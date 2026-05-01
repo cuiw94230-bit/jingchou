@@ -1,0 +1,336 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>坐照</title>
+  <link rel="stylesheet" href="./rengong.css">
+</head>
+<body>
+  <main class="rg-shell">
+    <section class="rg-hero">
+      <div class="rg-hero-copy">
+        <p class="rg-eyebrow">OBSERVING DISPATCH REALITY</p>
+        <h1>坐照</h1>
+        <p class="rg-lead">
+          本页以人工调度数据为境，如实观其变化与规律。<br><br>
+          因条件而生，谓之缘起；<br>
+          无固定本质，谓之性空。<br><br>
+          不执结果，不强干预，<br>
+          于变化中见其生成之理。<br><br>
+          页面只读展示，不改变调度逻辑。</p>
+      </div>
+      <div class="rg-hero-actions">
+        <a class="rg-hero-btn rg-ghost" href="./index.html">返回主页</a>
+        <a class="rg-hero-btn rg-ghost" href="./rengong.html">坐照</a>
+        <a class="rg-hero-btn rg-ghost" href="./dengtang.html">登堂</a>
+        <a class="rg-hero-btn rg-ghost" href="./rengong-boundary.html">缘起 · 性空</a>
+        <button id="refreshBtn" class="rg-hero-btn rg-primary" type="button">刷新数据</button>
+      </div>
+    </section>
+    <section class="rg-panel" style="padding:12px 18px;">
+      <div style="font-size:13px;color:#475569;">
+        从人工调度数据中提炼可解释规则，以 AI 与数字双驱动，让运营美好起来。      </div>
+    </section>
+
+    <section class="rg-panel rg-toolbar">
+      <div class="rg-toolbar-row rg-toolbar-day">
+        <label class="rg-field">
+          <span>选择日期</span>
+          <input id="dayInput" type="date">
+        </label>
+        <button id="loadDayBtn" class="rg-pill-btn rg-primary" type="button">查看当天</button>
+        <div id="queryState" class="rg-query-state">请选择日期</div>
+      </div>
+      <div class="rg-toolbar-row rg-toolbar-actions">
+        <label class="rg-field rg-field-wide">
+          <span>搜索</span>
+          <input id="searchInput" type="text" placeholder="按店号/店名搜索当天店铺">
+        </label>
+        <label class="rg-field">
+          <span>求解状态</span>
+          <select id="solverReadySelect">
+            <option value="all">全部</option>
+            <option value="1">可直接求解</option>
+            <option value="0">待补数据</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-kpi-grid" id="summaryCards"></div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>波次概览</h2>
+        <span class="rg-section-tip">与原求解口径一致的波次归属和折算货量</span>
+      </div>
+      <div id="waveBreakdown" class="rg-stack-list"></div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>门店组（双配结构：X / X+100）</h2>
+        <span id="storeGroupMeta" class="rg-section-tip">基于 human_dispatch_routes 的 X / X+100 双配抽取</span>
+      </div>
+      <div id="storeGroupSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>车牌</th>
+              <th>双配线路</th>
+              <th>一配店数</th>
+              <th>二配店数</th>
+              <th>重合店数</th>
+              <th>合并店数</th>
+              <th>重合率</th>
+              <th>核心店数</th>
+              <th>二配新增店数</th>
+              <th>二配比一配增加比例</th>
+              <th>二配/一配比例</th>
+              <th>门店编号（前20）</th>
+            </tr>
+          </thead>
+          <tbody id="storeGroupBody">
+            <tr><td colspan="13" class="rg-empty">请选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>调度输入模拟（基于人工门店组）</h2>
+        <span id="dispatchSimMeta" class="rg-section-tip">将双配门店组转换为一配/二配的调度输入结构（仅分析展示）</span>
+      </div>
+      <div id="dispatchSimSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>车牌</th>
+              <th>门店组</th>
+              <th>一配店数</th>
+              <th>二配店数</th>
+              <th>总店数</th>
+            </tr>
+          </thead>
+          <tbody id="dispatchSimBody">
+            <tr><td colspan="5" class="rg-empty">请先选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>单配线路（人工结构）</h2>
+        <span id="singleRouteMeta" class="rg-section-tip">同一天同车内，不参与 X / X+100 双配的线路编号视为单配线路</span>
+      </div>
+      <div id="singleRouteSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>车牌</th>
+              <th>线路编号</th>
+              <th>线路名称</th>
+              <th>店数</th>
+              <th>门店编号（前20）</th>
+            </tr>
+          </thead>
+          <tbody id="singleRouteBody">
+            <tr><td colspan="6" class="rg-empty">请先选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>单配线路画像（人工规律）</h2>
+        <span id="singleRoutePortraitMeta" class="rg-section-tip">看清单配线路是什么类型 + 大小结构</span>
+      </div>
+      <div class="rg-grid-2" style="padding: 14px 24px 24px;">
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>分类</th>
+                <th>数量</th>
+                <th>平均店数</th>
+                <th>最大店数</th>
+                <th>最小店数</th>
+              </tr>
+            </thead>
+            <tbody id="portraitCategoryBody">
+              <tr><td colspan="5" class="rg-empty">请先选择日期</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>店数分布</th>
+                <th>数量</th>
+              </tr>
+            </thead>
+            <tbody id="portraitDistributionBody">
+              <tr><td colspan="2" class="rg-empty">请先选择日期</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>人工结构模板</h2>
+        <span id="humanTemplateMeta" class="rg-section-tip">仅展示聚合统计模板，不输出具体车牌绑定方案</span>
+      </div>
+      <div id="humanTemplateSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-grid-2" style="padding: 14px 24px 24px;">
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>双配模板项</th>
+                <th>统计值</th>
+              </tr>
+            </thead>
+            <tbody id="humanTemplateDoubleBody">
+              <tr><td colspan="2" class="rg-empty">请先选择日期</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>单配模板项</th>
+                <th>统计值</th>
+              </tr>
+            </thead>
+            <tbody id="humanTemplateSingleBody">
+              <tr><td colspan="2" class="rg-empty">请先选择日期</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>车辆使用模板项</th>
+              <th>统计值</th>
+            </tr>
+          </thead>
+          <tbody id="humanTemplateVehicleBody">
+            <tr><td colspan="2" class="rg-empty">请先选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>一日多配店铺明细</h2>
+        <span id="multiMeta" class="rg-section-tip">等待选择日期</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="multi" data-key="shop_code"><button type="button" class="rg-sort-btn">编号</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="store_name"><button type="button" class="rg-sort-btn">名称</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="district"><button type="button" class="rg-sort-btn">区域</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="delivery_count"><button type="button" class="rg-sort-btn">次数</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave1_load"><button type="button" class="rg-sort-btn">一波次货量</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave2_load"><button type="button" class="rg-sort-btn">二波次货量</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="first_wave_time"><button type="button" class="rg-sort-btn">一配时间</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="second_wave_time"><button type="button" class="rg-sort-btn">二配时间</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave_belongs"><button type="button" class="rg-sort-btn">所属波次</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="unload_minutes"><button type="button" class="rg-sort-btn">卸货分钟</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="difficulty"><button type="button" class="rg-sort-btn">难度</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="tolerate_minutes"><button type="button" class="rg-sort-btn">允许偏差(分)</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="solver_ready_flag"><button type="button" class="rg-sort-btn">状态</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="source_vehicle_ids"><button type="button" class="rg-sort-btn">车号</button></th>
+            </tr>
+          </thead>
+          <tbody id="multiBody">
+            <tr><td colspan="14" class="rg-empty">请选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>一日一配店铺明细</h2>
+        <span id="singleMeta" class="rg-section-tip">等待选择日期</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="single" data-key="shop_code"><button type="button" class="rg-sort-btn">编号</button></th>
+              <th class="rg-sortable" data-table="single" data-key="store_name"><button type="button" class="rg-sort-btn">名称</button></th>
+              <th class="rg-sortable" data-table="single" data-key="district"><button type="button" class="rg-sort-btn">区域</button></th>
+              <th class="rg-sortable" data-table="single" data-key="delivery_count"><button type="button" class="rg-sort-btn">次数</button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave3_load"><button type="button" class="rg-sort-btn">三波次货量</button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave4_load"><button type="button" class="rg-sort-btn">四波次货量</button></th>
+              <th class="rg-sortable" data-table="single" data-key="expected_time"><button type="button" class="rg-sort-btn">到店时间</button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave_belongs"><button type="button" class="rg-sort-btn">所属波次</button></th>
+              <th class="rg-sortable" data-table="single" data-key="unload_minutes"><button type="button" class="rg-sort-btn">卸货分钟</button></th>
+              <th class="rg-sortable" data-table="single" data-key="difficulty"><button type="button" class="rg-sort-btn">难度</button></th>
+              <th class="rg-sortable" data-table="single" data-key="tolerate_minutes"><button type="button" class="rg-sort-btn">允许偏差(分)</button></th>
+              <th class="rg-sortable" data-table="single" data-key="solver_ready_flag"><button type="button" class="rg-sort-btn">状态</button></th>
+              <th class="rg-sortable" data-table="single" data-key="source_vehicle_ids"><button type="button" class="rg-sort-btn">车号</button></th>
+            </tr>
+          </thead>
+          <tbody id="singleBody">
+            <tr><td colspan="13" class="rg-empty">请选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>车辆信息</h2>
+        <span id="vehicleMeta" class="rg-section-tip">按当天存在车号去重展示，默认状态未使用</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="vehicle" data-key="plateNo"><button type="button" class="rg-sort-btn">车号</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="driverName"><button type="button" class="rg-sort-btn">司机名</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="type"><button type="button" class="rg-sort-btn">车型</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="capacity"><button type="button" class="rg-sort-btn">容量</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="speed"><button type="button" class="rg-sort-btn">速度</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="canCold"><button type="button" class="rg-sort-btn">可送冷藏</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="status"><button type="button" class="rg-sort-btn">状态</button></th>
+            </tr>
+          </thead>
+          <tbody id="vehicleBody">
+            <tr><td colspan="7" class="rg-empty">请选择日期</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="./rengong.js?v=20260427-03"></script>
+</body>
+</html>
+
+
+
+

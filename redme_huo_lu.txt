@@ -1,0 +1,319 @@
+huo / lu 导出文件说明（字段中文含义 + 里程计算方式）
+
+生成时间：2026-04-14
+对应文件：
+1) huo.xlsx / huo.txt
+2) lu.xlsx / lu.txt
+
+----------------------------------------
+一、huo 文件说明（双表货量）
+----------------------------------------
+
+huo.xlsx 包含两个工作表：
+1) store_wave_load_resolved
+2) wms_cargo_raw_clean_snapshot
+
+huo.txt 也按这两个分区输出。
+
+1) store_wave_load_resolved（折算后货量表，求解调用表）
+常见字段中文说明：
+- shop_code：店铺编号
+- wave_belongs：所属波次（如 1、2、3、4、1,2）
+- wave1_load：一波次货量（折算后）
+- wave2_load：二波次货量（折算后）
+- wave3_load：三波次货量（折算后）
+- wave4_load：四波次货量（折算后）
+- total_resolved_load：合计折算货量
+- first_wave_time：一配时间（W1 对应时间）
+- second_wave_time：二配时间（W2 对应时间）
+- arrival_time_w3：W3 到店时间
+- arrival_time_w4：W4 到店时间
+- updated_at：更新时间
+
+备注：
+- 该表是折算结果，不是原始货量明细表。
+
+2) wms_cargo_raw_clean_snapshot（清洗后原始货量表）
+常见字段中文说明：
+- shop_code：店铺编号
+- business_date：业务日期
+- rpcs / rcase / rpaper：R 类货量相关口径
+- bpcs / bpaper：B 类货量相关口径
+- apcs / apaper：A 类货量相关口径
+- source_table：来源表
+- row_hash：行内容哈希（用于去重/比对）
+- created_at：创建时间
+- updated_at：更新时间
+
+----------------------------------------
+二、lu 文件说明（点位 + 点间距离）
+----------------------------------------
+
+lu.xlsx 包含三个工作表：
+1) points
+2) amap_distance_cache
+3) all_pairs_straight_km
+
+lu.txt 也按这三个分区输出。
+
+1) points（门店点位）
+- store_id：店铺编号
+- store_name：店名
+- lng：经度
+- lat：纬度
+
+2) amap_distance_cache（高德距离缓存）
+- cache_key：坐标对键，格式 "from_lng,from_lat->to_lng,to_lat"
+- from_store_id：起点店铺编号（能匹配到则有值）
+- to_store_id：终点店铺编号（能匹配到则有值）
+- from_lng / from_lat：起点坐标
+- to_lng / to_lat：终点坐标
+- distance_km：高德返回的路网距离（公里）
+- duration_minutes：高德返回的路网时长（分钟）
+- updated_at：缓存更新时间
+
+备注：
+- 如果 from_store_id / to_store_id 为空，表示该缓存坐标未成功映射到当前点位表中的店铺编号。
+
+3) all_pairs_straight_km（全点对直线距离）
+- from_store_id：起点店铺编号
+- to_store_id：终点店铺编号
+- from_lng / from_lat：起点坐标
+- to_lng / to_lat：终点坐标
+- straight_distance_km：两点球面直线距离（公里）
+
+----------------------------------------
+三、lu 里的里程计算方式说明（重点）
+----------------------------------------
+
+lu 里有两种“距离”：
+
+A. 路网距离（amap_distance_cache.distance_km）
+- 来源：高德距离接口缓存
+- 含义：按道路网络估算的行驶距离（非直线）
+- 单位：公里（km）
+
+B. 直线距离（all_pairs_straight_km.straight_distance_km）
+- 来源：基于经纬度用 Haversine 公式计算
+- 单位：公里（km）
+- 公式核心（球面两点距离）：
+  d = 2R * asin( sqrt( sin²((lat2-lat1)/2) + cos(lat1)*cos(lat2)*sin²((lng2-lng1)/2) ) )
+  其中 R = 6371.0088 km
+
+补充：
+- all_pairs_straight_km 是“有向点对”，即 A->B 和 B->A 各记一条（数值通常相同）。
+- 自环（A->A）不输出。
+
+----------------------------------------
+四、核对建议
+----------------------------------------
+
+1) 先看 points 是否覆盖了当前所有参与求解门店。
+2) 再看 amap_distance_cache 是否覆盖关键门店对（尤其是问题门店）。
+3) 若缓存缺边，可用 all_pairs_straight_km 做兜底对照（仅用于诊断差异，不等同真实路网里程）。
+
+============================================================
+五、当前系统业务逻辑总说明（按代码口径，2026-04-14）
+============================================================
+
+本节说明“当前程序实际在跑的逻辑”，用于排障和业务对齐。
+说明来源：app.js + solver_core/*.py 当前代码。
+
+----------------------------------------
+5.1 波次与时间语义
+----------------------------------------
+
+一、默认波次（可在页面编辑）
+- W1：19:10 - 23:59，截止口径 endMode=return（要求回仓不晚于结束）
+- W2：21:00 - 次日07:00，截止口径 endMode=service（要求最后一家服务完成不晚于结束）
+- W3：21:00 - 次日07:00，截止口径 endMode=service
+- W4：12:00 - 18:00，截止口径 endMode=service
+
+二、时间字段是什么意思
+- 一配时间：W1 的期望到店时间（store.waveArrivals.w1）
+- 二配时间：W2 的期望到店时间（store.waveArrivals.w2）
+- 到店时间（W3）：W3 的期望到店时间（store.waveArrivals.w3）
+- 到店时间（W4）：W4 的期望到店时间（store.waveArrivals.w4）
+
+三、求解真正使用的时间字段（分钟制）
+- desiredArrivalMin：期望到店（按所属波次取值后转分钟）
+- latestAllowedArrivalMin：最晚允许到店 = desiredArrivalMin + allowedLateMinutes
+- allowedLateMinutes：允许偏差（优先 store.allowedLateMinutes，否则取 parking）
+- actualServiceMinutes：每店服务时长（用于离店时间计算）
+
+四、是否允许“早到”
+- 当前逻辑：允许早到，不算违规。
+- 当前逻辑：只限制“晚于 latestAllowedArrivalMin”才违规（arrival_window）。
+
+五、缺时间行为
+- 当前逻辑：若某店在当前波次缺少期望时间，直接抛错 missing_desired_arrival，不做时间兜底。
+
+----------------------------------------
+5.2 货量换算逻辑（原始货量 -> 折算货量）
+----------------------------------------
+
+一、原始字段
+- rpcs, rcase, bpcs, bpaper, rpaper, apcs, apaper
+
+二、折算容量常数（分母）
+- rpcs: 207
+- rcase: 380
+- bpcs: 120
+- bpaper: 380
+- rpaper: 380
+- apcs: 350
+- apaper: 380
+
+三、基础公式
+- baseW1 = rpcs/207 + rcase/380 + bpcs/120 + bpaper/380 + rpaper/380
+- baseW2 = apcs/350 + apaper/380
+- baseW34 = baseW1 + baseW2
+
+四、按业务波次/次数组装
+1) 仅属于波次2（onlyWave2）
+- W1 = 0
+- W2 = baseW1 + baseW2
+
+2) 非 onlyWave2 且 tripCount = 2（多配）
+- W1 = baseW1
+- W2 = baseW2
+
+3) 非 onlyWave2 且 tripCount != 2（单配）
+- W1 = baseW1 + baseW2
+- W2 = 0
+
+4) W3/W4
+- 若门店属于 W3：W3 = baseW34，否则 W3 = 0
+- 若门店属于 W4：W4 = baseW34，否则 W4 = 0
+
+五、store_wave_load_resolved 覆盖逻辑
+- 页面和求解主链读取 store_wave_load_resolved 后：
+  - wave1_load/wave2_load/wave3_load/wave4_load 直接写入对应波次货量
+  - total_resolved_load 写入合计货量
+  - first_wave_time/second_wave_time/arrival_time_w3/arrival_time_w4 按所属波次写入 waveArrivals
+
+----------------------------------------
+5.3 车辆容积占用换算（当前实现）
+----------------------------------------
+
+这部分是“当前代码实际口径”，请重点注意：
+
+1) 车辆求解容量
+- 构建场景时，车辆被标准化为：
+  - nominalCapacity = 原始容量（仅保留展示）
+  - capacity = 1
+  - solveCapacity = 1
+
+2) 单店占用
+- 每店在当前波次的占用 load 由该波次货量字段决定：
+  - W1 用 wave1TotalLoad
+  - W2 用 wave2TotalLoad
+  - W3 用 wave3TotalLoad
+  - W4 用 wave4TotalLoad
+
+3) 容量约束判定
+- 累计规则：route 内逐店累加 loadBoxes
+- 约束条件：loadBoxes <= vehicle.capacity（当前即 <= 1）
+- 含义：当前实际上按“标准化装载率”求解（1 代表满载）
+
+----------------------------------------
+5.4 求解参与字段（当前关键字段）
+----------------------------------------
+
+一、门店（store）参与求解的核心字段
+- id
+- waveBelongs
+- wave1TotalLoad / wave2TotalLoad / wave3TotalLoad / wave4TotalLoad
+- desiredArrivalMin / latestAllowedArrivalMin
+- actualServiceMinutes / serviceMinutes
+- difficulty
+- parking（常用于 allowedLateMinutes 来源）
+- lng / lat
+- boxes（后端约束中也会读取）
+
+二、车辆（vehicle）参与求解的核心字段
+- plateNo
+- capacity（当前求解口径为 1）
+- speed（当前场景标准化为 38）
+- earliestDepartureMin
+- priorRegularDistance
+- priorWaveCount
+- routes（算法状态）
+
+三、波次（wave）参与求解字段
+- waveId
+- startMin / endMin
+- endMode（return 或 service）
+- relaxEnd
+- singleWave
+- isNightWave
+- earliestDepartureMin
+
+四、场景（scenario）参与求解字段
+- dispatchStartMin
+- maxRouteKm
+- concentrateLate
+- dist（距离矩阵）
+- storeMap
+- vehicles
+
+----------------------------------------
+5.5 当前硬约束条件（不满足即判不可行）
+----------------------------------------
+
+1) 门店存在性约束
+- 路线里的 storeId 必须能在 storeMap 查到
+
+2) 容量约束
+- route 累计 loadBoxes 不能超过 vehicle.capacity（当前=1）
+
+3) 里程约束
+- 非单波次：整趟（去+回）<= maxRouteKm
+- 单波次：去程累计 <= maxRouteKm（另外回程也会校验总里程）
+- 夜波还会校验 priorRegularDistance + totalDistance <= maxRouteKm
+
+4) 时间窗约束
+- arrival > latestAllowedArrivalMin 即违规（arrival_window）
+- 当前允许早到，不把早到视为违规
+
+5) 波次截止约束
+- endMode=return：回仓时间不能晚于 endMin
+- endMode=service：最后服务完成不能晚于 endMin
+- relaxEnd=false 时严格生效
+
+6) 难度约束（按策略配置启用）
+- count 模式：各难度层级门店数上限
+- score 模式：路线难度总分上限
+
+7) 冷链约束
+- 当前代码口径：已停用，不再按 coldRatio/canCarryCold 拦截
+
+----------------------------------------
+5.6 评分/代价（用于算法比较，不等于硬约束）
+----------------------------------------
+
+核心代价由以下项组合（部分系数受策略配置影响）：
+- 到店超窗惩罚（arrivalViolationPenalty）
+- 迟到惩罚（latenessPenalty）
+- 波次超时惩罚（waveLatePenalty）
+- 车辆忙碌惩罚（vehicleBusyPenalty）
+- 多趟惩罚（extraTripPenalty）
+- 晚到路线惩罚（lateRoutePenalty）
+- 距离成本（distanceCost）
+- 装载奖励（loadBonus，作为减项）
+
+----------------------------------------
+5.7 重要排障结论（结合当前实现）
+----------------------------------------
+
+1) “到店时间不满足”大量出现时
+- 先看 desiredArrivalMin/latestAllowedArrivalMin 是否有值且波次匹配
+- 再看 dist/speed/serviceMinutes 是否让到达时间天然过晚
+
+2) “后端重建降级”出现时
+- 通常是重建阶段复核硬约束失败（常见是时间窗）
+- 日志里的 [约束类型/首触发店铺ID] 是首查入口
+
+3) W3 里程限制
+- 当前策略层支持 W3 里程上限解锁（以策略审计日志为准）
+

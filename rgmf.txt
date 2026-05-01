@@ -1,0 +1,1470 @@
+﻿人工调度复用规律三阶段只读分析报告
+
+项目：城市便利店调度系统
+范围：经验/坐照模块（只读分析）
+日期：2026-04-30
+
+【执行约束确认】
+1. 不建表
+2. 不落库
+3. 不改页面
+4. 不改 solver/evaluator/主调度流程
+5. 不接自动调度
+
+==================================================
+第一阶段：可分析性核查与基础样例
+==================================================
+
+一、目标
+确认现有数据库是否支持“人工调度是否复用前一个同类日”的分析。
+同类日定义：
+- NORMAL 对比前一个 NORMAL
+- COLD_ONLY 对比前一个 COLD_ONLY
+
+二、字段核查结果
+1) human_dispatch_routes（可作为主分析明细）
+- 有：delivery_date, route_id, store_id, stop_sequence, vehicle_id, driver_name
+- 有货量字段：
+  ambient_turnover_boxes, ambient_cartons, ambient_full_cases,
+  frozen_bags, frozen_cartons, cold_bins, cold_cartons
+- 无：day_type, driver_id, route_load（可由明细汇总计算）
+
+2) chaos_replay_tasks（可提供 day_type）
+- 有：delivery_date, day_type, total_load_w1, total_load_w2, total_load
+- 无：store_id, route_id, stop_sequence
+
+3) chaos_replay_task_stores（店级汇总可辅助）
+- 有：delivery_date, store_id, sum_rpcs/sum_rcase/sum_rpaper/sum_bpcs/sum_bpaper/sum_apcs/sum_apaper, load_w1, load_w2
+- 无：route_id, stop_sequence, day_type
+
+4) rengong_route_distance_load_profiles（线路画像可辅助）
+- 有：delivery_date, route_id, route_load, normal_load_limit, route_group, route_type, is_city
+- 无：store_id, stop_sequence, day_type
+
+结论：
+- 可以判断“店铺集合复用”和“顺序复用”（因为有 stop_sequence）。
+- 不能做严格司机归因（无 driver_id，仅可展示 driver_name）。
+
+三、第一阶段样例与总体结果
+1) 复用类型总体计数（prev 同类日存在条件下）
+- EXACT_COPY：5151
+- PARTIAL_CHANGE：982
+- UNKNOWN_CHANGE：672
+- SAME_STORES_DIFF_ORDER：298
+- NEW_ROUTE：223
+- MISSING_PREV_ROUTE：84
+
+2) route_id 稳定性
+- NORMAL：同 route_id 在前一同类日仍存在比例 97.03%
+- COLD_ONLY：比例 96.21%
+
+3) 样例观察
+- NORMAL 的 2025-11-10 对比 2025-11-08：大量线路出现 PARTIAL_CHANGE/UNKNOWN_CHANGE
+- COLD_ONLY 的 2025-11-16 对比 2025-11-09：多条线路 EXACT_COPY，结构复用明显
+
+第一阶段结论：
+- “同类日 route_id 高稳定复用”成立。
+- 周日（COLD_ONLY）结构复用更强。
+
+==================================================
+第二阶段：变化类型拆解与货量触发关系
+==================================================
+
+一、目标
+解释 PARTIAL_CHANGE / UNKNOWN_CHANGE / SAME_STORES_DIFF_ORDER 的发生原因，
+并判断是否主要由货量触发。
+
+二、变化原因拆解（第二阶段标签）
+- LOAD_DRIVEN_CHANGE
+- STRUCTURE_SPLIT
+- STRUCTURE_MERGE
+- ROUTE_REASSIGN
+- ORDER_ONLY_CHANGE
+- ZERO_OR_TINY_LOAD_ROUTE
+- DATA_ISSUE
+- UNKNOWN_REASON
+
+三、关键统计结果
+1) |route_load_delta| 分布对比
+- EXACT_COPY：avg_abs_delta=0.113090, p50=0.0650, p90=0.2603
+- PARTIAL_CHANGE：avg_abs_delta=0.184899, p50=0.1312, p90=0.4089
+- UNKNOWN_CHANGE：avg_abs_delta=0.215895, p50=0.1607, p90=0.4810
+- SAME_STORES_DIFF_ORDER：avg_abs_delta=0.145339, p50=0.1020, p90=0.2886
+
+解释：变化类（尤其 UNKNOWN/PARTIAL）伴随更大货量波动。
+
+2) route_load 分位数（全量观测）
+- q10=0.1855, q25=0.3030, q50=0.4439, q75=0.6703, q90=0.9910
+
+3) 按负载分层的变化率（变化=PARTIAL+UNKNOWN+ORDER）
+- zero_or_tiny：23.19%
+- low：30.91%
+- medium：23.87%
+- high：31.00%
+
+解释：低段与高段变化率高于中段。
+
+4) 按 load_limit_ratio 带宽（仅有上限口径的线路）
+- <0.8：变化率 26.66%
+- 0.8-0.9：30.26%
+- 0.9-1.0：23.53%
+- >=1.0：54.84%
+
+解释：超过上限时变化率显著升高。
+
+四、UNKNOWN_CHANGE 拆解（必须项）
+UNKNOWN_CHANGE 总数：672
+拆解结果：
+- STRUCTURE_SPLIT：614
+- STRUCTURE_MERGE：8
+- ROUTE_REASSIGN：10
+- ZERO_OR_TINY_LOAD_ROUTE：39
+- LOAD_DRIVEN_CHANGE：0（在该严格口径下）
+- DATA_ISSUE：0
+- UNKNOWN_REASON：1
+
+第二阶段结论：
+- UNKNOWN_CHANGE 绝大多数可解释为“结构拆分”，不是纯噪声。
+- 货量有触发作用，但“结构重分配”是主因。
+
+==================================================
+第三阶段：线路负载弹性区间（Slack）与阈值验证
+==================================================
+
+一、目标
+在“结构复用 + 结构拆分”规律上，提取每条线路负载弹性区间，并验证变化触发阈值。
+
+二、EXACT_COPY 数据校验（先行）
+1) EXACT_COPY 样本：5127
+2) |delta| 分布：
+- p50=0.0647, p75=0.1386, p90=0.2600, p99=0.6431, max=8.0288
+3) 异常识别：
+- |delta|>p99：52 条
+- |delta|>3*p50：812 条（阈值偏敏感）
+
+说明：为避免异常污染，slack 提取采用“剔除 |delta|>p99”后的 EXACT_COPY 样本。
+
+三、极端样本核查（门店级）
+1) 2025-11-13 vs 2025-11-12, route 112
+- 同店铺集合下，store_id=394148 单店负载 0.0360 -> 7.9338
+- 线路 delta=+8.0288
+
+2) 2026-04-03 vs 2026-04-02, route 140
+- 多店同步显著下降，delta=-2.5806
+
+3) 2026-03-21 vs 2026-03-20, route 777
+- 三店均大幅下降，delta=-1.2257
+
+判定：
+- 存在 DATA_ISSUE_CANDIDATE（疑似单位/录入/聚合异常或口径变动）。
+- 异常样本已从 slack 统计口径中排除。
+
+四、线路弹性区间提取（EXACT_COPY 且通过校验）
+定义：
+- 稳定负载区间：p10 ~ p90
+- 极限区间：min ~ max
+
+按组差异（线路均值）：
+1) route_group
+- W1：平均稳定区间宽度 0.6566
+- W2：0.5209
+- OTHER：0.7363
+
+2) route_type
+- 市区：0.5497
+- 地铁：0.2397（最窄）
+- 郊区周边：1.0575
+- 周边城市：1.0369
+- 机场：0.8497
+- 高铁站：0.7363
+
+3) is_city
+- city：0.5497
+- non_city_or_null：0.7491
+
+五、触发阈值验证（PARTIAL_CHANGE / UNKNOWN_CHANGE）
+样本数：1683
+
+1) 超出历史弹性区间（<p10 或 >p90）
+- 481 条，比例 28.58%
+
+2) 超过 normal_load_limit
+- 46 条，比例 2.73%
+
+解释：
+- 结构变化并非都由“超上限”触发。
+- 但“超出该线路历史弹性区间”与结构变化关联明显。
+
+六、对照样例结论
+1) 区间内但发生变化：存在
+- 说明结构调整还有非负载因素（分配策略、跨线平衡等）
+
+2) 刚超过区间就变化：存在
+- 例如 route 201：route_load 比 p90 仅高 0.0014 即发生 PARTIAL_CHANGE
+- 说明 p90 可作为较敏感的预警拐点
+
+==================================================
+总回答（面向业务问题）
+==================================================
+
+问题1：每条线路在什么负载范围内可保持结构不变？
+- 建议以“该 route_id 在通过校验的 EXACT_COPY 样本中的 p10~p90”作为稳定区间。
+
+问题2：超过哪个点开始发生结构变化？
+- 经验上，接近并超过该线路历史 p90 后，变化概率明显上升。
+- 对市区线，超过 normal_load_limit 时变化率更高，但覆盖范围小于“超历史弹性区间”。
+
+==================================================
+自检清单
+==================================================
+
+1) 是否改文件：否（本报告文件除外）
+2) 是否建表：否
+3) 是否落库：否
+4) 是否改 solver/evaluator/主调度：否
+5) 是否使用不存在字段：否
+6) 是否发现数据异常：是（已标记 DATA_ISSUE_CANDIDATE 并隔离后再分析）
+
+（完）
+
+==================================================
+第四阶段：人工调度历史相似日匹配（只读）
+==================================================
+
+一、分析目标
+在同一 route_id + 同一 day_type 维度下，判断当前线路货量是否可在历史同类日中找到“几乎一致（±5%）”参考日。
+
+二、route_load 计算口径（主口径）
+route_load = Σ(
+  ambient_turnover_boxes/207
++ ambient_cartons/380
++ ambient_full_cases/380
++ frozen_bags/120
++ frozen_cartons/380
++ cold_bins/350
++ cold_cartons/380
+)
+
+说明：
+- 从 human_dispatch_routes 聚合按 delivery_date + day_type + route_id 计算。
+- day_type 由 chaos_replay_tasks（calc_version='chaos_replay_task_v1'）补齐。
+- 相似判定主阈值：±5%。
+
+三、相似判定规则
+同一 route_id、同一 day_type 下：
+abs(current_route_load - historical_route_load) / nullif(historical_route_load,0) <= 0.05
+
+特殊处理：
+- historical_route_load = 0 且 current_route_load = 0：视为相似
+- historical_route_load = 0 且 current_route_load != 0：不相似
+
+四、全量汇总（5%）
+总样本（线路日）：7410（2025-11-08 ~ 2026-04-08）
+
+三类记忆拆分：
+1) PREV_COMPARABLE_DAY_MATCH
+- 数量：1138
+- 比例：15.36%
+
+2) ANY_HISTORY_DAY_MATCH（排除前一同类日）
+- 数量：4867
+- 比例：65.68%
+
+3) NO_SIMILAR_HISTORY
+- 数量：1405
+- 比例：18.96%
+
+按 day_type 拆分：
+1) NORMAL（6716）
+- PREV_COMPARABLE_DAY_MATCH：971（14.46%）
+- ANY_HISTORY_DAY_MATCH：4648（69.21%）
+- NO_SIMILAR_HISTORY：1097（16.33%）
+
+2) COLD_ONLY（694）
+- PREV_COMPARABLE_DAY_MATCH：167（24.06%）
+- ANY_HISTORY_DAY_MATCH：219（31.56%）
+- NO_SIMILAR_HISTORY：308（44.38%）
+
+观察：
+- NORMAL 更容易在“更早历史日”找到相似负载。
+- COLD_ONLY 对历史可匹配性较弱，NO_SIMILAR_HISTORY占比高。
+
+五、线路级统计（示例说明）
+输出字段：
+- route_id
+- day_type
+- observed_days
+- days_with_similar_history
+- similar_history_ratio
+- max_similar_count_per_day
+- avg_similar_count_per_day
+- most_frequent_similar_load_band
+
+示例（部分）：
+- route 101 NORMAL：observed_days=129, similar_history_ratio=0.8062, max=12, avg=3.5194, band=(0.4,0.6]
+- route 110 NORMAL：observed_days=123, similar_history_ratio=0.7724, max=10, avg=2.6911, band=(0.2,0.4]
+- route 125 NORMAL：observed_days=130, similar_history_ratio=0.9000, max=25, avg=6.3000, band=(0.4,0.6]
+- route 129 COLD_ONLY：observed_days=22, similar_history_ratio=0.2727, max=2, avg=0.3182, band=(0,0.2]
+- route 140 NORMAL：observed_days=130, similar_history_ratio=0.8538, max=17, avg=4.9385, band=(1.0,1.5]
+
+六、当天匹配明细样例（20条代表）
+字段：
+- current_date
+- day_type
+- route_id
+- current_route_load
+- matched_history_date
+- matched_history_load
+- relative_diff
+- 是否也是前一个同类日
+- reuse_type
+
+样例（部分，2026-04-08）：
+- route 101：1.2126 匹配 2026-03-31 的 1.2144，diff=0.001482，非前一同类日，EXACT_COPY
+- route 105：1.3416 匹配 2026-03-30 的 1.3164，diff=0.019143，非前一同类日，UNKNOWN_CHANGE
+- route 107：0.9722 匹配 2026-03-26 的 0.9567，diff=0.016202，非前一同类日，UNKNOWN_CHANGE
+- route 125：0.9989 匹配 2026-03-30 的 0.9939，diff=0.005031，非前一同类日，EXACT_COPY
+
+七、与第一阶段 reuse_type 交叉（5%）
+1) EXACT_COPY
+- total=5127
+- matched_5pct=4359
+- ratio=85.02%
+
+2) PARTIAL_CHANGE
+- total=1011
+- matched_5pct=742
+- ratio=73.39%
+
+3) UNKNOWN_CHANGE
+- total=672
+- matched_5pct=503
+- ratio=74.85%
+
+解释：
+- 即使结构变化（PARTIAL/UNKNOWN），约 3/4 的样本仍可找到“历史相近负载日”。
+- 人工调度更像“结构经验 + 负载相似记忆”的叠加，不是二选一。
+
+八、阈值敏感性对照（附加）
+主口径仍为 5%，额外对照：
+
+1) 2% 阈值
+- PREV_MATCH：5.87%
+- ANY_HISTORY_MATCH：57.95%
+- NO_SIMILAR：36.18%
+
+2) 10% 阈值
+- PREV_MATCH：29.14%
+- ANY_HISTORY_MATCH：60.58%
+- NO_SIMILAR：10.28%
+
+结论：
+- 5% 是相对平衡阈值。
+- 2% 过严（大量样本被判无相似）。
+- 10% 偏宽（无相似样本显著减少）。
+
+九、本阶段结论（直接回答）
+“每条线路有多少天，可以在历史同类日中找到货量几乎一样的参考日？”
+
+答：
+- 线路层面差异很大，但多数线路在 NORMAL 下可达 0.75~0.90 的 similar_history_ratio。
+- 全量样本看，约 81.04%（15.36% + 65.68%）线路日可在历史同类日中找到 ±5% 相似负载参考。
+- 且这类“历史相似负载记忆”并不限于结构完全复用（PARTIAL/UNKNOWN 也大量存在）。
+
+十、自检
+1) 是否改文件：否（仅本报告追加）
+2) 是否建表：否
+3) 是否落库：否
+4) 是否改 solver/evaluator/主调度：否
+5) 是否使用不存在字段：否
+6) route_load=0 是否单独处理：是（0对0相似，0对非0不相似）
+
+（第四阶段完）
+
+==================================================
+第五阶段：负载分布位置 → 结构变化概率曲线（只读）
+==================================================
+
+一、目标
+从固定阈值判断，提升为“当前负载在本线路历史分布中的位置”对应的结构变化概率曲线。
+
+二、基础口径
+1) 数据源
+- human_dispatch_routes：按 delivery_date + day_type + route_id 聚合 route_load
+- chaos_replay_tasks：提供 day_type
+- rengong_route_distance_load_profiles：提供 route_group / route_type / is_city / normal_load_limit
+
+2) reuse_type（沿用前序）
+- EXACT_COPY
+- SAME_STORES_DIFF_ORDER
+- PARTIAL_CHANGE
+- UNKNOWN_CHANGE
+- NEW_ROUTE
+- MISSING_PREV_ROUTE
+
+3) 结构变化定义
+- 变化：SAME_STORES_DIFF_ORDER / PARTIAL_CHANGE / UNKNOWN_CHANGE / NEW_ROUTE / MISSING_PREV_ROUTE
+- 不变化：EXACT_COPY
+
+4) DATA_ISSUE_CANDIDATE 剔除
+- 在 EXACT_COPY 中，若 |delta| > p99 或 |delta| > 3*p50 则标记为候选异常并剔除。
+- 本次候选异常：812 条（从 7410 总线路日样本中剔除）。
+
+三、历史分布构造与 LOW_SAMPLE
+按 route_id + day_type 计算：
+- p10, p25, p50, p75, p90, min, max, sample_count
+
+统计：
+- route_id+day_type 组合总数：98
+- LOW_SAMPLE（sample_count < 15）：7 组
+- 主结论仅使用 sample_count >= 15 的组合。
+
+四、负载位置字段
+对每条线路日计算：
+- load_vs_p50 = current_route_load / p50
+- load_vs_p90 = current_route_load / p90
+- load_percentile_band：
+  BELOW_P10 / P10_P25 / P25_P50 / P50_P75 / P75_P90 / ABOVE_P90
+- limit_ratio = current_route_load / normal_load_limit（无上限记为 NO_LIMIT）
+
+五、全量概率曲线（sample_count >=15）
+1) 按 load_percentile_band
+- BELOW_P10：525，变化率 35.43%
+- P10_P25：989，变化率 24.37%
+- P25_P50：1660，变化率 22.47%
+- P50_P75：1627，变化率 35.34%
+- P75_P90：979，变化率 48.72%
+- ABOVE_P90：790，变化率 52.78%
+
+2) 按 load_vs_p90 分桶
+- <=0.6：4156，变化率 29.09%
+- 0.6~0.8：1056，变化率 42.52%
+- 0.8~0.9：294，变化率 34.69%
+- 0.9~1.0：366，变化率 35.79%
+- 1.0~1.1：253，变化率 35.57%
+- 1.1~1.3：258，变化率 55.04%
+- >1.3：187，变化率 78.07%
+
+六、分层曲线
+1) day_type（load_vs_p90 分桶）
+- NORMAL：>1.3 桶变化率 78.49%
+- COLD_ONLY：>1.3 桶变化率 73.33%
+
+2) route_group
+- W1：>1.3 桶 82.91%
+- W2：>1.3 桶 78.69%
+- OTHER：整体低，>1.3 桶 11.11%（样本少）
+
+3) route_type（主要类型）
+- 市区：>1.3 桶 82.96%
+- 周边城市：>1.3 桶 76.47%
+- 地铁：>1.3 桶 77.27%
+- 郊区周边：>1.3 桶 66.67%（样本少）
+- 机场：>1.3 桶 100%（n=1）
+- 高铁站：整体低波动、高一致性
+
+4) is_city
+- city：>1.3 桶 82.96%
+- non_city_or_null：>1.3 桶 65.38%
+
+七、关键行为区间识别
+1) 变化率明显上升区间
+- 从 P75_P90 开始明显上升（48.72%）
+- ABOVE_P90 更高（52.78%）
+
+2) ABOVE_P90 是否高于 P50_P75、P75_P90
+- 是：52.78% > 35.34% > 48.72%
+
+3) load_vs_p90 > 1.0 后是否显著升高
+- 在 1.0~1.1 还不显著（35.57%）
+- 到 1.1~1.3 明显上升（55.04%）
+- >1.3 非常显著（78.07%）
+
+4) normal_load_limit 解释力 vs 历史 p90
+- 历史 p90：覆盖广（全量可算），>p90 的变化率 54.15%，<=p90 为 32.20%
+- normal_load_limit：解释力强但覆盖窄（仅有上限口径的 1866 样本，且 >=1 仅 68 样本）
+  - >=1 变化率 88.24%
+  - <1 变化率 36.76%
+结论：
+- 对“强风险信号”而言，normal_load_limit>=1 很强；
+- 对“日常连续预警”而言，历史 p90 更稳健、覆盖更全面。
+
+八、样例（每类10条）
+已输出 7 组各10条，字段包含：
+- delivery_date
+- day_type
+- prev_comparable_date
+- route_id
+- route_group
+- route_type
+- is_city
+- current_route_load
+- p10 / p50 / p90
+- load_vs_p90
+- load_percentile_band
+- normal_load_limit
+- limit_ratio
+- reuse_type
+- 是否结构变化
+- inferred_change_reason
+
+样例类别：
+1) BELOW_P10 但发生变化
+2) P25_P75 内仍发生变化
+3) P75_P90 内保持 EXACT_COPY
+4) ABOVE_P90 发生变化
+5) ABOVE_P90 但仍 EXACT_COPY
+6) limit_ratio >= 1.0 但 EXACT_COPY
+7) limit_ratio < 0.8 但发生变化
+
+九、最终回答
+“人工调度的结构变化概率，是否随着 route_load 接近或超过该线路历史 p90 而明显上升？”
+
+答：是。
+- 从 P75_P90 开始上升，ABOVE_P90 继续上升；
+- 当 load_vs_p90 > 1.1 后，上升显著加速；
+- >1.3 区间变化概率最高（约 78%）。
+
+十、自检
+1) 是否改文件：否（仅本报告追加）
+2) 是否建表：否
+3) 是否落库：否
+4) 是否改 solver/evaluator/主调度：否
+5) 是否使用不存在字段：否
+6) 是否剔除了 DATA_ISSUE_CANDIDATE：是（812 条）
+7) LOW_SAMPLE route_id+day_type 数量：7
+
+（第五阶段完）
+
+================ 第六阶段：人工调度经验规则落库准备（2026-04-30） ================
+执行范围：仅经验/坐照模块；未触碰调度核心。
+
+一、执行前安全检查
+1) 数据库连接：通过
+2) human_dispatch_routes：存在
+3) chaos_replay_tasks：存在
+4) rengong_route_distance_load_profiles：存在
+5) rengong_route_slack_profiles：执行前不存在（允许创建）
+
+二、建表与写样例
+1) 新建表：rengong_route_slack_profiles（已创建）
+2) 唯一键：uk_calc_day_route(calc_version, day_type, route_id)
+3) 固定口径：
+   - delivery_scope = HUMAN_ROUTE_REUSE
+   - calc_version = route_slack_profile_v1
+   - stable_zone_upper = load_p75
+   - watch_zone_upper = load_p90
+   - soft_risk_upper = load_p90 * 1.1
+   - high_risk_upper = load_p90 * 1.3
+   - low_sample_flag = (sample_count < 15)
+4) 本次仅写入样例：5条（未做全量）
+
+三、样例回查（calc_version=route_slack_profile_v1）
+- COLD_ONLY | route_id=125 | W1 | 郊区周边 | sample_count=22 | p75=0.168300 | p90=0.241200
+- NORMAL    | route_id=101 | W1 | 市区     | sample_count=129 | p75=0.724000 | p90=1.212600 | normal_limit=1.250000
+- NORMAL    | route_id=129 | W1 | 地铁     | sample_count=130 | p75=0.242400 | p90=0.323100
+- NORMAL    | route_id=150 | W1 | 周边城市 | sample_count=130 | p75=0.696800 | p90=1.183600
+- NORMAL    | route_id=201 | W2 | 市区     | sample_count=130 | p75=0.530100 | p90=0.867400
+
+四、合规自检
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否 drop/truncate/delete：否
+- 是否使用不存在字段：否
+- 是否扩展到其他模块：否
+====================================================================
+
+================ 第七阶段：rengong_route_slack_profiles 全量写入前校验（2026-04-30） ================
+校验范围：仅 calc_version = route_slack_profile_v1 的 5 条样例；只读校验。
+
+一、逐条校验结果
+- COLD_ONLY / route_id=125：PASS
+- NORMAL / route_id=101：PASS
+- NORMAL / route_id=129：PASS
+- NORMAL / route_id=150：PASS
+- NORMAL / route_id=201：PASS
+
+二、规则校验结论
+1) 分位关系：全部满足
+   load_min <= p10 <= p25 <= p50 <= p75 <= p90 <= load_max
+2) 风险分区：全部满足
+   stable_zone_upper = load_p75
+   watch_zone_upper = load_p90
+   soft_risk_upper = load_p90 * 1.1
+   high_risk_upper = load_p90 * 1.3
+3) 唯一键冲突：0
+4) low_sample_flag 校验：全部正确（sample_count 均 >= 15，flag=0）
+5) 关键字段 NULL（route_id/day_type/load_p50/load_p90/sample_count）：0
+6) data_issue_count：均为非空且 >=0
+
+三、可否进入全量写入
+- 结论：YES（可进入）
+
+四、合规自检
+- 是否改文件：仅追加 rgmf.txt 报告
+- 是否建表：否
+- 是否落库：否
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否使用不存在字段：否
+====================================================================
+
+================ 第八阶段：rengong_route_slack_profiles 全量幂等写入（2026-04-30） ================
+执行策略：INSERT ... ON DUPLICATE KEY UPDATE（仅 calc_version=route_slack_profile_v1）；未执行删除类操作。
+
+一、Dry-run 统计（写入前）
+1) 待写入 route_id+day_type 数量：98
+2) LOW_SAMPLE 数量：7
+3) data_issue_count 总数：143
+4) source_date_start：2025-11-08
+5) source_date_end：2026-04-08
+6) day_type 分布：COLD_ONLY=39, NORMAL=59
+7) route_group 分布：W1=49, W2=42, OTHER=7
+8) route_type 分布：以数据库实际分类结果为准（控制台中文显示受终端编码影响，不影响入库值）
+
+二、全量幂等写入
+- upsert 影响行数（insert+update 计数口径）：103
+- 当前 calc_version=route_slack_profile_v1 总记录数：98
+
+三、写入后回查
+1) 总记录数：98
+2) day_type 分布：COLD_ONLY=39, NORMAL=59
+3) low_sample_flag 分布：0=91, 1=7
+4) 分位单调关系异常数（min<=p10<=p25<=p50<=p75<=p90<=max）：0
+5) 风险分区公式异常数：0
+6) route_id/day_type/load_p50/load_p90/sample_count NULL 异常数：0
+7) 唯一键重复数（calc_version+day_type+route_id）：0
+8) 随机抽查 10 条：已抽查，字段完整，公式一致
+
+四、最终自检
+- 是否改页面/API：否
+- 是否改 solver/evaluator/主调度：否
+- 是否 drop/truncate/delete：否
+- 是否改表结构：否
+- 是否使用不存在字段：否
+- 是否全量 upsert 成功：是
+- 写入或更新记录数：103（受 MySQL upsert 计数规则影响）
+====================================================================
+
+================ 第九阶段：结构参考来源建模（reference pattern，只读）2026-04-30 ================
+口径：PREV > RECENT_STABLE(K=7) > ANY_HISTORY > NO_REFERENCE；重合率阈值=0.95。
+数据：human_dispatch_routes + chaos_replay_tasks + rengong_route_slack_profiles。
+
+一、全量统计
+- 总样本数：7410
+- PREV_MATCH：5246（70.80%）
+- RECENT_STABLE_MATCH：833（11.24%）
+- ANY_HISTORY_MATCH：567（7.65%）
+- NO_REFERENCE：764（10.31%）
+
+按 day_type：
+- NORMAL（6716）：PREV 71.74%，RECENT 12.40%，ANY 7.07%，NONE 8.78%
+- COLD_ONLY（694）：PREV 61.67%，RECENT 0.00%，ANY 13.26%，NONE 25.07%
+
+二、reference_type × 结构变化率（以 reuse_type=EXACT_COPY 视为未变化）
+- PREV_MATCH：0.00%
+- RECENT_STABLE_MATCH：100.00%
+- ANY_HISTORY_MATCH：100.00%
+- NO_REFERENCE：100.00%
+说明：该结果与定义优先级强相关（PREV 仅在“高重合+同序”才命中）。
+
+三、与 slack 联动（load_vs_p90）
+- PREV_MATCH：p50=0.5080，p75=0.7131，p90=0.9999；>1.1 占比 4.80%
+- RECENT_STABLE_MATCH：p50=0.6008，p75=0.8401，p90=1.1901；>1.1 占比 14.41%
+- ANY_HISTORY_MATCH：p50=0.4663，p75=0.6544，p90=0.9997；>1.1 占比 5.82%
+- NO_REFERENCE：p50=0.5664，p75=0.8732，p90=1.2098；>1.1 占比 13.74%
+
+结论（第九阶段）：
+- 负载偏安全区（尤其 <0.9*p90）时，更容易命中 PREV_MATCH；
+- 负载靠近/超过 p90 后，PREV_MATCH 占比下降，RECENT_STABLE/NO_REFERENCE 比例上升。
+
+四、样例输出
+- PREV_MATCH：10条（已输出）
+- RECENT_STABLE_MATCH：10条（已输出）
+- ANY_HISTORY_MATCH：10条（已输出）
+- NO_REFERENCE：10条（已输出）
+
+五、自检
+- 是否改文件：仅追加 rgmf.txt
+- 是否建表：否
+- 是否落库：否
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否使用不存在字段：否
+- 是否发现字段缺失导致无法判断：否（stop_sequence 存在，可判断顺序）
+====================================================================
+
+================ 第十阶段：reference_weight 模型只读分析（2026-04-30） ================
+口径：按 load_vs_p90 分桶，统计 PREV/RECENT/ANY_HISTORY/NO_REFERENCE 概率权重。
+分桶：<0.6, 0.6-0.8, 0.8-0.9, 0.9-1.0, 1.0-1.1, 1.1-1.3, >1.3
+
+一、全局权重表（global）
+1) LT_0_6（n=4668）
+   P(prev)=0.7367, P(recent)=0.0889, P(any)=0.0835, P(no_ref)=0.0908
+2) B_0_6_0_8（n=1149）
+   P(prev)=0.6536, P(recent)=0.1697, P(any)=0.0653, P(no_ref)=0.1114
+3) B_0_8_0_9（n=354）
+   P(prev)=0.7571, P(recent)=0.0904, P(any)=0.0678, P(no_ref)=0.0847
+4) B_0_9_1_0（n=387）
+   P(prev)=0.7545, P(recent)=0.0698, P(any)=0.0594, P(no_ref)=0.1163
+5) B_1_0_1_1（n=342）
+   P(prev)=0.7135, P(recent)=0.1287, P(any)=0.0643, P(no_ref)=0.0936
+6) B_1_1_1_3（n=299）
+   P(prev)=0.5585, P(recent)=0.2241, P(any)=0.0401, P(no_ref)=0.1773
+7) GT_1_3（n=211）
+   P(prev)=0.4028, P(recent)=0.2512, P(any)=0.0995, P(no_ref)=0.2464
+
+二、核心结论（回答本阶段问题）
+- 随着 load_vs_p90 升高，PREV 权重整体下降：
+  从 <0.6 的 73.67%，下降到 >1.3 的 40.28%。
+- 同时 RECENT 与 NO_REFERENCE 权重上升：
+  RECENT 从 8.89% 升至 25.12%；NO_REFERENCE 从 9.08% 升至 24.64%。
+- 说明人工在接近/超过 p90 时，更倾向放弃“前一同类日直接复用”，转向“近期稳定参考或无明确参考重排”。
+
+三、分层结果
+- 已输出 day_type / route_group / route_type / is_city 四组分层权重表。
+- LOW_SAMPLE_BUCKET（全局）数量：0
+- INVALID_P90 数量：0
+
+四、规则草案（仅文本）
+- load_vs_p90 < 1.1：优先 PREV_MATCH，次选 RECENT_STABLE_MATCH。
+- load_vs_p90 在 1.1~1.3：PREV 仍第一，但 RECENT 与 NO_REFERENCE 显著抬升。
+- load_vs_p90 > 1.3：PREV 优势显著收窄，RECENT 与 NO_REFERENCE 接近第二梯队。
+- 低样本桶（若未来出现）建议回退：route_type -> route_group -> day_type -> global。
+
+五、自检
+- 是否改文件：仅追加 rgmf.txt
+- 是否建表：否
+- 是否落库：否
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否使用不存在字段：否
+====================================================================
+
+================ 第10.5阶段：reference_weight 权重函数拟合（只读）2026-04-30 ================
+一、与第十阶段一致性复算
+- 分桶结果已复算，和第十阶段基本一致。
+- 最大权重差异：0.0000005（可视为一致）
+- INVALID_P90：0
+
+二、A/B 两方案误差评估
+- 方案A（分段常数）
+  MAE = 0.00000000
+  MAX_ERROR = 0.00000000
+- 方案B（分段线性）
+  MAE = 0.01149166
+  MAX_ERROR = 0.04663914
+
+三、推荐方案
+- 推荐：方案A（piecewise_constant）
+- 原因：A 与实际桶统计完全一致；B 在若干桶存在可见误差与局部反向波动风险。
+
+四、函数草案（推荐A）
+1) x < 0.6
+   prev=0.736718, recent=0.088903, any=0.083548, no_ref=0.090831
+2) 0.6 <= x < 0.8
+   prev=0.653612, recent=0.169713, any=0.065274, no_ref=0.111401
+3) 0.8 <= x < 0.9
+   prev=0.757062, recent=0.090395, any=0.067797, no_ref=0.084746
+4) 0.9 <= x < 1.0
+   prev=0.754522, recent=0.069767, any=0.059432, no_ref=0.116279
+5) 1.0 <= x < 1.1
+   prev=0.713450, recent=0.128655, any=0.064327, no_ref=0.093567
+6) 1.1 <= x <= 1.3
+   prev=0.558528, recent=0.224080, any=0.040134, no_ref=0.177258
+7) x > 1.3
+   prev=0.402844, recent=0.251185, any=0.099526, no_ref=0.246445
+
+五、趋势解释
+- x 上升后，PREV 权重整体下降（0.7367 -> 0.4028）。
+- RECENT+NO_REFERENCE 权重整体上升（0.1797 -> 0.4976）。
+- 说明负载接近/超过 p90 时，人工更倾向转向近期稳定参考或无参考重排。
+
+六、分层建议（不落库）
+- 全局模型稳定性：高（全局各桶样本均>=30）
+- 建议 day_type 单独模型：是
+- 建议 route_group 单独模型：是
+- 建议 route_type 单独模型：是
+- 理由：分层曲线差异明显，先全局+day_type，再视样本扩展到 route_group/route_type。
+
+七、自检
+- 是否改文件：仅追加 rgmf.txt
+- 是否建表：否
+- 是否落库：否
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否使用不存在字段：否
+- 是否与第十阶段不一致：否
+- 是否存在 LOW_SAMPLE_BUCKET（全局）：否
+- 是否推荐进入下一阶段落库：是（以方案A先落，方案B后续仅作平滑备选）
+====================================================================
+
+================ 第11阶段：reference_weight_profiles 落库（最小版本）2026-04-30 ================
+一、安全检查
+- 数据库连接：正常
+- 目标表是否已存在：否（创建前不存在）
+
+二、建表与写入
+- 已创建表：rengong_reference_weight_profiles
+- 唯一键：calc_version+bucket_label+day_type_scope+route_group_scope+route_type_scope+is_city_scope
+- 固定作用域：ALL/ALL/ALL/ALL
+- calc_version：reference_weight_v1
+- source_date_start：2025-11-08
+- source_date_end：2026-04-08
+- 权重和校验：7条全部通过（误差<0.001）
+- 写入方式：INSERT ... ON DUPLICATE KEY UPDATE
+- upsert 影响行数：7
+
+三、写入后回查
+- 当前作用域总记录数：7
+- bucket_label：LT_0_6, B_0_6_0_8, B_0_8_0_9, B_0_9_1_0, B_1_0_1_1, B_1_1_1_3, GT_1_3
+- 权重值与指定一致：是
+- 非 bucket_min/bucket_max 的 NULL：0
+- 唯一键冲突：0
+
+四、自检
+- 是否创建表：是
+- 是否表已存在：否
+- 是否写入成功：是
+- 写入条数：7
+- 是否改 solver/evaluator/主调度：否
+- 是否改页面/API：否
+- 是否 drop/truncate/delete：否
+- 是否使用不存在字段：否
+====================================================================
+
+================ 第12阶段：调度解释引擎（只读样例版）2026-04-30 ================
+一、执行范围
+- 仅只读分析，不建表、不落库、不改页面/API、不改调度核心。
+- 使用表：
+  1) rengong_route_slack_profiles
+  2) rengong_reference_weight_profiles
+  3) human_dispatch_routes
+  4) chaos_replay_tasks
+
+二、输入与样本
+- 自动识别最近有数据日期：2026-04-08
+- 对应 day_type：NORMAL
+- 解释样例线路数：20（route_id 升序前20条）
+
+三、样例解释（节选，完整数值见本节）
+1) route 101
+- load=1.212560, p90=1.191600, load_vs_p90=1.017590
+- slack区间：SOFT_RISK
+- 权重（bucket=B_1_0_1_1）：prev=71.35%, recent=12.87%, any=6.43%, no_ref=9.36%
+- 实际行为：EXACT_COPY
+- 解释：风险区仍复用，属可观察行为；建议持续监测。
+
+2) route 103
+- load=0.656242, p90=1.101900, load_vs_p90=0.595555
+- slack区间：STABLE
+- 权重（bucket=LT_0_6）：prev=73.67%, recent=8.89%, any=8.35%, no_ref=9.08%
+- 实际行为：PARTIAL_CHANGE
+- 解释：低负载区发生变化，需检查车辆/司机/特殊门店或数据原因。
+
+3) route 105
+- load=1.341546, p90=0.985000, load_vs_p90=1.361976
+- slack区间：REBUILD_RISK
+- 权重（bucket=GT_1_3）：prev=40.28%, recent=25.12%, any=9.95%, no_ref=24.64%
+- 实际行为：UNKNOWN_CHANGE
+- 解释：高风险区发生变化，符合经验；且已超过normal_load_limit，属于强风险信号。
+
+4) route 125
+- load=0.998899, p90=0.863400, load_vs_p90=1.156936
+- slack区间：HIGH_RISK
+- 权重（bucket=B_1_1_1_3）：prev=55.85%, recent=22.41%, any=4.01%, no_ref=17.73%
+- 实际行为：EXACT_COPY
+- 解释：高风险负载下仍复用，需重点检查是否存在超载或数据异常。
+
+5) route 129
+- load=0.354787, p90=0.318200, load_vs_p90=1.114982
+- slack区间：HIGH_RISK
+- 权重（bucket=B_1_1_1_3）：prev=55.85%, recent=22.41%, any=4.01%, no_ref=17.73%
+- 实际行为：EXACT_COPY
+- 解释：高风险负载下仍复用，建议人工复核。
+
+四、汇总统计
+- 样例线路数：20
+- STABLE：3
+- WATCH：8
+- SOFT_RISK：3
+- HIGH_RISK：3
+- REBUILD_RISK：3
+- EXACT_COPY：8
+- 结构变化：12
+- 符合经验：17
+- 需人工复核：3
+
+五、自检
+- 是否改文件：仅追加 rgmf.txt
+- 是否建表：否
+- 是否落库：否
+- 是否改页面/API：否
+- 是否改 solver/evaluator/主调度：否
+- 是否使用不存在字段：否
+- 是否读取到 slack_profiles：是
+- 是否读取到 reference_weight_profiles：是
+====================================================================
+
+================ 第12.5阶段：调度解释文本优化（只读，不改模型）2026-04-30 ================
+说明：本阶段仅文本优化，严格复用第12阶段同一批20条样例字段与结果，不做任何重算。
+
+1) route 101
+【原始解释】
+当前货量1.213，p90=1.192，load_vs_p90=1.018，区间SOFT_RISK；预测仍偏向复用，实际EXACT_COPY。
+【优化后解释】
+route 101：
+【负载情况】当前货量约1.21，已经接近这条线路平时上沿。
+【经验判断】这种情况下通常还能沿用前一天安排，但稳定性会开始下降。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 符合人工经验。
+
+2) route 102
+【原始解释】
+货量0.544，p90=0.850，区间WATCH；实际EXACT_COPY。
+【优化后解释】
+route 102：
+【负载情况】当前货量约0.54，处于常见波动区间。
+【经验判断】一般会继续沿用前一天，必要时做很小修正。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 符合人工经验。
+
+3) route 103
+【原始解释】
+货量0.656，p90=1.102，区间STABLE；实际PARTIAL_CHANGE。
+【优化后解释】
+route 103：
+【负载情况】当前货量约0.66，整体偏低。
+【经验判断】这种负载下通常应保持原结构。
+【实际行为】本次调度为：PARTIAL_CHANGE。
+【解释结论】→ 在负载不高的情况下仍发生调整，可能与车辆、司机或特殊门店有关，需关注。
+
+4) route 104
+【原始解释】
+货量0.570，p90=0.905，区间STABLE；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 104：
+【负载情况】当前货量约0.57，仍在常规可承受范围。
+【经验判断】一般会沿用原有结构。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 低负载下变化，略有异常，建议人工复核。
+
+5) route 105
+【原始解释】
+货量1.342，p90=0.985，区间REBUILD_RISK；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 105：
+【负载情况】当前货量约1.34，明显高于这条线平时上界。
+【经验判断】已经明显超过常规承受范围，通常会发生拆分或重排。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 符合人工经验；且已触发强风险信号（超过常规上限）。
+
+6) route 106
+【原始解释】
+货量0.712，p90=0.712，区间WATCH；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 106：
+【负载情况】当前货量几乎贴近这条线的历史上沿。
+【经验判断】这种情况下开始容易出现局部调整。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 基本符合经验，建议关注后续是否继续波动。
+
+7) route 107
+【原始解释】
+货量0.972，p90=1.020，区间WATCH；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 107：
+【负载情况】当前货量约0.97，接近线路上沿但未明显超出。
+【经验判断】通常还可复用，但稳定性下降。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 可解释，偏向临界区调整。
+
+8) route 108
+【原始解释】
+货量1.099，p90=0.754，区间REBUILD_RISK；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 108：
+【负载情况】当前货量明显偏高，超过常态承载范围。
+【经验判断】已经明显超过常规承受范围，通常会发生拆分或重排。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 符合人工经验，属于高压重排信号。
+
+9) route 109
+【原始解释】
+货量1.197，p90=0.928，区间HIGH_RISK；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 109：
+【负载情况】当前货量约1.20，已明显高于平时水平。
+【经验判断】这种负载下多半会做结构调整。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 符合人工经验，变化合理。
+
+10) route 110
+【原始解释】
+货量1.225，p90=1.414，区间WATCH；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 110：
+【负载情况】当前货量约1.22，处于观察区。
+【经验判断】通常仍可延续原结构，但会开始出现局部调整。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 基本可解释，建议结合门店特性复核。
+
+11) route 111
+【原始解释】
+货量0.924，p90=0.924，区间SOFT_RISK；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 111：
+【负载情况】当前货量已贴近并轻微越过历史上沿。
+【经验判断】这种情况下开始不太稳定，容易调整。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 符合经验。
+
+12) route 112
+【原始解释】
+货量1.469，p90=1.015，区间REBUILD_RISK；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 112：
+【负载情况】当前货量显著偏高。
+【经验判断】已经明显超过常规承受范围，通常会发生拆分或重排。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 符合人工经验；且超过normal_load_limit，属于强风险信号。
+
+13) route 113
+【原始解释】
+货量0.657，p90=0.945，区间STABLE；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 113：
+【负载情况】当前货量处于偏低到正常区间。
+【经验判断】一般会继续沿用既有线路结构。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 在负载不高情况下仍变化，需检查车辆、司机或特殊门店因素。
+
+14) route 114
+【原始解释】
+货量1.105，p90=1.118，区间WATCH；实际UNKNOWN_CHANGE。
+【优化后解释】
+route 114：
+【负载情况】当前货量约1.11，接近上沿。
+【经验判断】这种负载下开始容易出现顺序或局部结构调整。
+【实际行为】本次调度为：UNKNOWN_CHANGE。
+【解释结论】→ 基本符合经验。
+
+15) route 125
+【原始解释】
+货量0.999，p90=0.863，区间HIGH_RISK；实际EXACT_COPY。
+【优化后解释】
+route 125：
+【负载情况】当前货量已偏高。
+【经验判断】通常会进入调整倾向。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 负载已偏高但仍未调整，需注意是否存在超载或临时压单。
+
+16) route 126
+【原始解释】
+货量1.406，p90=1.351，区间SOFT_RISK；实际EXACT_COPY。
+【优化后解释】
+route 126：
+【负载情况】当前货量已接近上沿并略超。
+【经验判断】通常还会优先沿用前一天，但稳定性变弱。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 可接受，但建议重点跟踪后续是否转入调整。
+
+17) route 127
+【原始解释】
+货量1.342，p90=1.754，区间WATCH；实际EXACT_COPY。
+【优化后解释】
+route 127：
+【负载情况】当前货量处于正常偏上。
+【经验判断】一般会继续沿用前一同类日方案。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 符合人工经验。
+
+18) route 128
+【原始解释】
+货量1.251，p90=1.319，区间WATCH；实际EXACT_COPY。
+【优化后解释】
+route 128：
+【负载情况】当前货量接近上沿但仍在可控范围。
+【经验判断】这种情况下多数仍保留原结构。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 符合人工经验。
+
+19) route 129
+【原始解释】
+货量0.355，p90=0.318，区间HIGH_RISK；实际EXACT_COPY。
+【优化后解释】
+route 129：
+【负载情况】当前货量已偏高。
+【经验判断】通常会出现结构调整倾向。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 高负载仍复用，需注意是否存在超载或临时压单。
+
+20) route 130
+【原始解释】
+货量0.409，p90=0.447，区间WATCH；实际EXACT_COPY。
+【优化后解释】
+route 130：
+【负载情况】当前货量处于观察区。
+【经验判断】一般仍会沿用前一天安排。
+【实际行为】本次调度为：EXACT_COPY。
+【解释结论】→ 符合人工经验。
+
+汇总：
+- 总样例数：20
+- 优化前后差异一句话：将“区间+概率日志”改为“调度现场语言”，结论更像班组复盘而非模型输出。
+- 难以表达场景：
+  1) STABLE但UNKNOWN_CHANGE（需要额外业务上下文）
+  2) HIGH/REBUILD风险下仍EXACT_COPY（可能是策略坚持，也可能是异常）
+
+自检：
+- 是否改模型：否
+- 是否改表：否
+- 是否落库：否
+- 是否改 solver/evaluator：否
+- 是否改页面/API：否
+- 是否使用不存在字段：否
+====================================================================
+
+================ ====================================================================
+
+================ 第13阶段补充：导出文件编码修复（2026-04-30） ================
+仅修复写入编码，不改业务逻辑与数据内容。
+- CSV：dispatch_explain_review.csv -> UTF-8 with BOM（Excel兼容）
+- TXT：dispatch_explain_review.txt -> UTF-8
+- 分隔符：逗号（未改）
+验证：CSV BOM=True。
+自检：未改数据库/模型/字段/解释逻辑。
+====================================================================
+
+================ 第13阶段补充：乱码重建导出（2026-04-30） ================
+已按“从数据库与解释逻辑重生”执行，重新生成：
+- dispatch_explain_review.txt（UTF-8）
+- dispatch_explain_review.csv（UTF-8 with BOM）
+- dispatch_explain_review.xlsx（openpyxl）
+校验结果：
+- txt 连续?????：否
+- csv 中文字段可读：是
+- xlsx 可打开：是
+说明：csv 中仍存在 ?????（主要来自源数据字段内容，如 route_type 历史值），非导出编码造成。
+自检：未改数据库、未改模型、未改字段逻辑。
+====================================================================
+
+================ 第13阶段补充：最终Excel导出方案（2026-04-30） ================
+按要求仅保留并重建 dispatch_explain_review.xlsx（不写txt/csv）。
+为彻底规避脚本链路中文表头污染，表头改为稳定英文列名；解释正文中文保持正常。
+校验结果：
+- has_5q = False
+- has_mojibake = False
+- rows = 40
+自检：未改数据库、未改模型、未改字段内容逻辑。
+====================================================================
+
+================ 乱码/脏值源头定位（只读）2026-04-30 ================
+结论：已定位到数据库字段本身存在脏值，非导出编码单点问题。
+命中：rengong_route_slack_profiles.route_type
+- 脏值样例："??"、"????"
+- 数量：98
+- 最早时间：2026-04-30 16:24:23
+- 与最近阶段写入时间一致，疑似该阶段落库时写入了问号值
+链路验证（同一代表值）：
+- SQL原值："??"
+- Python repr：'??'
+- xlsx回读 repr：'??'
+判定：数据库原值已坏（导出过程只是原样带出）。
+修复建议（本次不执行）：
+1) 数据库字段已坏时：
+   - 受影响表/字段：rengong_route_slack_profiles.route_type
+   - 候选恢复来源：
+     a. 从 route_id 规则重推 route_type（<=120市区、121-128郊区周边、129-133地铁、140机场、>140周边城市；W2按route_name规则）
+     b. 从历史可用CSV/脚本中重算并回写（仅经你批准后执行）
+2) 导出层修复仅治标，不能修复已坏库值。
+自检：
+- 修改数据库：否
+- 修改表结构：否
+- 更新任何数据：否
+- 改模型：否
+- 继续导出：否
+- 是否定位到源头：是
+====================================================================
+
+================ route_type定向修复前校验（只读）2026-04-30 ================
+目标：验证是否可由 rengong_route_distance_load_profiles 反推修复 rengong_route_slack_profiles.route_type。
+结果：
+1) slack中坏值（??/????/明显乱码）记录：98
+2) 唯一可恢复：93
+3) 多候选但可最高频恢复：0
+4) 最高频并列冲突：0
+5) 完全无来源：5（route_id: 134,217,218,219,220 的 COLD_ONLY）
+安全结论：不能全自动全量修复（存在无来源记录）。
+可自动修复范围：93条（仅YES清单）。
+已生成UPDATE预览SQL（未执行）。
+自检：
+- 执行UPDATE：否
+- 修改数据库：否
+====================================================================
+
+================ route_type第一批定向修复执行结果（2026-04-30） ================
+执行范围：仅 rengong_route_slack_profiles.route_type。
+执行前：
+- 坏值总数：98
+- 备份文件：route_type_fix_backup_before.csv
+- 可自动修复YES：93
+- NO清单：5（route_id=134/217/218/219/220，均COLD_ONLY）
+执行：
+- 事务更新 route_type：93
+- 数量校验=93，已commit
+执行后：
+- 剩余坏值：5
+- 剩余5条均为NO清单，未更新
+- 已修复样例：10条（101市区、125郊区周边、129地铁等）
+自检：
+- 是否只更新route_type：是
+- 是否更新93条：是
+- 是否剩余5条坏值：是
+- 是否改其他表：否
+- 是否改模型：否
+- 是否改页面/API：否
+- 是否drop/truncate/delete：否
+====================================================================
+
+================ route_type剩余5条人工修复补正（2026-04-30） ================
+说明：首次5条修复在命令链路出现字符错码，已立即二次补正（仅route_type）。
+二次补正结果：
+- id16 route_id134 -> 地铁 (HEX=E59CB0E99381)
+- id38/39/40/41 route_id217/218/219/220 -> 市区 (HEX=E5B882E58CBA)
+- calc_version=route_slack_profile_v1 下 route_type 坏值(??/????)剩余：0
+自检：
+- 仅更新route_type：是
+- 更新条数：5
+- 其他表/模型/页面/API：未改
+- drop/truncate/delete：否
+====================================================================
+
+================ 第14阶段：人工经验提取成果全链路审计（只读）2026-04-30 ================
+审计范围：
+- 数据库：rengong_route_slack_profiles、rengong_reference_weight_profiles
+- 文件：rgmf.txt、dispatch_explain_review.xlsx、dispatch_explain_review.csv/txt（仅检查）
+- 备份：route_type_fix_backup_before.csv、route_type_fix_manual_backup_before.csv
+核心审计项：
+1) slack_profiles
+- route_type 乱码扫描（??/????/mojibake）
+- 必填字段空值检查（calc_version/day_type/route_id/sample_count/load_p50/load_p75/load_p90等）
+- 分位数单调性检查（min<=p10<=p25<=p50<=p75<=p90<=max）
+- 风险边界公式一致性检查
+- low_sample_flag 规则一致性检查
+- 唯一键冲突检查（calc_version+day_type+route_id）
+2) reference_weight_profiles
+- 固定7桶完整性
+- 权重和约等于1（误差<0.001）
+- 空值/乱码/重复键检查
+3) 解释样例一致性抽查
+- route_load、bucket命中、slack区间、引用权重来源一致性
+结论：
+- 审计过程仅只读，无建表、无落库、无更新。
+- 审计后进入“重生干净版评审文件”阶段。
+自检：
+- 修改数据库：否
+- 修改文件：否
+- 建表：否
+- 落库：否
+- 改页面/API：否
+- 改solver/evaluator/主调度：否
+====================================================================
+
+================ 第14.5阶段：重生干净版评审Excel（只导出）2026-04-30 ================
+目标：重新生成可交付评审文件，避免历史乱码文件污染。
+输出目标文件：dispatch_explain_review_clean.xlsx（不覆盖旧问题文件）
+执行口径：
+- 数据重新从数据库读取
+- 使用现有 slack_profiles + reference_weight_profiles + 第13阶段样本逻辑
+- 解释文本沿用第12.5阶段话术，不改模型计算
+- 仅保留评审必要字段（中文表头）
+格式控制：
+- openpyxl写入
+- 说明行 + 表头行 + 数据行
+- 解释列自动换行
+- 冻结窗格与列宽优化
+校验：
+- 读回检查是否含????/mojibake
+- 样本数是否为40
+- 解释文本是否为空
+结论：
+- 该阶段仅做导出重建，不改数据库和模型。
+====================================================================
+
+================ 第15阶段：导出链路专项修复（编码/路径/可复现）2026-04-30 ================
+本阶段处理的是“导出可靠性”，不涉及调度逻辑。
+子步骤：
+1) 编码修复
+- CSV统一UTF-8 BOM
+- TXT统一UTF-8
+- 不改字段、不改逻辑
+2) 乱码复盘结论
+- 旧文件中文被?替换后不可逆，必须重生成
+3) 导出路径隔离
+- 导出路径改到 C:\\x\\（避免中文路径链路风险）
+- 重新生成并回读校验repr
+4) 终版稳态方案
+- 仅保留 xlsx 作为交付格式
+- 不再依赖csv/txt做业务交付
+5) Unicode escape 实验
+- 对“源码中文污染风险”进行了规避性输出验证
+结果定位：
+- 导出编码问题与数据库历史脏值需分离看待：
+  编码可修复，数据库脏值需定向修复。
+====================================================================
+
+================ 第16阶段：新增“登堂”页面（只读解释前台）2026-04-30 ================
+定位：人工调度解释能力展示页（只读，不求解，不落库）。
+新增文件：
+- dengtang.html
+- dengtang.js
+- dengtang.css
+新增接口：
+- GET /rengong/dengtang-explain?date=YYYY-MM-DD（只读）
+返回结构：
+- daySummary：delivery_date/day_type/route_count/exact_copy_count/changed_count/stable_count/risk_count/review_count
+- routes[]：route_id/route_load/load_status/reuse_type/decision_hint/explanation_text/review_level
+页面能力：
+- 日期选择
+- KPI摘要（线路数/稳定复用/变化/高风险/需复核）
+- 筛选（全部/稳定复用/发生变化/高风险/需复核）
+- 线路解释卡片（中文可读短句）
+关键修复（链路级）：
+- 失败根因定位：file:// 打开页面导致CORS与Failed to fetch
+- 解决：必须通过后端静态服务 http://127.0.0.1:8765/*.html 访问
+- /index.html 静态404修复：修正后端静态文件挂载，保证 index/dengtang/js/css 可访问
+自检：
+- 不改数据库
+- 不改solver/evaluator/主调度
+- 不新增写入
+====================================================================
+
+================ 第16阶段补充：登堂解释文案规则改造（不改模型）2026-04-30 ================
+目标：解释文本从“模型术语”改为“调度员语言”。
+规则改造：
+- 禁用术语展示：软风险区/高风险区/load/p90/PARTIAL_CHANGE/EXACT_COPY等
+- 固定输出结构：
+  线路XXX
+  建议：...
+  原因：...
+- 典型规则：
+  1) 负载高+已调整 -> 建议不用再动
+  2) 负载高+未调整 -> 建议需要看一下（可能装不下）
+  3) 负载低+未调整 -> 建议不用动
+  4) 负载低+已调整 -> 建议看原因（不该动却动了）
+说明：仅改解释文案层，不改 slack/reference 计算。
+====================================================================
+
+================ 第17阶段：登堂“参考日还原层”增强（只读）2026-04-30 ================
+目标：每条线路可回看“今天 vs 参考日”的结构与变化，不只给结论。
+增强数据结构（routes[]）：
+1) reference
+- reference_date
+- reference_type
+- reference_label
+2) current_snapshot
+- route_id
+- route_load
+- store_count
+- distance
+- stores[]（stop_sequence/store_id/store_name/store_load/...）
+3) reference_snapshot
+- 同上（参考日线路快照）
+4) diff_summary
+- added_store_count
+- removed_store_count
+- same_store_count
+- order_changed
+- route_load_delta
+- route_load_delta_ratio
+- distance_delta
+- distance_delta_ratio
+强约束执行：
+- 单店里程字段缺失时明确返回
+  distance_available=false
+  distance_note="当前数据无单店里程字段"
+- 不虚构里程
+参考日口径：
+- 第一版固定“前一个同类日”（NORMAL对NORMAL，COLD_ONLY对COLD_ONLY）
+前端呈现：
+- 今日线路
+- 参考日线路
+- 变化摘要（新增/移出/顺序/货量/里程）
+====================================================================
+
+================ 第17阶段补充：调度助手接入登堂页（前端链路）2026-04-30 ================
+目标：在“登堂”页边看边问，问题自动带上下文。
+实施范围（仅登堂页前端）：
+- dengtang.html：新增助手面板容器
+- dengtang.css：新增助手局部样式（不影响其他页）
+- dengtang.js：新增助手逻辑
+核心能力：
+1) assistantContext 自动采集
+- page（登堂）
+- date（当前日期）
+- route_id（当前选中线路）
+- filters（当前筛选）
+2) prompt拼接
+- 在用户问题前注入 [CTX]...[/CTX]
+3) 调用链路
+- POST /deepseek-chat
+- 使用主系统同一配置源：localStorage(dispatch_deepseek_settings_v1)
+4) 可视化选中态
+- 线路点击高亮
+- 显示“已选线路ID”
+5) debug机制优化
+- 默认关闭，不要求调度员输入 debug=true
+- 支持URL/本地开关进入调试
+6) 线路数据预查询注入
+- 先调 /rengong/dengtang-explain?date=...
+- 将当前线路事实块拼入问题，避免通用空话回答
+重要修复：
+- 当时返回中缺少 load_p90/load_vs_p90，先给兜底话术“画像不足”
+- 后续补后端字段后自动升级精确解释
+====================================================================
+
+================ 第17阶段补充：后端补字段（dengtang-explain）2026-04-30 夜间 ================
+变更目标：
+- 在 /rengong/dengtang-explain routes[] 补充：
+  load_p90
+  load_vs_p90
+来源：
+- rengong_route_slack_profiles（按 day_type+route_id 取 p90）
+- load_vs_p90 = route_load / load_p90（p90为空或0则返回null）
+执行说明：
+- 修改后端后已重启并复查接口字段存在。
+- 前端助手无需再输入debug参数即可正常问答。
+====================================================================
+
+================ 第18阶段：模型成果展示补齐（坐照/缘起·性空/登堂）2026-04-30 ================
+目标：补齐“定位文案 + 模型成果卡片”展示，不改模型逻辑。
+执行内容：
+1) 登堂页顶部说明补齐
+- 中文主标题：登堂
+- 英文副标题：HUMAN DISPATCH EXPLAIN
+- 新增完整说明区（与坐照/缘起·性空风格对齐）
+2) 缘起·性空新增“人工调度经验模型”模块
+- 卡片A：线路负载边界模型（来源 slack_profiles）
+- 卡片B：历史参考来源权重模型（来源 reference_weight_profiles）
+- 卡片C：登堂解释引擎（来源 人工线路+两张模型表）
+- 明确三张卡片各自“能回答的问题”
+3) 样式收敛
+- 登堂说明区尺寸改为参考缘起·性空页面，避免首屏过高
+- 调整内边距、字号、行距、模块宽度，解决“整屏过大”问题
+结果：
+- 展示层补齐完成
+- 不改数据库、不改模型、不改solver/evaluator/主调度
+====================================================================
+
+================ 第18阶段补充：页面体系与文档沉淀（2026-04-30 ~ 2026-05-01） ================
+本轮还完成了以下沉淀动作：
+1) 页面体系梳理与命名固化
+- 坐照、见微、登堂、混沌、窥径、缘起·性空
+2) 说明文案统一与替换
+- 坐照说明文案按指定文本替换
+- 混沌/登堂/缘起文案统一风格（克制、可读、只读定位）
+3) 文档沉淀
+- 产出《我的世界》：系统页面的存在意义、功能要点、数据来源、作用边界、使用价值
+- 产出并持续维护《人工经验提取.md》与 rgmf 阶段记录
+====================================================================

@@ -1,0 +1,57 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dengtang</title>
+  <link rel="stylesheet" href="./dengtang.css">
+</head>
+<body>
+  <main class="dt-shell">
+    <section class="dt-hero">
+      <div class="dt-hero-copy">
+        <p class="dt-eyebrow">HUMAN DISPATCH EXPLAIN</p>
+        <h1 id="pageTitle"></h1>
+      </div>
+      <div class="dt-hero-actions">
+        <a class="dt-btn dt-ghost" href="./index.html" id="btnHome"></a>
+        <a class="dt-btn dt-ghost" href="./rengong.html" id="btnZuozhao"></a>
+        <a class="dt-btn dt-ghost" href="./rengong-boundary.html" id="btnYuanqi"></a>
+        <button class="dt-btn dt-primary" type="button" id="btnRefresh"></button>
+      </div>
+    </section>
+
+    <section class="dt-panel">
+      <div class="dt-explain">
+        <p>
+          登堂者，已得其门径，能循其法度，不止见其结果，亦能还原其过程。<br>
+          在此之前，调度之成败，多凭经验与记忆；<br>
+          至此，可以还原一条线路从何而来，参考何日，如何组织，又因何而变。<br>
+          登堂：<br>
+          人工经验 → 被还原为可解释的结构。
+        </p>
+      </div>
+    </section>
+
+    <section class="dt-panel dt-toolbar">
+      <label class="dt-field">
+        <span id="dateLabel"></span>
+        <input id="dateInput" type="date">
+      </label>
+      <button id="loadBtn" class="dt-btn dt-primary" type="button"></button>
+      <div id="statusText" class="dt-status"></div>
+    </section>
+
+    <section class="dt-panel">
+      <div class="dt-kpi-grid" id="kpiGrid"></div>
+    </section>
+
+    <section class="dt-panel dt-filter-row" id="filterRow"></section>
+
+    <section class="dt-panel">
+      <div id="cards" class="dt-cards"></div>
+    </section>
+  </main>
+  <script src="./dengtang.js?v=20260430-01"></script>
+</body>
+</html>

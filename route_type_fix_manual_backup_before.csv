@@ -1,0 +1,6 @@
+﻿id,route_id,day_type,route_type,route_type_hex,calc_version,source_date_start,source_date_end
+16,134,COLD_ONLY,??,3F3F,route_slack_profile_v1,2025-12-28,2025-12-28
+38,217,COLD_ONLY,??,3F3F,route_slack_profile_v1,2026-01-04,2026-01-04
+39,218,COLD_ONLY,??,3F3F,route_slack_profile_v1,2026-01-04,2026-01-04
+40,219,COLD_ONLY,??,3F3F,route_slack_profile_v1,2026-01-04,2026-01-04
+41,220,COLD_ONLY,??,3F3F,route_slack_profile_v1,2026-01-04,2026-01-04

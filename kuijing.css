@@ -1,0 +1,84 @@
+:root {
+  --kuijing-bg: #f3f5f9;
+  --kuijing-card: #ffffff;
+  --kuijing-text: #0f172a;
+  --kuijing-muted: #6b7280;
+  --kuijing-line: #dbe1ea;
+  --kuijing-brand: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--kuijing-bg);
+  color: var(--kuijing-text);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+
+.kuijing-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.kuijing-shell {
+  width: min(760px, 100%);
+  text-align: center;
+}
+
+.kuijing-eyebrow {
+  margin: 0;
+  color: var(--kuijing-muted);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.kuijing-shell h1 {
+  margin: 12px 0 0;
+  font-size: 56px;
+  line-height: 1.05;
+}
+
+.kuijing-intro-card {
+  margin-top: 24px;
+  padding: 28px 30px;
+  background: var(--kuijing-card);
+  border: 1px solid var(--kuijing-line);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.kuijing-intro-card p {
+  margin: 0 0 12px;
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.kuijing-intro-card p:last-child {
+  margin-bottom: 0;
+}
+
+.kuijing-main-btn {
+  margin-top: 24px;
+  height: 48px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--kuijing-brand);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.18);
+}
+
+.kuijing-main-btn:hover {
+  background: #1d4ed8;
+}

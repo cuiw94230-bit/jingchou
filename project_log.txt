@@ -1,0 +1,82 @@
+﻿2026-04-10 14:43:00|任务20260410-001|基础资料页重构|3|门店去经纬度主表+门店车辆DataTable统一并补齐编号/名称/车号搜索定位与编辑保存入口。
+2026-04-10 14:43:00|任务20260410-001|波次配置重构|2|波次改为左侧单选右侧门店清单结构并支持名称标签+N、门店搜索、增删和批量勾选。
+2026-04-10 14:43:00|任务20260410-001|档案查询页|2|新增基础资料档案查询面板并展示含经纬度的完整门店数据明细。
+2026-04-10 14:43:00|任务20260410-001|智能助手全局组件|2|智能助手改为全局三级状态组件并支持默认折叠与展开态拖拽移动。
+2026-04-10 15:24:48|任务20260410-002|后端WMS只读抓取|1|新增SQLServer只读抓取五表、密码本地加密保存、首抓5个月+后续增量同步并独立落库。
+2026-04-10 15:24:48|任务20260410-002|前台数据源切换|2|新增样本/真实业务切换与一键抓取入口，货量统一按CargoQTY覆盖到店铺表。
+2026-04-10 15:24:48|任务20260410-002|交互与状态展示|1|新增WMS同步状态反馈与密码失败重输弹窗链路，保持现有导入流程不冲突。
+2026-04-10 19:17:15|任务20260410-003|本地货量折算规则|1|装载能力表作为唯一系数来源，按车辆类型计算1/最大装载并对缺失类型按0记录日志。
+2026-04-10 19:17:15|任务20260410-003|前台货量来源统一|1|门店货量统一改为读取local-load折算结果并覆盖前台显示与求解输入。
+2026-04-10 19:40:35|任务20260410-004|波次货量重算|1|按110/210业务规则由货量明细自动计算wave1Load/wave2Load，boxes仅保留为派生兼容值。
+2026-04-10 19:50:38|任务20260410-005|分区方案号后端|1|新增分区方案管理表与CRUD接口，运行区围栏强制归属scheme_no并按方案号隔离查询。
+2026-04-10 19:50:38|任务20260410-005|运行区前端接入|2|运行区面板新增方案号管理与选择，围栏新建/编辑/列表全部绑定所选方案号且不同方案不混用。
+2026-04-10 19:50:38|任务20260410-005|求解前校验|1|求解前强制选择分区方案号并随求解请求携带regionSchemeNo。
+2026-04-10 20:07:07|任务20260410-006|货量默认源固定|1|开发模拟阶段货量来源固定为C:\x\副本店铺货量.xlsx并默认读取该文件导入本地货量快照。
+2026-04-10 20:07:07|任务20260410-006|波次货量自动公式|1|每次求解按配送次数自动重算wave1Load/wave2Load，boxes仅保留派生兼容值且前台不可手工覆盖。
+2026-04-10 20:26:59|任务20260410-007|分区方案1自动生成|2|新增run-regions/generate-scheme1接口并前端自动触发，基于human_dispatch_routes生成方案1分区与围栏并落图可编辑。
+2026-04-10 20:39:46|任务20260410-008|分区可见链路修复|2|补齐方案1自动生成与分区列表门店集合展示，分区号可选可见并驱动地图围栏多边形渲染与编辑。
+2026-04-10 20:41:50|任务20260410-008|分区显示验收补齐|2|分区列表新增分区号+门店集合展示，方案1自动补生并回流围栏渲染链路，地图按多边形可编辑显示。
+2026-04-10 20:44:34|任务20260410-008|分区方案下拉与列表补强|2|run-region-schemes补齐方案1可见性，run-regions/list返回分区号与门店集合，页面右侧可见并可选加载围栏。
+2026-04-11 16:54:00 | 任务20260410-010 | 装载链路专项审计 | files=0 | 仅审计不改代码
+[审计范围] 车辆类型->CarLoad匹配->SHOPCODE货量匹配->波次拆分->wave1/wave2折算->当前线路取值->routeLoad累计->超载判断
+[调用链核查]
+1) local_store_total_load 保存货量明细与wave1_total_load/wave2_total_load/total_load
+2) app.js getStoreSolveLoadForWave(): route_id=110(W1)取wave1_total_load；route_id=210(W2)取wave2_total_load
+3) app.js getVehicleSolveCapacity(): 当前求解口径容量=1
+4) routeLoad累计=线路内门店 route_pick_load 求和；超载判断=routeLoad > 1
+[统计结果]
+- 车辆类型为空数量(按当前导入结果推断): 267
+  依据: local_store_total_load共267行；local_load_factor_rows仅__default__1行，vehicle-specific系数行=0
+- CarLoad匹配失败数量: 0
+  依据: 当前只有__default__系数集，所有货量行可回退匹配默认系数
+- SHOPCODE未匹配数量: 99
+  SQL: local_store_total_load LEFT JOIN c_shop_main 未命中
+- wave1_total_load为0数量: 52
+- wave2_total_load为0数量: 51
+- wave1_total_load与wave2_total_load同时为0数量: 51
+[2台真实车辆样例]
+- vehicle_id=쑴FAQ401, delivery_date=2026-04-08, distinct_stores=9
+- vehicle_id=쑴JLN188, delivery_date=2026-04-08, distinct_stores=9
+[110/210线路完整样例]
+- delivery_date=2026-04-08, vehicle_id=쑴LHR562
+- route 110: store_cnt=6, routeLoad=0.564665, vehicleCapacity=1.000000, margin=0.435335
+- route 210: store_cnt=9, routeLoad=0.347821, vehicleCapacity=1.000000, margin=0.652179
+[3个真实门店计算样例（含字段到线路取值）]
+1) route_id=110, store_id=394024, 融科资讯中心
+   原始货量: rpcs=8, rcase=56, bpcs=4, bpaper=0, apcs=28, apaper=8, rpaper=0
+   wave1_total_load=0.219349, wave2_total_load=0.101053
+   当前线路取值(route_pick_load, 110取wave1)=0.219349
+2) route_id=110, store_id=394072, 超市发万柳
+   原始货量: rpcs=7, rcase=28, bpcs=1, bpaper=0, apcs=20, apaper=3, rpaper=0
+   wave1_total_load=0.115834, wave2_total_load=0.065038
+   当前线路取值(route_pick_load, 110取wave1)=0.115834
+3) route_id=210, store_id=393416, 北京地铁六道口站店
+   原始货量: rpcs=3, rcase=18, bpcs=0, bpaper=0, apcs=14, apaper=0, rpaper=0
+   wave1_total_load=0.061861, wave2_total_load=0.040000
+   当前线路取值(route_pick_load, 210取wave2)=0.040000
+2026-04-11 17:19:41|任务20260410-011|装载链路车型强制|2|禁用__default__并强制vehicle_type=4.2米厢式货车，求解前统一补齐空车型。
+2026-04-11 17:36:56|任务20260410-011|CarLoad匹配链路|1|移除__default__/默认回退，CarLoad未命中改为直接报错并终止导入。
+2026-04-11 17:36:56|任务20260410-011|求解入口校验|1|/ga-optimize-wave与/wave-optimize求解前强制补齐空车型为4.2米厢式货车并校验vehicle_type_key命中CarLoad，否则终止求解。
+2026-04-11 17:36:56|任务20260410-011|匹配对照日志|1|新增vehicle_type与CarLoad key全量对照打印（LOCAL_LOAD_MATCH/SOLVE_CARLOAD_MATCH），用于现场核对匹配结果。
+2026-04-12 20:59:33|任务2026041202-001|store_wave_load_resolved只读接口|1|新增单店与批量只读查询接口，仅返回指定10个字段且不改求解链路。
+2026-04-12 21:09:25|任务2026041202-002|求解入口覆盖取值|1|在/wave-optimize与/ga-optimize-wave前按shop_code批量读取store_wave_load_resolved覆盖payload stores字段。
+2026-04-12 21:14:29|任务2026041202-003|波次严格覆盖取值|1|求解入口按W1/W2/W3/W4严格覆盖boxes与对应时间字段，不做兜底推测。
+2026-04-12 21:23:35|任务2026041202-003补充|wave_belongs强校验|1|在_overlay_payload_stores_from_resolved_table中新增wave_belongs空值硬校验，空值直接报错终止。
+2026-04-12 21:31:00|任务2026041202-004|前端求解请求组装停用主动赋值|1|buildGaBackendPayload去除boxes与时间字段的前端主动赋值，仅保留原样展示与请求发起。
+2026-04-12 21:34:00|任务2026041202-005|后端求解入口严格校验|1|求解入口仅允许store_wave_load_resolved已存在且当前波次货量与时间字段非空的数据参与求解，缺店缺字段空值直接报错终止。
+2026-04-12 21:41:00|任务2026041202-006|停用旧货量时间取值|1|求解入口不再读取local_store_total_load/local_load_factor_rows作为前置校验，旧货量时间取值与兜底从求解链路中退出。
+2026-04-12 21:48:00|任务2026041202-006补充A|货量时间残留三分类审计|1|完成货量/时间相关残留三分类清单，仅标注必须删除/可保留但不参与求解/仅展示可保留，不改代码。
+2026-04-12 21:55:00|任务2026041202-006补充B|删除旧货量时间相关残留|1|仅删除三分类清单中必须删除项：旧货量表校验、旧折算函数、旧货量接口与旧货量debug日志，未改求解流程。
+2026-04-12 22:05:00|任务2026041202-006补充C|封口验收|1|确认do_POST白名单与/local-load分支已不含/local-load/import和/local-load/latest，前端buildGaBackendPayload已无W2旧货量debug。
+2026-04-12 22:18:00|任务2026041203-001|车辆容积超载校验审计|1|完成前后端与solver容量/超载链路审计，记录关闭点、绕过判断、恢复最小改动点及影响范围，不改代码。
+2026-04-12 22:28:00|任务2026041203-002|统一容量规则口径|2|清除后端残留_disable_capacity_checks_for_payload调用，并将算法层ACO/PSO容量门槛统一到同一IGNORE_CAPACITY_CONSTRAINT开关，不改变业务目标。
+2026-04-12 22:41:00|任务2026041203-003|恢复容量校验开关|2|仅将app.js与solver_core/constraints.py的IGNORE_CAPACITY_CONSTRAINT从true恢复为false，算法层保持统一联动不变。
+2026-04-12 22:46:00|任务2026041203-004|统一算法层容量口径|1|将solver_core/algorithms_impl.py中的ACO/PSO容量判断去掉放宽余量，统一为超过vehicle.capacity即拦截，与前端和constraints同口径。
+2026-04-12 22:53:00|任务2026041203-006|算法完整性基线更新|1|计算当前solver_core/algorithms_impl.py的SHA256并更新integrity_guard.py中的EXPECTED_SHA256为新值，不改算法逻辑。
+2026-04-13 09:10:00|任务2026041204-001|原始货量表现状排查|1|确认wms_cargoqty_snapshot存在但仅保存shop_code/business_date/ambient_qty/cold_qty/frozen_qty/total_boxes，不能直接作为store_wave_load_resolved上游原始货量全量表。
+2026-04-13 09:35:00|任务2026041204-002|新增原始货量表|1|新增wms_cargo_raw_snapshot原始货量表，仅保存shop_code/business_date/rpcs/rcase/bpcs/bpaper/apcs/apaper/rpaper及追踪字段，不改store_wave_load_resolved职责。
+2026-04-13 10:05:00|任务2026041204-003|原始货量入库入口|1|新增wms/cargo-raw/save只写wms_cargo_raw_snapshot，按row_hash去重，不做折算不写store_wave_load_resolved。
+2026-04-13 10:25:00|任务2026041204-004|原始表到折算结果单向生成链|1|新增wms/cargo-raw/rebuild-resolved，仅从wms_cargo_raw_snapshot读取并写入store_wave_load_resolved，不接前端不改求解。
+2026-04-13 02:33:30|任务2026041204-005|原始货量灌入与重建验证|1|使用店铺货量.csv真实原始数据写入wms_cargo_raw_snapshot并按原始表重建store_wave_load_resolved，抽样验证原始字段与折算结果均非0。
+2026-04-13 10:55:00|任务2026041204-007|门店信息页货量回显|1|仅在门店加载后批量读取store_wave_load_resolved并回填wave1~wave4货量，不改波次时间与求解。
+2026-04-13 03:10:00|门店信息页回显修正|1|门店信息页三四波次货量回显改为直接读取resolvedWave*Load，不再在渲染时被syncStoreWaveLoads重算覆盖。

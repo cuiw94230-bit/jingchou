@@ -1,0 +1,27 @@
+﻿# 环境变量
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# 临时文件
+*.log
+*.tmp
+
+# 浏览器缓存（非常关键）
+.tmp_edge_profile/
+
+# 备份文件（你项目里很多）
+backup/
+*.bak
+backup_*
+*.backup*
+
+# Git
+.git/

@@ -1,0 +1,10 @@
+GA backend listening on http://0.0.0.0:8765
+并行计算: CPU核心数=12
+GPU可用: False
+自动调参可用: True
+多算法独立初始解策略已启用:
+  - SA/Tabu: 随机顺序
+  - LNS: 距离优先
+  - ACO: 时间窗优先
+  - PSO: 完全随机
+  - Hybrid: Clark-Wright节约法

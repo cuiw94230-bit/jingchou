@@ -1,0 +1,130 @@
+﻿$ErrorActionPreference = "Stop"
+
+$toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$backendScript = Join-Path $toolsDir "ga_backend_server.py"
+$pythonCandidates = @(
+  "C:\Users\laoj0\AppData\Local\Programs\Python\Python314\python.exe",
+  "C:\Python314\python.exe"
+)
+$dockerDesktopCandidates = @(
+  "C:\Program Files\Docker\Docker\Docker Desktop.exe",
+  "C:\Program Files\Docker\Docker\Docker Desktop"
+)
+$dockerCliCandidates = @(
+  "C:\Program Files\Docker\Docker\resources\bin\docker.exe",
+  "docker"
+)
+
+function Write-Step($message) {
+  Write-Host ""
+  Write-Host ("[INFO] " + $message)
+}
+
+function Write-WarnLine($message) {
+  Write-Host ("[WARN] " + $message) -ForegroundColor Yellow
+}
+
+function Resolve-ExistingPath($candidates) {
+  foreach ($candidate in $candidates) {
+    if ($candidate -eq "docker") {
+      try {
+        $cmd = Get-Command docker -ErrorAction Stop
+        if ($cmd -and $cmd.Source) {
+          return $cmd.Source
+        }
+      } catch {
+      }
+    } elseif (Test-Path -LiteralPath $candidate) {
+      return $candidate
+    }
+  }
+  return $null
+}
+
+function Wait-DockerReady($dockerCli, $timeoutSeconds) {
+  $deadline = (Get-Date).AddSeconds($timeoutSeconds)
+  while ((Get-Date) -lt $deadline) {
+    try {
+      & $dockerCli ps | Out-Null
+      return $true
+    } catch {
+      Start-Sleep -Seconds 2
+    }
+  }
+  return $false
+}
+
+function Ensure-Metabase($dockerCli) {
+  try {
+    $allNames = @(& $dockerCli ps -a --format "{{.Names}}")
+    if ($allNames -contains "metabase") {
+      $runningNames = @(& $dockerCli ps --format "{{.Names}}")
+      if ($runningNames -contains "metabase") {
+        Write-Host "[OK] Metabase container is already running."
+      } else {
+        Write-Step "Starting existing metabase container..."
+        & $dockerCli start metabase | Out-Null
+        Write-Host "[OK] Metabase container started."
+      }
+    } else {
+      Write-Step "Creating metabase container..."
+      & $dockerCli run -d -p 3000:3000 --name metabase metabase/metabase | Out-Null
+      Write-Host "[OK] Metabase container created."
+    }
+    Write-Host "[OK] Metabase address: http://localhost:3000"
+  } catch {
+    Write-WarnLine ("Metabase未启动: " + $_.Exception.Message)
+  }
+}
+
+Write-Host "========================================"
+Write-Host "  Whale Scheduler - Start Services"
+Write-Host "========================================"
+
+if (-not (Test-Path -LiteralPath $backendScript)) {
+  throw "Backend script not found: $backendScript"
+}
+
+$dockerCli = Resolve-ExistingPath $dockerCliCandidates
+$dockerDesktop = Resolve-ExistingPath $dockerDesktopCandidates
+$pythonExe = Resolve-ExistingPath $pythonCandidates
+
+if (-not $dockerCli) {
+  Write-WarnLine "Docker CLI not found. Metabase未启动。"
+} else {
+  $dockerReady = $false
+  try {
+    & $dockerCli ps | Out-Null
+    $dockerReady = $true
+    Write-Host "[OK] Docker is already available."
+  } catch {
+    if ($dockerDesktop) {
+      Write-Step "Starting Docker Desktop..."
+      try {
+        Start-Process -FilePath $dockerDesktop -WindowStyle Hidden | Out-Null
+      } catch {
+        Write-WarnLine ("Docker Desktop launch failed: " + $_.Exception.Message)
+      }
+      Write-Step "Waiting for Docker..."
+      $dockerReady = Wait-DockerReady -dockerCli $dockerCli -timeoutSeconds 90
+    } else {
+      Write-WarnLine "Docker Desktop executable not found. Metabase未启动。"
+    }
+  }
+
+  if ($dockerReady) {
+    Ensure-Metabase -dockerCli $dockerCli
+  } else {
+    Write-WarnLine "Metabase未启动"
+  }
+}
+
+Write-Step "Starting Whale backend..."
+if (-not $pythonExe) {
+  Write-WarnLine "Python executable not found. Backend未启动。"
+} else {
+  Start-Process -FilePath $pythonExe -ArgumentList @($backendScript) -WorkingDirectory $toolsDir | Out-Null
+  Write-Host "[OK] Backend start command sent."
+}
+Write-Host "[INFO] Backend health: http://127.0.0.1:8765/health"
+Write-Host "[INFO] Metabase address: http://localhost:3000"

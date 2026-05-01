@@ -1,0 +1,15 @@
+"""求解器包总出口：对外暴露统一导入路径，避免外部直接耦合内部文件结构。"""`n`n"""solver_core package exports.
+
+九算法已拆分到 solver_core/algorithms/*.py，
+这里保留稳定导出，避免旧路径导入失败。
+"""
+
+from .algorithms import run_algorithm, solve_ga
+from .vehicle_driven import solve_vehicle_driven
+
+__all__ = [
+    "run_algorithm",
+    "solve_ga",
+    "solve_vehicle_driven",
+]
+

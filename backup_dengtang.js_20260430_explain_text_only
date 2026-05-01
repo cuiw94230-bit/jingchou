@@ -1,0 +1,183 @@
+﻿(function () {
+  const T = {
+    pageTitle: '\u767b\u5802\uff5c\u4eba\u5de5\u8c03\u5ea6\u89e3\u91ca',
+    home: '\u8fd4\u56de\u4e3b\u9875',
+    zuozhao: '\u5750\u7167',
+    yuanqi: '\u7f18\u8d77\u00b7\u6027\u7a7a',
+    refresh: '\u5237\u65b0\u6570\u636e',
+    date: '\u9009\u62e9\u65e5\u671f',
+    load: '\u52a0\u8f7d\u89e3\u91ca',
+    waiting: '\u8bf7\u9009\u62e9\u65e5\u671f\u540e\u52a0\u8f7d',
+    loading: '\u6b63\u5728\u52a0\u8f7d...',
+    failed: '\u52a0\u8f7d\u5931\u8d25',
+    noData: '\u5f53\u5929\u65e0\u53ef\u5c55\u793a\u7ebf\u8def\u3002',
+    all: '\u5168\u90e8',
+    stable: '\u7a33\u5b9a\u590d\u7528',
+    changed: '\u53d1\u751f\u53d8\u5316',
+    risk: '\u9ad8\u98ce\u9669',
+    review: '\u9700\u590d\u6838',
+    k_route_count: '\u7ebf\u8def\u6570',
+    k_exact_copy_count: '\u7a33\u5b9a\u590d\u7528',
+    k_changed_count: '\u53d1\u751f\u53d8\u5316',
+    k_risk_count: '\u9ad8\u98ce\u9669',
+    k_review_count: '\u9700\u590d\u6838',
+    route: '\u7ebf\u8def\u53f7',
+    load_status: '\u8d1f\u8f7d\u72b6\u6001',
+    reuse_type: '\u5b9e\u9645\u884c\u4e3a',
+    decision: '\u5efa\u8bae\u5224\u65ad'
+  };
+
+  const state = { routes: [], filter: 'all' };
+
+  const $ = (id) => document.getElementById(id);
+  const nodes = {
+    pageTitle: $('pageTitle'),
+    btnHome: $('btnHome'),
+    btnZuozhao: $('btnZuozhao'),
+    btnYuanqi: $('btnYuanqi'),
+    btnRefresh: $('btnRefresh'),
+    dateLabel: $('dateLabel'),
+    dateInput: $('dateInput'),
+    loadBtn: $('loadBtn'),
+    statusText: $('statusText'),
+    kpiGrid: $('kpiGrid'),
+    filterRow: $('filterRow'),
+    cards: $('cards')
+  };
+
+  function setStaticText() {
+    nodes.pageTitle.textContent = T.pageTitle;
+    nodes.btnHome.textContent = T.home;
+    nodes.btnZuozhao.textContent = T.zuozhao;
+    nodes.btnYuanqi.textContent = T.yuanqi;
+    nodes.btnRefresh.textContent = T.refresh;
+    nodes.dateLabel.textContent = T.date;
+    nodes.loadBtn.textContent = T.load;
+    nodes.statusText.textContent = T.waiting;
+  }
+
+  function fmtDate(v) {
+    if (!v) return '';
+    if (typeof v === 'string') return v.slice(0, 10);
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return '';
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${day}`;
+  }
+
+  function renderKpi(summary) {
+    const items = [
+      ['route_count', T.k_route_count],
+      ['exact_copy_count', T.k_exact_copy_count],
+      ['changed_count', T.k_changed_count],
+      ['risk_count', T.k_risk_count],
+      ['review_count', T.k_review_count]
+    ];
+    nodes.kpiGrid.innerHTML = items.map(([k, label]) => {
+      const v = Number(summary && summary[k] || 0);
+      return `<div class="dt-kpi"><div class="k">${label}</div><div class="v">${v}</div></div>`;
+    }).join('');
+  }
+
+  function buildFilters() {
+    const defs = [
+      ['all', T.all],
+      ['stable', T.stable],
+      ['changed', T.changed],
+      ['risk', T.risk],
+      ['review', T.review]
+    ];
+    nodes.filterRow.innerHTML = defs.map(([k, label]) => `<button class="dt-filter-btn ${state.filter === k ? 'active' : ''}" data-key="${k}">${label}</button>`).join('');
+    nodes.filterRow.querySelectorAll('.dt-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.filter = btn.dataset.key;
+        buildFilters();
+        renderCards();
+      });
+    });
+  }
+
+  function routeVisible(r) {
+    if (state.filter === 'all') return true;
+    if (state.filter === 'stable') return r.reuse_type === 'EXACT_COPY';
+    if (state.filter === 'changed') return r.reuse_type !== 'EXACT_COPY';
+    if (state.filter === 'risk') return r.review_level === '\u9ad8\u98ce\u9669';
+    if (state.filter === 'review') return r.review_level === '\u9700\u590d\u6838';
+    return true;
+  }
+
+  function tagClass(level) {
+    if (level === '\u9ad8\u98ce\u9669') return 'risk';
+    if (level === '\u9700\u590d\u6838') return 'review';
+    return 'stable';
+  }
+
+  function renderCards() {
+    const data = (state.routes || []).filter(routeVisible);
+    if (!data.length) {
+      nodes.cards.innerHTML = `<div class="dt-card">${T.noData}</div>`;
+      return;
+    }
+    nodes.cards.innerHTML = data.map(r => {
+      return `
+        <article class="dt-card">
+          <div class="dt-card-top">
+            <div><strong>${T.route}</strong> ${r.route_id ?? ''}</div>
+            <div><strong>${T.load_status}</strong> ${r.load_status || ''}</div>
+            <div><strong>${T.reuse_type}</strong> ${r.reuse_type || ''}</div>
+            <div><strong>${T.decision}</strong> ${r.decision_hint || ''}</div>
+            <div><span class="dt-tag ${tagClass(r.review_level)}">${r.review_level || ''}</span></div>
+          </div>
+          <p class="dt-explain">${r.explanation_text || ''}</p>
+        </article>`;
+    }).join('');
+  }
+
+  async function loadData() {
+    const date = nodes.dateInput.value;
+    nodes.statusText.textContent = T.loading;
+    try {
+      const qs = date ? `?date=${encodeURIComponent(date)}` : '';
+      const res = await fetch(`/rengong/dengtang-explain${qs}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok || !data || data.ok === false) {
+        throw new Error((data && data.error) || 'request_failed');
+      }
+      const summary = data.daySummary || {};
+      state.routes = Array.isArray(data.routes) ? data.routes : [];
+      const shownDate = fmtDate(summary.delivery_date || date);
+      if (shownDate) nodes.dateInput.value = shownDate;
+      nodes.statusText.textContent = `${shownDate || ''} ${summary.day_type || ''}`.trim();
+      renderKpi(summary);
+      buildFilters();
+      renderCards();
+    } catch (e) {
+      nodes.statusText.textContent = `${T.failed}: ${e.message || e}`;
+      state.routes = [];
+      renderKpi({});
+      buildFilters();
+      renderCards();
+    }
+  }
+
+  function bind() {
+    nodes.loadBtn.addEventListener('click', loadData);
+    nodes.btnRefresh.addEventListener('click', loadData);
+  }
+
+  function initDateDefault() {
+    const now = new Date();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    nodes.dateInput.value = `${now.getFullYear()}-${m}-${d}`;
+  }
+
+  setStaticText();
+  initDateDefault();
+  bind();
+  buildFilters();
+  renderKpi({});
+  renderCards();
+  loadData();
+})();

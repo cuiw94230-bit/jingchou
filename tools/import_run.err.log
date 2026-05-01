@@ -1,0 +1,2 @@
+C:\Users\laoj0\Desktop\一二技术\城市便利店调度系统\tools\import_human_dispatch_routes.py:191: Pandas4Warning: Timestamp.utcnow is deprecated and will be removed in a future version. Use Timestamp.now('UTC') instead.
+  import_batch_id = int(pd.Timestamp.utcnow().timestamp() * 1000)

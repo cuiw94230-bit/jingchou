@@ -1,0 +1,89 @@
+"""
+项目统一配置入口。
+
+这个文件负责集中管理数据库、归档表名、后端监听地址等配置，
+给前台脚本、后端服务、算法工具脚本提供统一的 settings 对象。
+"""
+import os
+from dataclasses import dataclass
+
+
+# EN: Config point used by runtime behavior.
+# CN: 运行时会使用的配置节点。
+def _to_bool(v: str, default: bool = False) -> bool:
+    # EN: Config point used by runtime behavior.
+    # CN: 运行时会使用的配置节点。
+    if v is None:
+        # EN: Config point used by runtime behavior.
+        # CN: 运行时会使用的配置节点。
+        return default
+    # EN: Config point used by runtime behavior.
+    # CN: 运行时会使用的配置节点。
+    return str(v).strip().lower() in {"1", "true", "yes", "on"}
+
+
+# EN: Config point used by runtime behavior.
+# CN: 运行时会使用的配置节点。
+def _to_int(v: str, default: int) -> int:
+    try:
+        # EN: Config point used by runtime behavior.
+        # CN: 运行时会使用的配置节点。
+        return int(str(v).strip())
+    except Exception:
+        # EN: Config point used by runtime behavior.
+        # CN: 运行时会使用的配置节点。
+        return default
+
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
+
+# EN: Configuration structure and defaults entry point.
+# CN: 配置结构与默认值入口。
+@dataclass(frozen=True)
+# EN: Config point used by runtime behavior.
+# CN: 运行时会使用的配置节点。
+# EN: Configuration structure and defaults entry point.
+# CN: 配置结构与默认值入口。
+class Settings:
+    HOST: str = os.getenv("APP_HOST", "0.0.0.0")
+    PORT: int = _to_int(os.getenv("PORT") or os.getenv("APP_PORT"), 8765)
+
+    FLASK_ENV: str = os.getenv("FLASK_ENV", "production")
+    FLASK_DEBUG: bool = _to_bool(os.getenv("FLASK_DEBUG"), False)
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+
+    # EN: Runtime environment variable mapping.
+    # CN: 运行时环境变量映射。
+    MYSQL_HOST: str = os.getenv("WHALE_DB_HOST", "127.0.0.1")
+    # EN: Runtime environment variable mapping.
+    # CN: 运行时环境变量映射。
+    MYSQL_PORT: int = _to_int(os.getenv("WHALE_DB_PORT"), 3306)
+    MYSQL_USER: str = os.getenv("WHALE_DB_USER", "root")
+    MYSQL_PASSWORD: str = os.getenv("WHALE_DB_PASSWORD", "")
+    MYSQL_DATABASE: str = os.getenv("WHALE_DB_NAME", "whale_scheduler")
+    ALLOW_REMOTE_DB: bool = _to_bool(os.getenv("WHALE_ALLOW_REMOTE_DB"), False)
+
+    DEEPSEEK_API_URL: str = os.getenv("DEEPSEEK_API_URL", "https://api.deepseek.com/chat/completions")
+    AMAP_WEB_SERVICE_KEY: str = os.getenv("AMAP_WEB_SERVICE_KEY", "")
+    AMAP_JS_WEB_KEY: str = os.getenv("AMAP_JS_WEB_KEY", "")
+
+    ENABLE_GPU: bool = _to_bool(os.getenv("ENABLE_GPU"), True)
+    ENABLE_SKOPT: bool = _to_bool(os.getenv("ENABLE_SKOPT"), True)
+    ENABLE_ARCHIVE: bool = _to_bool(os.getenv("ENABLE_ARCHIVE"), True)
+
+    ARCHIVE_TABLE: str = os.getenv("ARCHIVE_TABLE", "solve_archive_runs")
+    ARCHIVE_ROUTE_TABLE: str = os.getenv("ARCHIVE_ROUTE_TABLE", "solve_archive_routes")
+    AMAP_DISTANCE_TABLE: str = os.getenv("AMAP_DISTANCE_TABLE", "amap_distance_cache")
+    AMAP_ROUTE_TABLE: str = os.getenv("AMAP_ROUTE_TABLE", "amap_route_cache")
+
+
+# EN: Config point used by runtime behavior.
+# CN: 运行时会使用的配置节点。
+# EN: Configuration structure and defaults entry point.
+# CN: 配置结构与默认值入口。
+settings = Settings()

@@ -1,0 +1,136 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>缂樿捣 路 鎬х┖</title>
+  <link rel="stylesheet" href="./rengong-boundary.css">
+</head>
+<body>
+  <main class="bd-shell">
+    <section class="bd-hero">
+      <div class="bd-hero-copy">
+        <p class="bd-eyebrow">CONDITIONAL INSIGHT</p>
+        <h1>缂樿捣 路 鎬х┖</h1>
+        <p class="bd-lead">鏈〉灞曠ず由人�ヨ���︽���帹瀵煎嚭鐨勮则�€?/p>
+        <p class="bd-lead">
+          因条件�€岀敓锛岃皳涔嬬紭璧凤紱<br>
+          无固定本���谓之�х┖銆?br>
+          鎵€有时间与装载边界�?br>
+          皆为当下�′��下的成立结果，�€�非绝�标准�?        </p>
+        <p class="bd-manifesto">AI 与数字双驱动，�杩愯惀缇庡ソ璧锋潵銆?/p>
+      </div>
+      <div class="bd-actions">
+        <a class="bd-btn bd-ghost" href="./index.html">返回主页</a>
+        <a class="bd-btn bd-ghost" href="./rengong.html">坐照</a>
+        <a class="bd-btn bd-ghost" href="./rengong-boundary.html">缘起 · 性空</a>
+        <button id="reloadBtn" class="bd-btn bd-primary" type="button">刷新数据</button>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-topbar">
+        <label class="bd-field">
+          <span>娉㈡閫夋嫨</span>
+          <select id="waveSelector">
+            <option value="W1">W1</option>
+            <option value="W2">W2</option>
+            <option value="W3">W3</option>
+            <option value="W4">W4</option>
+          </select>
+        </label>
+        <div id="waveMsg" class="bd-msg"></div>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-section-head">
+        <h2>瑁呰浇瑙勫垯</h2>
+      </div>
+      <div id="rulesWrap" class="bd-cards"></div>
+    </section>
+
+    <section class="bd-grid">
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>店铺收货时间规则</h2>
+        </div>
+        <div class="bd-filters bd-compact">
+          <input id="storeIdSearch" class="bd-input" type="text" placeholder="店铺编号搜索">
+          <input id="storeNameSearch" class="bd-input" type="text" placeholder="店铺名�О鎼滅储">
+          <input id="storeTimeStart" class="bd-input" type="time" placeholder="到店�€濮?>
+          <input id="storeTimeEnd" class="bd-input" type="time" placeholder="到店结束">
+          <input id="storeMinValidSamples" class="bd-input" type="number" min="0" step="1" placeholder="鏈€灏忔湁鏁堟牱鏈暟">
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-store">
+          <table class="bd-table" id="storeTable">
+            <thead>
+              <tr>
+                <th data-table="store" data-key="store_id">店铺编号</th>
+                <th data-table="store" data-key="store_name">店铺名�О</th>
+                <th data-table="store" data-key="earliest_arrival_time">鏈€鏃╁���?/th>
+                <th data-table="store" data-key="avg_arrival_time">平均到店</th>
+                <th data-table="store" data-key="latest_arrival_time">鏈€晚到�?/th>
+                <th data-table="store" data-key="early_allowed_minutes">鍏佽鏃╁��分钟</th>
+                <th data-table="store" data-key="late_allowed_minutes">鍏佽晚到分钟</th>
+                <th data-table="store" data-key="valid_sample_count">有效样本�?/th>
+              </tr>
+            </thead>
+            <tbody id="storeBody">
+              <tr><td colspan="8" class="bd-empty">鏆傛棤鏁版嵁</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>线路 W1 装载明细</h2>
+        </div>
+        <div class="bd-filters">
+          <input id="routeIdSearch" class="bd-input" type="text" placeholder="线路号搜�?>
+          <input id="routeNameSearch" class="bd-input" type="text" placeholder="线路名�О鎼滅储">
+          <input id="vehicleSearch" class="bd-input" type="text" placeholder="杞﹁締鎼滅储">
+          <input id="routeDateStart" class="bd-input" type="date">
+          <input id="routeDateEnd" class="bd-input" type="date">
+          <select id="routeCategoryFilter" class="bd-select">
+            <option value="all">线路类型：全�?/option>
+            <option value="normal">线路类型：普�?/option>
+            <option value="airport">线路类型：�閮芥満鍦?/option>
+          </select>
+          <select id="routeStatusFilter" class="bd-select">
+            <option value="all">鐘舵€侊細鍏ㄩ儴</option>
+            <option value="over">鐘舵€侊細瓒呮櫘閫氫笂闄?/option>
+            <option value="airport">鐘舵€�：机场�?/option>
+            <option value="dirty">鐘舵€�：脏数�€欓€?/option>
+          </select>
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-route">
+          <table class="bd-table" id="routeTable">
+            <thead>
+              <tr>
+                <th data-table="route" data-key="delivery_date">鏃ユ湡</th>
+                <th data-table="route" data-key="vehicle_id">杞﹁締</th>
+                <th data-table="route" data-key="route_id">线路�?/th>
+                <th data-table="route" data-key="route_name">线路名�О</th>
+                <th data-table="route" data-key="route_category">线路类型</th>
+                <th data-table="route" data-key="store_count">店铺�?/th>
+                <th data-table="route" data-key="route_load_w1">W1瑁呰浇閲?/th>
+                <th data-table="route" data-key="normal_hard_limit">鏅€氫笂闄?/th>
+                <th data-table="route" data-key="is_airport_route">鏄��机场�?/th>
+                <th data-table="route" data-key="is_over_normal_limit">鏄惁瓒呮櫘閫氫笂闄?/th>
+                <th data-table="route" data-key="is_dirty_candidate">鏄��脏数�€欓€?/th>
+              </tr>
+            </thead>
+            <tbody id="routeBody">
+              <tr><td colspan="11" class="bd-empty">鏆傛棤鏁版嵁</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="./rengong-boundary.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,802 @@
+﻿<!--
+  椤圭洰涓婚〉闈㈤架�€?
+  鍙��义结构层，不承载复杂业务逻辑�?  - app.js 负责主调�﹂〉浜や簰
+  - tuiyan.js 璐熻矗混沌/鎺ㄦ��页交�?--><!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>城市便利店 VRPTW 调度系统</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-brand">
+        <div class="hero-brand-mark">
+          <img src="./assets/brand-logo-whale.jpg" alt="一二技术株式会社 Logo">
+        </div>
+        <div class="hero-copy">
+        <p class="eyebrow">Cetacean Optimizer</p>
+        <h1>城市便利店 VRPTW 调度系统</h1>
+        <p class="lead">当前版本优先追求可用，支持多车、多波次、多门店单日多次配送调度、手工调车、单波次店铺，以及调度过程可视化。</p>
+        <p class="hero-slogan">AI与数字双驱动，让运营美好起来</p>
+          <div class="hero-badges">
+            <span class="hero-badge">鲸鱼智调</span>
+            <span class="hero-badge">AI配送优化</span>
+            <span class="hero-badge">多波次协同</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions hero-actions-card">
+        <select id="languageSelect" class="secondary">
+          <option value="zh" selected>中文</option>
+          <option value="ja">日本语</option>
+        </select>
+        <button id="openShowcaseBtn" class="alert">系统介绍</button>
+        <button id="loadSampleBtn" class="secondary">重新加载固定门店</button>
+        <button id="savePlanBtn" class="primary">保存当前方案</button>
+      </div>
+    </section>
+
+    <section class="panel main-tabs-shell">
+      <div class="main-tabs" id="mainTabs">
+        <button id="mainTabBasicBtn" class="main-tab-btn is-active" data-main-tab-btn="basic">基础资料</button>
+        <button id="mainTabRegionBtn" class="main-tab-btn" data-main-tab-btn="region">运行区定义</button>
+        <button id="mainTabStrategyBtn" class="main-tab-btn" data-main-tab-btn="strategy">调度策略</button>
+        <button id="mainTabSolveBtn" class="main-tab-btn" data-main-tab-btn="solve">求解与对比</button>
+        <button id="mainTabResultBtn" class="main-tab-btn" data-main-tab-btn="result">调度结果</button>
+        <div class="main-tabs-action">
+          <button id="openTuiyanBtn" class="main-tab-btn main-tab-action-btn">混沌</button>
+          <button id="openRengongBtn" type="button" class="main-tab-btn main-tab-action-btn" onclick="window.location.href='./rengong.html'">坐照</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel tuiyan-page tab-hidden" id="tuiyanPage" aria-hidden="true">
+      <div class="tuiyan-container">
+        <!-- 澶撮儴 -->
+        <div class="tuiyan-header">
+          <div class="tuiyan-header-copy">
+            <p class="tuiyan-eyebrow">CHAOTIC SIMULATION</p>
+            <h1>混沌</h1>
+          </div>
+          <div class="tuiyan-top-actions">
+            <button id="closeTuiyanBtn" class="back-home-btn">返回主页</button>
+            <button type="button" class="back-home-btn" onclick="window.location.href='./rengong.html'">坐照</button>
+            <button type="button" class="back-home-btn" onclick="window.location.href='./rengong-boundary.html'">缘起 · 性空</button>
+            <button id="chaosRefreshBtn" type="button" class="back-home-btn is-primary" onclick="window.location.reload()">刷新数据</button>
+          </div>
+        </div>
+
+        <div class="tuiyan-intro-card">
+          <p>本页用于调度结果的推演与对比。</p>
+          <p>在不同初始条件下（参数、约束、数据等），<br>系统会演化出不同的调度结果。</p>
+          <p>调度具有典型的混沌特性：<br>微小的起点差异，可能引发显著的结果变化。</p>
+          <p>这里不追求唯一解，<br>而是观察变化、理解路径，<br>从而更接近更优的决策。</p>
+        </div>
+
+        <!-- 控制栏-->
+        <div class="tuiyan-control-bar">
+          <div class="batch-selector">
+            <label for="batch-select">选择批次：</label>
+            <select id="batch-select">
+              <option value="">加载中...</option>
+            </select>
+          </div>
+          <div id="benchmark-info" class="benchmark-info">加载中...</div>
+        </div>
+
+        <!-- 鎺ㄦ紨鎿嶄綔鍖?-->
+        <div class="tuiyan-action-bar">
+          <div class="shop-selector">
+            <div class="shop-input-group">
+              <label for="simulate-mode">推演模式</label>
+              <select id="simulate-mode">
+                <option value="fleet_feasibility" selected>减车可行性推演</option>
+                <option value="single_store">单店时间推演</option>
+              </select>
+            </div>
+
+            <div class="shop-input-group sim-mode-only sim-mode-fleet">
+              <label for="simulate-target-vehicles">目标车辆数（车号）：</label>
+              <input type="number" id="simulate-target-vehicles" min="1" step="1" placeholder="渚嬪: 8">
+            </div>
+            <div class="shop-input-group sim-mode-only sim-mode-fleet">
+              <label>推演波次</label>
+              <div class="simulate-wave-checks">
+                <label><input type="checkbox" class="simulate-wave-checkbox" value="W1" checked> W1</label>
+                <label><input type="checkbox" class="simulate-wave-checkbox" value="W2" checked> W2</label>
+                <label><input type="checkbox" class="simulate-wave-checkbox" value="W3"> W3</label>
+                <label><input type="checkbox" class="simulate-wave-checkbox" value="W4"> W4</label>
+              </div>
+            </div>
+
+            <div class="shop-input-group sim-mode-only sim-mode-store tab-hidden">
+              <label for="simulate-store-id">店铺编号</label>
+              <input type="text" id="simulate-store-id" placeholder="渚嬪: 391001">
+            </div>
+            <div class="shop-input-group sim-mode-only sim-mode-store tab-hidden">
+              <label for="simulate-new-time">新收货时间</label>
+              <input type="time" id="simulate-new-time" step="60">
+            </div>
+            <div class="shop-input-group">
+              <label for="simulate-target">优化目标</label>
+              <select id="simulate-target">
+                <option value="min_vehicles">最少用车</option>
+                <option value="balanced">综合平衡</option>
+              </select>
+            </div>
+            <button id="simulate-btn" class="btn-primary">开始减车推演</button>
+          </div>
+        </div>
+
+        <div class="tuiyan-report-panel" id="simulate-report-panel">
+          <div class="tuiyan-report-summary" id="simulate-report-summary">
+            暂无推演报告，先执行一次推演。          </div>
+          <div class="tuiyan-report-grid">
+            <div class="tuiyan-report-card">
+              <div class="tuiyan-report-card-title">决策建议</div>
+              <div id="simulate-report-decision" class="tuiyan-report-card-body">等待推演结果...</div>
+            </div>
+            <div class="tuiyan-report-card">
+              <div class="tuiyan-report-card-title">约束诊断</div>
+              <div id="simulate-report-diagnosis" class="tuiyan-report-card-body">等待推演结果...</div>
+            </div>
+          </div>
+          <div class="tuiyan-report-tabs">
+            <button class="tuiyan-report-tab is-active" data-report-tab="adjustments">调整清单</button>
+            <button class="tuiyan-report-tab" data-report-tab="failures">失败样本</button>
+            <button class="tuiyan-report-tab" data-report-tab="replay">试插回放</button>
+          </div>
+          <div class="tuiyan-report-tab-body">
+            <div id="simulate-report-adjustments" class="tuiyan-report-pane"></div>
+            <div id="simulate-report-failures" class="tuiyan-report-pane tab-hidden"></div>
+            <div id="simulate-report-replay" class="tuiyan-report-pane tab-hidden"></div>
+          </div>
+        </div>
+
+        <div class="tuiyan-progress-card" id="simulate-progress-panel">
+          <div class="tuiyan-progress-header">
+            <span>推演过程</span>
+            <span id="simulate-progress-status" class="simulate-progress-status idle">待执行</span>
+          </div>
+          <div class="tuiyan-progress-body">
+            <div id="simulate-progress-steps" class="simulate-progress-steps">
+              <div class="simulate-step">等待开始推演...</div>
+            </div>
+            <pre id="simulate-debug-output" class="simulate-debug-output">暂无过程数据</pre>
+          </div>
+        </div>
+
+        <!-- 四个输出模块 -->
+        <div class="tuiyan-output-grid">
+          <!-- 模块A：店铺清单 -->
+          <div class="tuiyan-card">
+            <div class="tuiyan-card-header">店铺时间推荐清单</div>
+            <div class="tuiyan-card-body">
+              <table class="store-table">
+                <thead>
+                  <tr>
+                    <th>店铺编号</th><th>店铺名称</th><th>波次</th><th>当前时间</th><th>推荐时间</th><th>省车</th><th>省里程</th>><th>优先级</th>>
+                  </tr>
+                </thead>
+                <tbody id="store-table-body">
+                  <tr><td colspan="8">加载中...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 模块B：波次汇总-->
+          <div class="tuiyan-card">
+            <div class="tuiyan-card-header">馃搳 波次姹囨€?/div>
+            <div class="tuiyan-card-body" id="wave-summary">
+              加载中...
+            </div>
+          </div>
+
+          <!-- 模块C：排行榜 -->
+          <div class="tuiyan-card">
+            <div class="tuiyan-card-header">优化排行榜/div>
+            <div class="tuiyan-card-body" id="rankings">
+              加载中...
+            </div>
+          </div>
+
+          <!-- 模块D：全局方案 -->
+          <div class="tuiyan-card">
+            <div class="tuiyan-card-header">全局最优方案/div>
+            <div class="tuiyan-card-body" id="global-plan">
+              加载中...
+            </div>
+          </div>
+        </div>
+
+        <!-- 推演结果模态框 -->
+        <div id="simulateModal" style="display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.45); z-index: 1000; align-items: center; justify-content: center; padding: 12px;">
+          <div style="background: white; border-radius: 16px; width: min(1720px, 98vw); max-height: 96vh; overflow: hidden; margin: 0; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);">
+            <div style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; font-weight: 600; font-size: 18px; display: flex; justify-content: space-between; flex: 0 0 auto;">
+              <span>推演结果</span>
+              <button id="closeModalBtn" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div id="modalContent" style="padding: 14px 18px; line-height: 1.55; overflow: auto; flex: 1 1 auto;">
+              加载中...
+            </div>
+            <div style="padding: 12px 18px; border-top: 1px solid #e2e8f0; text-align: right; flex: 0 0 auto; background: #fff; display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+              <button id="modalSaveRouteBtn" style="background: #0f766e; color: white; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer;">保存线路决策</button>
+              <button id="modalContinueRouteBtn" style="background: #1d4ed8; color: white; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer;">继续求解剩余点</button>
+              <button id="modalConfirmBtn" style="background: #3b82f6; color: white; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer;">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="wmsSyncPanel" data-main-tab="basic">
+      <div class="panel-head panel-head-with-actions">
+        <div class="panel-head-main">
+          <h2>WMS业务抓取</h2>
+          <p>一键只读抓取远端WMS五表。店铺和车辆可选样本/真实业务，货量统一使用抓取的CargoQTY。</p>
+        </div>
+        <div class="panel-actions">
+          <label for="storeSourceSelect">店铺来源</label>
+          <select id="storeSourceSelect">
+            <option value="sample" selected>样本</option>
+            <option value="real">真实业务</option>
+          </select>
+          <label for="vehicleSourceSelect">车辆来源</label>
+          <select id="vehicleSourceSelect">
+            <option value="sample" selected>样本</option>
+            <option value="real">真实业务</option>
+          </select>
+          <button id="wmsFetchBtn" class="primary">一键抓取WMS</button>
+        </div>
+      </div>
+      <div id="wmsSyncStatus" class="note"></div>
+    </section>
+
+    <section class="panel feature-panel" id="storeInfoPanel" data-main-tab="basic">
+      <div class="panel-head panel-head-with-actions">
+        <div class="panel-head-main">
+          <h2>门店信息</h2>
+          <p>门店数据已内置到系统中，当前可直接编辑基础属性。</p>
+        </div>
+        <div class="panel-actions">
+          <input id="storeSearchInput" type="text" placeholder="按编号/名称/车号搜索门店">
+          <button id="storeLocateBtn" class="secondary">定位</button>
+          <input id="storeFile" type="file" accept=".csv,.txt,.json,.xlsx,.xls" class="visually-hidden-file">
+          <div class="import-button" data-import-kind="store">
+          <button id="storeFileTrigger" type="button" class="primary import-trigger">导入门店</button>
+          <span id="storeFileTag" class="import-file-tag is-empty" title="">
+              <span id="storeFileName" class="import-file-name">未选择文件</span>
+              <button id="storeFileClearBtn" type="button" class="import-file-clear" aria-label="清除门店文件">脳</button>
+            </span>
+          </div>
+          <button id="calcWaveLoadBtn" class="secondary">货量折算</button>
+           <button id="saveDualStoreLoadsBtn" class="secondary">保存双表货量</button>
+           <button id="clearDistanceCacheBtn" class="secondary">清距离缓存</button>>
+           <button id="exportMultiDailyStoreBtn" class="secondary">导出一日多配</button>
+           <button id="exportSingleDailyStoreBtn" class="secondary">导出一日一配</button>
+          <button id="addStoreBtn" class="secondary">新增门店</button>
+          <button id="saveStoreDataBtn" class="secondary">保存资料</button>
+          <button id="storeBatchBtn" class="ghost" disabled>批量操作（预留）</button>
+        </div>
+      </div>
+      <div class="panel-toggle-row">
+        <button id="toggleStorePanelBtn" class="secondary">折叠店铺明细</button>
+      </div>
+      <div id="storeResultQuickSwitch" class="store-result-switch-bar"></div>
+      <div id="storePanelBody">
+        <div id="storeReschedulePanel"></div>
+        <h3 class="store-subtable-title">一日多配店铺明细</h3>
+        <div class="table-wrap store-subtable-wrap"><div id="storeTable"></div></div>
+        <h3 class="store-subtable-title">一日一配店铺明细</h3>
+        <div class="table-wrap store-subtable-wrap"><div id="storeTableSingleDaily"></div></div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="runRegionPanel" data-main-tab="region">
+      <div class="panel-head">
+        <h2>业务区定义</h2>>
+        <p>左侧地图绘制，右侧定义和查看已定义业务区。</p>
+      </div>
+      <div class="run-region-layout">
+        <div id="runRegionMap" class="run-region-map"></div>
+        <aside class="run-region-sidebar">
+          <h3 class="run-region-sidebar-title">分区方案号</h3>
+          <div class="toolbar run-region-sidebar-toolbar">
+            <select id="runRegionSchemeSelect">
+              <option value="">请选择分区方案号</option>
+            </select>
+            <input id="runRegionSchemeNoInput" type="text" placeholder="方案号，例如：RS-001">
+            <input id="runRegionSchemeNameInput" type="text" placeholder="方案名称，例如：业务区默认">
+            <label class="inline-check"><input id="runRegionSchemeEnabledInput" type="checkbox" checked>启用</label>
+            <button id="runRegionSchemeCreateBtn" class="secondary">新增方案</button>
+            <button id="runRegionSchemeUpdateBtn" class="secondary">更新方案</button>
+            <button id="runRegionSchemeDeleteBtn" class="ghost">删除方案</button>
+          </div>
+          <h3 class="run-region-sidebar-title">定义业务区</h3>>
+          <div class="toolbar run-region-sidebar-toolbar">
+            <input id="runRegionNameInput" type="text" placeholder="【待确认】
+            <button id="runRegionDrawBtn" class="secondary">开始绘制围栏</button>
+            <button id="runRegionSaveBtn" class="primary" disabled>保存围栏</button>
+            <button id="runRegionCancelBtn" class="ghost">取消编辑</button>
+            <button id="runRegionRefreshBtn" class="secondary">刷新业务区</button>
+          </div>
+          <div class="toolbar run-region-visibility-toolbar">
+            <label for="runRegionStoreVisibilityMode">店铺显示</label>
+            <select id="runRegionStoreVisibilityMode">
+              <option value="show_all" selected>显示所有店铺</option>
+              <option value="show_in_region">显示区域内店铺</option>
+              <option value="hide_all">隐藏所有店铺</option>>
+              <option value="hide_in_region">隐藏区域内店铺</option>>
+            </select>
+            <label for="runRegionTargetRegion">作用业务区</label>
+            <select id="runRegionTargetRegion">
+              <option value="all" selected>全部业务区</option>
+            </select>
+          </div>
+          <div id="runRegionStatus" class="note"></div>
+          <h3 class="run-region-sidebar-title">已定义业务区</h3>
+          <div id="runRegionList" class="run-region-list"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="vehicleInfoPanel" data-main-tab="basic">
+      <div class="panel-head panel-head-with-actions">
+        <div class="panel-head-main">
+          <h2>车辆信息</h2>
+          <p>车辆可通过 TXT 导入，也可以手工补充。</p>
+        </div>
+        <div class="panel-actions">
+          <input id="vehicleSearchInput" type="text" placeholder="按车号/司机搜索车辆">
+          <button id="vehicleLocateBtn" class="secondary">定位</button>
+          <input id="vehicleFile" type="file" accept=".txt" class="visually-hidden-file">
+          <div class="import-button" data-import-kind="vehicle">
+            <button id="vehicleFileTrigger" type="button" class="primary import-trigger">导入车辆</button>
+            <span id="vehicleFileTag" class="import-file-tag is-empty" title="">
+              <span id="vehicleFileName" class="import-file-name">未选择文件</span>
+              <button id="vehicleFileClearBtn" type="button" class="import-file-clear" aria-label="清除车辆文件">脳</button>
+            </span>
+          </div>
+          <button id="addVehicleBtn" class="secondary">新增车辆</button>
+          <button id="saveVehicleDataBtn" class="secondary">保存资料</button>
+          <button id="vehicleBatchBtn" class="ghost" disabled>批量操作（预留）</button>
+        </div>
+      </div>
+      <div class="panel-toggle-row">
+        <button id="toggleVehiclePanelBtn" class="secondary">折叠车辆明细</button>
+      </div>
+      <div id="vehiclePanelBody">
+        <div class="table-wrap"><table id="vehicleTable"></table></div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="waveConfigPanel" data-main-tab="basic">
+      <div class="panel-head panel-head-with-actions">
+        <div class="panel-head-main">
+          <h2>波次配置</h2>
+          <p>声明配送波次、各波次开始结束时间，以及该波次覆盖门店编号。</p>>
+        </div>
+        <div class="panel-actions">
+          <input id="waveSearchInput" type="text" placeholder="按波次/门店名称搜索">
+          <button id="waveLocateBtn" class="secondary">定位</button>
+          <button id="waveImportBtn" class="primary" disabled>导入波次</button>
+          <button id="addWaveBtn" class="secondary">新增波次</button>
+          <button id="saveWaveDataBtn" class="secondary">保存资料</button>
+          <button id="waveBatchBtn" class="ghost" disabled>批量操作（预留）</button>
+          <button id="autoWaveBtn" class="ghost">按固定门店自动生成波次</button>
+        </div>
+      </div>
+      <div class="wave-split-layout">
+        <aside class="wave-left-pane">
+          <div id="waveLeftList" class="wave-left-list"></div>
+        </aside>
+        <section class="wave-right-pane">
+          <div id="waveRightEditor" class="wave-right-editor"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="dataArchivePanel" data-main-tab="basic">
+      <div class="panel-head panel-head-with-actions">
+        <div class="panel-head-main">
+          <h2>档案查询</h2>
+          <p>查询基础资料档案，并查询完整经纬度与门店数据。</p>>
+        </div>
+        <div class="panel-actions">
+          <input id="dataArchiveDateInput" type="date">
+          <input id="dataArchiveKeywordInput" type="text" placeholder="按编号/名称/车号搜索档案内容">
+          <button id="dataArchiveQueryBtn" class="secondary">查询</button>
+        </div>
+      </div>
+      <div id="dataArchiveQueryStatus" class="note"></div>
+      <div class="table-wrap"><table id="dataArchiveTable"></table></div>
+      <div class="table-wrap"><table id="dataArchiveStoreTable"></table></div>
+    </section>
+
+    <section class="panel feature-panel" id="strategyPanel" data-main-tab="strategy">
+      <div class="panel-head">
+        <h2>调度策略</h2>
+        <p>配置时窗、里程、波次口径和策略参数。</p>>
+      </div>
+      <div class="toolbar">
+        <label id="dispatchStartLabel">首次发车时间</label>
+        <input id="dispatchStartTimeInput" type="time" value="19:10">
+          <label id="maxRouteKmLabel">单车往返总里程上限（公里）</label>>
+        <input id="maxRouteKmInput" type="number" value="220" min="1">
+          <label id="minLoadRateLabel">单车�€低�载率�?锛?/label>
+        <input id="minLoadRateInput" type="number" value="0" min="0" max="100">
+        <label id="targetScoreLabel">鐩爣璇勫垎涓嬮檺</label>
+        <input id="targetScoreInput" type="number" value="0" min="0" max="1" step="0.001">
+        <label id="ignoreWavesLabel"><input id="ignoreWavesInput" type="checkbox"> <span id="ignoreWavesText">忽略�㈡</span></label>
+      </div>
+      <div class="toolbar">
+          <label id="singleWaveDistanceLabel">单波�¤窛绂婚槇鍊硷紙鍏噷锛?/label>
+        <input id="singleWaveDistanceInput" type="number" value="70" min="1">
+          <label id="singleWaveStartLabel">单波�″紑濮?/label>
+        <input id="singleWaveStartInput" type="time" value="19:10">
+          <label id="singleWaveEndLabel">单波�＄���?/label>
+        <input id="singleWaveEndInput" type="time" value="05:30">
+          <label id="singleWaveModeLabel">单波�℃埅姝㈣鍒?/label>
+        <select id="singleWaveEndModeInput">
+          <option value="return">鍥炲簱鎴</option>
+          <option value="service" selected>瀹屽簵鎴</option>
+        </select>
+      </div>
+      <div id="singleWaveInfo" class="note"></div>
+      <div class="strategy-shell">
+        <div class="toolbar strategy-config-toolbar">
+          <label for="strategyDeliveryModeSelect">作业�″紡</label>
+          <select id="strategyDeliveryModeSelect">
+            <option value="singleDailyWave" selected>涓€鏃ヤ竴閰?/option>
+            <option value="doubleDailyWave">涓€鏃ヤ袱閰?/option>
+          </select>
+          <label for="strategyOptimizeGoalSelect">优化目标</label>
+          <select id="strategyOptimizeGoalSelect">
+            <option value="load">浼樺厛瑁呰浇</option>
+            <option value="balanced" selected>骞宠　</option>
+            <option value="distance">浼樺厛璺濈</option>
+          </select>
+          <label for="strategyLoadDistanceBiasInput">瑁呰浇 / 璺濈鍊惧悜</label>
+          <span class="muted">鏇村亸瑁呰浇</span>
+          <input id="strategyLoadDistanceBiasInput" type="range" min="-100" max="100" value="0">
+          <span class="muted">鏇村亸璺濈</span>
+          <label for="strategyLatenessToleranceSelect">迟到容忍�?/label>
+          <select id="strategyLatenessToleranceSelect">
+            <option value="strict">涓ユ牸</option>
+            <option value="medium" selected>閫備腑</option>
+            <option value="loose">瀹芥澗</option>
+          </select>
+          <label for="strategyVehicleCostBiasInput">鐢ㄨ溅鎴愭湰鍊惧悜</label>
+          <input id="strategyVehicleCostBiasInput" type="range" min="0" max="100" value="50">
+        </div>
+        <div class="toolbar strategy-config-toolbar">
+          <label for="strategyDualWaveWeightInput">双配权重（�鐣欓」锛?/label>
+          <input id="strategyDualWaveWeightInput" type="range" min="0" max="100" value="50">
+          <label for="strategyCrossRegionPenaltyWeightInput">璺ㄥ尯鎯╃��权重（�鐣欓」锛?/label>
+          <input id="strategyCrossRegionPenaltyWeightInput" type="range" min="0" max="100" value="50">
+          <label for="strategyWaveDelayPenaltyInput">波次寤惰鎯╃綒</label>
+          <input id="strategyWaveDelayPenaltyInput" type="range" min="0" max="100" value="50">
+        </div>
+        <div class="toolbar strategy-config-toolbar">
+          <label for="strategyLateRouteStrengthSelect">鏅氱嚎璺��罚强�?/label>
+          <select id="strategyLateRouteStrengthSelect">
+            <option value="low">浣?/option>
+            <option value="medium" selected>涓?/option>
+            <option value="high">楂?/option>
+          </select>
+          <label for="strategyDifficultyModeSelect">閰嶉€�难�︽ā寮?/label>
+          <select id="strategyDifficultyModeSelect">
+            <option value="time">按时间放�?/option>
+            <option value="count">按数量限�?/option>
+            <option value="score">鎸夋€诲垎闄愬埗</option>
+          </select>
+          <div id="strategyDifficultyCountGroup" class="toolbar strategy-config-toolbar">
+            <label for="strategyDifficultyTier1UnlimitedInput">绗?妗ｄ笉闄?/label>
+            <input id="strategyDifficultyTier1UnlimitedInput" type="checkbox">
+            <label for="strategyDifficultyTier1LimitInput">绗?妗ｆ渶澶氬嚑涓?/label>
+            <input id="strategyDifficultyTier1LimitInput" type="number" min="0" step="1" value="1">
+            <label for="strategyDifficultyTier2UnlimitedInput">绗?妗ｄ笉闄?/label>
+            <input id="strategyDifficultyTier2UnlimitedInput" type="checkbox">
+            <label for="strategyDifficultyTier2LimitInput">绗?妗ｆ渶澶氬嚑涓?/label>
+            <input id="strategyDifficultyTier2LimitInput" type="number" min="0" step="1" value="2">
+            <label for="strategyDifficultyTier3UnlimitedInput">绗?妗ｄ笉闄?/label>
+            <input id="strategyDifficultyTier3UnlimitedInput" type="checkbox" checked>
+            <label for="strategyDifficultyTier3LimitInput">绗?妗ｆ渶澶氬嚑涓?/label>
+            <input id="strategyDifficultyTier3LimitInput" type="number" min="0" step="1" value="0">
+          </div>
+          <div id="strategyDifficultyScoreGroup" class="toolbar strategy-config-toolbar" style="display:none">
+            <label for="strategyDifficultyScoreLimitInput">线路难度总分上限</label>
+            <input id="strategyDifficultyScoreLimitInput" type="number" min="1" step="1" value="8">
+          </div>
+        </div>
+        <div id="strategyHint" class="note"></div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="solveComparePanel" data-main-tab="solve">
+      <div class="panel-head">
+        <h2>姹傝В涓庡姣?/h2>
+        <p>閫夋嫨姹傝В方式、算法池并执行�绠楋紝鏌ョ湅瀵规瘮鍜屾帹鑽愩€?/p>
+      </div>
+      <div class="strategy-shell">
+        <div class="strategy-preview-group">
+          <div class="strategy-preview-label">姹傝В方式</div>
+          <div class="strategy-preview-row">
+            <span class="strategy-pill is-active">蹇€熷垵鎺?/span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill">缁х画浼樺寲</span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill">鎺ュ姏姹傝В</span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill">澶氭柟妗堝姣?/span>
+          </div>
+        </div>
+        <div class="strategy-preview-group">
+          <div class="strategy-preview-label">方�鐩爣</div>
+          <div class="strategy-preview-row">
+            <span class="strategy-pill">鏈€准时</span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill">少用�?/span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill">鐪侀噷绋?/span>
+            <span class="strategy-divider">/</span>
+            <span class="strategy-pill is-active">综合平衡</span>
+          </div>
+        </div>
+        <div class="toolbar strategy-toolbar">
+          <label id="solveRegionSchemeLabel">分区方案号/label>
+          <select id="solveRegionSchemeSelect">
+            <option value="">请选择分区方案号</option>
+          </select>
+          <label id="solveStrategyLabel">姹傝В绛栫暐</label>
+          <select id="solveStrategySelect">
+            <option value="manual">鎵嬪姩鍕鹃€?/option>
+            <option value="quick">蹇€熷垵鎺?/option>
+            <option value="deep">娣卞害浼樺寲</option>
+            <option value="global">鍏ㄥ眬鎼滅储</option>
+            <option value="relay">鎺ュ姏姹傝В</option>
+                        <option value="free">鑷敱姹傝В</option>
+            <option value="compare">多算法�姣?/option>
+          </select>
+          <label id="optimizeGoalLabel">优化目标</label>
+          <select id="optimizeGoalSelect">
+            <option value="balanced">综合平衡</option>
+            <option value="ontime">准点优先</option>
+            <option value="distance">閲岀▼浼樺厛</option>
+            <option value="vehicles">最少用车</option>
+            <option value="load">瑁呰浇浼樺厛</option>
+          </select>
+        </div>
+        <div class="toolbar strategy-toolbar solve-wave-toolbar">
+          <label>姹傝В波次</label>
+          <label class="solve-wave-all-option">
+            <input id="solveWaveAllInput" type="checkbox" checked>
+            <span>鍏ㄩ儴</span>
+          </label>
+          <div id="solveWaveOptions" class="solve-wave-options"></div>
+        </div>
+        <div class="toolbar strategy-actions">
+          <button id="quickSolveBtn" class="secondary">蹇€熷垵鎺?/button>
+          <button id="deepOptimizeBtn" class="secondary">缁х画浼樺寲</button>
+          <button id="globalSearchBtn" class="secondary">鍏ㄥ眬鎼滅储</button>
+          <button id="relaySolveBtn" class="secondary">鎺ュ姏姹傝В</button>
+                    <button id="freeSolveBtn" class="secondary">鑷敱姹傝В</button>
+          <button id="multiCompareBtn" class="secondary">多算法�姣?/button>
+        </div>
+      </div>
+      <div class="algo-box">
+        <label><input type="checkbox" class="algo-check" value="vrptw" checked> VRPTW</label>
+        <label><input type="checkbox" class="algo-check" value="hybrid"> 娣峰悎VRPTW</label>
+        <label><input type="checkbox" class="algo-check" value="ga"> 閬椾紶绠楁硶</label>
+        <label><input type="checkbox" class="algo-check" value="tabu"> 绂佸繉鎼滅储</label>
+        <label><input type="checkbox" class="algo-check" value="lns"> 澶ч��域搜�?/label>
+        <label><input type="checkbox" class="algo-check" value="savings"> Clark-Wright节约�?/label>
+        <label><input type="checkbox" class="algo-check" value="sa"> 妯℃嫙閫€鐏?/label>
+        <label><input type="checkbox" class="algo-check" value="aco"> 铓佺兢绠楁硶</label>
+        <label><input type="checkbox" class="algo-check" value="pso"> 绮掑瓙缇ょ���?/label>
+        <label><input type="checkbox" class="algo-check" value="vehicle"> 杞﹁��驱动构�€?/label>
+      </div>
+      <div id="gaBackendStatusBar" class="ga-backend-status is-checking" role="status" aria-live="polite"></div>
+      <div class="toolbar">
+        <button id="generateBtn" class="primary">生成调度结果</button>
+      </div>
+      <div id="validationBox" class="note"></div>
+      <div class="panel lite-panel" id="storeWaveResolvedPanel">
+        <div class="panel-head">
+          <h3>鎶樼畻璐ч噺查询</h3>
+          <p>读取后台�?store_wave_load_resolved锛堟眰瑙ｈ皟鐢ㄨ〃锛夈€?/p>
+        </div>
+        <div class="toolbar inline-toolbar">
+          <label>店铺编号</label>
+          <input id="storeWaveResolvedShopCodeInput" type="text" placeholder="濡?391409">
+          <label>鎵€灞炴尝娆?/label>
+          <select id="storeWaveResolvedWaveBelongsInput">
+            <option value="">鍏ㄩ儴</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="1,2">1,2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          <button id="queryStoreWaveResolvedBtn" class="secondary">查询</button>
+        </div>
+        <div id="storeWaveResolvedSummary" class="note"></div>
+        <div class="table-scroll store-wave-resolved-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th><button class="data-table-sort" data-store-wave-sort="shop_code">店铺编号<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="wave_belongs">鎵€灞炴尝娆?span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="wave1_load">涓€波次<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="wave2_load">二波�?span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="wave3_load">涓夋尝娆?span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="wave4_load">鍥涙尝娆?span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="total_resolved_load">合�<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="first_wave_time">涓€配时�?span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="second_wave_time">二配时间<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="arrival_time_w3">W3到店时间<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="arrival_time_w4">W4到店时间<span class="store-wave-sort-mark"></span></button></th>
+                <th><button class="data-table-sort" data-store-wave-sort="updated_at">更新时间<span class="store-wave-sort-mark"></span></button></th>
+              </tr>
+            </thead>
+            <tbody id="storeWaveResolvedTableBody">
+              <tr><td colspan="11" class="muted">鏆傛棤鏁版嵁</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid summary-grid" id="summaryCards" data-main-tab="solve"></section>
+
+    <section class="panel feature-panel" id="dispatchResultPanel" data-main-tab="result">
+      <div class="panel-head">
+        <h2>调度结果</h2>
+        <p id="resultIntro">系统会展示门店路线�€佽窛绂汇€�调�﹁��程，�ュ��人工调车�ュ彛銆?/p>
+      </div>
+      <div class="toolbar">
+        <button id="exportResultBtn" class="secondary">导出当前结果</button>
+      </div>
+      <div id="resultPanels" class="grid result-grid"></div>
+    </section>
+
+    <section class="panel feature-panel" id="recommendedPlansSection" data-main-tab="solve">
+      <div class="panel-head">
+        <div>
+          <h2>历史方�鎺ㄨ崘</h2>
+          <p id="recommendedPlansDateLabel">当前任务�ユ湡锛?/p>
+        </div>
+        <div class="toolbar inline-toolbar">
+          <button id="fetchRecommendedPlansBtn" class="primary">鑾峰彇鎺ㄨ��方�</button>
+        </div>
+      </div>
+      <div id="recommendedPlansList" class="recommended-list">
+        <div class="empty-state">鏆傛棤鎺ㄨ��方�</div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="archivePanel" data-main-tab="result">
+      <div class="panel-head">
+        <h2>姹傝В妗ｆ</h2>
+        <p>系统会自�ㄧ暀瀛樻瘡涓€杞眰瑙ｇ��果，后续�炕椤垫煡鐪嬪苟鎭㈠任意�€杞€?/p>
+      </div>
+      <div id="savedPlans"></div>
+    </section>
+
+    <aside id="assistantDock" class="assistant-dock" aria-label="智能�╂墜渚ф爮"></aside>
+  </main>
+
+  <div id="processModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="true"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Dispatch Playback</p>
+        <h3 id="processModalTitle">调度过�▼鍙鍖?/h3>
+        </div>
+        <button id="closeProcessModalBtn" class="ghost">鍏抽棴</button>
+      </div>
+      <div id="processGrid" class="process-grid"></div>
+    </div>
+  </div>
+
+  <div id="showcaseModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-showcase="true"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">System Showcase</p>
+          <h3 id="showcaseModalTitle">绯荤粺鑳藉姏鎬昏</h3>
+        </div>
+        <button id="closeShowcaseModalBtn" class="ghost">鍏抽棴</button>
+      </div>
+      <pre id="showcaseTypewriter" class="terminal-view"></pre>
+    </div>
+  </div>
+
+  <div id="routeMapModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-route-map="true"></div>
+    <div class="modal-card route-map-modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Route Map</p>
+        <h3 id="routeMapModalTitle">线路�?/h3>
+        </div>
+        <button id="closeRouteMapModalBtn" class="ghost">鍏抽棴</button>
+      </div>
+      <div id="routeMapModalBody"></div>
+    </div>
+  </div>
+
+  <div id="relayConsoleModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-relay-console="true"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Relay Console</p>
+          <h3 id="relayConsoleTitle">鎺ュ姏姹傝В杩囩▼</h3>
+        </div>
+        <button id="closeRelayConsoleBtn" class="ghost">鍏抽棴</button>
+      </div>
+      <pre id="relayConsoleBody" class="terminal-view"></pre>
+    </div>
+  </div>
+
+  <div id="loadConvertModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-load-convert="true"></div>
+    <div class="modal-card load-convert-modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Load Conversion</p>
+          <h3 id="loadConvertModalTitle">璐ч��折算结果</h3>
+        </div>
+        <button id="closeLoadConvertModalBtn" class="ghost">应用并关�?/button>
+      </div>
+      <div id="loadConvertSummary" class="load-convert-summary"></div>
+      <div class="table-wrap load-convert-table-wrap">
+        <table id="loadConvertTable" class="load-convert-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <div id="solveDiagnoseModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-solve-diagnose="true"></div>
+    <div class="modal-card load-convert-modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Solve Diagnose</p>
+          <h3 id="solveDiagnoseModalTitle">姹傝В前诊�?/h3>
+        </div>
+        <button id="closeSolveDiagnoseModalBtn" class="ghost">鍏抽棴</button>
+      </div>
+      <div id="solveDiagnoseSummary" class="load-convert-summary"></div>
+      <div id="solveDiagnoseBody" class="table-wrap load-convert-table-wrap"></div>
+      <div class="modal-footer" style="display:flex;justify-content:flex-end;gap:12px;margin-top:12px;">
+        <button id="cancelSolveDiagnoseBtn" class="ghost">取消求�В</button>
+        <button id="continueSolveDiagnoseBtn">缁х画姹傝В</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window._AMapSecurityConfig = {
+      securityJsCode: "93ea2141a4ccd3ea1055c6bdf1d8bce4"
+    };
+  </script>
+  <script src="https://webapi.amap.com/maps?v=2.0&key=28741158a28eba2a5182757cf0d6c059&plugin=AMap.MoveAnimation,AMap.ToolBar,AMap.Scale,AMap.MouseTool,AMap.PolygonEditor" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="./app.js?v=20260410-002"></script>
+  <script src="./tuiyan.js"></script>
+</body>
+</html>
+
+
+
+
+
+

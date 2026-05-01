@@ -1,0 +1,235 @@
+(function () {
+  "use strict";
+
+  const state = {
+    allStores: [],
+    allVehicles: [],
+    filteredStores: [],
+    filteredVehicles: [],
+    currentDate: "",
+    storeSort: { key: "total_load", dir: "desc" },
+  };
+
+  const el = {
+    dateSelect: document.getElementById("jianweiDateSelect"),
+    dateInput: document.getElementById("jianweiDateInput"),
+    loadBtn: document.getElementById("jianweiLoadBtn"),
+    refreshBtn: document.getElementById("jianweiRefreshBtn"),
+    summaryGrid: document.getElementById("jianweiSummaryGrid"),
+    storesBody: document.getElementById("storesTableBody"),
+    vehiclesBody: document.getElementById("vehiclesTableBody"),
+    storeIdSearch: document.getElementById("storeIdSearch"),
+    storeNameSearch: document.getElementById("storeNameSearch"),
+    vehicleIdSearch: document.getElementById("vehicleIdSearch"),
+    driverNameSearch: document.getElementById("driverNameSearch"),
+    storesTable: document.getElementById("storesTable"),
+  };
+
+  function fmtNum(v, d) {
+    const n = Number(v || 0);
+    return Number.isFinite(n) ? n.toFixed(d) : (0).toFixed(d);
+  }
+
+  function esc(v) {
+    return String(v == null ? "" : v)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+
+  function parseJsonList(text) {
+    if (!text) return [];
+    if (Array.isArray(text)) return text;
+    try {
+      const arr = JSON.parse(text);
+      return Array.isArray(arr) ? arr : [];
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  async function fetchReplayData(dateText) {
+    const q = dateText ? `?date=${encodeURIComponent(dateText)}` : "";
+    const resp = await fetch(`/chaos/replay-task-view${q}`);
+    const data = await resp.json();
+    if (!resp.ok || !data || data.ok === false) {
+      throw new Error((data && (data.error || data.message)) || "加载失败");
+    }
+    return data;
+  }
+
+  function renderSummary(task) {
+    if (!task || !task.delivery_date) {
+      el.summaryGrid.innerHTML = '<div class="summary-item"><div class="k">状态</div><div class="v">暂无数据</div></div>';
+      return;
+    }
+    const fields = [
+      ["delivery_date", task.delivery_date || "-"],
+      ["day_type", task.day_type || "-"],
+      ["store_count", task.store_count ?? 0],
+      ["vehicle_count", task.vehicle_count ?? 0],
+      ["route_count", task.route_count ?? 0],
+      ["total_load_w1", fmtNum(task.total_load_w1, 3)],
+      ["total_load_w2", fmtNum(task.total_load_w2, 3)],
+      ["total_load", fmtNum(task.total_load, 3)],
+    ];
+    el.summaryGrid.innerHTML = fields
+      .map(([k, v]) => `<div class="summary-item"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`)
+      .join("");
+  }
+
+  function filterStores() {
+    const sid = (el.storeIdSearch.value || "").trim().toLowerCase();
+    const sn = (el.storeNameSearch.value || "").trim().toLowerCase();
+    state.filteredStores = state.allStores.filter((r) => {
+      const a = String(r.store_id || "").toLowerCase();
+      const b = String(r.store_name || "").toLowerCase();
+      if (sid && !a.includes(sid)) return false;
+      if (sn && !b.includes(sn)) return false;
+      return true;
+    });
+  }
+
+  function sortStores() {
+    const { key, dir } = state.storeSort;
+    const mul = dir === "asc" ? 1 : -1;
+    state.filteredStores.sort((x, y) => {
+      const ax = Number(x[key] || 0);
+      const ay = Number(y[key] || 0);
+      return (ax - ay) * mul;
+    });
+  }
+
+  function renderStores() {
+    filterStores();
+    sortStores();
+    if (!state.filteredStores.length) {
+      el.storesBody.innerHTML = '<tr class="empty-row"><td colspan="7">暂无数据</td></tr>';
+      return;
+    }
+    el.storesBody.innerHTML = state.filteredStores
+      .map((r) => {
+        const routes = parseJsonList(r.original_route_ids).join(", ");
+        const vehicles = parseJsonList(r.original_vehicle_ids).join(", ");
+        return `<tr>
+          <td title="${esc(r.store_id)}">${esc(r.store_id || "-")}</td>
+          <td title="${esc(r.store_name)}">${esc(r.store_name || "-")}</td>
+          <td>${fmtNum(r.load_w1, 3)}</td>
+          <td>${fmtNum(r.load_w2, 3)}</td>
+          <td>${fmtNum(r.total_load, 3)}</td>
+          <td title="${esc(routes)}">${esc(routes || "-")}</td>
+          <td title="${esc(vehicles)}">${esc(vehicles || "-")}</td>
+        </tr>`;
+      })
+      .join("");
+  }
+
+  function filterVehicles() {
+    const vid = (el.vehicleIdSearch.value || "").trim().toLowerCase();
+    const dn = (el.driverNameSearch.value || "").trim().toLowerCase();
+    state.filteredVehicles = state.allVehicles.filter((r) => {
+      const a = String(r.vehicle_id || "").toLowerCase();
+      const b = String(r.driver_name || "").toLowerCase();
+      if (vid && !a.includes(vid)) return false;
+      if (dn && !b.includes(dn)) return false;
+      return true;
+    });
+  }
+
+  function renderVehicles() {
+    filterVehicles();
+    if (!state.filteredVehicles.length) {
+      el.vehiclesBody.innerHTML = '<tr class="empty-row"><td colspan="4">暂无数据</td></tr>';
+      return;
+    }
+    el.vehiclesBody.innerHTML = state.filteredVehicles
+      .map((r) => {
+        const routes = parseJsonList(r.original_route_ids).join(", ");
+        return `<tr>
+          <td title="${esc(r.vehicle_id)}">${esc(r.vehicle_id || "-")}</td>
+          <td title="${esc(r.driver_name)}">${esc(r.driver_name || "-")}</td>
+          <td>${Number(r.route_count || 0)}</td>
+          <td title="${esc(routes)}">${esc(routes || "-")}</td>
+        </tr>`;
+      })
+      .join("");
+  }
+
+  function bindSort() {
+    el.storesTable.querySelectorAll("th[data-sort-key]").forEach((th) => {
+      th.addEventListener("click", function () {
+        const key = th.getAttribute("data-sort-key");
+        if (!key) return;
+        if (state.storeSort.key !== key) {
+          state.storeSort = { key, dir: "asc" };
+        } else if (state.storeSort.dir === "asc") {
+          state.storeSort.dir = "desc";
+        } else {
+          state.storeSort.dir = "asc";
+        }
+        renderStores();
+      });
+    });
+  }
+
+  function syncDateControls(dateText) {
+    state.currentDate = dateText || "";
+    if (el.dateInput) el.dateInput.value = dateText || "";
+    if (el.dateSelect && dateText) {
+      const exists = Array.from(el.dateSelect.options).some((x) => x.value === dateText);
+      if (!exists) {
+        const opt = document.createElement("option");
+        opt.value = dateText;
+        opt.textContent = dateText;
+        el.dateSelect.appendChild(opt);
+      }
+      el.dateSelect.value = dateText;
+    }
+  }
+
+  async function loadData(dateText) {
+    const data = await fetchReplayData(dateText || "");
+    const task = data.task || {};
+    const finalDate = task.delivery_date || data.date || "";
+    syncDateControls(finalDate);
+    state.allStores = Array.isArray(data.stores) ? data.stores : [];
+    state.allVehicles = Array.isArray(data.vehicles) ? data.vehicles : [];
+    renderSummary(task);
+    renderStores();
+    renderVehicles();
+  }
+
+  async function init() {
+    bindSort();
+    el.storeIdSearch.addEventListener("input", renderStores);
+    el.storeNameSearch.addEventListener("input", renderStores);
+    el.vehicleIdSearch.addEventListener("input", renderVehicles);
+    el.driverNameSearch.addEventListener("input", renderVehicles);
+    el.dateSelect.addEventListener("change", () => {
+      const v = el.dateSelect.value || "";
+      if (v) loadData(v).catch((e) => alert(e.message || "加载失败"));
+    });
+    el.dateInput.addEventListener("change", () => {
+      const v = el.dateInput.value || "";
+      if (v) loadData(v).catch((e) => alert(e.message || "加载失败"));
+    });
+    el.loadBtn.addEventListener("click", () => {
+      const v = (el.dateInput.value || el.dateSelect.value || "").trim();
+      loadData(v).catch((e) => alert(e.message || "加载失败"));
+    });
+    el.refreshBtn.addEventListener("click", () => {
+      loadData(state.currentDate).catch((e) => alert(e.message || "加载失败"));
+    });
+
+    try {
+      await loadData("");
+    } catch (e) {
+      renderSummary({});
+      renderStores();
+      renderVehicles();
+      alert(e.message || "初始化失败");
+    }
+  }
+
+  init();
+})();

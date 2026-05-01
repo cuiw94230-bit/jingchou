@@ -1,0 +1,447 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>缘起 · 性空</title>
+  <link rel="stylesheet" href="./rengong-boundary.css">
+</head>
+<body>
+  <main class="bd-shell">
+    <section class="bd-hero">
+      <div class="bd-hero-copy">
+        <p class="bd-eyebrow">CONDITIONAL INSIGHT</p>
+        <h1>缘起 · 性空</h1>
+        <p class="bd-lead">本页展示由人工调度数据推导出的规则。</p>
+        <p class="bd-lead">
+          因条件而生，谓之缘起；<br>
+          无固定本质，谓之性空。<br>
+          所有时间与装载边界，<br>
+          皆为当下条件下的成立结果，而非绝对标准。</p>
+        <p class="bd-manifesto">AI 与数字双驱动，让运营美好起来。</p>
+      </div>
+      <div class="bd-actions">
+        <a class="bd-btn bd-ghost" href="./index.html">返回主页</a>
+        <a class="bd-btn bd-ghost" href="./rengong.html">坐照</a>
+        <a class="bd-btn bd-ghost" href="./rengong-boundary.html">缘起 · 性空</a>
+        <button id="reloadBtn" class="bd-btn bd-primary" type="button">刷新数据</button>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-topbar">
+        <label class="bd-field">
+          <span>波次选择</span>
+          <select id="waveSelector">
+            <option value="W1">W1</option>
+            <option value="W2">W2</option>
+            <option value="W3">W3</option>
+            <option value="W4">W4</option>
+          </select>
+        </label>
+        <div id="waveMsg" class="bd-msg"></div>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-section-head">
+        <h2>装载规则</h2>
+      </div>
+      <div id="rulesWrap" class="bd-cards"></div>
+    </section>
+
+    <section class="bd-grid">
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>店铺收货时间规则</h2>
+        </div>
+        <div class="bd-filters bd-compact">
+          <input id="storeIdSearch" class="bd-input" type="text" placeholder="店铺编号搜索">
+          <input id="storeNameSearch" class="bd-input" type="text" placeholder="店铺名称搜索">
+          <input id="storeTimeStart" class="bd-input" type="time" placeholder="到店开始">
+          <input id="storeTimeEnd" class="bd-input" type="time" placeholder="到店结束">
+          <input id="storeMinValidSamples" class="bd-input" type="number" min="0" step="1" placeholder="最小有效样本数">
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-store">
+          <table class="bd-table" id="storeTable">
+            <thead>
+              <tr>
+                <th data-table="store" data-key="store_id">店铺编号</th>
+                <th data-table="store" data-key="store_name">店铺名称</th>
+                <th data-table="store" data-key="earliest_arrival_time">最早到店</th>
+                <th data-table="store" data-key="avg_arrival_time">平均到店</th>
+                <th data-table="store" data-key="latest_arrival_time">最晚到店</th>
+                <th data-table="store" data-key="early_allowed_minutes">允许早到分钟</th>
+                <th data-table="store" data-key="late_allowed_minutes">允许晚到分钟</th>
+                <th data-table="store" data-key="valid_sample_count">有效样本数</th>
+              </tr>
+            </thead>
+            <tbody id="storeBody">
+              <tr><td colspan="8" class="bd-empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>线路 W1 装载明细</h2>
+        </div>
+        <div class="bd-filters">
+          <input id="routeIdSearch" class="bd-input" type="text" placeholder="线路号搜索">
+          <input id="routeNameSearch" class="bd-input" type="text" placeholder="线路名称搜索">
+          <input id="vehicleSearch" class="bd-input" type="text" placeholder="车辆搜索">
+          <input id="routeDateStart" class="bd-input" type="date">
+          <input id="routeDateEnd" class="bd-input" type="date">
+          <select id="routeCategoryFilter" class="bd-select">
+            <option value="all">线路类型：全部</option>
+            <option value="normal">线路类型：普通</option>
+            <option value="airport">线路类型：首都机场</option>
+          </select>
+          <select id="routeStatusFilter" class="bd-select">
+            <option value="all">状态：全部</option>
+            <option value="over">状态：超普通上限</option>
+            <option value="airport">状态：机场线</option>
+            <option value="dirty">状态：脏数据候选</option>
+          </select>
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-route">
+          <table class="bd-table" id="routeTable">
+            <thead>
+              <tr>
+                <th data-table="route" data-key="delivery_date">日期</th>
+                <th data-table="route" data-key="vehicle_id">车辆</th>
+                <th data-table="route" data-key="route_id">线路号</th>
+                <th data-table="route" data-key="route_name">线路名称</th>
+                <th data-table="route" data-key="route_category">线路类型</th>
+                <th data-table="route" data-key="store_count">店铺数</th>
+                <th data-table="route" data-key="route_load_w1">W1装载量</th>
+                <th data-table="route" data-key="normal_hard_limit">普通上限</th>
+                <th data-table="route" data-key="is_airport_route">是否机场线</th>
+                <th data-table="route" data-key="is_over_normal_limit">是否超普通上限</th>
+                <th data-table="route" data-key="is_dirty_candidate">是否脏数据候选</th>
+              </tr>
+            </thead>
+            <tbody id="routeBody">
+              <tr><td colspan="11" class="bd-empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-section-head">
+        <h2>里程与装载</h2>
+      </div>
+      <div class="bd-filters" style="grid-template-columns: repeat(6, minmax(0, 1fr));">
+        <select id="rdGroupFilter" class="bd-select">
+          <option value="all">线路组：全部</option>
+          <option value="W1">线路组：W1</option>
+          <option value="W2">线路组：W2</option>
+          <option value="OTHER">线路组：OTHER</option>
+        </select>
+        <select id="rdTypeFilter" class="bd-select" multiple title="可多选：按住 Ctrl 或 Shift">
+          <option value="市区">市区</option>
+          <option value="机场">机场</option>
+          <option value="地铁">地铁</option>
+          <option value="郊区周边">郊区周边</option>
+          <option value="周边城市">周边城市</option>
+          <option value="高铁站">高铁站</option>
+        </select>
+        <select id="rdRouteNameFilter" class="bd-select" title="线路名称">
+          <option value="all">线路名称：全部</option>
+        </select>
+        <input id="rdRouteIdSearch" class="bd-input" type="text" placeholder="线路号搜索">
+        <input id="rdVehicleSearch" class="bd-input" type="text" placeholder="车辆搜索">
+        <input id="rdDateStart" class="bd-input" type="date">
+        <input id="rdDateEnd" class="bd-input" type="date">
+      </div>
+      <div class="bd-table-wrap" style="height:420px;">
+        <table class="bd-table" id="rdTable">
+          <thead>
+            <tr>
+              <th><button type="button" data-rd-key="delivery_date" style="all:unset;cursor:pointer;">日期</button></th>
+              <th><button type="button" data-rd-key="route_group" style="all:unset;cursor:pointer;">线路组</button></th>
+              <th><button type="button" data-rd-key="route_type" style="all:unset;cursor:pointer;">线路类型</button></th>
+              <th><button type="button" data-rd-key="route_id" style="all:unset;cursor:pointer;">线路号</button></th>
+              <th><button type="button" data-rd-key="vehicle_id" style="all:unset;cursor:pointer;">车辆</button></th>
+              <th><button type="button" data-rd-key="store_count" style="all:unset;cursor:pointer;">店铺数</button></th>
+              <th><button type="button" data-rd-key="one_way_distance_km" style="all:unset;cursor:pointer;">单程里程</button></th>
+              <th><button type="button" data-rd-key="route_load" style="all:unset;cursor:pointer;">装载量</button></th>
+              <th><button type="button" data-rd-key="is_airport" style="all:unset;cursor:pointer;">是否机场</button></th>
+              <th><button type="button" data-rd-key="is_over_normal_limit" style="all:unset;cursor:pointer;">是否超上限</button></th>
+              <th><button type="button" data-rd-key="is_dirty_candidate" style="all:unset;cursor:pointer;">是否脏数据</button></th>
+            </tr>
+          </thead>
+          <tbody id="rdBody">
+            <tr><td colspan="11" class="bd-empty">暂无数据</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div id="rdDetailModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,.45);z-index:1000;align-items:center;justify-content:center;padding:12px;">
+      <div style="background:#fff;border-radius:12px;width:min(1400px,96vw);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #e2e8f0;">
+          <div id="rdDetailTitle" style="font-weight:700;">线路明细</div>
+          <button id="rdDetailCloseBtn" type="button" class="bd-btn bd-ghost" style="height:32px;line-height:30px;padding:0 12px;">关闭</button>
+        </div>
+        <div id="rdDetailSummary" style="padding:10px 16px;border-bottom:1px solid #e2e8f0;color:#334155;font-size:13px;"></div>
+        <div id="rdDetailError" style="display:none;padding:8px 16px;color:#b91c1c;background:#fef2f2;border-bottom:1px solid #fecaca;"></div>
+        <div style="padding:0 12px 12px;overflow:auto;">
+          <table class="bd-table" style="table-layout:auto;">
+            <thead>
+              <tr>
+                <th>顺序</th>
+                <th>店铺编号</th>
+                <th>店铺名称</th>
+                <th>上站到本站km</th>
+                <th>本站到下站km</th>
+                <th>原始货量</th>
+                <th>折算货量</th>
+                <th>累计装载</th>
+              </tr>
+            </thead>
+            <tbody id="rdDetailBody">
+              <tr><td colspan="8" class="bd-empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="./rengong-boundary.js"></script>
+  <script>
+    (function () {
+      const API_BASE = "http://127.0.0.1:8765";
+      const state = {
+        wave: "W1",
+        rows: [],
+        sort: { key: "one_way_distance_km", dir: "desc" },
+      };
+
+      const els = {
+        waveSelector: document.getElementById("waveSelector"),
+        reloadBtn: document.getElementById("reloadBtn"),
+        group: document.getElementById("rdGroupFilter"),
+        type: document.getElementById("rdTypeFilter"),
+        routeName: document.getElementById("rdRouteNameFilter"),
+        routeId: document.getElementById("rdRouteIdSearch"),
+        vehicle: document.getElementById("rdVehicleSearch"),
+        start: document.getElementById("rdDateStart"),
+        end: document.getElementById("rdDateEnd"),
+        body: document.getElementById("rdBody"),
+        sortBtns: Array.from(document.querySelectorAll("#rdTable [data-rd-key]")),
+        detailModal: document.getElementById("rdDetailModal"),
+        detailTitle: document.getElementById("rdDetailTitle"),
+        detailSummary: document.getElementById("rdDetailSummary"),
+        detailError: document.getElementById("rdDetailError"),
+        detailBody: document.getElementById("rdDetailBody"),
+        detailCloseBtn: document.getElementById("rdDetailCloseBtn"),
+      };
+
+      function esc(v) {
+        return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+      function boolCn(v) { return v ? "是" : "否"; }
+      function num1(v) { const n = Number(v); return Number.isFinite(n) ? n.toFixed(1) : "-"; }
+      function num3(v) { const n = Number(v); return Number.isFinite(n) ? n.toFixed(3) : "-"; }
+      function selectedTypes() {
+        return Array.from(els.type.selectedOptions).map(o => o.value).filter(Boolean);
+      }
+      function refreshRouteNameOptions() {
+        const types = selectedTypes();
+        const names = new Set();
+        state.rows.forEach((r) => {
+          const rt = String(r.route_type || "");
+          const rn = String(r.route_name || "").trim();
+          if (!rn) return;
+          if (!types.length || types.includes(rt)) names.add(rn);
+        });
+        const sorted = Array.from(names).sort((a, b) => a.localeCompare(b, "zh-CN"));
+        els.routeName.innerHTML = '<option value="all">线路名称：全部</option>' + sorted.map((n) => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
+        els.routeName.value = "all";
+      }
+      function compare(a, b, key, dir) {
+        const mul = dir === "desc" ? -1 : 1;
+        if (key === "store_count" || key === "route_id" || key === "one_way_distance_km" || key === "route_load") {
+          return (Number(a[key] || 0) - Number(b[key] || 0)) * mul;
+        }
+        if (key === "delivery_date") return String(a[key] || "").localeCompare(String(b[key] || "")) * mul;
+        if (key === "is_airport" || key === "is_over_normal_limit" || key === "is_dirty_candidate") {
+          return ((a[key] ? 1 : 0) - (b[key] ? 1 : 0)) * mul;
+        }
+        return String(a[key] || "").localeCompare(String(b[key] || ""), "zh-CN") * mul;
+      }
+      function showDetailError(msg) {
+        els.detailError.style.display = "block";
+        els.detailError.textContent = msg || "加载失败";
+      }
+      function hideDetailError() {
+        els.detailError.style.display = "none";
+        els.detailError.textContent = "";
+      }
+      function openDetailModal() { els.detailModal.style.display = "flex"; }
+      function closeDetailModal() { els.detailModal.style.display = "none"; }
+      function fmtRawLoad(r) {
+        return `rpcs:${num3(r.rpcs)} rcase:${num3(r.rcase)} rpaper:${num3(r.rpaper)} bpcs:${num3(r.bpcs)} bpaper:${num3(r.bpaper)} apcs:${num3(r.apcs)} apaper:${num3(r.apaper)}`;
+      }
+      async function loadRouteDetail(row) {
+        hideDetailError();
+        els.detailTitle.textContent = `线路明细：${row.delivery_date || "-"} / ${row.route_id || "-"} / ${row.route_name || "-"} / ${row.vehicle_id || "-"}`;
+        els.detailSummary.textContent = "加载中...";
+        els.detailBody.innerHTML = '<tr><td colspan="8" class="bd-empty">加载中...</td></tr>';
+        openDetailModal();
+        try {
+          const q = new URLSearchParams({
+            date: String(row.delivery_date || ""),
+            route_id: String(row.route_id || ""),
+            route_group: String(row.route_group || ""),
+            vehicle_id: String(row.vehicle_id || "")
+          }).toString();
+          const resp = await fetch(`${API_BASE}/rengong/route-distance-load-detail?${q}`, { cache: "no-store" });
+          const json = await resp.json();
+          if (!resp.ok || json.ok === false) {
+            throw new Error(json.message || json.error || "明细接口失败");
+          }
+          const s = json.summary || {};
+          const items = Array.isArray(json.items) ? json.items : [];
+          els.detailSummary.textContent = `店铺数: ${s.store_count ?? "-"} | 单程里程: ${num1(s.one_way_distance_km)} km | 线路装载量: ${num3(s.route_load)} | 线路类型: ${s.route_type || "-"} | 是否机场: ${boolCn(!!s.is_airport)} | 是否脏数据: ${boolCn(!!s.is_dirty_candidate)}`;
+          if (!items.length) {
+            els.detailBody.innerHTML = '<tr><td colspan="8" class="bd-empty">暂无明细数据</td></tr>';
+            return;
+          }
+          els.detailBody.innerHTML = items.map((r) => `
+            <tr>
+              <td>${esc(r.stop_sequence ?? "-")}</td>
+              <td>${esc(r.store_id || "-")}</td>
+              <td title="${esc(r.store_name || "-")}">${esc(r.store_name || "-")}</td>
+              <td>${num1(r.distance_from_prev_km)}</td>
+              <td>${num1(r.distance_to_next_km)}</td>
+              <td title="${esc(fmtRawLoad(r))}">${esc(fmtRawLoad(r))}</td>
+              <td>${num3(r.store_load_resolved)}</td>
+              <td>${num3(r.cumulative_load)}</td>
+            </tr>
+          `).join("");
+        } catch (e) {
+          showDetailError(e.message || "加载失败");
+          els.detailSummary.textContent = "明细加载失败";
+          els.detailBody.innerHTML = '<tr><td colspan="8" class="bd-empty">加载失败</td></tr>';
+        }
+      }
+
+      function render() {
+        const g = String(els.group.value || "all");
+        const types = selectedTypes();
+        const routeNameSel = String((els.routeName && els.routeName.value) || "all");
+        const routeQ = String(els.routeId.value || "").trim().toLowerCase();
+        const vehQ = String(els.vehicle.value || "").trim().toLowerCase();
+        const ds = String(els.start.value || "").trim();
+        const de = String(els.end.value || "").trim();
+
+        let rows = state.rows.filter(r => {
+          if (g !== "all" && String(r.route_group || "") !== g) return false;
+          if (types.length && !types.includes(String(r.route_type || ""))) return false;
+          if (routeNameSel !== "all" && String(r.route_name || "").trim() !== routeNameSel) return false;
+          if (routeQ && !String(r.route_id || "").toLowerCase().includes(routeQ)) return false;
+          if (vehQ && !String(r.vehicle_id || "").toLowerCase().includes(vehQ)) return false;
+          if (ds && String(r.delivery_date || "") < ds) return false;
+          if (de && String(r.delivery_date || "") > de) return false;
+          return true;
+        });
+
+        rows = rows.slice().sort((a, b) => {
+          const c1 = String(a.route_type || "").localeCompare(String(b.route_type || ""), "zh-CN");
+          if (!state.sort.key) {
+            if (c1 !== 0) return c1;
+            return Number(b.one_way_distance_km || 0) - Number(a.one_way_distance_km || 0);
+          }
+          const c = compare(a, b, state.sort.key, state.sort.dir);
+          if (c !== 0) return c;
+          if (c1 !== 0) return c1;
+          return Number(b.one_way_distance_km || 0) - Number(a.one_way_distance_km || 0);
+        });
+
+        if (!rows.length) {
+          els.body.innerHTML = '<tr><td colspan="11" class="bd-empty">暂无数据</td></tr>';
+          return;
+        }
+        els.body.innerHTML = rows.map(r => `
+          <tr data-rd-date="${esc(r.delivery_date || "")}" data-rd-group="${esc(r.route_group || "")}" data-rd-route-id="${esc(r.route_id || "")}" data-rd-vehicle="${esc(r.vehicle_id || "")}">
+            <td>${esc(r.delivery_date || "-")}</td>
+            <td>${esc(r.route_group || "-")}</td>
+            <td>${esc(r.route_type || "-")}</td>
+            <td>${esc(r.route_id || "-")}</td>
+            <td title="${esc(r.vehicle_id || "-")}">${esc(r.vehicle_id || "-")}</td>
+            <td>${esc(r.store_count ?? "-")}</td>
+            <td>${num1(r.one_way_distance_km)}</td>
+            <td>${num3(r.route_load)}</td>
+            <td>${boolCn(!!r.is_airport)}</td>
+            <td>${boolCn(!!r.is_over_normal_limit)}</td>
+            <td>${boolCn(!!r.is_dirty_candidate)}</td>
+          </tr>
+        `).join("");
+      }
+
+      async function fetchRows() {
+        state.wave = String((els.waveSelector && els.waveSelector.value) || "W1");
+        const q = new URLSearchParams({ wave: state.wave }).toString();
+        const resp = await fetch(`${API_BASE}/rengong/boundary-page-data?${q}`, { cache: "no-store" });
+        const json = await resp.json();
+        if (!resp.ok || json.ok === false) throw new Error(json.error || "加载失败");
+        state.rows = Array.isArray(json.route_distance_load_profiles) ? json.route_distance_load_profiles : [];
+      }
+
+      async function reload() {
+        try {
+          await fetchRows();
+          refreshRouteNameOptions();
+          render();
+        } catch (_e) {
+          els.body.innerHTML = '<tr><td colspan="11" class="bd-empty">加载失败</td></tr>';
+        }
+      }
+
+      els.sortBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const key = btn.getAttribute("data-rd-key");
+          if (state.sort.key === key) state.sort.dir = state.sort.dir === "asc" ? "desc" : "asc";
+          else { state.sort.key = key; state.sort.dir = "asc"; }
+          render();
+        });
+      });
+
+      if (els.group) els.group.addEventListener("change", render);
+      if (els.type) els.type.addEventListener("change", () => { refreshRouteNameOptions(); render(); });
+      if (els.routeName) els.routeName.addEventListener("change", render);
+      [els.routeId, els.vehicle, els.start, els.end].forEach(el => el && el.addEventListener("input", render));
+      if (els.body) {
+        els.body.addEventListener("contextmenu", (ev) => {
+          const tr = ev.target && ev.target.closest ? ev.target.closest("tr[data-rd-date]") : null;
+          if (!tr) return;
+          ev.preventDefault();
+          const date = tr.getAttribute("data-rd-date") || "";
+          const routeGroup = tr.getAttribute("data-rd-group") || "";
+          const routeId = tr.getAttribute("data-rd-route-id") || "";
+          const vehicleId = tr.getAttribute("data-rd-vehicle") || "";
+          const row = state.rows.find((x) => String(x.delivery_date || "") === date && String(x.route_group || "") === routeGroup && String(x.route_id || "") === routeId && String(x.vehicle_id || "") === vehicleId);
+          if (row) loadRouteDetail(row);
+        });
+      }
+      if (els.detailCloseBtn) els.detailCloseBtn.addEventListener("click", closeDetailModal);
+      if (els.detailModal) {
+        els.detailModal.addEventListener("click", (ev) => {
+          if (ev.target === els.detailModal) closeDetailModal();
+        });
+      }
+      if (els.waveSelector) els.waveSelector.addEventListener("change", reload);
+      if (els.reloadBtn) els.reloadBtn.addEventListener("click", reload);
+
+      reload();
+    })();
+  </script>
+</body>
+</html>
+
+
+

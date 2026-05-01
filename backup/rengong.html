@@ -1,0 +1,332 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>经验数据�ヤ���?/title>
+  <link rel="stylesheet" href="./rengong.css">
+</head>
+<body>
+  <main class="rg-shell">
+    <section class="rg-hero">
+      <div class="rg-hero-copy">
+        <p class="rg-eyebrow">OBSERVING DISPATCH REALITY</p>
+        <h1>鍧愮収</h1>
+        <p class="rg-lead">
+          鏈〉浠ヤ���ヨ���︽�����境，如实观其变化与�寰嬨€?br><br>
+          因条件�€岀敓锛岃皳涔嬬紭璧凤紱<br>
+          无固定本���谓之�х┖銆?br><br>
+          不执结果，不强干预，<br>
+          于变化中见其生成之理�?br><br>
+          页面�灞曠ず，不改变调度逻辑�?        </p>
+      </div>
+      <div class="rg-hero-actions">
+        <a class="rg-hero-btn rg-ghost" href="./index.html">返回主页</a>
+        <a class="rg-hero-btn rg-ghost" href="./rengong.html">坐照</a>
+        <a class="rg-hero-btn rg-ghost" href="./rengong-boundary.html">缘起 · 性空</a>
+        <button id="refreshBtn" class="rg-hero-btn rg-primary" type="button">刷新数据</button>
+      </div>
+    </section>
+    <section class="rg-panel" style="padding:12px 18px;">
+      <div style="font-size:13px;color:#475569;">
+        从人�ヨ���︽�����提炼�В閲婅则，�?AI 与数字双驱动，�杩愯惀缇庡ソ璧锋潵銆?      </div>
+    </section>
+
+    <section class="rg-panel rg-toolbar">
+      <div class="rg-toolbar-row rg-toolbar-day">
+        <label class="rg-field">
+          <span>选择�ユ湡</span>
+          <input id="dayInput" type="date">
+        </label>
+        <button id="loadDayBtn" class="rg-pill-btn rg-primary" type="button">鏌ョ湅褰撳ぉ</button>
+        <div id="queryState" class="rg-query-state">璇烽€�择�ユ湡</div>
+      </div>
+      <div class="rg-toolbar-row rg-toolbar-actions">
+        <label class="rg-field rg-field-wide">
+          <span>鎼滅储</span>
+          <input id="searchInput" type="text" placeholder="按店�?/ 店名搜索当�ぉ店铺">
+        </label>
+        <label class="rg-field">
+          <span>姹傝В鐘舵€?/span>
+          <select id="solverReadySelect">
+            <option value="all">鍏ㄩ儴</option>
+            <option value="1">鍙洿鎺ユ眰瑙?/option>
+            <option value="0">寰呰ˉ鏁版嵁</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-kpi-grid" id="summaryCards"></div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>娉㈡姒傝</h2>
+        <span class="rg-section-tip">涓庡師姹傝В鍙ｅ緞涓€致的�㈡褰掑睘鍜屾姌绠楄揣閲?/span>
+      </div>
+      <div id="waveBreakdown" class="rg-stack-list"></div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>闂ㄥ��组（双配结构：X / X+100锛?/h2>
+        <span id="storeGroupMeta" class="rg-section-tip">基于 human_dispatch_routes 鐨?X / X+100 双配抽取</span>
+      </div>
+      <div id="storeGroupSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>鏃ユ湡</th>
+              <th>杞︾墝</th>
+              <th>双配线路</th>
+              <th>涓€閰嶅簵鏁?/th>
+              <th>二配店数</th>
+              <th>重合店数</th>
+              <th>合并店数</th>
+              <th>閲嶅悎鐜?/th>
+              <th>核心店数</th>
+              <th>二配新�店数</th>
+              <th>二配比一配�加比�?/th>
+              <th>二配/涓€閰嶆瘮渚?/th>
+              <th>闂ㄥ簵缂栧彿锛堝墠20锛?/th>
+            </tr>
+          </thead>
+          <tbody id="storeGroupBody">
+            <tr><td colspan="13" class="rg-empty">璇烽€�择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>调度输入�℃��（基于人�ラ��店组�?/h2>
+        <span id="dispatchSimMeta" class="rg-section-tip">将双配门店组�崲涓轰竴閰?/ 二配的调�﹁緭鍏ョ��构（仅分析展示）</span>
+      </div>
+      <div id="dispatchSimSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>杞︾墝</th>
+              <th>闂ㄥ���?/th>
+              <th>涓€閰嶅簵鏁?/th>
+              <th>二配店数</th>
+              <th>鎬诲簵鏁?/th>
+            </tr>
+          </thead>
+          <tbody id="dispatchSimBody">
+            <tr><td colspan="5" class="rg-empty">请先选择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>单配线路（人�ョ��构）</h2>
+        <span id="singleRouteMeta" class="rg-section-tip">同一�╁���﹀��，不参与 X / X+100 双配的线���号�涓哄崟閰嶇嚎璺?/span>
+      </div>
+      <div id="singleRouteSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>鏃ユ湡</th>
+              <th>杞︾墝</th>
+              <th>线路编号</th>
+              <th>线路名�О</th>
+              <th>店数</th>
+              <th>闂ㄥ簵缂栧彿锛堝墠20锛?/th>
+            </tr>
+          </thead>
+          <tbody id="singleRouteBody">
+            <tr><td colspan="6" class="rg-empty">请先选择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>单配线路画像（人�ヨ寰嬶級</h2>
+        <span id="singleRoutePortraitMeta" class="rg-section-tip">看清单配线路�粈涔堢被鍨?+ 澶у��结构</span>
+      </div>
+      <div class="rg-grid-2" style="padding: 14px 24px 24px;">
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>分类</th>
+                <th>鏁伴噺</th>
+                <th>平均店数</th>
+                <th>鏈€澶у簵鏁?/th>
+                <th>鏈€灏忓簵鏁?/th>
+              </tr>
+            </thead>
+            <tbody id="portraitCategoryBody">
+              <tr><td colspan="5" class="rg-empty">请先选择�ユ湡</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>店数分布</th>
+                <th>鏁伴噺</th>
+              </tr>
+            </thead>
+            <tbody id="portraitDistributionBody">
+              <tr><td colspan="2" class="rg-empty">请先选择�ユ湡</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>人工结构�℃澘</h2>
+        <span id="humanTemplateMeta" class="rg-section-tip">仅展示聚合统�℃ā板，不输出具体车牌绑定方�?/span>
+      </div>
+      <div id="humanTemplateSummary" class="rg-kpi-grid rg-kpi-grid-compact"></div>
+      <div class="rg-grid-2" style="padding: 14px 24px 24px;">
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>双配�℃澘椤?/th>
+                <th>统�鍊?/th>
+              </tr>
+            </thead>
+            <tbody id="humanTemplateDoubleBody">
+              <tr><td colspan="2" class="rg-empty">请先选择�ユ湡</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rg-table-wrap">
+          <table class="rg-table rg-day-table">
+            <thead>
+              <tr>
+                <th>单配�℃澘椤?/th>
+                <th>统�鍊?/th>
+              </tr>
+            </thead>
+            <tbody id="humanTemplateSingleBody">
+              <tr><td colspan="2" class="rg-empty">请先选择�ユ湡</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th>杞﹁��使用�℃澘椤?/th>
+              <th>统�鍊?/th>
+            </tr>
+          </thead>
+          <tbody id="humanTemplateVehicleBody">
+            <tr><td colspan="2" class="rg-empty">请先选择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>涓€鏃ュ配店铺明�?/h2>
+        <span id="multiMeta" class="rg-section-tip">等待选择�ユ湡</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="multi" data-key="shop_code"><button type="button" class="rg-sort-btn">缂栧彿</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="store_name"><button type="button" class="rg-sort-btn">名�О</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="district"><button type="button" class="rg-sort-btn">鍖哄煙</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="delivery_count"><button type="button" class="rg-sort-btn">娆℃暟</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave1_load"><button type="button" class="rg-sort-btn">涓€娉㈡璐ч噺</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave2_load"><button type="button" class="rg-sort-btn">二波�¤揣閲?/button></th>
+              <th class="rg-sortable" data-table="multi" data-key="first_wave_time"><button type="button" class="rg-sort-btn">涓€配时�?/button></th>
+              <th class="rg-sortable" data-table="multi" data-key="second_wave_time"><button type="button" class="rg-sort-btn">二配时间</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="wave_belongs"><button type="button" class="rg-sort-btn">鎵€灞炴尝娆?/button></th>
+              <th class="rg-sortable" data-table="multi" data-key="unload_minutes"><button type="button" class="rg-sort-btn">卸货分钟</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="difficulty"><button type="button" class="rg-sort-btn">闅惧害</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="tolerate_minutes"><button type="button" class="rg-sort-btn">鍏佽鍋忓樊(鍒?</button></th>
+              <th class="rg-sortable" data-table="multi" data-key="solver_ready_flag"><button type="button" class="rg-sort-btn">鐘舵€?/button></th>
+              <th class="rg-sortable" data-table="multi" data-key="source_vehicle_ids"><button type="button" class="rg-sort-btn">杞﹀彿</button></th>
+            </tr>
+          </thead>
+          <tbody id="multiBody">
+            <tr><td colspan="14" class="rg-empty">璇烽€�择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>涓€鏃ヤ��配店铺明�?/h2>
+        <span id="singleMeta" class="rg-section-tip">等待选择�ユ湡</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="single" data-key="shop_code"><button type="button" class="rg-sort-btn">缂栧彿</button></th>
+              <th class="rg-sortable" data-table="single" data-key="store_name"><button type="button" class="rg-sort-btn">名�О</button></th>
+              <th class="rg-sortable" data-table="single" data-key="district"><button type="button" class="rg-sort-btn">鍖哄煙</button></th>
+              <th class="rg-sortable" data-table="single" data-key="delivery_count"><button type="button" class="rg-sort-btn">娆℃暟</button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave3_load"><button type="button" class="rg-sort-btn">涓夋尝娆¤揣閲?/button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave4_load"><button type="button" class="rg-sort-btn">鍥涙尝娆¤揣閲?/button></th>
+              <th class="rg-sortable" data-table="single" data-key="expected_time"><button type="button" class="rg-sort-btn">到店时间</button></th>
+              <th class="rg-sortable" data-table="single" data-key="wave_belongs"><button type="button" class="rg-sort-btn">鎵€灞炴尝娆?/button></th>
+              <th class="rg-sortable" data-table="single" data-key="unload_minutes"><button type="button" class="rg-sort-btn">卸货分钟</button></th>
+              <th class="rg-sortable" data-table="single" data-key="difficulty"><button type="button" class="rg-sort-btn">闅惧害</button></th>
+              <th class="rg-sortable" data-table="single" data-key="tolerate_minutes"><button type="button" class="rg-sort-btn">鍏佽鍋忓樊(鍒?</button></th>
+              <th class="rg-sortable" data-table="single" data-key="solver_ready_flag"><button type="button" class="rg-sort-btn">鐘舵€?/button></th>
+              <th class="rg-sortable" data-table="single" data-key="source_vehicle_ids"><button type="button" class="rg-sort-btn">杞﹀彿</button></th>
+            </tr>
+          </thead>
+          <tbody id="singleBody">
+            <tr><td colspan="13" class="rg-empty">璇烽€�择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rg-panel">
+      <div class="rg-section-head">
+        <h2>杞﹁締淇℃伅</h2>
+        <span id="vehicleMeta" class="rg-section-tip">鎸夊綋澶╁瓨鍦ㄧ���﹀彿鍘婚噸灞曠ず锛岄粯璁ょ��态未使用</span>
+      </div>
+      <div class="rg-table-wrap rg-store-table-wrap">
+        <table class="rg-table rg-day-table">
+          <thead>
+            <tr>
+              <th class="rg-sortable" data-table="vehicle" data-key="plateNo"><button type="button" class="rg-sort-btn">杞﹀彿</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="driverName"><button type="button" class="rg-sort-btn">司机�?/button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="type"><button type="button" class="rg-sort-btn">杞﹀瀷</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="capacity"><button type="button" class="rg-sort-btn">瀹归噺</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="speed"><button type="button" class="rg-sort-btn">閫熷害</button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="canCold"><button type="button" class="rg-sort-btn">鍙€佸喎钘?/button></th>
+              <th class="rg-sortable" data-table="vehicle" data-key="status"><button type="button" class="rg-sort-btn">鐘舵€?/button></th>
+            </tr>
+          </thead>
+          <tbody id="vehicleBody">
+            <tr><td colspan="7" class="rg-empty">璇烽€�择�ユ湡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="./rengong.js?v=20260427-03"></script>
+</body>
+</html>
+

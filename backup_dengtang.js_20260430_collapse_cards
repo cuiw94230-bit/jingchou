@@ -1,0 +1,476 @@
+﻿(function () {
+  const T = {
+    pageTitle: '\u767b\u5802\uff5c\u4eba\u5de5\u8c03\u5ea6\u89e3\u91ca',
+    home: '\u8fd4\u56de\u4e3b\u9875',
+    zuozhao: '\u5750\u7167',
+    yuanqi: '\u7f18\u8d77\u00b7\u6027\u7a7a',
+    refresh: '\u5237\u65b0\u6570\u636e',
+    date: '\u9009\u62e9\u65e5\u671f',
+    load: '\u52a0\u8f7d\u89e3\u91ca',
+    waiting: '\u8bf7\u9009\u62e9\u65e5\u671f\u540e\u52a0\u8f7d',
+    loading: '\u6b63\u5728\u52a0\u8f7d...',
+    failed: '\u52a0\u8f7d\u5931\u8d25',
+    noData: '\u5f53\u5929\u65e0\u53ef\u5c55\u793a\u7ebf\u8def\u3002',
+    all: '\u5168\u90e8',
+    stable: '\u7a33\u5b9a\u590d\u7528',
+    changed: '\u53d1\u751f\u53d8\u5316',
+    risk: '\u9ad8\u98ce\u9669',
+    review: '\u9700\u590d\u6838',
+    k_route_count: '\u7ebf\u8def\u6570',
+    k_exact_copy_count: '\u7a33\u5b9a\u590d\u7528',
+    k_changed_count: '\u53d1\u751f\u53d8\u5316',
+    k_risk_count: '\u9ad8\u98ce\u9669',
+    k_review_count: '\u9700\u590d\u6838',
+    route: '\u7ebf\u8def\u53f7',
+    load_status: '\u8d1f\u8f7d\u72b6\u6001',
+    reuse_type: '\u5b9e\u9645\u884c\u4e3a',
+    decision: '\u5efa\u8bae\u5224\u65ad'
+  };
+
+  const state = { routes: [], filter: 'all' };
+
+  const $ = (id) => document.getElementById(id);
+  const nodes = {
+    pageTitle: $('pageTitle'),
+    btnHome: $('btnHome'),
+    btnZuozhao: $('btnZuozhao'),
+    btnYuanqi: $('btnYuanqi'),
+    btnRefresh: $('btnRefresh'),
+    dateLabel: $('dateLabel'),
+    dateInput: $('dateInput'),
+    loadBtn: $('loadBtn'),
+    statusText: $('statusText'),
+    kpiGrid: $('kpiGrid'),
+    filterRow: $('filterRow'),
+    cards: $('cards')
+  };
+
+  function setStaticText() {
+    nodes.pageTitle.textContent = T.pageTitle;
+    nodes.btnHome.textContent = T.home;
+    nodes.btnZuozhao.textContent = T.zuozhao;
+    nodes.btnYuanqi.textContent = T.yuanqi;
+    nodes.btnRefresh.textContent = T.refresh;
+    nodes.dateLabel.textContent = T.date;
+    nodes.loadBtn.textContent = T.load;
+    nodes.statusText.textContent = T.waiting;
+  }
+
+  function fmtDate(v) {
+    if (!v) return '';
+    if (typeof v === 'string') return v.slice(0, 10);
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return '';
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${day}`;
+  }
+
+  function renderKpi(summary) {
+    const items = [
+      ['route_count', T.k_route_count],
+      ['exact_copy_count', T.k_exact_copy_count],
+      ['changed_count', T.k_changed_count],
+      ['risk_count', T.k_risk_count],
+      ['review_count', T.k_review_count]
+    ];
+    nodes.kpiGrid.innerHTML = items.map(([k, label]) => {
+      const v = Number(summary && summary[k] || 0);
+      return `<div class="dt-kpi"><div class="k">${label}</div><div class="v">${v}</div></div>`;
+    }).join('');
+  }
+
+  function buildFilters() {
+    const defs = [
+      ['all', T.all],
+      ['stable', T.stable],
+      ['changed', T.changed],
+      ['risk', T.risk],
+      ['review', T.review]
+    ];
+    nodes.filterRow.innerHTML = defs.map(([k, label]) => `<button class="dt-filter-btn ${state.filter === k ? 'active' : ''}" data-key="${k}">${label}</button>`).join('');
+    nodes.filterRow.querySelectorAll('.dt-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.filter = btn.dataset.key;
+        buildFilters();
+        renderCards();
+      });
+    });
+  }
+
+  function routeVisible(r) {
+    if (state.filter === 'all') return true;
+    if (state.filter === 'stable') return r.reuse_type === 'EXACT_COPY';
+    if (state.filter === 'changed') return r.reuse_type !== 'EXACT_COPY';
+    if (state.filter === 'risk') return r.review_level === '\u9ad8\u98ce\u9669';
+    if (state.filter === 'review') return r.review_level === '\u9700\u590d\u6838';
+    return true;
+  }
+
+  function tagClass(level) {
+    if (level === '\u9ad8\u98ce\u9669') return 'risk';
+    if (level === '\u9700\u590d\u6838') return 'review';
+    return 'stable';
+  }
+
+  function isAdjusted(route) {
+    return String(route && route.reuse_type || '') !== 'EXACT_COPY';
+  }
+
+  function isHighLoad(route) {
+    const status = String(route && route.load_status || '');
+    const review = String(route && route.review_level || '');
+    if (review === '\u9ad8\u98ce\u9669') return true;
+    return status.includes('\u63a5\u8fd1\u4e0a\u9650') || status.includes('\u660e\u663e\u504f\u9ad8') || status.includes('\u8d85\u51fa\u5e38\u6001');
+  }
+
+  function briefLoadState(route) {
+    return isHighLoad(route) ? '\u8d1f\u8f7d\u504f\u9ad8' : '\u8d1f\u8f7d\u5e73\u7a33';
+  }
+
+  function briefAction(route) {
+    return isAdjusted(route) ? '\u5df2\u8c03\u6574' : '\u672a\u8c03\u6574';
+  }
+
+  function buildRuleExplain(route) {
+    const high = isHighLoad(route);
+    const adjusted = isAdjusted(route);
+    let suggest = '';
+    let reason = '';
+    if (high && adjusted) {
+      suggest = '\u4e0d\u7528\u518d\u52a8';
+      reason = '\u5df2\u7ecf\u8c03\u6574\u8fc7';
+    } else if (high && !adjusted) {
+      suggest = '\u9700\u8981\u770b\u4e00\u4e0b';
+      reason = '\u53ef\u80fd\u88c5\u4e0d\u4e0b';
+    } else if (!high && !adjusted) {
+      suggest = '\u4e0d\u7528\u52a8';
+      reason = '\u8d27\u91cf\u6ca1\u53d8\u5316';
+    } else {
+      suggest = '\u9700\u8981\u770b\u539f\u56e0';
+      reason = '\u4e0d\u8be5\u52a8\u5374\u52a8\u4e86';
+    }
+    const rid = route && route.route_id != null ? route.route_id : '';
+    return `\u7ebf\u8def ${rid}\n\n\u5efa\u8bae\uff1a${suggest}\n\n\u539f\u56e0\uff1a\n${reason}`;
+  }
+
+  function safeNum(v, d = 0) {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : d;
+  }
+
+  function fmtNum(v, p = 3) {
+    const n = Number(v);
+    return Number.isFinite(n) ? n.toFixed(p) : '--';
+  }
+
+  function fmtPct(v, p = 1) {
+    const n = Number(v);
+    return Number.isFinite(n) ? `${(n * 100).toFixed(p)}%` : '\u6682\u65e0\u91cc\u7a0b\u6570\u636e';
+  }
+
+  function listStores(snapshot) {
+    const stores = Array.isArray(snapshot && snapshot.stores) ? snapshot.stores : [];
+    if (!stores.length) return '<div class="dt-explain">\u6682\u65e0\u5e97\u94fa\u660e\u7ec6</div>';
+    return stores.map((s) => {
+      const seq = safeNum(s.stop_sequence, 0);
+      const name = String(s.store_name || s.store_id || '');
+      const load = fmtNum(s.store_load, 3);
+      let distText = '\u6682\u65e0\u91cc\u7a0b\u6570\u636e';
+      if (snapshot && snapshot.store_distance_available) {
+        const seg = s.distance_from_prev;
+        const cum = s.distance_cumulative;
+        const segTxt = Number.isFinite(Number(seg)) ? `${fmtNum(seg, 3)}km` : '--';
+        const cumTxt = Number.isFinite(Number(cum)) ? `${fmtNum(cum, 3)}km` : '--';
+        distText = `${segTxt} / ${cumTxt}`;
+      }
+      return `<div class="dt-explain">${seq}. ${name}\uff5c${load}\uff5c${distText}</div>`;
+    }).join('');
+  }
+
+  function renderSnapshot(title, snapshot, refDate) {
+    const snap = snapshot || {};
+    const storeCount = safeNum(snap.store_count, 0);
+    const load = fmtNum(snap.route_load, 3);
+    const distance = snap.distance_available ? `${fmtNum(snap.distance, 3)}km` : '\u6682\u65e0\u91cc\u7a0b\u6570\u636e';
+    const refLine = refDate ? `<div class="dt-explain">\u53c2\u8003\u65e5\uff1a${refDate}</div>` : '';
+    const note = snap.store_distance_available ? '' : `<div class="dt-explain">${snap.store_distance_note || '\u5f53\u524d\u6570\u636e\u65e0\u5355\u5e97\u91cc\u7a0b\u5b57\u6bb5'}</div>`;
+    return `
+      <div class="dt-explain"><strong>${title}</strong></div>
+      ${refLine}
+      <div class="dt-explain">- \u5e97\u94fa\u6570\uff1a${storeCount}</div>
+      <div class="dt-explain">- \u603b\u8d27\u91cf\uff1a${load}</div>
+      <div class="dt-explain">- \u603b\u91cc\u7a0b\uff1a${distance}</div>
+      ${note}
+      ${listStores(snap)}
+    `;
+  }
+
+  function renderDiff(diff, currSnap, refSnap) {
+    const d = diff || {};
+    const add = safeNum(d.added_store_count, 0);
+    const rm = safeNum(d.removed_store_count, 0);
+    const ord = d.order_changed ? '\u6709' : '\u65e0';
+    const loadPct = fmtPct(d.route_load_delta_ratio, 1);
+    const distPct = (currSnap && refSnap && currSnap.distance_available && refSnap.distance_available)
+      ? fmtPct(d.distance_delta_ratio, 1)
+      : '\u6682\u65e0\u91cc\u7a0b\u6570\u636e';
+    return `
+      <div class="dt-explain"><strong>\u3010\u53d8\u5316\u3011</strong></div>
+      <div class="dt-explain">- \u65b0\u589e\u5e97\uff1a${add}\u4e2a</div>
+      <div class="dt-explain">- \u79fb\u51fa\u5e97\uff1a${rm}\u4e2a</div>
+      <div class="dt-explain">- \u987a\u5e8f\u53d8\u5316\uff1a${ord}</div>
+      <div class="dt-explain">- \u8d27\u91cf\u53d8\u5316\uff1a${loadPct}</div>
+      <div class="dt-explain">- \u91cc\u7a0b\u53d8\u5316\uff1a${distPct}</div>
+    `;
+  }
+
+  function renderCards() {
+    const data = (state.routes || []).filter(routeVisible);
+    if (!data.length) {
+      nodes.cards.innerHTML = `<div class="dt-card">${T.noData}</div>`;
+      return;
+    }
+    nodes.cards.innerHTML = data.map(r => {
+      const ref = r.reference || {};
+      const currentSnapshot = r.current_snapshot || {};
+      const referenceSnapshot = r.reference_snapshot || {};
+      const diffSummary = r.diff_summary || {};
+      const refDate = ref.reference_date || '';
+      return `
+        <article class="dt-card">
+          <div class="dt-card-top">
+            <div><strong>${T.route}</strong> ${r.route_id ?? ''}</div>
+            <div><strong>${T.load_status}</strong> ${briefLoadState(r)}</div>
+            <div><strong>${T.reuse_type}</strong> ${briefAction(r)}</div>
+            <div><strong>${T.decision}</strong> ${r.decision_hint || ''}</div>
+            <div><span class="dt-tag ${tagClass(r.review_level)}">${r.review_level || ''}</span></div>
+          </div>
+          <p class="dt-explain">${buildRuleExplain(r)}</p>
+          <div class="dt-explain"><strong>\u3010\u53c2\u8003\u65e5\u8fd8\u539f\u3011</strong> ${refDate || '\u65e0\u524d\u4e00\u540c\u7c7b\u65e5'}</div>
+          ${renderSnapshot('\u3010\u4eca\u65e5\u7ebf\u8def\u3011', currentSnapshot, '')}
+          ${renderSnapshot('\u3010\u53c2\u8003\u65e5\u7ebf\u8def\u3011', referenceSnapshot, refDate)}
+          ${renderDiff(diffSummary, currentSnapshot, referenceSnapshot)}
+        </article>`;
+    }).join('');
+  }
+
+  async function loadData() {
+    const date = nodes.dateInput.value;
+    nodes.statusText.textContent = T.loading;
+    try {
+      const qs = date ? `?date=${encodeURIComponent(date)}` : '';
+      const res = await fetch(`/rengong/dengtang-explain${qs}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok || !data || data.ok === false) {
+        throw new Error((data && data.error) || 'request_failed');
+      }
+      const summary = data.daySummary || {};
+      state.routes = Array.isArray(data.routes) ? data.routes : [];
+      const shownDate = fmtDate(summary.delivery_date || date);
+      if (shownDate) nodes.dateInput.value = shownDate;
+      nodes.statusText.textContent = `${shownDate || ''} ${summary.day_type || ''}`.trim();
+      renderKpi(summary);
+      buildFilters();
+      renderCards();
+    } catch (e) {
+      nodes.statusText.textContent = `${T.failed}: ${e.message || e}`;
+      state.routes = [];
+      renderKpi({});
+      buildFilters();
+      renderCards();
+    }
+  }
+
+  function bind() {
+    nodes.loadBtn.addEventListener('click', loadData);
+    nodes.btnRefresh.addEventListener('click', loadData);
+  }
+
+  function initDateDefault() {
+    const now = new Date();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    nodes.dateInput.value = `${now.getFullYear()}-${m}-${d}`;
+  }
+
+  setStaticText();
+  initDateDefault();
+  bind();
+  buildFilters();
+  renderKpi({});
+  renderCards();
+  loadData();
+})();
+
+// ================= 调度助手集成（登堂页）- 兼容主系统 DeepSeek 链路 =================
+(function initDengtangAssistant() {
+  const panel = document.getElementById('assistantPanel');
+  if (!panel) return;
+
+  const messagesContainer = document.getElementById('assistantMessages');
+  const inputEl = document.getElementById('assistantInput');
+  const sendBtn = document.getElementById('assistantSendBtn');
+  const minimizeBtn = document.getElementById('assistantMinimizeBtn');
+  const statusEl = document.getElementById('assistantStatus');
+  if (!messagesContainer || !inputEl || !sendBtn || !minimizeBtn || !statusEl) return;
+
+  let isLoading = false;
+
+  function getDeepSeekSettings() {
+    try {
+      const raw = localStorage.getItem('dispatch_deepseek_settings_v1');
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function getDeepSeekApiKey() {
+    const settings = getDeepSeekSettings();
+    const fromSettings = String(settings.deepseekApiKey || settings.apiKey || '').trim();
+    if (fromSettings) return fromSettings;
+    const legacyKeys = [
+      'dispatch_deepseek_api_key',
+      'deepseek_api_key',
+      'DEEPSEEK_API_KEY'
+    ];
+    for (const key of legacyKeys) {
+      const v = String(localStorage.getItem(key) || '').trim();
+      if (v) return v;
+    }
+    return '';
+  }
+
+  function getDeepSeekModel() {
+    const settings = getDeepSeekSettings();
+    const fromSettings = String(settings.deepseekModel || settings.model || '').trim();
+    if (fromSettings) return fromSettings;
+    const legacyModel = String(localStorage.getItem('dispatch_deepseek_model') || '').trim();
+    return legacyModel || 'deepseek-chat';
+  }
+
+  function getCurrentAssistantContext() {
+    const page = '登堂';
+    const dateInput = document.getElementById('dateInput');
+    const date = dateInput && dateInput.value ? String(dateInput.value) : '';
+    const routeId = window.selectedRouteId ? String(window.selectedRouteId) : 'null';
+    const active = document.querySelector('.dt-filter-btn.active');
+    const filters = active ? String(active.textContent || '').trim() || '全部' : '全部';
+    return { page, date, routeId, filters };
+  }
+
+  function addMessage(content, role, isError) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `assistant-message ${role}`;
+    if (isError) msgDiv.classList.add('error');
+    msgDiv.innerHTML = String(content || '')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    messagesContainer.appendChild(msgDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function setLoading(loading) {
+    isLoading = !!loading;
+    if (loading) {
+      statusEl.classList.add('loading');
+      statusEl.textContent = '⏳ 思考中...';
+      sendBtn.disabled = true;
+      inputEl.disabled = true;
+    } else {
+      statusEl.classList.remove('loading');
+      statusEl.textContent = '● 就绪';
+      sendBtn.disabled = false;
+      inputEl.disabled = false;
+      inputEl.focus();
+    }
+  }
+
+  async function sendQuestion() {
+    if (isLoading) return;
+    const question = String(inputEl.value || '').trim();
+    if (!question) return;
+    inputEl.value = '';
+
+    const ctx = getCurrentAssistantContext();
+    const isDebug = /debug\s*=\s*true/i.test(question);
+    const cleanQuestion = question.replace(/\s*debug\s*=\s*true\s*/i, '').trim();
+    const ctxBlock = `[CTX]
+page=${ctx.page}
+date=${ctx.date || '未知'}
+route_id=${ctx.routeId || 'null'}
+filters=${ctx.filters || '全部'}
+debug=${isDebug}
+[/CTX]`;
+    const finalPrompt = `${ctxBlock}\n\n用户问题：${cleanQuestion || '请分析当前线路'}`;
+
+    addMessage(cleanQuestion || '分析当前线路', 'user', false);
+    setLoading(true);
+    try {
+      const apiKey = getDeepSeekApiKey();
+      if (!apiKey) throw new Error('未配置 DeepSeek API Key，请先在主页面调度助手配置');
+
+      const requestBody = {
+        apiKey,
+        model: getDeepSeekModel(),
+        messages: [
+          {
+            role: 'system',
+            content: '你是调度助手，专门回答物流调度员的问题。回答要简洁、可操作，使用调度员能看懂的语言。不要输出SQL、不要输出工程术语如p90/load_vs_p90等，直接给出结论和建议。'
+          },
+          { role: 'user', content: finalPrompt }
+        ]
+      };
+
+      const response = await fetch('/deepseek-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const reply = data?.content || data?.result || data?.reply || '抱歉，没有获取到有效回答。';
+      addMessage(reply, 'assistant', false);
+    } catch (err) {
+      addMessage(`请求失败：${(err && err.message) || err}`, 'assistant', true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  sendBtn.addEventListener('click', sendQuestion);
+  inputEl.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendQuestion();
+    }
+  });
+
+  let isMinimized = false;
+  minimizeBtn.addEventListener('click', () => {
+    isMinimized = !isMinimized;
+    if (isMinimized) {
+      panel.classList.add('minimized');
+      minimizeBtn.textContent = '+';
+    } else {
+      panel.classList.remove('minimized');
+      minimizeBtn.textContent = '−';
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const card = e.target && e.target.closest ? e.target.closest('.dt-card') : null;
+    if (!card) return;
+    document.querySelectorAll('.dt-card.dt-selected').forEach((el) => el.classList.remove('dt-selected'));
+    card.classList.add('dt-selected');
+    const txt = String(card.textContent || '');
+    const m = txt.match(/线路号\s*([0-9]+)/);
+    if (m && m[1]) {
+      window.selectedRouteId = m[1];
+      statusEl.textContent = `● 已选线路 ${window.selectedRouteId}`;
+    }
+  });
+})();

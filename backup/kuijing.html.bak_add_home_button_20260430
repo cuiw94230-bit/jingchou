@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>窥径</title>
+  <link rel="stylesheet" href="./kuijing.css">
+</head>
+<body>
+  <main class="kuijing-page">
+    <section class="kuijing-shell">
+      <p class="kuijing-eyebrow">DATA TRAJECTORY OBSERVATION</p>
+      <h1>窥径</h1>
+      <div class="kuijing-intro-card">
+        <p>本页用于从数据中观察调度的运行轨迹与结构变化。</p>
+        <p>见其径，<br>知其势。</p>
+        <p>这里不做调度，不做推演，<br>只观察真实数据在时间与空间中的演化，<br>以辅助判断规则与系统是否符合现实。</p>
+      </div>
+      <button type="button" class="kuijing-main-btn" onclick="window.open('http://localhost:3000', '_blank')">进入数据分析</button>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,213 @@
+算法文件夹说明（solver_core）
+
+目录：C:\Users\laoj0\Desktop\一二技术\城市便利店调度系统\solver_core
+用途：承接后端 /wave-optimize 与 /ga-optimize-wave 的核心求解逻辑。
+
+============================================================
+1) __init__.py
+============================================================
+作用：
+- 包级导出入口。
+- 当前导出：run_wave_optimize, run_ga_optimize
+
+============================================================
+2) runner.py
+============================================================
+作用：
+- 算法总入口适配层（API 到算法主函数的桥）。
+- 在进入算法前做“数值类型归一化”。
+
+关键函数：
+- _normalize_numeric_types(value)
+  - 递归把 Decimal 转 float（dict/list 深层也处理）
+- run_wave_optimize(payload)
+  - 调 solve_metaheuristic_v2
+- run_ga_optimize(payload)
+  - 调 solve_ga
+
+说明：
+- 这个文件不做业务兜底，只做类型整形 + 调度入口。
+
+============================================================
+3) algorithms_impl.py
+============================================================
+作用：
+- 元启发式算法主实现与统一调度。
+- 根据 algorithmKey 分发到对应算法。
+
+包含算法类：
+- AntColonyOptimizer（蚁群 ACO）
+- ParticleSwarmOptimizer（粒子群 PSO）
+- SimulatedAnnealing（模拟退火 SA）
+- LargeNeighborhoodSearch（大邻域 LNS）
+- HybridOptimizer（混合优化）
+- TabuSearch（禁忌搜索）
+- AutoTuner（自动调参）
+
+关键函数：
+- solve_metaheuristic_v2(payload)
+  - 波次主入口（/wave-optimize 主要走这里）
+  - algorithmKey=vrptw/savings 时，走 constructive.py 的构造式求解
+  - 其他算法走对应元启发式流程
+- solve_ga(payload)
+  - 遗传算法入口（/ga-optimize-wave 走这里）
+
+输入核心：
+- payload.scenario / payload.wave / payload.stores / payload.vehicles / payload.dist
+
+输出核心：
+- bestState（每车 routes）
+- traceLog（过程日志）
+- 由上层再重建成前端可展示结果
+
+============================================================
+4) constructive.py
+============================================================
+作用：
+- 构造式求解（快速初排）与多算法初始解生成。
+
+关键函数：
+- solve_constructive(payload, algorithm_key)
+  - algorithm_key=vrptw 或 savings
+  - 一店一店插入，逐步形成可行初解
+- build_initial_from_order(store_order, ...)
+  - 按给定店序逐店插入
+- generate_diverse_initial_state(payload, algorithm_key, rng)
+  - 为 SA/LNS/ACO/PSO/Hybrid/Tabu/GA 生成多样化初始状态
+
+============================================================
+5) common_ops.py
+============================================================
+作用：
+- 状态结构与“插入算子”基础工具。
+
+关键函数：
+- clone_state / normalize_routes / hash_state
+- route_distance
+- best_insert_for_vehicle
+  - 给定门店，计算插入某车某位置的边际距离
+- greedy_insert_missing
+- vrptw_insert_missing
+- savings_insert_missing
+- empty_like_state
+- collect_unique_stores
+- score_for_savings_order
+
+说明：
+- 这里是“店怎么往车里放”的基础动作层。
+
+============================================================
+6) constraints.py
+============================================================
+作用：
+- 硬约束判定（可行/不可行）。
+
+关键函数：
+- check_plan_constraints(item, stores, dist, wave, scenario)
+
+当前主要约束：
+- 门店存在约束（store_missing）
+- 容量约束（capacity）
+- 里程约束（max_route_km / max_route_km_single / max_route_km_return）
+- 时间窗约束（arrival_window：到店晚于 latestAllowedArrivalMin）
+- 波次截止约束（wave_end）
+- 夜波里程约束（night_regular_distance）
+- 难度约束（按策略：count/score）
+
+当前口径备注：
+- 冷链约束在此文件内已停用（不再按 coldRatio/canCarryCold 拦截）。
+- IGNORE_CAPACITY_CONSTRAINT 当前为 False（容量严格生效）。
+
+============================================================
+7) objective.py
+============================================================
+作用：
+- 成本/评分分解与系数映射。
+
+关键函数：
+- resolve_cost_coefficients(strategy_config_resolved)
+  - 把策略配置映射为惩罚/奖励系数
+- score_plan_components(item, wave, scenario, summary)
+  - 输出各成本分项与 total_cost
+
+主要分项：
+- arrivalViolationPenalty
+- latenessPenalty
+- waveLatePenalty
+- vehicleBusyPenalty
+- extraTripPenalty
+- lateRoutePenalty
+- distanceCost
+- loadBonus（减项）
+
+============================================================
+8) evaluator.py
+============================================================
+作用：
+- 评估层：把“约束结果 + 目标函数”组合成可比较代价。
+
+关键函数：
+- evaluate_plan(item, stores, dist, wave, scenario)
+  - 单车计划评估
+- evaluate_state(state, stores, dist, wave, scenario)
+  - 全状态评估（不可行返回 None）
+- evaluate_state_details(...)
+  - 返回 cost + components 细项
+
+补充：
+- 含双波次惩罚计算（_compute_dual_wave_penalty）
+- 依赖 utils/route_wave.py 的 route 波次标签逻辑
+
+============================================================
+9) integrity_guard.py
+============================================================
+作用：
+- 算法文件完整性校验（哈希防篡改）。
+
+关键函数：
+- verify_algorithm_file(strict=True)
+  - 校验目标：algorithms_impl.py 的 SHA256
+  - 不通过时 strict=True 会抛 RuntimeError("algorithm_file_tampered")
+
+说明：
+- 只要修改 algorithms_impl.py，就需要走合法流程更新哈希，否则后台启动会被拦。
+
+============================================================
+10) 典型调用链（从接口到算法）
+============================================================
+
+/wave-optimize
+-> ga_backend_server.py do_POST
+-> runner.run_wave_optimize
+-> algorithms_impl.solve_metaheuristic_v2
+-> (constructive / ACO / PSO / SA / Hybrid / Tabu / LNS)
+-> evaluator + constraints + objective
+-> bestState + traceLog
+-> 后端重建结果返回前端
+
+/ga-optimize-wave
+-> ga_backend_server.py do_POST
+-> runner.run_ga_optimize
+-> algorithms_impl.solve_ga
+-> evaluator + constraints + objective
+-> bestState + traceLog
+-> 后端重建结果返回前端
+
+============================================================
+11) 排障优先看哪里
+============================================================
+
+1. 报 KeyError / 字段缺失
+- 先看 runner.py 输入标准化 + payload 字段齐全性
+- 再看 constraints.py 直接读取的字段名
+
+2. 报 Backend state rebuild failed
+- 算法可能已出 bestState，重点查“后端重建阶段”输入集合与约束复核
+
+3. 报 Decimal/float 类型问题
+- 先看 runner._normalize_numeric_types 是否覆盖到该调用链
+- 再看后端重建阶段是否绕过了 runner 的归一化
+
+4. 报 algorithm_file_tampered
+- 看 integrity_guard.py 的 EXPECTED_SHA256 与 algorithms_impl.py 当前哈希是否一致
+

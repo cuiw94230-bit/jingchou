@@ -1,0 +1,138 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>缘起 · 性空</title>
+  <link rel="stylesheet" href="./rengong-boundary.css">
+</head>
+<body>
+  <main class="bd-shell">
+    <section class="bd-hero">
+      <div class="bd-hero-copy">
+        <p class="bd-eyebrow">CONDITIONAL INSIGHT</p>
+        <h1>缘起 · 性空</h1>
+        <p class="bd-lead">本页展示由人工调度数据推导出的规则。</p>
+        <p class="bd-lead">
+          因条件而生，谓之缘起；<br>
+          无固定本质，谓之性空。<br>
+          所有时间与装载边界，<br>
+          皆为当下条件下的成立结果，而非绝对标准。</p>
+        <p class="bd-manifesto">AI 与数字双驱动，让运营美好起来。</p>
+      </div>
+      <div class="bd-actions">
+        <a class="bd-btn bd-ghost" href="./index.html">返回主页</a>
+        <a class="bd-btn bd-ghost" href="./rengong.html">坐照</a>
+        <a class="bd-btn bd-ghost" href="./rengong-boundary.html">缘起 · 性空</a>
+        <button id="reloadBtn" class="bd-btn bd-primary" type="button">刷新数据</button>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-topbar">
+        <label class="bd-field">
+          <span>波次选择</span>
+          <select id="waveSelector">
+            <option value="W1">W1</option>
+            <option value="W2">W2</option>
+            <option value="W3">W3</option>
+            <option value="W4">W4</option>
+          </select>
+        </label>
+        <div id="waveMsg" class="bd-msg"></div>
+      </div>
+    </section>
+
+    <section class="bd-panel">
+      <div class="bd-section-head">
+        <h2>装载规则</h2>
+      </div>
+      <div id="rulesWrap" class="bd-cards"></div>
+    </section>
+
+    <section class="bd-grid">
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>店铺收货时间规则</h2>
+        </div>
+        <div class="bd-filters bd-compact">
+          <input id="storeIdSearch" class="bd-input" type="text" placeholder="店铺编号搜索">
+          <input id="storeNameSearch" class="bd-input" type="text" placeholder="店铺名称搜索">
+          <input id="storeTimeStart" class="bd-input" type="time" placeholder="到店开始">
+          <input id="storeTimeEnd" class="bd-input" type="time" placeholder="到店结束">
+          <input id="storeMinValidSamples" class="bd-input" type="number" min="0" step="1" placeholder="最小有效样本数">
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-store">
+          <table class="bd-table" id="storeTable">
+            <thead>
+              <tr>
+                <th data-table="store" data-key="store_id">店铺编号</th>
+                <th data-table="store" data-key="store_name">店铺名称</th>
+                <th data-table="store" data-key="earliest_arrival_time">最早到店</th>
+                <th data-table="store" data-key="avg_arrival_time">平均到店</th>
+                <th data-table="store" data-key="latest_arrival_time">最晚到店</th>
+                <th data-table="store" data-key="early_allowed_minutes">允许早到分钟</th>
+                <th data-table="store" data-key="late_allowed_minutes">允许晚到分钟</th>
+                <th data-table="store" data-key="valid_sample_count">有效样本数</th>
+              </tr>
+            </thead>
+            <tbody id="storeBody">
+              <tr><td colspan="8" class="bd-empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bd-panel">
+        <div class="bd-section-head">
+          <h2>线路 W1 装载明细</h2>
+        </div>
+        <div class="bd-filters">
+          <input id="routeIdSearch" class="bd-input" type="text" placeholder="线路号搜索">
+          <input id="routeNameSearch" class="bd-input" type="text" placeholder="线路名称搜索">
+          <input id="vehicleSearch" class="bd-input" type="text" placeholder="车辆搜索">
+          <input id="routeDateStart" class="bd-input" type="date">
+          <input id="routeDateEnd" class="bd-input" type="date">
+          <select id="routeCategoryFilter" class="bd-select">
+            <option value="all">线路类型：全部</option>
+            <option value="normal">线路类型：普通</option>
+            <option value="airport">线路类型：首都机场</option>
+          </select>
+          <select id="routeStatusFilter" class="bd-select">
+            <option value="all">状态：全部</option>
+            <option value="over">状态：超普通上限</option>
+            <option value="airport">状态：机场线</option>
+            <option value="dirty">状态：脏数据候选</option>
+          </select>
+        </div>
+        <div class="bd-table-wrap bd-table-wrap-route">
+          <table class="bd-table" id="routeTable">
+            <thead>
+              <tr>
+                <th data-table="route" data-key="delivery_date">日期</th>
+                <th data-table="route" data-key="vehicle_id">车辆</th>
+                <th data-table="route" data-key="route_id">线路号</th>
+                <th data-table="route" data-key="route_name">线路名称</th>
+                <th data-table="route" data-key="route_category">线路类型</th>
+                <th data-table="route" data-key="store_count">店铺数</th>
+                <th data-table="route" data-key="route_load_w1">W1装载量</th>
+                <th data-table="route" data-key="normal_hard_limit">普通上限</th>
+                <th data-table="route" data-key="is_airport_route">是否机场线</th>
+                <th data-table="route" data-key="is_over_normal_limit">是否超普通上限</th>
+                <th data-table="route" data-key="is_dirty_candidate">是否脏数据候选</th>
+              </tr>
+            </thead>
+            <tbody id="routeBody">
+              <tr><td colspan="11" class="bd-empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="./rengong-boundary.js"></script>
+</body>
+</html>
+
+
+

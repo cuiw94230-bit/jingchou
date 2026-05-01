@@ -1,0 +1,68 @@
+@echo off
+setlocal
+title Whale Scheduler - Restart Backend
+
+set "PYTHON_EXE=C:\Users\laoj0\AppData\Local\Programs\Python\Python314\python.exe"
+set "PY_CMD="
+set "SCRIPT=%~dp0ga_backend_server.py"
+
+echo ========================================
+echo   Whale Scheduler - Restart Backend
+echo ========================================
+echo.
+
+powershell -NoProfile -Command "if (Test-Path '%PYTHON_EXE%') { exit 0 } else { exit 1 }" >nul 2>&1
+if errorlevel 1 (
+  echo [ERROR] Python not found: %PYTHON_EXE%
+  pause
+  exit /b 1
+)
+set "PY_CMD=powershell -NoProfile -Command ""& '%PYTHON_EXE%'"""
+
+if not exist "%SCRIPT%" (
+  echo [ERROR] Backend script not found: %SCRIPT%
+  pause
+  exit /b 1
+)
+
+echo [1/5] Ensuring Metabase is available...
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$ErrorActionPreference='Stop';" ^
+  "$dockerCli=$null; foreach($p in @('C:\Program Files\Docker\Docker\resources\bin\docker.exe')){ if(Test-Path $p){ $dockerCli=$p; break } }; if(-not $dockerCli){ try{ $dockerCli=(Get-Command docker -ErrorAction Stop).Source } catch{} };" ^
+  "if(-not $dockerCli){ Write-Host '[WARN] Metabase未启动'; exit 0 };" ^
+  "try{ & $dockerCli ps | Out-Null } catch { $desktop=$null; foreach($p in @('C:\Program Files\Docker\Docker\Docker Desktop.exe','C:\Program Files\Docker\Docker\Docker Desktop')){ if(Test-Path $p){ $desktop=$p; break } }; if($desktop){ try{ Start-Process -FilePath $desktop -WindowStyle Hidden | Out-Null } catch{}; $deadline=(Get-Date).AddSeconds(90); $ready=$false; while((Get-Date)-lt $deadline){ try{ & $dockerCli ps | Out-Null; $ready=$true; break } catch { Start-Sleep -Seconds 2 } }; if(-not $ready){ Write-Host '[WARN] Metabase未启动'; exit 0 } } else { Write-Host '[WARN] Metabase未启动'; exit 0 } };" ^
+  "$all=@(& $dockerCli ps -a --format '{{.Names}}'); if($all -contains 'metabase'){ $running=@(& $dockerCli ps --format '{{.Names}}'); if(-not ($running -contains 'metabase')){ & $dockerCli start metabase | Out-Null } } else { & $dockerCli run -d -p 3000:3000 --name metabase metabase/metabase | Out-Null };" ^
+  "Write-Host '[OK] Metabase: http://localhost:3000'; exit 0"
+echo.
+
+echo [2/5] Killing listeners on port 8765...
+set "KILLED=0"
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8765 ^| findstr LISTENING') do (
+  echo   - killing PID %%a
+  taskkill /PID %%a /F >nul 2>&1
+  set "KILLED=1"
+)
+if "%KILLED%"=="0" echo   - no existing listener
+echo.
+
+echo [3/5] Checking skopt (dynamic tuning dependency)...
+powershell -NoProfile -Command "& '%PYTHON_EXE%' -c \"import importlib.util,sys;sys.exit(0 if importlib.util.find_spec('skopt') else 2)\""
+if errorlevel 1 (
+  echo [ERROR] skopt is missing. Dynamic tuning will not work.
+  echo         Run: "%PYTHON_EXE%" -m pip install scikit-optimize
+  pause
+  exit /b 2
+)
+echo [OK] skopt is available.
+echo.
+
+echo [4/5] Waiting for port release...
+timeout /t 2 /nobreak >nul
+echo.
+
+echo [5/5] Starting backend in new window...
+start "Whale Backend" powershell -NoExit -Command "& '%PYTHON_EXE%' '%SCRIPT%'"
+echo.
+echo Backend start command sent.
+echo Metabase address: http://localhost:3000
+pause

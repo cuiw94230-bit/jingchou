@@ -1,0 +1,101 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>见微</title>
+  <link rel="stylesheet" href="./chaos-jianwei.css">
+</head>
+<body>
+  <main class="jianwei-page">
+    <header class="jianwei-header">
+      <div class="jianwei-header-copy">
+        <p class="jianwei-eyebrow">CHAOS REPLAY INPUT</p>
+        <h1>见微</h1>
+      </div>
+      <div class="jianwei-actions">
+        <button type="button" class="back-home-btn" onclick="window.location.href='./index.html'">返回主页</button>
+        <button type="button" class="back-home-btn" onclick="window.location.href='./rengong.html'">坐照</button>
+        <button type="button" class="back-home-btn" onclick="window.location.href='./rengong-boundary.html'">缘起 · 性空</button>
+        <button type="button" class="back-home-btn" onclick="sessionStorage.setItem('openChaosOnLanding','1');window.location.href='./index.html'">混沌</button>
+        <button id="jianweiRefreshBtn" type="button" class="back-home-btn is-primary">刷新数据</button>
+      </div>
+    </header>
+
+    <section class="jianwei-intro-card">
+      <p>本页用于查看由人工调度结果反推出的每日待调度任务。</p>
+      <p>见一日之微，<br>知系统之势。</p>
+      <p>这里展示的是“题目”本身：<br>每天有哪些店、多少货、多少车，<br>不求解，不评价，只复盘真实输入。</p>
+    </section>
+
+    <section class="jianwei-filter-card">
+      <div class="filter-item">
+        <label for="jianweiDateSelect">选择日期</label>
+        <select id="jianweiDateSelect"></select>
+      </div>
+      <div class="filter-item">
+        <label for="jianweiDateInput">或输入日期</label>
+        <input id="jianweiDateInput" type="date">
+      </div>
+      <div class="filter-item">
+        <button id="jianweiLoadBtn" type="button" class="back-home-btn is-primary">加载当日任务</button>
+      </div>
+    </section>
+
+    <section class="jianwei-summary-card" id="jianweiSummaryCard">
+      <div class="summary-title">当日任务摘要</div>
+      <div class="summary-grid" id="jianweiSummaryGrid"></div>
+    </section>
+
+    <section class="jianwei-table-card">
+      <div class="card-title">当日店铺明细</div>
+      <div class="table-filters">
+        <input id="storeIdSearch" type="text" placeholder="店铺编号搜索">
+        <input id="storeNameSearch" type="text" placeholder="店铺名称搜索">
+      </div>
+      <div class="table-wrap table-wrap-store">
+        <table class="data-table" id="storesTable">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th data-sort-key="store_id">店铺编号</th>
+              <th data-sort-key="store_name">店铺名称</th>
+              <th data-sort-key="load_w1">W1货量</th>
+              <th data-sort-key="load_w2">W2货量</th>
+              <th data-sort-key="total_load">总货量</th>
+              <th>原始货量</th>
+              <th>原线路</th>
+              <th>原车辆</th>
+            </tr>
+          </thead>
+          <tbody id="storesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="jianwei-table-card">
+      <div class="card-title">当日车辆明细</div>
+      <div class="table-filters">
+        <input id="vehicleIdSearch" type="text" placeholder="车辆搜索">
+        <input id="driverNameSearch" type="text" placeholder="司机搜索">
+      </div>
+      <div class="table-wrap table-wrap-vehicle">
+        <table class="data-table" id="vehiclesTable">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th data-sort-key="vehicle_id">车牌</th>
+              <th data-sort-key="driver_name">司机</th>
+              <th data-sort-key="route_count">线路数</th>
+              <th>原线路</th>
+            </tr>
+          </thead>
+          <tbody id="vehiclesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="./chaos-jianwei.js"></script>
+</body>
+</html>

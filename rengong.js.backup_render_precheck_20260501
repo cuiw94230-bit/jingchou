@@ -1,0 +1,721 @@
+(function () {
+  const API_BASE = "http://127.0.0.1:8765";
+
+  const els = {
+    refreshBtn: document.getElementById("refreshBtn"),
+    loadDayBtn: document.getElementById("loadDayBtn"),
+    dayInput: document.getElementById("dayInput"),
+    searchInput: document.getElementById("searchInput"),
+    solverReadySelect: document.getElementById("solverReadySelect"),
+    queryState: document.getElementById("queryState"),
+    summaryCards: document.getElementById("summaryCards"),
+    waveBreakdown: document.getElementById("waveBreakdown"),
+
+    storeGroupMeta: document.getElementById("storeGroupMeta"),
+    storeGroupSummary: document.getElementById("storeGroupSummary"),
+    storeGroupBody: document.getElementById("storeGroupBody"),
+
+    dispatchSimMeta: document.getElementById("dispatchSimMeta"),
+    dispatchSimSummary: document.getElementById("dispatchSimSummary"),
+    dispatchSimBody: document.getElementById("dispatchSimBody"),
+
+    singleRouteMeta: document.getElementById("singleRouteMeta"),
+    singleRouteSummary: document.getElementById("singleRouteSummary"),
+    singleRouteBody: document.getElementById("singleRouteBody"),
+
+    singleRoutePortraitMeta: document.getElementById("singleRoutePortraitMeta"),
+    portraitCategoryBody: document.getElementById("portraitCategoryBody"),
+    portraitDistributionBody: document.getElementById("portraitDistributionBody"),
+    humanTemplateMeta: document.getElementById("humanTemplateMeta"),
+    humanTemplateSummary: document.getElementById("humanTemplateSummary"),
+    humanTemplateDoubleBody: document.getElementById("humanTemplateDoubleBody"),
+    humanTemplateSingleBody: document.getElementById("humanTemplateSingleBody"),
+    humanTemplateVehicleBody: document.getElementById("humanTemplateVehicleBody"),
+
+    multiMeta: document.getElementById("multiMeta"),
+    singleMeta: document.getElementById("singleMeta"),
+    vehicleMeta: document.getElementById("vehicleMeta"),
+    multiBody: document.getElementById("multiBody"),
+    singleBody: document.getElementById("singleBody"),
+    vehicleBody: document.getElementById("vehicleBody"),
+  };
+
+  const state = {
+    selectedDate: "",
+    query: "",
+    solverReady: "all",
+    overview: null,
+    rows: { multi: [], single: [], vehicle: [] },
+    sort: {
+      multi: { key: "shop_code", order: "asc" },
+      single: { key: "shop_code", order: "asc" },
+      vehicle: { key: "plateNo", order: "asc" },
+    },
+  };
+
+  function escapeHtml(v) {
+    return String(v ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function formatNumber(v, digits = 0) {
+    const n = Number(v);
+    return Number.isFinite(n) ? n.toFixed(digits) : "--";
+  }
+
+  function parseTimeToMinutes(value) {
+    const text = String(value || "").trim();
+    const m = text.match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return Number.POSITIVE_INFINITY;
+    return Number(m[1]) * 60 + Number(m[2]);
+  }
+
+  function parseSortableValue(item, key) {
+    const numberKeys = new Set([
+      "shop_code", "delivery_count", "wave1_load", "wave2_load", "wave3_load", "wave4_load",
+      "original_load", "total_resolved_load", "active_wave_load", "unload_minutes",
+      "difficulty", "tolerate_minutes", "solver_ready_flag", "capacity", "speed", "canCold",
+    ]);
+    const timeKeys = new Set(["first_wave_time", "second_wave_time", "expected_time"]);
+    if (numberKeys.has(key)) {
+      const n = Number(item[key]);
+      return Number.isFinite(n) ? n : Number.NEGATIVE_INFINITY;
+    }
+    if (timeKeys.has(key)) return parseTimeToMinutes(item[key]);
+    return String(item[key] ?? "").toLowerCase();
+  }
+
+  function sortRows(rows, table) {
+    const cfg = state.sort[table];
+    if (!cfg || !cfg.key) return rows.slice();
+    const factor = cfg.order === "desc" ? -1 : 1;
+    return rows.slice().sort((a, b) => {
+      const av = parseSortableValue(a, cfg.key);
+      const bv = parseSortableValue(b, cfg.key);
+      if (av < bv) return -1 * factor;
+      if (av > bv) return 1 * factor;
+      return (Number(a.shop_code) || 0) - (Number(b.shop_code) || 0);
+    });
+  }
+
+  function splitTokens(value) {
+    return String(value || "")
+      .split(/[,\s|，、]+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+  }
+
+  function splitDrivers(value) {
+    return String(value || "")
+      .split(/\s*\|\s*|[,，、\s]+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+  }
+
+  function buildVehicleRows(rows) {
+    const map = new Map();
+    for (const row of rows || []) {
+      const plateCandidates = splitTokens(row.source_vehicle_ids);
+      if (row.plate_no) plateCandidates.push(String(row.plate_no).trim());
+      const drivers = splitDrivers(row.source_drivers);
+      const fallbackDriver = drivers.length === 1 ? drivers[0] : "--";
+      plateCandidates.forEach((plate, idx) => {
+        if (!plate) return;
+        const driverName = drivers[idx] || fallbackDriver || "--";
+        if (!map.has(plate)) {
+          map.set(plate, {
+            plateNo: plate,
+            driverName,
+            type: "4.2米厢式货车",
+            capacity: 100,
+            speed: 38,
+            canCold: 0,
+            status: "未使用",
+          });
+        } else {
+          const old = map.get(plate);
+          if ((old.driverName === "--" || !old.driverName) && driverName !== "--") {
+            old.driverName = driverName;
+          }
+        }
+      });
+    }
+    return Array.from(map.values());
+  }
+
+  async function fetchJson(path, query = "") {
+    const url = `${API_BASE}${path}${query ? `?${query}` : ""}`;
+    const response = await fetch(url, { cache: "no-store" });
+    const result = await response.json();
+    if (!response.ok || result.ok === false) {
+      throw new Error(result.error || `HTTP ${response.status}`);
+    }
+    return result;
+  }
+
+  function buildDayQuery() {
+    const params = new URLSearchParams();
+    if (state.selectedDate) params.set("date", state.selectedDate);
+    if (state.query) params.set("q", state.query);
+    if (state.solverReady !== "all") params.set("solverReady", state.solverReady);
+    return params.toString();
+  }
+
+  function cellBox(value, cls = "") {
+    return `<span class="rg-cell-box ${cls}">${escapeHtml(value)}</span>`;
+  }
+
+  function rowReadyBadge(item) {
+    return Number(item.solver_ready_flag) === 1
+      ? '<span class="rg-cell-box rg-cell-box-status rg-cell-box-ready">可直接求解</span>'
+      : '<span class="rg-cell-box rg-cell-box-status rg-cell-box-miss">待补数据</span>';
+  }
+
+  function buildSummaryCards(day) {
+    const cards = [
+      { label: "当天店铺数", value: formatNumber(day.total_rows, 0), sub: `可直接求解 ${formatNumber(day.ready_rows, 0)} 家` },
+      { label: "待补数据", value: formatNumber(day.not_ready_rows, 0), sub: `占比 ${formatNumber(day.total_rows ? (day.not_ready_rows / day.total_rows) * 100 : 0, 1)}%` },
+      { label: "原始货量合计", value: formatNumber(day.original_load_sum, 3), sub: "保留人工原始货量口径" },
+      { label: "折算货量合计", value: formatNumber(day.resolved_load_sum, 6), sub: "与原求解口径一致" },
+    ];
+    els.summaryCards.innerHTML = cards.map((c) => `
+      <article class="rg-kpi-card">
+        <div class="rg-kpi-label">${c.label}</div>
+        <div class="rg-kpi-value">${c.value}</div>
+        <div class="rg-kpi-sub">${c.sub}</div>
+      </article>
+    `).join("");
+  }
+
+  function renderWaveBreakdown(items) {
+    if (!items || !items.length) {
+      els.waveBreakdown.innerHTML = '<div class="rg-empty">当天没有波次数据</div>';
+      return;
+    }
+    els.waveBreakdown.innerHTML = items.map((item) => `
+      <article class="rg-stack-item">
+        <div class="rg-stack-head">
+          <div class="rg-stack-title">${escapeHtml(item.wave_belongs || "未映射")}</div>
+          <div class="rg-stack-meta">${formatNumber(item.row_count, 0)} 家，已就绪 ${formatNumber(item.ready_rows, 0)} 家</div>
+        </div>
+        <div class="rg-stack-meta">原始货量 ${formatNumber(item.original_load_sum, 3)} ｜ 折算货量 ${formatNumber(item.resolved_load_sum, 6)}</div>
+      </article>
+    `).join("");
+  }
+
+  function renderStoreGroupSummary(stats) {
+    const s = stats || {};
+    const cards = [
+      { label: "总门店组数量", value: formatNumber(s.total_groups, 0), sub: "同日同车 route_id=X 与 X+100" },
+      { label: "平均每组店数", value: formatNumber(s.avg_store_count, 2), sub: "去重店铺集合平均值" },
+      { label: "最大店数", value: formatNumber(s.max_store_count, 0), sub: "单组上限" },
+      { label: "最小店数", value: formatNumber(s.min_store_count, 0), sub: "单组下限" },
+      { label: "平均二配增加比例", value: `${(Number(s.avg_second_extra_ratio || 0) * 100).toFixed(2)}%`, sub: "按（二配新增店数 / 一配店数）计算" },
+      { label: "二配比一配多20%以上组数", value: formatNumber(s.second_extra_over_20_count, 0), sub: "second_extra_ratio > 20%" },
+      { label: "二配等于一配组数", value: formatNumber(s.second_equals_first_count, 0), sub: "second_store_count = first_store_count" },
+    ];
+    els.storeGroupSummary.innerHTML = cards.map((c) => `
+      <article class="rg-kpi-card rg-kpi-card-compact">
+        <div class="rg-kpi-label">${c.label}</div>
+        <div class="rg-kpi-value">${c.value}</div>
+        <div class="rg-kpi-sub">${c.sub}</div>
+      </article>
+    `).join("");
+  }
+
+  function renderStoreGroupRows(items) {
+    if (!items || !items.length) {
+      els.storeGroupBody.innerHTML = '<tr><td colspan="13" class="rg-empty">当天没有双配门店组</td></tr>';
+      return;
+    }
+    els.storeGroupBody.innerHTML = items.map((item) => {
+      const ids = Array.isArray(item.store_ids) ? item.store_ids : [];
+      const shortText = ids.length > 20 ? `${ids.slice(0, 20).join(",")} ...` : ids.join(",");
+      return `
+        <tr>
+          <td>${escapeHtml(item.delivery_date || "--")}</td>
+          <td>${cellBox(item.vehicle_id || "--", "rg-cell-box-vehicle")}</td>
+          <td>${cellBox(item.pair_label || "--", "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.first_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.second_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.overlap_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.union_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(`${(Number(item.jaccard || 0) * 100).toFixed(2)}%`, "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.core_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.extra_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(`${(Number(item.second_extra_ratio || 0) * 100).toFixed(2)}%`, "rg-cell-box-small")}</td>
+          <td>${cellBox(`${(Number(item.second_vs_first_ratio || 0) * 100).toFixed(2)}%`, "rg-cell-box-small")}</td>
+          <td title="${escapeHtml(ids.join(","))}">${escapeHtml(shortText || "-")}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderDispatchSimSummary(stats) {
+    const s = stats || {};
+    const cards = [
+      { label: "总门店组数量", value: formatNumber(s.total_groups, 0), sub: "可转换调度输入的组数" },
+      { label: "平均总店数", value: formatNumber(s.avg_total_store_count, 2), sub: "每组一配/二配合并后店数" },
+      { label: "最大总店数", value: formatNumber(s.max_total_store_count, 0), sub: "单组上限" },
+      { label: "最小总店数", value: formatNumber(s.min_total_store_count, 0), sub: "单组下限" },
+    ];
+    els.dispatchSimSummary.innerHTML = cards.map((c) => `
+      <article class="rg-kpi-card rg-kpi-card-compact">
+        <div class="rg-kpi-label">${c.label}</div>
+        <div class="rg-kpi-value">${c.value}</div>
+        <div class="rg-kpi-sub">${c.sub}</div>
+      </article>
+    `).join("");
+  }
+
+  function renderDispatchSimRows(items) {
+    if (!items || !items.length) {
+      els.dispatchSimBody.innerHTML = '<tr><td colspan="5" class="rg-empty">当天没有可转换的门店组</td></tr>';
+      return;
+    }
+    els.dispatchSimBody.innerHTML = items.map((item) => `
+      <tr>
+        <td>${cellBox(item.vehicle_id || "--", "rg-cell-box-vehicle")}</td>
+        <td>${cellBox(item.pair_label || "--", "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave1_store_count, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave2_store_count, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.total_store_count, 0), "rg-cell-box-small")}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderSingleRouteSummary(stats) {
+    const s = stats || {};
+    const cards = [
+      { label: "单配线路数量", value: formatNumber(s.total_routes, 0), sub: "未参与 X / X+100 的 route_id" },
+      { label: "平均店数", value: formatNumber(s.avg_store_count, 2), sub: "去重店数均值" },
+      { label: "最大店数", value: formatNumber(s.max_store_count, 0), sub: "单条线路上限" },
+      { label: "最小店数", value: formatNumber(s.min_store_count, 0), sub: "单条线路下限" },
+    ];
+    els.singleRouteSummary.innerHTML = cards.map((c) => `
+      <article class="rg-kpi-card rg-kpi-card-compact">
+        <div class="rg-kpi-label">${c.label}</div>
+        <div class="rg-kpi-value">${c.value}</div>
+        <div class="rg-kpi-sub">${c.sub}</div>
+      </article>
+    `).join("");
+  }
+
+  function renderSingleRouteRows(items) {
+    if (!items || !items.length) {
+      els.singleRouteBody.innerHTML = '<tr><td colspan="6" class="rg-empty">当天没有单配线路</td></tr>';
+      return;
+    }
+    els.singleRouteBody.innerHTML = items.map((item) => {
+      const ids = Array.isArray(item.store_ids) ? item.store_ids : [];
+      const shortText = ids.length > 20 ? `${ids.slice(0, 20).join(",")} ...` : ids.join(",");
+      return `
+        <tr>
+          <td>${escapeHtml(item.delivery_date || "--")}</td>
+          <td>${cellBox(item.vehicle_id || "--", "rg-cell-box-vehicle")}</td>
+          <td>${cellBox(item.route_id || "--", "rg-cell-box-small")}</td>
+          <td>${escapeHtml(item.route_name || "--")}</td>
+          <td>${cellBox(formatNumber(item.store_count, 0), "rg-cell-box-small")}</td>
+          <td title="${escapeHtml(ids.join(","))}">${escapeHtml(shortText || "-")}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderSingleRoutePortrait(portrait) {
+    const p = portrait || {};
+    const categories = Array.isArray(p.categories) ? p.categories : [];
+    const d = p.distribution || {};
+
+    if (!categories.length) {
+      els.portraitCategoryBody.innerHTML = '<tr><td colspan="5" class="rg-empty">当天没有可分析的单配线路</td></tr>';
+    } else {
+      els.portraitCategoryBody.innerHTML = categories.map((item) => `
+        <tr>
+          <td>${escapeHtml(item.category || "--")}</td>
+          <td>${cellBox(formatNumber(item.count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.avg_store_count, 2), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.max_store_count, 0), "rg-cell-box-small")}</td>
+          <td>${cellBox(formatNumber(item.min_store_count, 0), "rg-cell-box-small")}</td>
+        </tr>
+      `).join("");
+    }
+
+    const distRows = [
+      { label: "单店线路数量（=1店）", value: d.single_store_routes },
+      { label: "小线路（<=3店）", value: d.small_routes },
+      { label: "中线路（4~6店）", value: d.medium_routes },
+      { label: "大线路（>=7店）", value: d.large_routes },
+      { label: "单配线路总数", value: d.total_routes },
+    ];
+    els.portraitDistributionBody.innerHTML = distRows.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.label)}</td>
+        <td>${cellBox(formatNumber(item.value, 0), "rg-cell-box-small")}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderHumanStructureTemplate(template) {
+    const t = template || {};
+    const d = t.doubleTemplate || {};
+    const s = t.singleTemplate || {};
+    const v = t.vehicleUsageTemplate || {};
+    const sizeDist = s.size_distribution || {};
+    const categoryShare = Array.isArray(s.category_share) ? s.category_share : [];
+    const firstDist = Array.isArray(d.first_store_count_distribution) ? d.first_store_count_distribution : [];
+    const secondDist = Array.isArray(d.second_store_count_distribution) ? d.second_store_count_distribution : [];
+    const overlapDist = Array.isArray(d.overlap_rate_distribution) ? d.overlap_rate_distribution : [];
+
+    const summaryCards = [
+      { label: "双配模板均值（一配店数）", value: formatNumber(d.avg_first_store_count, 2), sub: "基于 X / X+100 门店组" },
+      { label: "双配模板均值（二配店数）", value: formatNumber(d.avg_second_store_count, 2), sub: "基于 X / X+100 门店组" },
+      { label: "平均二配新增比例", value: `${(Number(d.avg_second_extra_ratio || 0) * 100).toFixed(2)}%`, sub: "按（二配新增店数 / 一配店数）计算" },
+      { label: "单配线路总量", value: formatNumber(sizeDist.total_routes, 0), sub: "由单配线路画像统计" },
+    ];
+    if (els.humanTemplateSummary) {
+      els.humanTemplateSummary.innerHTML = summaryCards.map((c) => `
+        <article class="rg-kpi-card rg-kpi-card-compact">
+          <div class="rg-kpi-label">${c.label}</div>
+          <div class="rg-kpi-value">${c.value}</div>
+          <div class="rg-kpi-sub">${c.sub}</div>
+        </article>
+      `).join("");
+    }
+
+    const doubleRows = [
+      { k: "平均一配店数", v: formatNumber(d.avg_first_store_count, 2) },
+      { k: "平均二配店数", v: formatNumber(d.avg_second_store_count, 2) },
+      { k: "平均二配新增比例", v: `${(Number(d.avg_second_extra_ratio || 0) * 100).toFixed(2)}%` },
+      { k: "一配店数分布", v: firstDist.length ? firstDist.map((x) => `${x.value}店:${x.count}`).join(" ｜ ") : "-" },
+      { k: "二配店数分布", v: secondDist.length ? secondDist.map((x) => `${x.value}店:${x.count}`).join(" ｜ ") : "-" },
+      { k: "重合率分布", v: overlapDist.length ? overlapDist.map((x) => `${x.range}:${x.count}`).join(" ｜ ") : "-" },
+    ];
+    if (els.humanTemplateDoubleBody) {
+      els.humanTemplateDoubleBody.innerHTML = doubleRows.map((row) => `
+        <tr><td>${escapeHtml(row.k)}</td><td>${escapeHtml(row.v)}</td></tr>
+      `).join("");
+    }
+
+    const singleRows = [
+      { k: "各类型数量占比", v: categoryShare.length ? categoryShare.map((x) => `${x.category}:${(Number(x.ratio || 0) * 100).toFixed(1)}%(${x.count})`).join(" ｜ ") : "-" },
+      { k: "各类型平均店数", v: categoryShare.length ? categoryShare.map((x) => `${x.category}:${formatNumber(x.avg_store_count, 2)}`).join(" ｜ ") : "-" },
+      { k: "单店线路数量", v: formatNumber(sizeDist.single_store_routes, 0) },
+      { k: "小线路(<=3店)", v: formatNumber(sizeDist.small_routes, 0) },
+      { k: "中线路(4~6店)", v: formatNumber(sizeDist.medium_routes, 0) },
+      { k: "大线路(>=7店)", v: formatNumber(sizeDist.large_routes, 0) },
+    ];
+    if (els.humanTemplateSingleBody) {
+      els.humanTemplateSingleBody.innerHTML = singleRows.map((row) => `
+        <tr><td>${escapeHtml(row.k)}</td><td>${escapeHtml(row.v)}</td></tr>
+      `).join("");
+    }
+
+    const vehicleRows = [
+      { k: "一天双配组数量", v: formatNumber(v.double_group_count, 0) },
+      { k: "一天单配线路数量", v: formatNumber(v.single_route_count, 0) },
+      { k: "总车辆数", v: formatNumber(v.total_vehicle_count, 0) },
+      { k: "双配任务建议车辆数", v: formatNumber(v.suggested_vehicle_for_double_tasks, 0) },
+      { k: "单配任务建议车辆数", v: formatNumber(v.suggested_vehicle_for_single_tasks, 0) },
+    ];
+    if (els.humanTemplateVehicleBody) {
+      els.humanTemplateVehicleBody.innerHTML = vehicleRows.map((row) => `
+        <tr><td>${escapeHtml(row.k)}</td><td>${escapeHtml(row.v)}</td></tr>
+      `).join("");
+    }
+  }
+
+  function buildSingleRoutePortraitFromRoutes(singleRoutes) {
+    const routes = Array.isArray(singleRoutes) ? singleRoutes : [];
+    const counters = {
+      airport: [],
+      rail: [],
+      subway: [],
+      other: [],
+    };
+    const distribution = {
+      single_store_routes: 0,
+      small_routes: 0,
+      medium_routes: 0,
+      large_routes: 0,
+      total_routes: routes.length,
+    };
+    routes.forEach((r) => {
+      const routeName = String(r.route_name || "").toLowerCase();
+      const storeCount = Number(r.store_count) || 0;
+      if (storeCount <= 1) distribution.single_store_routes += 1;
+      if (storeCount <= 3) distribution.small_routes += 1;
+      else if (storeCount <= 6) distribution.medium_routes += 1;
+      else distribution.large_routes += 1;
+      if (routeName.includes("机场")) counters.airport.push(storeCount);
+      else if (routeName.includes("高铁") || routeName.includes("南站") || routeName.includes("北站")) counters.rail.push(storeCount);
+      else if (routeName.includes("地铁")) counters.subway.push(storeCount);
+      else counters.other.push(storeCount);
+    });
+    const makeCat = (label, values) => ({
+      category: label,
+      count: values.length,
+      avg_store_count: values.length ? (values.reduce((a, b) => a + b, 0) / values.length) : 0,
+      max_store_count: values.length ? Math.max(...values) : 0,
+      min_store_count: values.length ? Math.min(...values) : 0,
+    });
+    return {
+      categories: [
+        makeCat("机场", counters.airport),
+        makeCat("高铁/南站/北站", counters.rail),
+        makeCat("地铁", counters.subway),
+        makeCat("其他", counters.other),
+      ],
+      distribution,
+    };
+  }
+
+  function renderMultiRows(items) {
+    if (!items || !items.length) {
+      els.multiBody.innerHTML = '<tr><td colspan="14" class="rg-empty">当天没有一日多配店铺</td></tr>';
+      return;
+    }
+    els.multiBody.innerHTML = items.map((item) => `
+      <tr>
+        <td>${cellBox(item.shop_code, "rg-cell-box-id")}</td>
+        <td>
+          <div class="rg-store-name-stack">
+            <span class="rg-store-name-id">店铺编号: ${escapeHtml(item.shop_code)}</span>
+            ${cellBox(item.store_name || "--", "rg-cell-box-name")}
+          </div>
+        </td>
+        <td>${cellBox(item.district || "--", "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.delivery_count, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave1_load, 3), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave2_load, 3), "rg-cell-box-small")}</td>
+        <td>${cellBox(item.first_wave_time || "--:--", "rg-cell-box-time")}</td>
+        <td>${cellBox(item.second_wave_time || "--:--", "rg-cell-box-time")}</td>
+        <td>${cellBox(item.wave_belongs || "--", "rg-cell-box-wave")}</td>
+        <td>${cellBox(formatNumber(item.unload_minutes, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.difficulty, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.tolerate_minutes, 0), "rg-cell-box-small")}</td>
+        <td>${rowReadyBadge(item)}</td>
+        <td>${cellBox(item.source_vehicle_ids || "-", "rg-cell-box-vehicle")}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderSingleRows(items) {
+    if (!items || !items.length) {
+      els.singleBody.innerHTML = '<tr><td colspan="13" class="rg-empty">当天没有一日一配店铺</td></tr>';
+      return;
+    }
+    els.singleBody.innerHTML = items.map((item) => `
+      <tr>
+        <td>${cellBox(item.shop_code, "rg-cell-box-id")}</td>
+        <td>
+          <div class="rg-store-name-stack">
+            <span class="rg-store-name-id">店铺编号: ${escapeHtml(item.shop_code)}</span>
+            ${cellBox(item.store_name || "--", "rg-cell-box-name")}
+          </div>
+        </td>
+        <td>${cellBox(item.district || "--", "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.delivery_count, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave3_load, 3), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.wave4_load, 3), "rg-cell-box-small")}</td>
+        <td>${cellBox(item.expected_time || "--:--", "rg-cell-box-time")}</td>
+        <td>${cellBox(item.wave_belongs || "--", "rg-cell-box-wave")}</td>
+        <td>${cellBox(formatNumber(item.unload_minutes, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.difficulty, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.tolerate_minutes, 0), "rg-cell-box-small")}</td>
+        <td>${rowReadyBadge(item)}</td>
+        <td>${cellBox(item.source_vehicle_ids || "-", "rg-cell-box-vehicle")}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderVehicleRows(items) {
+    if (!items || !items.length) {
+      els.vehicleBody.innerHTML = '<tr><td colspan="7" class="rg-empty">当天未匹配到可用车号</td></tr>';
+      return;
+    }
+    els.vehicleBody.innerHTML = items.map((item) => `
+      <tr>
+        <td>${cellBox(item.plateNo || "--", "rg-cell-box-vehicle")}</td>
+        <td>${cellBox(item.driverName || "--", "rg-cell-box-name")}</td>
+        <td>${cellBox(item.type || "--", "rg-cell-box-name")}</td>
+        <td>${cellBox(formatNumber(item.capacity, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(formatNumber(item.speed, 0), "rg-cell-box-small")}</td>
+        <td>${cellBox(Number(item.canCold) ? "可送冷藏" : "否", "rg-cell-box-small")}</td>
+        <td>${cellBox(item.status || "未使用", "rg-cell-box-status rg-cell-box-miss")}</td>
+      </tr>
+    `).join("");
+  }
+
+  function renderTables() {
+    renderMultiRows(sortRows(state.rows.multi, "multi"));
+    renderSingleRows(sortRows(state.rows.single, "single"));
+    renderVehicleRows(sortRows(state.rows.vehicle, "vehicle"));
+    updateSortHeaderState();
+  }
+
+  function updateSortHeaderState() {
+    document.querySelectorAll(".rg-sortable").forEach((th) => {
+      const table = th.dataset.table;
+      const key = th.dataset.key;
+      const btn = th.querySelector(".rg-sort-btn");
+      if (!btn) return;
+      const cfg = state.sort[table];
+      const active = !!cfg && cfg.key === key;
+      th.classList.toggle("is-active", active);
+      th.classList.toggle("is-desc", active && cfg.order === "desc");
+      if (!active) btn.dataset.arrow = "↕";
+      else btn.dataset.arrow = cfg.order === "asc" ? "↑" : "↓";
+    });
+  }
+
+  function bindSortHeaders() {
+    document.querySelectorAll(".rg-sortable").forEach((th) => {
+      th.addEventListener("click", () => {
+        const table = th.dataset.table;
+        const key = th.dataset.key;
+        if (!table || !key || !state.sort[table]) return;
+        const cfg = state.sort[table];
+        if (cfg.key === key) cfg.order = cfg.order === "asc" ? "desc" : "asc";
+        else {
+          cfg.key = key;
+          cfg.order = "asc";
+        }
+        renderTables();
+      });
+    });
+  }
+
+  async function loadSummary() {
+    const result = await fetchJson("/rengong/summary");
+    state.overview = result.overview || {};
+    if (!state.selectedDate) {
+      state.selectedDate = state.overview?.date_max || "";
+      if (state.selectedDate && els.dayInput) els.dayInput.value = state.selectedDate;
+    }
+  }
+
+  async function loadDayView() {
+    if (!state.selectedDate) {
+      els.queryState.textContent = "请先选择日期";
+      return;
+    }
+    try {
+      els.queryState.textContent = "正在读取当天经验数据...";
+      console.log("[经验页] loadDayView date=", state.selectedDate);
+
+      const result = await fetchJson("/rengong/day-view", buildDayQuery());
+      const day = result.daySummary || {};
+      const multi = result.multiDeliveryStores || [];
+      const single = result.singleDeliveryStores || [];
+      const waveBreakdown = result.waveBreakdown || [];
+
+      const storeGroups = result.storeGroups || [];
+      const storeGroupStats = result.storeGroupStats || {};
+      const dispatchSimulations = result.dispatchInputSimulations || [];
+      const dispatchSimStats = result.dispatchInputSimStats || {};
+      const singleRoutes = result.singleRoutes || [];
+      const singleRouteStats = result.singleRouteStats || {};
+      const singleRoutePortrait = result.singleRoutePortrait || buildSingleRoutePortraitFromRoutes(singleRoutes);
+      const humanStructureTemplate = result.humanStructureTemplate || {};
+
+      buildSummaryCards(day);
+      renderWaveBreakdown(waveBreakdown);
+      renderStoreGroupSummary(storeGroupStats);
+      renderStoreGroupRows(storeGroups);
+      renderDispatchSimSummary(dispatchSimStats);
+      renderDispatchSimRows(dispatchSimulations);
+      renderSingleRouteSummary(singleRouteStats);
+      renderSingleRouteRows(singleRoutes);
+      renderSingleRoutePortrait(singleRoutePortrait);
+      renderHumanStructureTemplate(humanStructureTemplate);
+
+      state.rows.multi = multi;
+      state.rows.single = single;
+      state.rows.vehicle = buildVehicleRows([...multi, ...single]);
+      renderTables();
+
+      const singleWave3Sum = single.reduce((sum, row) => sum + (Number(row.wave3_load) || 0), 0);
+      const singleWave4Sum = single.reduce((sum, row) => sum + (Number(row.wave4_load) || 0), 0);
+      els.multiMeta.textContent = `共 ${formatNumber(multi.length, 0)} 家 ｜ 一波次货量合计 ${formatNumber(day.multi_wave1_sum, 3)} ｜ 二波次货量合计 ${formatNumber(day.multi_wave2_sum, 3)}`;
+      els.singleMeta.textContent = `共 ${formatNumber(single.length, 0)} 家 ｜ 三波次货量合计 ${formatNumber(singleWave3Sum, 3)} ｜ 四波次货量合计 ${formatNumber(singleWave4Sum, 3)}`;
+
+      if (els.storeGroupMeta) {
+        els.storeGroupMeta.textContent = `共 ${formatNumber(storeGroupStats.total_groups, 0)} 组 ｜ 平均每组 ${formatNumber(storeGroupStats.avg_store_count, 2)} 家 ｜ 当前仅展示前 ${formatNumber(storeGroups.length, 0)} 条`;
+      }
+      if (els.dispatchSimMeta) {
+        els.dispatchSimMeta.textContent = `共 ${formatNumber(dispatchSimStats.total_groups, 0)} 组 ｜ 平均总店数 ${formatNumber(dispatchSimStats.avg_total_store_count, 2)} ｜ 当前仅展示前 ${formatNumber(dispatchSimulations.length, 0)} 条`;
+      }
+      if (els.singleRouteMeta) {
+        els.singleRouteMeta.textContent = `共 ${formatNumber(singleRouteStats.total_routes, 0)} 条 ｜ 平均店数 ${formatNumber(singleRouteStats.avg_store_count, 2)} ｜ 当前仅展示前 ${formatNumber(singleRoutes.length, 0)} 条`;
+      }
+      if (els.singleRoutePortraitMeta) {
+        const totalPortraitRoutes = Number(singleRoutePortrait?.distribution?.total_routes || 0);
+        els.singleRoutePortraitMeta.textContent = `按线路名称分类统计（共 ${formatNumber(totalPortraitRoutes, 0)} 条单配线路）`;
+      }
+      if (els.humanTemplateMeta) {
+        els.humanTemplateMeta.textContent = "仅展示分布与统计模板，不输出具体车牌绑定方案";
+      }
+      if (els.vehicleMeta) {
+        els.vehicleMeta.textContent = `去重车号 ${formatNumber(state.rows.vehicle.length, 0)} 台 ｜ 默认状态全部“未使用”`;
+      }
+      els.queryState.textContent = `已加载 ${state.selectedDate}`;
+    } catch (error) {
+      const message = String(error?.message || error || "未知错误");
+      els.queryState.textContent = `读取失败：${message}`;
+      els.storeGroupSummary.innerHTML = "";
+      els.dispatchSimSummary.innerHTML = "";
+      els.singleRouteSummary.innerHTML = "";
+      if (els.humanTemplateSummary) els.humanTemplateSummary.innerHTML = "";
+      els.storeGroupBody.innerHTML = `<tr><td colspan="13" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.dispatchSimBody.innerHTML = `<tr><td colspan="5" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.singleRouteBody.innerHTML = `<tr><td colspan="6" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.portraitCategoryBody.innerHTML = `<tr><td colspan="5" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.portraitDistributionBody.innerHTML = `<tr><td colspan="2" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      if (els.humanTemplateDoubleBody) els.humanTemplateDoubleBody.innerHTML = `<tr><td colspan="2" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      if (els.humanTemplateSingleBody) els.humanTemplateSingleBody.innerHTML = `<tr><td colspan="2" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      if (els.humanTemplateVehicleBody) els.humanTemplateVehicleBody.innerHTML = `<tr><td colspan="2" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.multiBody.innerHTML = `<tr><td colspan="14" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.singleBody.innerHTML = `<tr><td colspan="13" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+      els.vehicleBody.innerHTML = `<tr><td colspan="7" class="rg-empty">读取失败：${escapeHtml(message)}</td></tr>`;
+    }
+  }
+
+  function refreshStateFromInputs() {
+    state.selectedDate = String(els.dayInput?.value || "").trim();
+    state.query = String(els.searchInput?.value || "").trim();
+    state.solverReady = String(els.solverReadySelect?.value || "all").trim();
+  }
+
+  async function loadCurrentSelection() {
+    refreshStateFromInputs();
+    await loadDayView();
+  }
+
+  async function initPage() {
+    els.queryState.textContent = "正在读取可用日期...";
+    await loadSummary();
+    if (!state.selectedDate) {
+      els.queryState.textContent = "经验库里暂无可用日期";
+      return;
+    }
+    await loadCurrentSelection();
+  }
+
+  if (els.loadDayBtn) els.loadDayBtn.addEventListener("click", () => loadCurrentSelection());
+  if (els.refreshBtn) els.refreshBtn.addEventListener("click", () => loadCurrentSelection());
+  if (els.searchInput) {
+    els.searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") loadCurrentSelection();
+    });
+  }
+  if (els.solverReadySelect) els.solverReadySelect.addEventListener("change", () => loadCurrentSelection());
+
+  bindSortHeaders();
+  updateSortHeaderState();
+  initPage();
+})();

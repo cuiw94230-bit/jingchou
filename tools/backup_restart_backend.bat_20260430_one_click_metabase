@@ -1,0 +1,57 @@
+@echo off
+setlocal
+title Whale Scheduler - Restart Backend
+
+set "PYTHON_EXE=C:\Users\laoj0\AppData\Local\Programs\Python\Python314\python.exe"
+set "PY_CMD="
+set "SCRIPT=%~dp0ga_backend_server.py"
+
+echo ========================================
+echo   Whale Scheduler - Restart Backend
+echo ========================================
+echo.
+
+powershell -NoProfile -Command "if (Test-Path '%PYTHON_EXE%') { exit 0 } else { exit 1 }" >nul 2>&1
+if errorlevel 1 (
+  echo [ERROR] Python not found: %PYTHON_EXE%
+  pause
+  exit /b 1
+)
+set "PY_CMD=powershell -NoProfile -Command ""& '%PYTHON_EXE%'"""
+
+if not exist "%SCRIPT%" (
+  echo [ERROR] Backend script not found: %SCRIPT%
+  pause
+  exit /b 1
+)
+
+echo [1/4] Killing listeners on port 8765...
+set "KILLED=0"
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8765 ^| findstr LISTENING') do (
+  echo   - killing PID %%a
+  taskkill /PID %%a /F >nul 2>&1
+  set "KILLED=1"
+)
+if "%KILLED%"=="0" echo   - no existing listener
+echo.
+
+echo [2/4] Checking skopt (dynamic tuning dependency)...
+powershell -NoProfile -Command "& '%PYTHON_EXE%' -c \"import importlib.util,sys;sys.exit(0 if importlib.util.find_spec('skopt') else 2)\""
+if errorlevel 1 (
+  echo [ERROR] skopt is missing. Dynamic tuning will not work.
+  echo         Run: "%PYTHON_EXE%" -m pip install scikit-optimize
+  pause
+  exit /b 2
+)
+echo [OK] skopt is available.
+echo.
+
+echo [3/4] Waiting for port release...
+timeout /t 2 /nobreak >nul
+echo.
+
+echo [4/4] Starting backend in new window...
+start "Whale Backend" powershell -NoExit -Command "& '%PYTHON_EXE%' '%SCRIPT%'"
+echo.
+echo Backend start command sent.
+pause
