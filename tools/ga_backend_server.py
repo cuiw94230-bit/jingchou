@@ -9,6 +9,7 @@ GA 后端总入口。
 import json
 import math
 import os
+
 import random
 import re
 import time
@@ -89,8 +90,10 @@ from solver_core.integrity_guard import verify_algorithm_file
 from solver_core.simulation import build_failure_records as build_simulation_failure_records
 from tools.strategy_center import apply_strategy_center
 
+import os
+
 HOST = settings.HOST
-PORT = settings.PORT
+PORT = int(os.environ.get("PORT", settings.PORT))
 DC_ID = "DC"
 DEEPSEEK_API_URL = settings.DEEPSEEK_API_URL
 MYSQL_HOST = settings.MYSQL_HOST
@@ -99,12 +102,14 @@ MYSQL_USER = settings.MYSQL_USER
 MYSQL_PASSWORD = settings.MYSQL_PASSWORD
 MYSQL_DATABASE = settings.MYSQL_DATABASE
 ALLOW_REMOTE_DB = settings.ALLOW_REMOTE_DB
+
 ARCHIVE_TABLE = settings.ARCHIVE_TABLE
 ARCHIVE_ROUTE_TABLE = settings.ARCHIVE_ROUTE_TABLE
 RECOMMENDED_PLAN_TABLE = "recommended_plan_candidates"
 AMAP_DISTANCE_TABLE = settings.AMAP_DISTANCE_TABLE
 AMAP_ROUTE_TABLE = settings.AMAP_ROUTE_TABLE
 STORE_DISTANCE_TABLE = "store_distance_matrix"
+
 RUN_REGION_TABLE = "dispatch_run_regions"
 RUN_REGION_SCHEME_TABLE = "dispatch_region_schemes"
 RUN_REGION_MEMBER_TABLE = "dispatch_region_members"
