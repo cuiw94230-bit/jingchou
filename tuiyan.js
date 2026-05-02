@@ -1,8 +1,12 @@
 /*
- * 娣锋矊锛堟帹婕旈〉锛夊墠绔剼鏈€? *
- * 杩欓噷闆嗕腑缁存姢涓ょ被鎺ㄦ紨锛? * 1. 鍗曞簵鏃堕棿鎺ㄦ紨锛氬悓涓€娉㈡鍋氭敼鍓?鏀瑰悗 A/B 鐪熸眰瑙ｃ€? * 2. 鍑忚溅/鍙鎬ф帹婕旓細鍥寸粫澶辫触鏍锋湰銆佺害鏉熻瘖鏂拰寤鸿瑙勫垯灞曞紑銆? */
+ * 混沌（推演页）前端脚本。
+ *
+ * 这里集中维护两类推演：
+ * 1. 单店时间推演：同一波次做改前/改后 A/B 真求解。
+ * 2. 减车/可行性推演：围绕失败样本、约束诊断和建议规则展开。
+ */
 (function () {
-    const GA_BACKEND_URL = "";
+    const GA_BACKEND_URL = "http://127.0.0.1:8765";
 
     let currentBatch = null;
     let currentProcessedData = null;
@@ -201,13 +205,13 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ date: today, page, pageSize })
             }, 10000);
-            console.log("閹佃顐奸崚妤勩€冮崫宥呯安閻樿埖鈧?", response.status);
+            console.log("鎵规鍒楄〃鍝嶅簲鐘舵€?", response.status);
             const result = await response.json();
             result._httpStatus = response.status;
-            console.log("閹佃顐奸崚妤勩€冮崫宥呯安閺佺増宓?", result);
+            console.log("鎵规鍒楄〃鍝嶅簲鏁版嵁:", result);
             return Array.isArray(result?.items) ? result.items : [];
         } catch (error) {
-            console.error("鍔犺浇鎵规鍒楄〃鍑洪敊:", error);
+            console.error("加载批次列表出错:", error);
             return [];
         }
     }
@@ -220,8 +224,8 @@
                 body: JSON.stringify({ id: batchId })
             }, 15000);
             const result = await response.json();
-            console.log("鎵规璇︽儏鍝嶅簲鏁版嵁:", result);
-            if (!result?.item) throw new Error("鑾峰彇鎵规璇︽儏澶辫触");
+            console.log("批次详情响应数据:", result);
+            if (!result?.item) throw new Error("获取批次详情失败");
             currentBatch = result.item;
             currentProcessedData = processSnapshot(currentBatch);
             latestSimulationResult = null;
@@ -230,7 +234,7 @@
             window.__tuiyanDebug = { currentBatch, currentProcessedData, allShops, shopWaveTimes };
             return currentProcessedData;
         } catch (error) {
-            console.error("鍔犺浇鎵规璇︽儏鍑洪敊:", error);
+            console.error("加载批次详情出错:", error);
             return null;
         }
     }
@@ -242,12 +246,12 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ date, page, pageSize })
             }, 10000);
-            console.log("閹佃顐奸崚妤勩€冮崫宥呯安閻樿埖鈧?", response.status, "date=", date);
+            console.log("鎵规鍒楄〃鍝嶅簲鐘舵€?", response.status, "date=", date);
             const result = await response.json();
-            console.log("閹佃顐奸崚妤勩€冮崫宥呯安閺佺増宓?", result);
+            console.log("鎵规鍒楄〃鍝嶅簲鏁版嵁:", result);
             return Array.isArray(result?.items) ? result.items : [];
         } catch (error) {
-            console.error("鍔犺浇鎵规鍒楄〃鍑洪敊:", error);
+            console.error("加载批次列表出错:", error);
             return [];
         }
     }
@@ -279,11 +283,11 @@
                 headers: { "Content-Type": "application/json" }
             }, 10000);
             const result = await response.json();
-            console.log("闂ㄥ簵鍩虹淇℃伅鍝嶅簲鏁版嵁:", result);
+            console.log("门店基础信息响应数据:", result);
             allShops = Array.isArray(result?.shops) ? result.shops : [];
             return allShops;
         } catch (error) {
-            console.error("鍔犺浇闂ㄥ簵淇℃伅鍑洪敊:", error);
+            console.error("加载门店信息出错:", error);
             return [];
         }
     }
@@ -295,18 +299,18 @@
                 headers: { "Content-Type": "application/json" }
             }, 10000);
             const result = await response.json();
-            console.log("闂ㄥ簵娉㈡鏃堕棿鍝嶅簲鏁版嵁:", result);
+            console.log("门店波次时间响应数据:", result);
             shopWaveTimes = Array.isArray(result?.items) ? result.items : [];
             return shopWaveTimes;
         } catch (error) {
-            console.error("鍔犺浇闂ㄥ簵娉㈡鏃堕棿鍑洪敊:", error);
+            console.error("加载门店波次时间出错:", error);
             return [];
         }
     }
 
     function processSnapshot(snapshot) {
         if (!snapshot) return null;
-        console.log("processSnapshot缁撴灉缁撴瀯:", {
+        console.log("processSnapshot结果结构:", {
             snapshot_id: snapshot?.id,
             result: snapshot?.result,
             results: snapshot?.results,
@@ -375,7 +379,7 @@
                 return window.__dispatchRealtimeContext;
             }
         } catch (error) {
-            console.warn("璇诲彇 window.__dispatchRealtimeContext 澶辫触:", error);
+            console.warn("读取 window.__dispatchRealtimeContext 失败:", error);
         }
         try {
             const raw = localStorage.getItem(REALTIME_DISPATCH_CONTEXT_KEY);
@@ -383,7 +387,7 @@
             const parsed = JSON.parse(raw);
             return parsed && typeof parsed === "object" ? parsed : null;
         } catch (error) {
-            console.warn("璇诲彇鏈湴璋冨害涓婁笅鏂囧け璐?", error);
+            console.warn("读取本地调度上下文失败:", error);
             return null;
         }
     }
@@ -395,13 +399,13 @@
         if (statusEl) {
             statusEl.className = `simulate-progress-status ${status || "idle"}`;
             statusEl.textContent =
-                status === "running" ? "Running" :
-                status === "success" ? "Success" :
-                status === "error" ? "Error" :
-                "Idle";
+                status === "running" ? "执行中" :
+                status === "success" ? "已完成" :
+                status === "error" ? "失败" :
+                "待执行";
         }
         if (stepsEl) {
-            const list = Array.isArray(steps) && steps.length ? steps : [{ text: "绛夊緟寮€濮嬫帹婕?..", state: "" }];
+            const list = Array.isArray(steps) && steps.length ? steps : [{ text: "等待开始推演...", state: "" }];
             stepsEl.innerHTML = list.map((step) => {
                 const state = String(step?.state || "").trim();
                 const className = ["simulate-step", state ? `is-${state}` : ""].filter(Boolean).join(" ");
@@ -410,7 +414,7 @@
         }
         if (debugEl) {
             if (!payload) {
-                debugEl.textContent = "鏆傛棤杩囩▼鏁版嵁";
+                debugEl.textContent = "暂无过程数据";
             } else {
                 try {
                     debugEl.textContent = JSON.stringify(payload, null, 2);
@@ -433,7 +437,7 @@
 
     function openSimulationRelayConsole() {
         if (typeof window.openRelayConsoleModal === "function") {
-            window.openRelayConsoleModal("姹傝В杩囩▼鍙鍖栫獥鍙?);
+            window.openRelayConsoleModal("求解过程可视化窗口");
         }
     }
 
@@ -487,7 +491,9 @@
         void pollSimulationTaskLog(taskId, false);
     }
 
-    // 鎺ㄦ紨鎺ュ彛缁熶竴鍏ュ彛銆?    // 鍓嶇鍏堟妸妯″紡銆佹壒娆°€佺洰鏍囥€佸簵閾?杞﹁締绾︽潫鏁寸悊鎴?requestPayload锛屽啀鐢卞悗绔喅瀹氬叿浣撹蛋鍝潯鎺ㄦ紨鍒嗘敮銆?    async function callSimulateAPI(requestPayload) {
+    // 推演接口统一入口。
+    // 前端先把模式、批次、目标、店铺/车辆约束整理成 requestPayload，再由后端决定具体走哪条推演分支。
+    async function callSimulateAPI(requestPayload) {
         try {
             const realtimeContext = getRealtimeDispatchContext();
             const response = await fetch(`${GA_BACKEND_URL}/simulate/optimize-time`, {
@@ -503,23 +509,24 @@
             const result = await response.json();
             result._httpStatus = response.status;
             if (result.success) {
-                console.log("鎺ㄦ紨鎴愬姛:", result?.data?.improvements);
+                console.log("推演成功:", result?.data?.improvements);
             }
             return result;
         } catch (error) {
-            console.error("鎺ㄦ紨鎺ュ彛璋冪敤澶辫触:", error);
+            console.error("推演接口调用失败:", error);
             return { success: false, message: error.message };
         }
     }
 
-    // 鍗曞簵鎺ㄦ紨缁撴灉浼樺厛浠庢暟鎹簱鍥炶锛岄伩鍏嶉〉闈㈠彧渚濊禆棣栨杩斿洖鐨勪复鏃?JSON銆?    async function loadSingleStoreSimulationReport(taskId) {
+    // 单店推演结果优先从数据库回读，避免页面只依赖首次返回的临时 JSON。
+    async function loadSingleStoreSimulationReport(taskId) {
         try {
             const response = await fetch(`${GA_BACKEND_URL}/simulate/single-report?taskId=${encodeURIComponent(taskId)}`);
             const result = await response.json();
             result._httpStatus = response.status;
             return result;
         } catch (error) {
-            console.error("鍔犺浇鍗曞簵鎺ㄦ紨瀹¤缁撴灉澶辫触:", error);
+            console.error("加载单店推演审计结果失败:", error);
             return { success: false, message: error.message };
         }
     }
@@ -535,12 +542,13 @@
             result._httpStatus = response.status;
             return result;
         } catch (error) {
-            console.error("淇濆瓨鍗曞簵绾胯矾鍐崇瓥澶辫触:", error);
+            console.error("保存单店线路决策失败:", error);
             return { success: false, message: error.message };
         }
     }
 
-    // 鍦ㄧ嚎璺汉宸ョ‘璁?鍐嶄紭鍖栦箣鍚庯紝鍩轰簬鈥滄柊鐨勫墿浣欓泦鈥濈户缁彂璧蜂笅涓€杞湡姹傝В銆?    async function continueSingleRouteSolve(taskId) {
+    // 在线路人工确认/再优化之后，基于“新的剩余集”继续发起下一轮真求解。
+    async function continueSingleRouteSolve(taskId) {
         const reduceVehicleCount = Number(document.getElementById("continue-reduce-vehicles")?.value || 0);
         const minStoresPerVehicle = Number(document.getElementById("continue-min-stores")?.value || 0);
         const minLoadRate = Number(document.getElementById("continue-min-load-rate")?.value || 0);
@@ -561,12 +569,14 @@
             result._httpStatus = response.status;
             return result;
         } catch (error) {
-            console.error("缁х画姹傝В鍓╀綑闆嗗け璐?", error);
+            console.error("继续求解剩余集失败:", error);
             return { success: false, message: error.message };
         }
     }
 
-    // 鎺ㄦ紨寮圭獥鎬绘覆鏌撳嚱鏁般€?    // 杩欓噷浼氬悓鏃舵嫾鍑猴細A/B 瀵圭収銆佺嚎璺鎯呫€佸叾浠栫嚎璺€佸綋鍓嶅€欓€夌嚎璺€佷汉宸ュ喅绛栦笌涓嬩竴杞緭鍏ャ€?    function showSimulateModal(result, storeId, newTime) {
+    // 推演弹窗总渲染函数。
+    // 这里会同时拼出：A/B 对照、线路详情、其他线路、当前候选线路、人工决策与下一轮输入。
+    function showSimulateModal(result, storeId, newTime) {
         const modal = document.getElementById("simulateModal");
         const modalContent = document.getElementById("modalContent");
         const saveBtn = document.getElementById("modalSaveRouteBtn");
@@ -598,48 +608,48 @@
         const deltaColor = (val) => Number(val || 0) === 0 ? "#334155" : "#dc2626";
         const deltaPrefix = (val) => Number(val || 0) > 0 ? "+" : "";
         const baselineText = report?.baseline_text
-            || `鍩虹嚎鏂规锛堟敼鍓嶏級锛氭湰娉㈡鍙備笌鎺掔嚎闂ㄥ簵 ${Number(abBase.candidate || 0)} 瀹讹紝鎴愬姛瀹夋帓 ${Number(abBase.assigned || 0)} 瀹讹紝鏈畨鎺?${Number(abBase.pending || 0)} 瀹讹紱浣跨敤杞﹁締 ${Number(abBase.vehicles || 0)} 鍙帮紝鎬婚噷绋?${formatNumber(abBase.mileage, 1)} 鍏噷銆俙;
+            || `基线方案（改前）：本波次参与排线门店 ${Number(abBase.candidate || 0)} 家，成功安排 ${Number(abBase.assigned || 0)} 家，未安排 ${Number(abBase.pending || 0)} 家；使用车辆 ${Number(abBase.vehicles || 0)} 台，总里程 ${formatNumber(abBase.mileage, 1)} 公里。`;
         const simulatedText = report?.simulated_text
-            || `鎺ㄦ紨鏂规锛堟敼鍚庯級锛氫粎灏嗗簵閾?${escapeHtml(storeId)} 鐨勫埌搴楁椂闂磋皟鏁村埌 ${escapeHtml(newTime)} 鍚庯紝鏈尝娆″弬涓庢帓绾块棬搴?${Number(abSim.candidate || 0)} 瀹讹紝鎴愬姛瀹夋帓 ${Number(abSim.assigned || 0)} 瀹讹紝鏈畨鎺?${Number(abSim.pending || 0)} 瀹讹紱浣跨敤杞﹁締 ${Number(abSim.vehicles || 0)} 鍙帮紝鎬婚噷绋?${formatNumber(abSim.mileage, 1)} 鍏噷銆俙;
+            || `推演方案（改后）：仅将店铺 ${escapeHtml(storeId)} 的到店时间调整到 ${escapeHtml(newTime)} 后，本波次参与排线门店 ${Number(abSim.candidate || 0)} 家，成功安排 ${Number(abSim.assigned || 0)} 家，未安排 ${Number(abSim.pending || 0)} 家；使用车辆 ${Number(abSim.vehicles || 0)} 台，总里程 ${formatNumber(abSim.mileage, 1)} 公里。`;
         const deltaText = report?.delta_text
-            || `杩欐鏀瑰崟搴楁椂闂村悗鐨勫彉鍖栦负锛氬畨鎺掗棬搴楀彉鍖?${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)} 瀹讹紝杞﹁締鍙樺寲 ${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)} 鍙帮紝鎬婚噷绋嬪彉鍖?${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)} 鍏噷銆俙;
-        const proofText = report?.variable_proof || auditProof?.proof_text || "浠呭彉鏇寸洰鏍囧簵鏃堕棿锛屽叾浣欒緭鍏ヤ繚鎸佷竴鑷淬€?;
+            || `这次改单店时间后的变化为：安排门店变化 ${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)} 家，车辆变化 ${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)} 台，总里程变化 ${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)} 公里。`;
+        const proofText = report?.variable_proof || auditProof?.proof_text || "仅变更目标店时间，其余输入保持一致。";
 
         let html = `
             <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
-                <strong>浼樺寲鏁堟灉</strong><br>
-                鐢ㄨ溅: ${Number(before.total_vehicles || 0)} 杈?-> ${Number(after.total_vehicles || 0)} 杈?(${vehiclesSaved > 0 ? `鍑忓皯 ${vehiclesSaved} 杈哷 : "鏈噺灏?})<br>
-                閲岀▼: ${Number(before.total_mileage || 0).toFixed(1)} km -> ${Number(after.total_mileage || 0).toFixed(1)} km (${mileageSaved > 0 ? `鍑忓皯 ${mileageSaved.toFixed(1)} km` : "鏈噺灏?})
+                <strong>优化效果</strong><br>
+                用车: ${Number(before.total_vehicles || 0)} 辆 -> ${Number(after.total_vehicles || 0)} 辆 (${vehiclesSaved > 0 ? `减少 ${vehiclesSaved} 辆` : "未减少"})<br>
+                里程: ${Number(before.total_mileage || 0).toFixed(1)} km -> ${Number(after.total_mileage || 0).toFixed(1)} km (${mileageSaved > 0 ? `减少 ${mileageSaved.toFixed(1)} km` : "未减少"})
             </div>
         `;
 
         html += `<div style="background: #eef2ff; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
-            <strong>A/B 瀵圭収锛?{escapeHtml(abCompare?.wave_id || report?.wave_id || "--")}锛?/strong><br>
+            <strong>A/B 对照（${escapeHtml(abCompare?.wave_id || report?.wave_id || "--")}）</strong><br>
             <div style="margin-top: 8px;">${escapeHtml(baselineText)}</div>
             <div style="margin-top: 6px;">${escapeHtml(simulatedText)}</div>
             <div style="margin-top: 8px;">
-                宸€硷細
-                瀹夋帓闂ㄥ簵 <span style="color:${deltaColor(abDelta.assigned)}">${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)}</span> 瀹讹紝
-                鏈畨鎺?<span style="color:${deltaColor(abDelta.pending)}">${deltaPrefix(abDelta.pending)}${Number(abDelta.pending || 0)}</span> 瀹讹紝
-                杞﹁締 <span style="color:${deltaColor(abDelta.vehicles)}">${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)}</span> 鍙帮紝
-                閲岀▼ <span style="color:${deltaColor(abDelta.mileage)}">${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)}</span> 鍏噷
+                差值：
+                安排门店 <span style="color:${deltaColor(abDelta.assigned)}">${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)}</span> 家，
+                未安排 <span style="color:${deltaColor(abDelta.pending)}">${deltaPrefix(abDelta.pending)}${Number(abDelta.pending || 0)}</span> 家，
+                车辆 <span style="color:${deltaColor(abDelta.vehicles)}">${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)}</span> 台，
+                里程 <span style="color:${deltaColor(abDelta.mileage)}">${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)}</span> 公里
             </div>
             <div style="margin-top: 8px;"><strong>${escapeHtml(deltaText)}</strong></div>
         </div>`;
 
         if (remainingStateSummary?.summary) {
             html += `<div style="background:#ecfeff; padding:12px; border-radius:8px; margin-bottom:16px;">
-                <strong>褰撳墠寰呭啀浼樺寲闆嗗悎</strong><br>
+                <strong>当前待再优化集合</strong><br>
                 ${escapeHtml(String(remainingStateSummary.summary || ""))}<br>
-                <span style="font-size:12px;color:#475569;">鐘舵€佸簭鍙?${Number(remainingStateSummary.state_seq || 0)} 锝?鍙啀鍒╃敤杞﹁締 ${Number(remainingStateSummary.remaining_vehicle_count || 0)} 鍙?锝?寰呭啀浼樺寲搴楅摵 ${Number(remainingStateSummary.remaining_store_count || 0)} 瀹?/span>
+                <span style="font-size:12px;color:#475569;">状态序号 ${Number(remainingStateSummary.state_seq || 0)} ｜ 可再利用车辆 ${Number(remainingStateSummary.remaining_vehicle_count || 0)} 台 ｜ 待再优化店铺 ${Number(remainingStateSummary.remaining_store_count || 0)} 家</span>
             </div>`;
         }
         if (manualDecisionSummary?.action_type === "manual_route_selection") {
             const pendingStores = Array.isArray(remainingStateSummary?.remaining_stores) ? remainingStateSummary.remaining_stores : [];
             html += `<div style="background:#fff7ed; padding:12px; border-radius:8px; margin-bottom:16px;">
-                <strong>涓嬩竴杞眰瑙ｈ緭鍏?/strong><br>
-                宸茬‘瀹氱嚎璺?${Number(manualDecisionSummary.confirm_count || 0)} 鏉★紱鍐嶄紭鍖栫嚎璺?${Number(manualDecisionSummary.reoptimize_count || 0)} 鏉★紱閲婃斁杞﹁締 ${Number(manualDecisionSummary.released_vehicle_count || 0)} 鍙般€?br>
-                浣犳爣璁颁负鈥滃啀浼樺寲鈥濈殑绾胯矾宸叉仮澶嶆垚寰呭啀浼樺寲搴楅摵闆嗗悎锛屼笅鏂瑰氨鏄笅涓€杞湡姹傝В鐨勮緭鍏ュ簵閾猴紙鍓?20 瀹讹級锛?br>
+                <strong>下一轮求解输入</strong><br>
+                已确定线路 ${Number(manualDecisionSummary.confirm_count || 0)} 条；再优化线路 ${Number(manualDecisionSummary.reoptimize_count || 0)} 条；释放车辆 ${Number(manualDecisionSummary.released_vehicle_count || 0)} 台。<br>
+                你标记为“再优化”的线路已恢复成待再优化店铺集合，下方就是下一轮真求解的输入店铺（前 20 家）：<br>
                 <div style="margin-top:8px; max-height:180px; overflow:auto; background:#fff; border:1px solid #fed7aa; border-radius:8px; padding:8px;">
                     ${pendingStores.slice(0, 20).map((item, idx) => `
                         <div style="display:flex; gap:12px; font-size:13px; padding:4px 0; border-bottom:${idx < Math.min(pendingStores.length, 20) - 1 ? "1px solid #ffedd5" : "none"};">
@@ -647,19 +657,19 @@
                             <span style="flex:1; color:#334155;">${escapeHtml(item.shop_name || "--")}</span>
                             <span style="width:70px; color:#475569;">${escapeHtml(item.expected_time || "--:--")}</span>
                         </div>
-                    `).join("") || '<div style="color:#64748b;">鏆傛棤寰呭啀浼樺寲搴楅摵</div>'}
+                    `).join("") || '<div style="color:#64748b;">暂无待再优化店铺</div>'}
                 </div>
                 <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; margin-top:12px;">
                     <label style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
-                        <span>鍑忓皯鍑犺締杞?/span>
+                        <span>减少几辆车</span>
                         <input id="continue-reduce-vehicles" type="number" min="0" value="0" style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px;">
                     </label>
                     <label style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
-                        <span>姣忚溅鑷冲皯鍑犱釜搴?/span>
+                        <span>每车至少几个店</span>
                         <input id="continue-min-stores" type="number" min="0" value="0" style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px;">
                     </label>
                     <label style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
-                        <span>瑁呰浇鐜囦笉浣庝簬澶氬皯%</span>
+                        <span>装载率不低于多少%</span>
                         <input id="continue-min-load-rate" type="number" min="0" max="1000" value="0" style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px;">
                     </label>
                 </div>
@@ -699,14 +709,14 @@
                 const shopName = String(stop?.shop_name || shopCode || "--").trim();
                 const isTarget = shopCode === String(storeId || "").trim();
                 const expectedTime = String(stop?.expected_time || "--:--").trim() || "--:--";
-                const scheduledTime = String(stop?.scheduled_time || stop?.arrival || "姹傝В鍣ㄦ湭杩斿洖鍒板簵鏃堕棿").trim() || "姹傝В鍣ㄦ湭杩斿洖鍒板簵鏃堕棿";
+                const scheduledTime = String(stop?.scheduled_time || stop?.arrival || "求解器未返回到店时间").trim() || "求解器未返回到店时间";
                 const boxes = Number(stop?.boxes || 0);
                 const legText = String(stop?.route_leg_text || "--").trim() || "--";
                 return `
                     <tr>
                         <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap;">${idx + 1}</td>
                         <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap;">${escapeHtml(shopCode)}</td>
-                        <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:normal; word-break:break-all;">${escapeHtml(shopName)}${isTarget ? ' <span style="color:#dc2626;font-weight:600;">(鐩爣搴?</span>' : ""}</td>
+                        <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:normal; word-break:break-all;">${escapeHtml(shopName)}${isTarget ? ' <span style="color:#dc2626;font-weight:600;">(目标店)</span>' : ""}</td>
                         <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#475569;">${escapeHtml(legText)}</td>
                         <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; ${isTarget ? "color:#dc2626;font-weight:600;" : ""}">${escapeHtml(expectedTime)}</td>
                         <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap;">${escapeHtml(scheduledTime)}</td>
@@ -717,37 +727,37 @@
             return `
                 <div class="simulate-route-card" data-route-key="${escapeHtml(routeState.routeKey)}" data-route-wave="${escapeHtml(route.wave || "--")}" data-route-vehicle="${escapeHtml(route.vehicle || "--")}" data-route-trip="${Number(route.trip || 1)}" data-snapshot-type="${escapeHtml(snapshotType || (selectable ? "simulated" : "baseline"))}" style="background:#ffffff; border:1px solid #dbeafe; border-left:4px solid ${accentColor}; border-radius:8px; padding:10px; margin-top:10px;">
                     <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:6px;">
-                        <div style="font-weight:700;">${escapeHtml(title)}锛?{escapeHtml(route.wave || "--")} 路 ${escapeHtml(route.vehicle || "--")} 路 绗?{Number(route.trip || 1)}瓒?/div>
+                        <div style="font-weight:700;">${escapeHtml(title)}：${escapeHtml(route.wave || "--")} · ${escapeHtml(route.vehicle || "--")} · 第${Number(route.trip || 1)}趟</div>
                         ${selectable ? `
                             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                                 <label style="display:flex; gap:6px; align-items:center; font-size:12px;">
                                     <input type="checkbox" class="simulate-route-check" ${routeState.checked ? "checked" : ""}>
-                                    閫変腑
+                                    选中
                                 </label>
                                 <select class="simulate-route-action" style="padding:4px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px;">
-                                    <option value="confirm" ${routeState.action === "confirm" ? "selected" : ""}>纭畾</option>
-                                    <option value="reoptimize" ${routeState.action === "reoptimize" ? "selected" : ""}>鍐嶄紭鍖?/option>
+                                    <option value="confirm" ${routeState.action === "confirm" ? "selected" : ""}>确定</option>
+                                    <option value="reoptimize" ${routeState.action === "reoptimize" ? "selected" : ""}>再优化</option>
                                 </select>
                             </div>
                         ` : ""}
                     </div>
                     <div style="margin-bottom:8px; color:#334155;">
-                        绾胯矾閲岀▼ ${Number(route.total_distance || 0).toFixed(1)} km 锝?瑁呰浇 ${formatNumber(loadSummary.actualLoad, 3)} / ${formatNumber(loadSummary.capacityLimit, 3)} 锝?瑁呰浇鐜?<span style="color:${loadSummary.overload ? "#dc2626" : "#334155"}; font-weight:${loadSummary.overload ? "700" : "400"};">${formatNumber(loadSummary.loadPercent, 1)}%</span>${loadSummary.overload ? ' <span style="color:#dc2626;">(瓒呴檺)</span>' : ""}
+                        线路里程 ${Number(route.total_distance || 0).toFixed(1)} km ｜ 装载 ${formatNumber(loadSummary.actualLoad, 3)} / ${formatNumber(loadSummary.capacityLimit, 3)} ｜ 装载率 <span style="color:${loadSummary.overload ? "#dc2626" : "#334155"}; font-weight:${loadSummary.overload ? "700" : "400"};">${formatNumber(loadSummary.loadPercent, 1)}%</span>${loadSummary.overload ? ' <span style="color:#dc2626;">(超限)</span>' : ""}
                     </div>
                     <div style="overflow:auto hidden;">
                         <table style="width:100%; border-collapse:collapse; font-size:13px; table-layout:fixed;">
                             <thead>
                                 <tr style="background:#f8fafc;">
-                                    <th style="text-align:left; padding:6px 8px; width:52px;">搴忓彿</th>
-                                    <th style="text-align:left; padding:6px 8px; width:92px;">搴楅摵缂栧彿</th>
-                                    <th style="text-align:left; padding:6px 8px; width:24%;">搴楀悕</th>
-                                    <th style="text-align:left; padding:6px 8px; width:92px;">閲岀▼鍙樺寲</th>
-                                    <th style="text-align:left; padding:6px 8px; width:92px;">鏈熸湜鍒板簵</th>
-                                    <th style="text-align:left; padding:6px 8px; width:92px;">璋冨害鍒板簵</th>
-                                    <th style="text-align:left; padding:6px 8px; width:72px;">璐ч噺</th>
+                                    <th style="text-align:left; padding:6px 8px; width:52px;">序号</th>
+                                    <th style="text-align:left; padding:6px 8px; width:92px;">店铺编号</th>
+                                    <th style="text-align:left; padding:6px 8px; width:24%;">店名</th>
+                                    <th style="text-align:left; padding:6px 8px; width:92px;">里程变化</th>
+                                    <th style="text-align:left; padding:6px 8px; width:92px;">期望到店</th>
+                                    <th style="text-align:left; padding:6px 8px; width:92px;">调度到店</th>
+                                    <th style="text-align:left; padding:6px 8px; width:72px;">货量</th>
                                 </tr>
                             </thead>
-                            <tbody>${rows || '<tr><td colspan="7" style="padding:8px;">鏃犲仠闈犳槑缁?/td></tr>'}</tbody>
+                            <tbody>${rows || '<tr><td colspan="7" style="padding:8px;">无停靠明细</td></tr>'}</tbody>
                         </table>
                     </div>
                 </div>
@@ -767,37 +777,38 @@
         const oldRoute = oldRoutes.length ? oldRoutes[0] : null;
         if (oldRoute || newRoute) {
             html += `<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:16px;">
-                <strong>涓ゆ潯绾胯矾璇︽儏锛堟寜鍋滈潬椤哄簭锛?/strong>
-                <div style="font-size:12px;color:#64748b;margin-top:4px;">璇存槑锛氭湡鏈涘埌搴楁椂闂存潵鑷湰娆/B姹傝В杈撳叆锛涢噷绋嬪彉鍖栨潵鑷暟鎹簱瀹為檯閲岀▼锛涙帹婕旂嚎璺腑鐨勭洰鏍囧簵鏈熸湜鏃堕棿鍗充綘杈撳叆鐨勬帹婕旀椂闂淬€?/div>
-                ${renderRouteDetail("鏀瑰墠绾胯矾", oldRoute, "#ef4444", { snapshotType: "baseline" })}
-                ${renderRouteDetail("鏀瑰悗绾胯矾", newRoute, "#22c55e", { selectable: true, snapshotType: "simulated" })}
+                <strong>两条线路详情（按停靠顺序）</strong>
+                <div style="font-size:12px;color:#64748b;margin-top:4px;">说明：期望到店时间来自本次A/B求解输入；里程变化来自数据库实际里程；推演线路中的目标店期望时间即你输入的推演时间。</div>
+                ${renderRouteDetail("改前线路", oldRoute, "#ef4444", { snapshotType: "baseline" })}
+                ${renderRouteDetail("改后线路", newRoute, "#22c55e", { selectable: true, snapshotType: "simulated" })}
             </div>`;
         }
 
         if ((otherRoutes?.baseline && otherRoutes.baseline.length) || (otherRoutes?.simulated && otherRoutes.simulated.length)) {
             html += `<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:16px;">
-                <strong>鍏朵粬绾胯矾缁撴灉</strong>
-                <div style="font-size:12px;color:#64748b;margin-top:4px;">杩欓噷灞曠ず鍚屼竴娉㈡涓嬶紝闄ょ洰鏍囬敋鐐圭嚎璺箣澶栫殑鍏朵綑绾胯矾閫愬簵鏄庣粏锛涙敼鍚庣嚎璺敮鎸佸嬀閫夊苟鏍囨敞鈥滅‘瀹?鍐嶄紭鍖栤€濄€?/div>
-                ${renderRouteGroupDetails("鏀瑰墠鍏朵綑绾胯矾", otherRoutes?.baseline || [], "#ef4444", false, "baseline")}
-                ${renderRouteGroupDetails("鏀瑰悗鍏朵綑绾胯矾", otherRoutes?.simulated || [], "#22c55e", true, "simulated")}
+                <strong>其他线路结果</strong>
+                <div style="font-size:12px;color:#64748b;margin-top:4px;">这里展示同一波次下，除目标锚点线路之外的其余线路逐店明细；改后线路支持勾选并标注“确定/再优化”。</div>
+                ${renderRouteGroupDetails("改前其余线路", otherRoutes?.baseline || [], "#ef4444", false, "baseline")}
+                ${renderRouteGroupDetails("改后其余线路", otherRoutes?.simulated || [], "#22c55e", true, "simulated")}
             </div>`;
         }
 
         if (currentCandidateRoutes.length) {
             html += `<div style="background:#f0fdf4; padding:12px; border-radius:8px; margin-bottom:16px;">
-                <strong>缁х画姹傝В鍚庣殑褰撳墠鍊欓€夌嚎璺?/strong>
-                <div style="font-size:12px;color:#64748b;margin-top:4px;">浠ヤ笅绾胯矾鍩轰簬浣犲垰鍒氱‘璁ゅ悗鐨勫墿浣欒溅杈?鍓╀綑闂ㄥ簵閲嶆柊鐪熸眰瑙ｅ緱鍒般€備綘鍙互缁х画鍕鹃€夆€滅‘瀹?鍐嶄紭鍖栤€濓紝鍐嶇偣淇濆瓨绾胯矾鍐崇瓥锛岄殢鍚庣户缁笅涓€杞眰瑙ｃ€?/div>
-                ${renderRouteGroupDetails("褰撳墠鍊欓€夌嚎璺?, currentCandidateRoutes, "#16a34a", true, "iterative")}
+                <strong>继续求解后的当前候选线路</strong>
+                <div style="font-size:12px;color:#64748b;margin-top:4px;">以下线路基于你刚刚确认后的剩余车辆/剩余门店重新真求解得到。你可以继续勾选“确定/再优化”，再点保存线路决策，随后继续下一轮求解。</div>
+                ${renderRouteGroupDetails("当前候选线路", currentCandidateRoutes, "#16a34a", true, "iterative")}
             </div>`;
         }
 
         html += `<div style="background: #fef3c7; padding: 12px; border-radius: 8px;">
-            <strong>缁撹涓庡彛寰勮鏄?/strong><br>
+            <strong>结论与口径说明</strong><br>
             ${escapeHtml(proofText)}<br>
-            褰撳墠寮圭獥宸蹭笌鈥滄帹婕旇繃绋嬪彲瑙嗗寲鈥濆彛寰勫榻愶紝鍧囨寜鍚屼竴娉㈡鐨?A/B 缁撴灉灞曠ず銆?        </div>`;
+            当前弹窗已与“推演过程可视化”口径对齐，均按同一波次的 A/B 结果展示。
+        </div>`;
         if (scheduleDiagnostics && (scheduleDiagnostics.summary || scheduleDiagnostics.reason)) {
             html += `<div style="background:#fff7ed; padding:12px; border-radius:8px; margin-top:12px;">
-                <strong>璋冨害鏃堕棿鏉ユ簮璇婃柇</strong><br>
+                <strong>调度时间来源诊断</strong><br>
                 ${escapeHtml(String(scheduleDiagnostics.summary || ""))}<br>
                 ${escapeHtml(String(scheduleDiagnostics.reason || ""))}
             </div>`;
@@ -831,19 +842,19 @@
                 }).filter((item) => item.route_key);
                 saveRouteBtn.disabled = true;
                 const originalText = saveRouteBtn.textContent;
-                saveRouteBtn.textContent = "淇濆瓨涓?..";
+                saveRouteBtn.textContent = "保存中...";
                 const saveResult = await saveSingleRouteDecisions(taskId, decisions);
                 saveRouteBtn.disabled = false;
                 saveRouteBtn.textContent = originalText;
                 if (!saveResult?.success) {
-                    alert(`淇濆瓨绾胯矾鍐崇瓥澶辫触锛?{saveResult?.message || saveResult?.error || "鏈煡閿欒"}`);
+                    alert(`保存线路决策失败：${saveResult?.message || saveResult?.error || "未知错误"}`);
                     return;
                 }
                 const refreshed = await loadSingleStoreSimulationReport(taskId);
                 if (refreshed?.success) {
                     showSimulateModal(refreshed, storeId, newTime);
                 } else {
-                    alert(`绾胯矾鍐崇瓥宸蹭繚瀛橈紝浣嗗埛鏂版姤鍛婂け璐ワ細${refreshed?.message || "鏈煡閿欒"}`);
+                    alert(`线路决策已保存，但刷新报告失败：${refreshed?.message || "未知错误"}`);
                 }
             };
         }
@@ -852,19 +863,19 @@
                 if (!taskId) return;
                 continueRouteBtn.disabled = true;
                 const originalText = continueRouteBtn.textContent;
-                continueRouteBtn.textContent = "姹傝В涓?..";
+                continueRouteBtn.textContent = "求解中...";
                 const solveResult = await continueSingleRouteSolve(taskId);
                 continueRouteBtn.disabled = false;
                 continueRouteBtn.textContent = originalText;
                 if (!solveResult?.success) {
-                    alert(`缁х画姹傝В澶辫触锛?{solveResult?.message || solveResult?.error || "鏈煡閿欒"}`);
+                    alert(`继续求解失败：${solveResult?.message || solveResult?.error || "未知错误"}`);
                     return;
                 }
                 const refreshed = await loadSingleStoreSimulationReport(taskId);
                 if (refreshed?.success) {
                     showSimulateModal(refreshed, storeId, newTime);
                 } else {
-                    alert(`缁х画姹傝В宸插畬鎴愶紝浣嗗埛鏂版姤鍛婂け璐ワ細${refreshed?.message || "鏈煡閿欒"}`);
+                    alert(`继续求解已完成，但刷新报告失败：${refreshed?.message || "未知错误"}`);
                 }
             };
         }
@@ -899,7 +910,7 @@
         fleetNodes.forEach((node) => node.classList.toggle("tab-hidden", !isFleet));
         storeNodes.forEach((node) => node.classList.toggle("tab-hidden", isFleet));
 
-        if (btn) btn.textContent = isFleet ? "寮€濮嬪噺杞︽帹婕? : "寮€濮嬪崟搴楁帹婕?;
+        if (btn) btn.textContent = isFleet ? "开始减车推演" : "开始单店推演";
     }
 
     function setupSimulationModeControls() {
@@ -948,12 +959,12 @@
         const attemptTrace = resultData?.attempt_trace_summary || {};
 
         if (!resultData) {
-            summaryEl.innerHTML = `褰撳墠鍩哄噯鎵规 <strong>${escapeHtml(baseline.batch_id || "--")}</strong>锛屾€荤敤杞?${Number(baseline.total_vehicles || 0)} 杈嗭紝鎬婚噷绋?${formatNumber(baseline.total_distance_km || 0)} km銆俙;
-            decisionEl.innerHTML = "绛夊緟鎺ㄦ紨缁撴灉銆傛墽琛屼竴娆℃帹婕斿悗锛岃繖閲屼細缁欏嚭鍙墽琛屽缓璁紙鏃堕棿璋冩暣/娉㈡璋冩暣/绾︽潫鏀惧锛夈€?;
-            diagnosisEl.innerHTML = "绛夊緟鎺ㄦ紨缁撴灉銆傛墽琛屼竴娆℃帹婕斿悗锛岃繖閲屼細鏄剧ず绾︽潫鍒嗗竷锛堟椂闂寸獥/娉㈡缁撴潫/閲岀▼/瀹归噺/闂ㄥ簵鏁帮級銆?;
-            adjustmentsEl.innerHTML = '<div class="tuiyan-report-item">鏆傛棤璋冩暣娓呭崟</div>';
-            failuresEl.innerHTML = '<div class="tuiyan-report-item">鏆傛棤澶辫触鏍锋湰</div>';
-            replayEl.innerHTML = '<div class="tuiyan-report-item">鏆傛棤璇曟彃鍥炴斁</div>';
+            summaryEl.innerHTML = `当前基准批次 <strong>${escapeHtml(baseline.batch_id || "--")}</strong>，总用车 ${Number(baseline.total_vehicles || 0)} 辆，总里程 ${formatNumber(baseline.total_distance_km || 0)} km。`;
+            decisionEl.innerHTML = "等待推演结果。执行一次推演后，这里会给出可执行建议（时间调整/波次调整/约束放宽）。";
+            diagnosisEl.innerHTML = "等待推演结果。执行一次推演后，这里会显示约束分布（时间窗/波次结束/里程/容量/门店数）。";
+            adjustmentsEl.innerHTML = '<div class="tuiyan-report-item">暂无调整清单</div>';
+            failuresEl.innerHTML = '<div class="tuiyan-report-item">暂无失败样本</div>';
+            replayEl.innerHTML = '<div class="tuiyan-report-item">暂无试插回放</div>';
             renderReportPaneVisibility();
             return;
         }
@@ -977,18 +988,18 @@
             .sort((a, b) => b[1] - a[1])
             .map(([key, count]) => {
                 const zh = {
-                    arrival_window: "鏃堕棿绐楄秴鏃?,
-                    wave_end: "娉㈡缁撴潫瓒呮椂",
-                    mileage: "閲岀▼瓒呴檺",
-                    capacity: "瑁呰浇瓒呴檺",
-                    max_stops: "闂ㄥ簵鏁拌秴闄?,
-                    unknown: "鏈煡绾︽潫"
+                    arrival_window: "时间窗超时",
+                    wave_end: "波次结束超时",
+                    mileage: "里程超限",
+                    capacity: "装载超限",
+                    max_stops: "门店数超限",
+                    unknown: "未知约束"
                 }[key] || key;
-                return `<div>${escapeHtml(zh)}锛?{count} 瀹?/div>`;
+                return `<div>${escapeHtml(zh)}：${count} 家</div>`;
             });
         diagnosisEl.innerHTML = diagnosisLines.length
             ? diagnosisLines.join("")
-            : "<div>鏈鎺ㄦ紨鏈骇鐢熷け璐ユ牱鏈€?/div>";
+            : "<div>本次推演未产生失败样本。</div>";
 
         if (mode === "fleet_feasibility") {
             const scopeWaves = Array.isArray(request.selected_waves) && request.selected_waves.length
@@ -1001,32 +1012,32 @@
             });
             const waveResultText = (scopeWaves.length ? scopeWaves : Object.keys(failureByWave)).map((waveId) => {
                 const count = Number(failureByWave[waveId] || 0);
-                return `${escapeHtml(waveId)} 鏈畨鎺?${count} 瀹禶;
-            }).join("锛?);
+                return `${escapeHtml(waveId)} 未安排 ${count} 家`;
+            }).join("，");
 
-            summaryEl.innerHTML = `缁撹锛氭垜浠皾璇曠敤 <strong>${Number(request.target_vehicle_count || vehiclesAfter || 0)}</strong> 杈嗚溅瀹屾垚 <strong>${escapeHtml((scopeWaves.length ? scopeWaves.join("/") : waveText) || "--")}</strong>锛岀粨鏋?${waveResultText || "鎵€鏈夌洰鏍囨尝娆″潎鍙畬鎴?}銆俙;
+            summaryEl.innerHTML = `结论：我们尝试用 <strong>${Number(request.target_vehicle_count || vehiclesAfter || 0)}</strong> 辆车完成 <strong>${escapeHtml((scopeWaves.length ? scopeWaves.join("/") : waveText) || "--")}</strong>，结果 ${waveResultText || "所有目标波次均可完成"}。`;
             decisionEl.innerHTML = [
-                "寤鸿鎸変互涓嬮『搴忓鐞嗭細鍏堟敼闂ㄥ簵鏃堕棿锛屽啀鏀惧閲岀▼涓婇檺锛屾渶鍚庤皟鏁存尝娆℃埅姝㈡椂闂淬€?,
-                "鑻ュけ璐ユ牱鏈富瑕佷负娉㈡缁撴潫瓒呮椂锛屼紭鍏堟敼鎴鏃跺埢锛涜嫢涓昏涓洪噷绋嬭秴闄愶紝浼樺厛鏀归噷绋嬩笂闄愩€?,
-                "姣忔璋冩暣鍚庝繚鎸佸悓鏍疯溅杈嗘暟澶嶇畻锛岀洿鍒扮洰鏍囨尝娆℃棤鏈畨鎺掗棬搴椼€?
+                "建议按以下顺序处理：先改门店时间，再放宽里程上限，最后调整波次截止时间。",
+                "若失败样本主要为波次结束超时，优先改截止时刻；若主要为里程超限，优先改里程上限。",
+                "每次调整后保持同样车辆数复算，直到目标波次无未安排门店。"
             ].map((line) => `<div>${escapeHtml(line)}</div>`).join("");
 
             const timeAdvice = failureLogs
                 .filter((item) => String(item?.suggestion_type || "").includes("time"))
                 .slice(0, 80)
-                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 搴?{escapeHtml(item.shop_code || "--")}</strong>锛氬缓璁椂闂?${escapeHtml(item.suggested_time || "--")}锛堝綋鍓?${escapeHtml(item.current_time || "--")}锛?/div>`);
+                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 店${escapeHtml(item.shop_code || "--")}</strong>：建议时间 ${escapeHtml(item.suggested_time || "--")}（当前 ${escapeHtml(item.current_time || "--")}）</div>`);
             const mileageAdvice = failureLogs
                 .filter((item) => String(item?.suggestion_type || "").includes("mileage"))
                 .slice(0, 40)
-                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 搴?{escapeHtml(item.shop_code || "--")}</strong>锛氶噷绋嬩笂闄愬缓璁斁瀹藉埌 ${formatNumber(item.required_limit_km, 1)} km锛堝綋鍓?${formatNumber(item.current_limit_km, 1)} km锛?/div>`);
+                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 店${escapeHtml(item.shop_code || "--")}</strong>：里程上限建议放宽到 ${formatNumber(item.required_limit_km, 1)} km（当前 ${formatNumber(item.current_limit_km, 1)} km）</div>`);
             const waveEndAdvice = failureLogs
                 .filter((item) => String(item?.suggestion_type || "").includes("wave_end"))
                 .slice(0, 40)
-                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 搴?{escapeHtml(item.shop_code || "--")}</strong>锛氭尝娆℃埅姝㈠缓璁皟鏁村埌 ${escapeHtml(item.suggested_wave_end_time || "--")}</div>`);
+                .map((item) => `<div class="tuiyan-report-item"><strong>${escapeHtml(item.wave_id || "--")} | 店${escapeHtml(item.shop_code || "--")}</strong>：波次截止建议调整到 ${escapeHtml(item.suggested_wave_end_time || "--")}</div>`);
             const adviceBlocks = [...timeAdvice, ...mileageAdvice, ...waveEndAdvice];
             adjustmentsEl.innerHTML = adviceBlocks.length
                 ? adviceBlocks.join("")
-                : '<div class="tuiyan-report-item">褰撳墠杞﹁締瑙勬ā涓嬶紝鏆傛棤棰濆瑙勫垯璋冩暣寤鸿銆?/div>';
+                : '<div class="tuiyan-report-item">当前车辆规模下，暂无额外规则调整建议。</div>';
         } else {
             const auditProof = resultData?.audit_proof || {};
             const abCompare = resultData?.ab_compare || {};
@@ -1036,45 +1047,45 @@
             const report = resultData?.report || {};
             const hasReadableReport = Boolean(report?.baseline_text || report?.simulated_text || report?.delta_text);
             if (hasReadableReport) {
-                summaryEl.innerHTML = `缁撹锛?strong>${escapeHtml(report.delta_text || "鏈鎺ㄦ紨宸插畬鎴愶紝璇锋煡鐪嬩笅鏂瑰鐓ц鎯呫€?)}</strong>`;
+                summaryEl.innerHTML = `结论：<strong>${escapeHtml(report.delta_text || "本次推演已完成，请查看下方对照详情。")}</strong>`;
             } else {
                 summaryEl.innerHTML = [
-                    `缁撹锛氱敤杞?<strong>${vehiclesBefore} -> ${vehiclesAfter}</strong>锛?{vehiclesSaved >= 0 ? `鍑忓皯 ${vehiclesSaved}` : `澧炲姞 ${Math.abs(vehiclesSaved)}`} 杈嗭級`,
-                    `閲岀▼ <strong>${mileageBefore.toFixed(1)} -> ${mileageAfter.toFixed(1)} km</strong>锛?{mileageSaved >= 0 ? `鍑忓皯 ${mileageSaved.toFixed(1)}` : `澧炲姞 ${Math.abs(mileageSaved).toFixed(1)}`} km锛塦,
-                    `鍙楀奖鍝嶆尝娆?<strong>${escapeHtml(waveText)}</strong>`,
-                    `钀藉簱锛氬簵閾哄皾璇?${Number(attemptTrace.store_attempt_rows || 0)} 鏉★紝璇曟彃鏄庣粏 ${Number(attemptTrace.insert_trial_rows || 0)} 鏉
+                    `结论：用车 <strong>${vehiclesBefore} -> ${vehiclesAfter}</strong>（${vehiclesSaved >= 0 ? `减少 ${vehiclesSaved}` : `增加 ${Math.abs(vehiclesSaved)}`} 辆）`,
+                    `里程 <strong>${mileageBefore.toFixed(1)} -> ${mileageAfter.toFixed(1)} km</strong>（${mileageSaved >= 0 ? `减少 ${mileageSaved.toFixed(1)}` : `增加 ${Math.abs(mileageSaved).toFixed(1)}`} km）`,
+                    `受影响波次 <strong>${escapeHtml(waveText)}</strong>`,
+                    `落库：店铺尝试 ${Number(attemptTrace.store_attempt_rows || 0)} 条，试插明细 ${Number(attemptTrace.insert_trial_rows || 0)} 条`
                 ].join(" | ");
             }
 
             const firstAdjust = affectedShops[0] || {};
             const decisionLines = [
-                `鍞竴鍙橀噺璇佹槑锛?{escapeHtml(report?.variable_proof || auditProof?.proof_text || "浠呭彉鏇寸洰鏍囧簵鏃堕棿锛屽叾浣欒緭鍏ヤ繚鎸佷竴鑷淬€?)}`,
-                `杈撳叆鎸囩汗锛?{escapeHtml(String(auditProof?.fixed_input_fingerprint || "--"))}`,
-                `浼樺厛寤鸿锛氬厛楠岃瘉鏈簵璋冩暣鍦ㄥ綋鍓嶆尝娆℃槸鍚﹀甫鏉ュ彲瑙佹敹鐩婏紝鍐嶅喅瀹氭槸鍚︽墿灞曞埌鍚岀被闂ㄥ簵銆俙
+                `唯一变量证明：${escapeHtml(report?.variable_proof || auditProof?.proof_text || "仅变更目标店时间，其余输入保持一致。")}`,
+                `输入指纹：${escapeHtml(String(auditProof?.fixed_input_fingerprint || "--"))}`,
+                `优先建议：先验证本店调整在当前波次是否带来可见收益，再决定是否扩展到同类门店。`
             ];
             decisionEl.innerHTML = decisionLines.map((line) => `<div>${escapeHtml(line)}</div>`).join("");
 
             const deltaColor = (val) => Number(val || 0) === 0 ? "#334155" : "#dc2626";
             const deltaPrefix = (val) => Number(val || 0) > 0 ? "+" : "";
-            const baselineCn = `鏀瑰墠锛氬弬涓庢帓绾?${Number(abBase.candidate || 0)} 瀹讹紝鎴愬姛瀹夋帓 ${Number(abBase.assigned || 0)} 瀹讹紝鏈畨鎺?${Number(abBase.pending || 0)} 瀹讹紱浣跨敤杞﹁締 ${Number(abBase.vehicles || 0)} 鍙帮紝鎬婚噷绋?${formatNumber(abBase.mileage, 1)} 鍏噷銆俙;
-            const simulatedCn = `鏀瑰悗锛氬弬涓庢帓绾?${Number(abSim.candidate || 0)} 瀹讹紝鎴愬姛瀹夋帓 ${Number(abSim.assigned || 0)} 瀹讹紝鏈畨鎺?${Number(abSim.pending || 0)} 瀹讹紱浣跨敤杞﹁締 ${Number(abSim.vehicles || 0)} 鍙帮紝鎬婚噷绋?${formatNumber(abSim.mileage, 1)} 鍏噷銆俙;
+            const baselineCn = `改前：参与排线 ${Number(abBase.candidate || 0)} 家，成功安排 ${Number(abBase.assigned || 0)} 家，未安排 ${Number(abBase.pending || 0)} 家；使用车辆 ${Number(abBase.vehicles || 0)} 台，总里程 ${formatNumber(abBase.mileage, 1)} 公里。`;
+            const simulatedCn = `改后：参与排线 ${Number(abSim.candidate || 0)} 家，成功安排 ${Number(abSim.assigned || 0)} 家，未安排 ${Number(abSim.pending || 0)} 家；使用车辆 ${Number(abSim.vehicles || 0)} 台，总里程 ${formatNumber(abSim.mileage, 1)} 公里。`;
             adjustmentsEl.innerHTML = `
                 <div class="tuiyan-report-item">
-                    <div><strong>A/B 瀵圭収锛?{escapeHtml(abCompare?.wave_id || report?.wave_id || "--")}锛?/strong></div>
+                    <div><strong>A/B 对照（${escapeHtml(abCompare?.wave_id || report?.wave_id || "--")}）</strong></div>
                     <div class="tuiyan-report-kv">${escapeHtml(report?.baseline_text || baselineCn)}</div>
                     <div class="tuiyan-report-kv">${escapeHtml(report?.simulated_text || simulatedCn)}</div>
                     <div class="tuiyan-report-kv">
-                        宸€硷細瀹夋帓闂ㄥ簵 <span style="color:${deltaColor(abDelta.assigned)}">${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)}</span> 瀹?|
-                        鏈畨鎺?<span style="color:${deltaColor(abDelta.pending)}">${deltaPrefix(abDelta.pending)}${Number(abDelta.pending || 0)}</span> 瀹?|
-                        杞﹁締 <span style="color:${deltaColor(abDelta.vehicles)}">${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)}</span> 鍙?|
-                        閲岀▼ <span style="color:${deltaColor(abDelta.mileage)}">${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)} 鍏噷</span>
+                        差值：安排门店 <span style="color:${deltaColor(abDelta.assigned)}">${deltaPrefix(abDelta.assigned)}${Number(abDelta.assigned || 0)}</span> 家 |
+                        未安排 <span style="color:${deltaColor(abDelta.pending)}">${deltaPrefix(abDelta.pending)}${Number(abDelta.pending || 0)}</span> 家 |
+                        车辆 <span style="color:${deltaColor(abDelta.vehicles)}">${deltaPrefix(abDelta.vehicles)}${Number(abDelta.vehicles || 0)}</span> 台 |
+                        里程 <span style="color:${deltaColor(abDelta.mileage)}">${deltaPrefix(abDelta.mileage)}${formatNumber(abDelta.mileage, 1)} 公里</span>
                     </div>
                     ${report?.delta_text ? `<div class="tuiyan-report-kv" style="margin-top:8px;"><strong>${escapeHtml(report.delta_text)}</strong></div>` : ""}
                 </div>
                 ${(affectedShops.length ? affectedShops : [{ shop_code: "--", old_wave: "--", new_wave: "--", old_time: "--", new_time: "--", reason: "--" }]).map((shop, index) => `
                     <div class="tuiyan-report-item">
-                        <div><strong>${index + 1}. 搴?{escapeHtml(shop.shop_code || "--")}</strong>锛?{escapeHtml(shop.old_wave || "--")} -> ${escapeHtml(shop.new_wave || "--")}锛?{escapeHtml(shop.old_time || "--")} -> <span style="color:#dc2626">${escapeHtml(shop.new_time || "--")}</span></div>
-                        <div class="tuiyan-report-kv">鍘熷洜锛?{escapeHtml(shop.reason || "璋冩暣寤鸿")}</div>
+                        <div><strong>${index + 1}. 店${escapeHtml(shop.shop_code || "--")}</strong>：${escapeHtml(shop.old_wave || "--")} -> ${escapeHtml(shop.new_wave || "--")}，${escapeHtml(shop.old_time || "--")} -> <span style="color:#dc2626">${escapeHtml(shop.new_time || "--")}</span></div>
+                        <div class="tuiyan-report-kv">原因：${escapeHtml(shop.reason || "调整建议")}</div>
                     </div>
                 `).join("")}
             `;
@@ -1083,23 +1094,23 @@
         failuresEl.innerHTML = failureLogs.length
             ? failureLogs.slice(0, 200).map((item) => `
                 <div class="tuiyan-report-item">
-                    <div><strong>${escapeHtml(item.wave_id || "--")} | 搴?{escapeHtml(item.shop_code || "--")}</strong>锛?{escapeHtml(item.suggestion_type || item.failure_type || "--")}</div>
-                    <div class="tuiyan-report-kv">褰撳墠 ${escapeHtml(item.current_time || "--")}锛岄璁?${escapeHtml(item.expected_arrival || "--")}锛屾渶鏅?${escapeHtml(item.latest_allowed || "--")}锛岃秴鍑?${Number(item.over_minutes || item.late_minutes || 0)} 鍒嗛挓</div>
-                    <div>${escapeHtml(item.suggestion_text || "鏆傛棤寤鸿")}</div>
+                    <div><strong>${escapeHtml(item.wave_id || "--")} | 店${escapeHtml(item.shop_code || "--")}</strong>：${escapeHtml(item.suggestion_type || item.failure_type || "--")}</div>
+                    <div class="tuiyan-report-kv">当前 ${escapeHtml(item.current_time || "--")}，预计 ${escapeHtml(item.expected_arrival || "--")}，最晚 ${escapeHtml(item.latest_allowed || "--")}，超出 ${Number(item.over_minutes || item.late_minutes || 0)} 分钟</div>
+                    <div>${escapeHtml(item.suggestion_text || "暂无建议")}</div>
                 </div>
             `).join("")
-            : '<div class="tuiyan-report-item">鏈鏃犲け璐ユ牱鏈€?/div>';
+            : '<div class="tuiyan-report-item">本次无失败样本。</div>';
 
         const replayItems = simulationReplayLines
-            .filter((line) => /灏濊瘯#|灏濊瘯缁撴潫|澶辫触鏍锋湰|鎻掑叆鍥炴斁宸茶惤搴?.test(String(line || "")))
+            .filter((line) => /尝试#|尝试结束|失败样本|插入回放已落库/.test(String(line || "")))
             .slice(-300);
         replayEl.innerHTML = replayItems.length
             ? replayItems.map((line) => `<div class="tuiyan-report-item">${escapeHtml(line)}</div>`).join("")
-            : '<div class="tuiyan-report-item">鏆傛棤鍥炴斁鏃ュ織銆?/div>';
+            : '<div class="tuiyan-report-item">暂无回放日志。</div>';
 
         if (mode === "single_store") {
-            failuresEl.innerHTML = '<div class="tuiyan-report-item">鍗曞簵妯″紡榛樿涓嶅睍绀轰笌鐩爣搴楁棤鍏崇殑澶辫触鏍锋湰銆?/div>';
-            replayEl.innerHTML = '<div class="tuiyan-report-item">鍗曞簵妯″紡榛樿涓嶅睍绀鸿瘯鎻掑洖鏀撅紝鏌ョ湅鈥滄帹婕旇繃绋嬧€濅腑鐨?A/B 鏃ュ織鍗冲彲銆?/div>';
+            failuresEl.innerHTML = '<div class="tuiyan-report-item">单店模式默认不展示与目标店无关的失败样本。</div>';
+            replayEl.innerHTML = '<div class="tuiyan-report-item">单店模式默认不展示试插回放，查看“推演过程”中的 A/B 日志即可。</div>';
         }
 
         renderReportPaneVisibility();
@@ -1109,20 +1120,20 @@
         const container = document.getElementById("benchmark-info");
         if (!container) return;
         if (!currentProcessedData) {
-            container.textContent = "鏆傛棤鍩哄噯鏂规";
+            container.textContent = "暂无基准方案";
             return;
         }
-        container.innerHTML = `鍩哄噯: ${escapeHtml(currentProcessedData.batch_id)} | 鐢ㄨ溅 ${currentProcessedData.total_vehicles} 杈?| 閲岀▼ ${formatNumber(currentProcessedData.total_distance_km)} km | ${escapeHtml(formatDateTime(currentProcessedData.created_at))}`;
+        container.innerHTML = `基准: ${escapeHtml(currentProcessedData.batch_id)} | 用车 ${currentProcessedData.total_vehicles} 辆 | 里程 ${formatNumber(currentProcessedData.total_distance_km)} km | ${escapeHtml(formatDateTime(currentProcessedData.created_at))}`;
     }
 
     async function renderBatchSelector() {
         const selectEl = document.getElementById("batch-select");
         if (!selectEl) return;
-        selectEl.innerHTML = '<option value="">鍔犺浇涓?..</option>';
+        selectEl.innerHTML = '<option value="">加载中...</option>';
         const list = await loadBatchList(1, 50);
         selectEl.innerHTML = "";
         if (!list.length) {
-            selectEl.innerHTML = '<option value="">鏆傛棤鍘嗗彶鎵规</option>';
+            selectEl.innerHTML = '<option value="">暂无历史批次</option>';
             return;
         }
 
@@ -1153,7 +1164,7 @@
         if (!container) return;
         const stores = currentProcessedData?.stores || [];
         if (!stores.length) {
-            container.innerHTML = '<tr><td colspan="8" style="text-align:center">鏆傛棤鏁版嵁锛岃鍏堥€夋嫨鎵规</td></tr>';
+            container.innerHTML = '<tr><td colspan="8" style="text-align:center">暂无数据，请先选择批次</td></tr>';
             return;
         }
 
@@ -1166,7 +1177,7 @@
                 <td>--:--</td>
                 <td>-</td>
                 <td>-</td>
-                <td>${store.allowed_late <= 10 ? '<span class="priority-high">楂?/span>' : store.allowed_late <= 20 ? '<span class="priority-medium">涓?/span>' : '<span class="priority-low">浣?/span>'}</td>
+                <td>${store.allowed_late <= 10 ? '<span class="priority-high">高</span>' : store.allowed_late <= 20 ? '<span class="priority-medium">中</span>' : '<span class="priority-low">低</span>'}</td>
             </tr>
         `).join("");
     }
@@ -1176,7 +1187,7 @@
         if (!container) return;
         const waveResults = currentProcessedData?.wave_results;
         if (!waveResults) {
-            container.innerHTML = "鏆傛棤鏁版嵁锛岃鍏堥€夋嫨鎵规";
+            container.innerHTML = "暂无数据，请先选择批次";
             return;
         }
 
@@ -1185,16 +1196,16 @@
             waves.map((waveId) => {
                 const data = waveResults[waveId];
                 if (!data) {
-                    return `<div class="wave-card"><div class="wave-title">${waveId}</div><div class="wave-stats">鏆傛棤鏁版嵁</div></div>`;
+                    return `<div class="wave-card"><div class="wave-title">${waveId}</div><div class="wave-stats">暂无数据</div></div>`;
                 }
                 return `
                     <div class="wave-card">
                         <div class="wave-title">${waveId}</div>
                         <div class="wave-stats">
-                            璋冨害闂ㄥ簵: ${data.scheduled_count}<br>
-                            鏈皟搴﹂棬搴? ${data.unscheduled_count}<br>
-                            鎬婚噷绋? ${formatNumber(data.total_distance_km)} km<br>
-                            鐢ㄨ溅鏁? ${data.vehicles.length}
+                            调度门店: ${data.scheduled_count}<br>
+                            未调度门店: ${data.unscheduled_count}<br>
+                            总里程: ${formatNumber(data.total_distance_km)} km<br>
+                            用车数: ${data.vehicles.length}
                         </div>
                     </div>
                 `;
@@ -1207,7 +1218,7 @@
         if (!container) return;
         const waves = Object.values(currentProcessedData?.wave_results || {}).filter(Boolean);
         if (!waves.length) {
-            container.innerHTML = "鏆傛棤鏁版嵁";
+            container.innerHTML = "暂无数据";
             return;
         }
         const rankedByDistance = waves
@@ -1219,7 +1230,7 @@
                     <li class="rank-item">
                         <span class="rank-number">${index + 1}</span>
                         <span class="rank-store">${item.wave_id}</span>
-                        <span class="rank-time">闂ㄥ簵 ${item.scheduled_count}</span>
+                        <span class="rank-time">门店 ${item.scheduled_count}</span>
                         <span class="rank-save">${formatNumber(item.total_distance_km)} km</span>
                     </li>
                 `).join("")}
@@ -1231,38 +1242,38 @@
         const container = document.getElementById("global-plan");
         if (!container) return;
         if (!currentProcessedData) {
-            container.innerHTML = "鏆傛棤鏁版嵁";
+            container.innerHTML = "暂无数据";
             return;
         }
         container.innerHTML = `
             <div class="global-summary">
-                <div style="font-weight:600; margin-bottom:8px;">褰撳墠鍩哄噯鏂规</div>
+                <div style="font-weight:600; margin-bottom:8px;">当前基准方案</div>
                 <div class="global-metrics">
                     <div class="metric">
                         <div class="metric-value">${currentProcessedData.total_vehicles}</div>
-                        <div class="metric-label">鎬荤敤杞?/div>
+                        <div class="metric-label">总用车</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">${formatNumber(currentProcessedData.total_distance_km)}</div>
-                        <div class="metric-label">鎬婚噷绋?km)</div>
+                        <div class="metric-label">总里程(km)</div>
                     </div>
                     <div class="metric">
                         <div class="metric-value">${currentProcessedData.total_stores}</div>
-                        <div class="metric-label">闂ㄥ簵鏁?/div>
+                        <div class="metric-label">门店数</div>
                     </div>
                 </div>
             </div>
             <div class="route-preview">
                 <div class="route-item">
-                    <div class="route-vehicle">褰撳墠鎵规</div>
+                    <div class="route-vehicle">当前批次</div>
                     <div class="route-stores">${escapeHtml(currentProcessedData.batch_id)}</div>
                 </div>
                 <div class="route-item">
-                    <div class="route-vehicle">绠楁硶</div>
+                    <div class="route-vehicle">算法</div>
                     <div class="route-stores">${escapeHtml(currentProcessedData.strategy || "--")}</div>
                 </div>
                 <div class="route-item">
-                    <div class="route-vehicle">鍒涘缓鏃堕棿</div>
+                    <div class="route-vehicle">创建时间</div>
                     <div class="route-stores">${escapeHtml(currentProcessedData.created_at || "--")}</div>
                 </div>
             </div>
@@ -1287,30 +1298,30 @@
 
             if (!isFleetMode) {
                 if (!storeId) {
-                    renderSimulationProgress("error", [{ text: "杈撳叆鏍￠獙澶辫触锛氱己灏戝簵閾虹紪鍙?, state: "error" }], { storeId, newTime, target });
-                    alert("璇疯緭鍏ュ簵閾虹紪鍙?);
+                    renderSimulationProgress("error", [{ text: "输入校验失败：缺少店铺编号", state: "error" }], { storeId, newTime, target });
+                    alert("请输入店铺编号");
                     return;
                 }
                 if (!newTime) {
-                    renderSimulationProgress("error", [{ text: "杈撳叆鏍￠獙澶辫触锛氱己灏戞柊鏀惰揣鏃堕棿", state: "error" }], { storeId, newTime, target });
-                    alert("璇烽€夋嫨鏂版椂闂?);
+                    renderSimulationProgress("error", [{ text: "输入校验失败：缺少新收货时间", state: "error" }], { storeId, newTime, target });
+                    alert("请选择新时间");
                     return;
                 }
             } else {
                 if (!Number.isFinite(targetVehicles) || targetVehicles <= 0) {
-                    renderSimulationProgress("error", [{ text: "杈撳叆鏍￠獙澶辫触锛氱洰鏍囪溅杈嗘暟鏃犳晥", state: "error" }], { targetVehicles });
-                    alert("璇疯緭鍏ユ湁鏁堢殑鐩爣杞﹁締鏁?);
+                    renderSimulationProgress("error", [{ text: "输入校验失败：目标车辆数无效", state: "error" }], { targetVehicles });
+                    alert("请输入有效的目标车辆数");
                     return;
                 }
                 if (!selectedWaves.length) {
-                    renderSimulationProgress("error", [{ text: "杈撳叆鏍￠獙澶辫触锛氭湭閫夋嫨鎺ㄦ紨娉㈡", state: "error" }], { selectedWaves });
-                    alert("璇疯嚦灏戦€夋嫨涓€涓帹婕旀尝娆?);
+                    renderSimulationProgress("error", [{ text: "输入校验失败：未选择推演波次", state: "error" }], { selectedWaves });
+                    alert("请至少选择一个推演波次");
                     return;
                 }
             }
             if (!realtimeContext || !Array.isArray(realtimeContext.vehicles) || !realtimeContext.vehicles.length) {
-                renderSimulationProgress("error", [{ text: "鏈娴嬪埌褰撳墠杞﹁締鍒楄〃", state: "error" }], { hasRealtimeContext: Boolean(realtimeContext) });
-                alert("璇峰厛鍥炲埌璋冨害椤靛鍏ュ綋鍓嶈溅杈嗗垪琛ㄥ苟淇濆瓨鏈€鏂拌揣閲忥紝鍐嶈繘鍏ユ帹婕旈〉銆?);
+                renderSimulationProgress("error", [{ text: "未检测到当前车辆列表", state: "error" }], { hasRealtimeContext: Boolean(realtimeContext) });
+                alert("请先回到调度页导入当前车辆列表并保存最新货量，再进入推演页。");
                 return;
             }
 
@@ -1319,11 +1330,11 @@
             startSimulationLogPolling(taskId);
 
             renderSimulationProgress("running", [
-                { text: "1. 鏍￠獙杈撳叆鍙傛暟", state: "success" },
-                { text: `2. 璇诲彇褰撳墠璋冨害涓婁笅鏂囷細杞﹁締 ${realtimeContext.vehicles.length} 杈哷, state: "success" },
-                { text: "3. 鎻愪氦鍚庡彴鎺ㄦ紨璇锋眰", state: "active" },
-                { text: "4. 绛夊緟鍚庡彴姹傝В杩斿洖", state: "" },
-                { text: "5. 娓叉煋缁撴灉", state: "" }
+                { text: "1. 校验输入参数", state: "success" },
+                { text: `2. 读取当前调度上下文：车辆 ${realtimeContext.vehicles.length} 辆`, state: "success" },
+                { text: "3. 提交后台推演请求", state: "active" },
+                { text: "4. 等待后台求解返回", state: "" },
+                { text: "5. 渲染结果", state: "" }
             ], {
                 batch_id: currentProcessedData?.batch_id,
                 storeId,
@@ -1338,7 +1349,7 @@
             });
 
             simulateBtn.disabled = true;
-            simulateBtn.textContent = "鎺ㄦ紨涓?..";
+            simulateBtn.textContent = "推演中...";
             try {
                 const requestPayload = isFleetMode
                     ? {
@@ -1372,11 +1383,11 @@
                     }
                     latestSimulationResult = displayResult;
                     renderSimulationProgress("success", [
-                        { text: "1. 鏍￠獙杈撳叆鍙傛暟", state: "success" },
-                        { text: `2. 璇诲彇褰撳墠璋冨害涓婁笅鏂囷細杞﹁締 ${realtimeContext.vehicles.length} 杈哷, state: "success" },
-                        { text: "3. 鎻愪氦鍚庡彴鎺ㄦ紨璇锋眰", state: "success" },
-                        { text: "4. 鍚庡彴姹傝В瀹屾垚", state: "success" },
-                        { text: `5. 娓叉煋缁撴灉锛堣€楁椂 ${((Date.now() - startedAt) / 1000).toFixed(1)} 绉掞級`, state: "success" }
+                        { text: "1. 校验输入参数", state: "success" },
+                        { text: `2. 读取当前调度上下文：车辆 ${realtimeContext.vehicles.length} 辆`, state: "success" },
+                        { text: "3. 提交后台推演请求", state: "success" },
+                        { text: "4. 后台求解完成", state: "success" },
+                        { text: `5. 渲染结果（耗时 ${((Date.now() - startedAt) / 1000).toFixed(1)} 秒）`, state: "success" }
                     ], displayResult);
                     renderSimulationReport();
                     if (!isFleetMode) {
@@ -1385,22 +1396,22 @@
                 } else {
                     latestSimulationResult = null;
                     renderSimulationProgress("error", [
-                        { text: "1. 鏍￠獙杈撳叆鍙傛暟", state: "success" },
-                        { text: `2. 璇诲彇褰撳墠璋冨害涓婁笅鏂囷細杞﹁締 ${realtimeContext.vehicles.length} 杈哷, state: "success" },
-                        { text: "3. 鎻愪氦鍚庡彴鎺ㄦ紨璇锋眰", state: "success" },
-                        { text: "4. 鍚庡彴杩斿洖澶辫触", state: "error" },
-                        { text: `5. 鍋滄娓叉煋锛堣€楁椂 ${((Date.now() - startedAt) / 1000).toFixed(1)} 绉掞級`, state: "error" }
+                        { text: "1. 校验输入参数", state: "success" },
+                        { text: `2. 读取当前调度上下文：车辆 ${realtimeContext.vehicles.length} 辆`, state: "success" },
+                        { text: "3. 提交后台推演请求", state: "success" },
+                        { text: "4. 后台返回失败", state: "error" },
+                        { text: `5. 停止渲染（耗时 ${((Date.now() - startedAt) / 1000).toFixed(1)} 秒）`, state: "error" }
                     ], result);
-                    alert(`鎺ㄦ紨澶辫触锛?{result?.message || "鏈煡閿欒"}`);
+                    alert(`推演失败：${result?.message || "未知错误"}`);
                 }
             } catch (error) {
                 await pollSimulationTaskLog(taskId, true);
                 renderSimulationProgress("error", [
-                    { text: "1. 鏍￠獙杈撳叆鍙傛暟", state: "success" },
-                    { text: `2. 璇诲彇褰撳墠璋冨害涓婁笅鏂囷細杞﹁締 ${realtimeContext?.vehicles?.length || 0} 杈哷, state: "success" },
-                    { text: "3. 璋冪敤鎺ㄦ紨鎺ュ彛", state: "error" }
+                    { text: "1. 校验输入参数", state: "success" },
+                    { text: `2. 读取当前调度上下文：车辆 ${realtimeContext?.vehicles?.length || 0} 辆`, state: "success" },
+                    { text: "3. 调用推演接口", state: "error" }
                 ], { error: error?.message || String(error) });
-                alert(`鎺ㄦ紨澶辫触锛?{error?.message || ""}`);
+                alert(`推演失败：${error?.message || ""}`);
             } finally {
                 stopSimulationLogPolling();
                 simulateBtn.disabled = false;
@@ -1418,8 +1429,10 @@
         renderGlobalPlan();
     }
 
-    // 娣锋矊椤靛垵濮嬪寲鍏ュ彛銆?    // 椤甸潰鎵撳紑鍚庝細鍦ㄨ繖閲屾媺鍙栨壒娆°€佸簵閾恒€佹尝娆℃椂闂淬€佹姤鍛婂尯榛樿鐘舵€佺瓑鍓嶇疆鏁版嵁銆?    async function initBusinessFunctions() {
-        console.log("鎺ㄦ紨椤典笟鍔″姛鑳藉垵濮嬪寲...");
+    // 混沌页初始化入口。
+    // 页面打开后会在这里拉取批次、店铺、波次时间、报告区默认状态等前置数据。
+    async function initBusinessFunctions() {
+        console.log("推演页业务功能初始化...");
         const container = document.querySelector("#tuiyanPage");
         if (container) container.style.opacity = "0.5";
         try {
@@ -1428,15 +1441,15 @@
             await renderBatchSelector();
             setupReportTabs();
             setupSimulationModeControls();
-            renderSimulationProgress("idle", [{ text: "绛夊緟寮€濮嬫帹婕?..", state: "" }], null);
+            renderSimulationProgress("idle", [{ text: "等待开始推演...", state: "" }], null);
             renderAllOutputs();
             setupSimulationControls();
             window.__tuiyanDebug = { currentBatch, currentProcessedData, allShops, shopWaveTimes };
-            console.log("鎺ㄦ紨椤靛垵濮嬪寲瀹屾垚", { currentProcessedData });
+            console.log("推演页初始化完成", { currentProcessedData });
         } catch (error) {
-            console.error("涓氬姟鍒濆鍖栧け璐?", error);
+            console.error("业务初始化失败:", error);
             const benchmarkInfo = document.getElementById("benchmark-info");
-            if (benchmarkInfo) benchmarkInfo.textContent = "鍔犺浇澶辫触锛岃妫€鏌ュ悗绔湇鍔?;
+            if (benchmarkInfo) benchmarkInfo.textContent = "加载失败，请检查后端服务";
         } finally {
             if (container) container.style.opacity = "1";
         }
@@ -1492,4 +1505,3 @@
         initPageSwitch();
     }
 })();
-
