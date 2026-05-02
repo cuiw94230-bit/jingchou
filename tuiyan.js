@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 娣锋矊锛堟帹婕旈〉锛夊墠绔剼鏈€? *
  * 杩欓噷闆嗕腑缁存姢涓ょ被鎺ㄦ紨锛? * 1. 鍗曞簵鏃堕棿鎺ㄦ紨锛氬悓涓€娉㈡鍋氭敼鍓?鏀瑰悗 A/B 鐪熸眰瑙ｃ€? * 2. 鍑忚溅/鍙鎬ф帹婕旓細鍥寸粫澶辫触鏍锋湰銆佺害鏉熻瘖鏂拰寤鸿瑙勫垯灞曞紑銆? */
 (function () {
@@ -395,10 +395,10 @@
         if (statusEl) {
             statusEl.className = `simulate-progress-status ${status || "idle"}`;
             statusEl.textContent =
-                status === "running" ? "鎵ц涓? :
-                status === "success" ? "宸插畬鎴? :
-                status === "error" ? "澶辫触" :
-                "寰呮墽琛?;
+                status === "running" ? "Running" :
+                status === "success" ? "Success" :
+                status === "error" ? "Error" :
+                "Idle";
         }
         if (stepsEl) {
             const list = Array.isArray(steps) && steps.length ? steps : [{ text: "绛夊緟寮€濮嬫帹婕?..", state: "" }];
