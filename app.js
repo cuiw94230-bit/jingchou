@@ -3098,10 +3098,10 @@ async function buildDistanceData(stores) {
         const params = new URLSearchParams({
           storeIds: storeIds.join(","),
           includeDuration: "true",
-          strict: "false",
+          strict: "true",
         });
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 5000);
+        const timer = setTimeout(() => controller.abort(), 30000);
         try {
           const response = await fetch(`${GA_BACKEND_URL}/distance-matrix/full?${params.toString()}`, {
             method: "GET",
