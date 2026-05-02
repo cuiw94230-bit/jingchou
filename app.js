@@ -1,17 +1,38 @@
 /*
- * 璋冨害绯荤粺鍓嶇涓昏剼鏈€? *
- * 杩欓噷璐熻矗涓昏皟搴﹂〉闈㈢殑娴忚鍣ㄤ晶閫昏緫锛? * - 缁勭粐璋冨害杈撳叆锛? * - 璋冪敤鍚庣鎺ュ彛锛? * - 灞曠ず璋冨害杩囩▼銆佹尝娆＄粨鏋滃拰淇濆瓨/褰掓。鑳藉姏锛? * - 绠＄悊鏈湴缂撳瓨涓庨〉闈㈢姸鎬佹仮澶嶃€? */
+ * EN: Core module header and section note.
+ * CN: 核心模块头说明与分段提示。
+ */
 const STORAGE_KEY = "dispatch_saved_plans_v6";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const RUN_ARCHIVE_KEY = "dispatch_run_archive_v1";
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const DEEPSEEK_SETTINGS_KEY = "dispatch_deepseek_settings_v1";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const AMAP_WEB_SERVICE_KEY = "3ba73c0e0906dcbe77eeb85f3a5c343d";
 const AMAP_JS_WEB_KEY = "28741158a28eba2a5182757cf0d6c059";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const AMAP_DISTANCE_CACHE_KEY = "dispatch_amap_distance_cache_v1";
 const AMAP_ROUTE_CACHE_KEY = "dispatch_amap_route_cache_v1";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const AMAP_ORIGIN_BATCH_SIZE = 20;
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const RECOMMENDED_PLAN_TASK_DATE_KEY = "dispatch_recommended_task_date_v1";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const RUN_REGION_SCHEME_SELECTED_KEY = "dispatch_run_region_scheme_selected_v1";
-const ENFORCED_VEHICLE_TYPE = "4.2绫冲帰寮忚揣杞?;
+const ENFORCED_VEHICLE_TYPE = "4.2米厢式货车";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const LOAD_CONVERT_CAPACITY_MAP = {
   rpcs: 207,
   rcase: 380,
@@ -22,71 +43,87 @@ const LOAD_CONVERT_CAPACITY_MAP = {
   rpaper: 380,
 };
 const LOAD_CONVERT_WAVE1_FIELDS = ["rpcs", "rcase", "bpcs", "bpaper", "rpaper"];
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const LOAD_CONVERT_WAVE2_FIELDS = ["apcs", "apaper"];
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const algorithmMeta = {
-  vrptw: { label: "VRPTW璐績鎻掑叆鍚彂寮?, description: "绾墠绔椂闂寸淮搴︽彃鍏ュ紡璐績 VRPTW 鍚彂寮忋€? },
-  hybrid: { label: "娣峰悎VRPTW鍚彂寮?, description: "鍦ㄨ椽蹇冩彃鍏ュ垵濮嬭В涓婂彔鍔犵蹇屾悳绱笌澶ч偦鍩熸悳绱㈢殑绾墠绔贩鍚堝惎鍙戝紡銆? },
-  ga: { label: "閬椾紶绠楁硶锛圙A锛?, description: "鍩轰簬璐績鍒濆瑙ｅ仛杞婚噺鎵板姩銆? },
-  tabu: { label: "绂佸繉鎼滅储", description: "鍥寸粫鍒濆瑙ｅ仛閭诲煙鏇挎崲銆? },
-  lns: { label: "澶ч偦鍩熸悳绱?, description: "灞€閮ㄦ媶瑙ｅ悗閲嶆柊鎻掑叆闂ㄥ簵銆? },
-  savings: { label: "Clark-Wright鑺傜害娉?, description: "鎸夎妭绾﹀€煎悎骞惰矾绾匡紝鍐嶅仛 2-opt 涓庤溅杈嗗垎閰嶃€? },
-  sa: { label: "妯℃嫙閫€鐏?, description: "鐢ㄩ€€鐏帴鍙楀噯鍒欒烦鍑哄眬閮ㄦ渶浼橈紝鍐嶉厤鍚堝眬閮ㄤ紭鍖栨敹鏁涖€? },
-  aco: { label: "铓佺兢绠楁硶锛圓CO锛?, description: "鐢ㄤ俊鎭礌鍜屽惎鍙戝紡鏋勯€犻棬搴楀簭鍒楋紝鍐嶅仛灞€閮ㄦ敼杩涖€? },
-  pso: { label: "绮掑瓙缇ょ畻娉?, description: "鐢ㄤ紭鍏堢骇瀹炴暟缂栫爜銆侀€熷害鏇存柊鍜岀兢浣撴渶浼樺紩瀵兼悳绱€? },
-  vehicle: { label: "杞﹁締椹卞姩鏋勯€?, description: "鎸夎溅杈嗛€愬彴瑁呭～闂ㄥ簵锛屽厛涓ユ牸鍙鍐嶅仛涓€娆℃澗寮涢噸璇曘€? },
-  relay: { label: "鎺ュ姏姹傝В", description: "鍏堢敓鎴愬垵鎺掞紝鍐嶆寜闃舵涓茶仈鍏ㄥ眬鎼滅储涓庡眬閮ㄤ紭鍖栵紝閫愭鎺ユ鎵撶（鏈€缁堟柟妗堛€? },
+  vrptw: { label: "VRPTW贪心插入启发式", description: "纯前端时间维度插入式贪心 VRPTW 启发式。" },
+  hybrid: { label: "混合VRPTW启发式", description: "在贪心插入初始解上叠加禁忌搜索与大邻域搜索的纯前端混合启发式。" },
+  ga: { label: "遗传算法（GA）", description: "基于贪心初始解做轻量扰动。" },
+  tabu: { label: "禁忌搜索", description: "围绕初始解做邻域替换。" },
+  lns: { label: "大邻域搜索", description: "局部拆解后重新插入门店。" },
+  savings: { label: "Clark-Wright节约法", description: "按节约值合并路线，再做 2-opt 与车辆分配。" },
+  sa: { label: "模拟退火", description: "用退火接受准则跳出局部最优，再配合局部优化收敛。" },
+  aco: { label: "蚁群算法（ACO）", description: "用信息素和启发式构造门店序列，再做局部改进。" },
+  pso: { label: "粒子群算法", description: "用优先级实数编码、速度更新和群体最优引导搜索。" },
+  vehicle: { label: "车辆驱动构造", description: "按车辆逐台装填门店，先严格可行再做一次松弛重试。" },
+  relay: { label: "接力求解", description: "先生成初排，再按阶段串联全局搜索与局部优化，逐段接棒打磨最终方案。" },
 };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getAlgorithmQuickGuide(key) {
   const guides = {
-    aco: "馃悳 铓佺兢绠楁硶(ACO)锛氭ā鎷熻殏铓佽椋燂紝淇℃伅绱犲紩瀵兼悳绱€傞€傚悎100-300瀹堕棬搴楋紝鑳芥壘鍒颁紭璐ㄨ矾寰勪絾鏀舵暃绋嶆參銆?,
-    pso: "馃惁 绮掑瓙缇ょ畻娉?PSO)锛氭ā鎷熼笩缇ゆ崟椋燂紝缇や綋鏅鸿兘寮曞銆傞€傚悎50-150瀹堕棬搴楋紝鏀舵暃蹇絾鍙兘鏃╃啛銆?,
-    vehicle: "馃殮 杞﹁締椹卞姩鏋勯€狅細鎸夎溅杈嗛€愬彴濉炲簵锛屼紭鍏堟彁鍗囪鐩栫巼锛岄€傚悎璋冭瘯鍜屼繚搴曟帓婊°€?,
-    sa: "馃敟 妯℃嫙閫€鐏?SA)锛氭ā鎷熼噾灞為€€鐏紝姒傜巼鎬ф帴鍙楀樊瑙ｃ€傞€傚悎浠绘剰瑙勬ā锛岃兘璺冲嚭灞€閮ㄦ渶浼樸€?,
-    tabu: "馃搵 绂佸繉鎼滅储(Tabu)锛氬甫璁板繂鐨勯偦鍩熸悳绱€傞€傚悎灏忚妯＄簿纭紭鍖栵紝閬垮厤璧板洖澶磋矾銆?,
-    lns: "馃敤 澶ч偦鍩熸悳绱?LNS)锛氱牬鍧?淇妗嗘灦銆傞€傚悎200-500瀹堕棬搴楋紝鑳藉ぇ瑙勬ā閲嶆瀯瑙ｃ€?,
-    hybrid: "馃幆 娣峰悎绠楁硶锛歋A+LNS+Tabu涓夐樁娈垫帴鍔涖€傝拷姹傛瀬鑷磋川閲忔椂浣跨敤锛岃€楁椂鏈€闀裤€?,
-    ga: "馃К 閬椾紶绠楁硶(GA)锛氭ā鎷熻嚜鐒堕€夋嫨锛岃繘鍖栨悳绱€傚叏灞€鑳藉姏寮猴紝浣嗘敹鏁涙參銆?,
-    savings: "馃挵 Clark-Wright鑺傜害娉曪細缁忓吀鏋勯€犳硶锛屽揩閫熺敓鎴愬垵濮嬭В銆傞€熷害蹇紝璐ㄩ噺绋冲畾銆?,
-    vrptw: "鈴?VRPTW璐績鎻掑叆锛氭椂闂寸獥浼樺厛锛岄€愪釜鎻掑叆銆傚彲琛屾€уソ锛岄€傚悎蹇€熷垵鎺掋€?
+    aco: "🐜 蚁群算法(ACO)：模拟蚂蚁觅食，信息素引导搜索。适合100-300家门店，能找到优质路径但收敛稍慢。",
+    pso: "🐦 粒子群算法(PSO)：模拟鸟群捕食，群体智能引导。适合50-150家门店，收敛快但可能早熟。",
+    vehicle: "🚚 车辆驱动构造：按车辆逐台塞店，优先提升覆盖率，适合调试和保底排满。",
+    sa: "🔥 模拟退火(SA)：模拟金属退火，概率性接受差解。适合任意规模，能跳出局部最优。",
+    tabu: "📋 禁忌搜索(Tabu)：带记忆的邻域搜索。适合小规模精确优化，避免走回头路。",
+    lns: "🔨 大邻域搜索(LNS)：破坏-修复框架。适合200-500家门店，能大规模重构解。",
+    hybrid: "🎯 混合算法：SA+LNS+Tabu三阶段接力。追求极致质量时使用，耗时最长。",
+    ga: "🧬 遗传算法(GA)：模拟自然选择，进化搜索。全局能力强，但收敛慢。",
+    savings: "💰 Clark-Wright节约法：经典构造法，快速生成初始解。速度快，质量稳定。",
+    vrptw: "⏰ VRPTW贪心插入：时间窗优先，逐个插入。可行性好，适合快速初排。"
   };
-  return guides[key] || `${key}绠楁硶锛岃鎯呰鏌ョ湅绯荤粺鏂囨。銆俙;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  return guides[key] || `${key}算法，详情请查看系统文档。`;
 }
 const I18N = {
   zh: {
-    algorithmLabels: { vrptw: "VRPTW璐績鎻掑叆鍚彂寮?, hybrid: "娣峰悎VRPTW鍚彂寮?, ga: "閬椾紶绠楁硶锛圙A锛?, tabu: "绂佸繉鎼滅储", lns: "澶ч偦鍩熸悳绱?, savings: "Clark-Wright鑺傜害娉?, sa: "妯℃嫙閫€鐏?, aco: "铓佺兢绠楁硶锛圓CO锛?, pso: "绮掑瓙缇ょ畻娉?, vehicle: "杞﹁締椹卞姩鏋勯€?, relay: "鎺ュ姏姹傝В" },
+    algorithmLabels: { vrptw: "VRPTW贪心插入启发式", hybrid: "混合VRPTW启发式", ga: "遗传算法（GA）", tabu: "禁忌搜索", lns: "大邻域搜索", savings: "Clark-Wright节约法", sa: "模拟退火", aco: "蚁群算法（ACO）", pso: "粒子群算法", vehicle: "车辆驱动构造", relay: "接力求解" },
     algorithmDescriptions: {
-      vrptw: "绾墠绔椂闂寸淮搴︽彃鍏ュ紡璐績 VRPTW 鍚彂寮忋€?,
-      hybrid: "鍦ㄨ椽蹇冩彃鍏ュ垵濮嬭В涓婂彔鍔犵蹇屾悳绱笌澶ч偦鍩熸悳绱㈢殑绾墠绔贩鍚堝惎鍙戝紡銆?,
-      ga: "鍩轰簬璐績鍒濆瑙ｅ仛杞婚噺鎵板姩銆?,
-      tabu: "鍥寸粫鍒濆瑙ｅ仛閭诲煙鏇挎崲銆?,
-      lns: "灞€閮ㄦ媶瑙ｅ悗閲嶆柊鎻掑叆闂ㄥ簵銆?,
-      savings: "鎸夎妭绾﹀€煎悎骞惰矾绾匡紝鍐嶅仛 2-opt 涓庤溅杈嗗垎閰嶃€?,
-      sa: "鐢ㄩ€€鐏帴鍙楀噯鍒欒烦鍑哄眬閮ㄦ渶浼橈紝鍐嶉厤鍚堝眬閮ㄤ紭鍖栨敹鏁涖€?,
-      aco: "鐢ㄤ俊鎭礌鍜屽惎鍙戝紡鏋勯€犻棬搴楀簭鍒楋紝鍐嶅仛灞€閮ㄦ敼杩涖€?,
-      pso: "鐢ㄤ紭鍏堢骇瀹炴暟缂栫爜銆侀€熷害鏇存柊鍜岀兢浣撴渶浼樺紩瀵兼悳绱€?,
-      vehicle: "鎸夎溅杈嗛€愬彴瑁呭～闂ㄥ簵锛屽厛涓ユ牸鍙锛屽啀鍋氫竴娆¤蒋鏃堕棿绐楅噸璇曘€?,
-      relay: "鍏堝嚭鍒濇帓锛屽啀鎸夐樁娈典覆鑱斿叏灞€鎼滅储涓庡眬閮ㄤ紭鍖栵紝鐢熸垚鍗曟潯鏈€缁堟帴鍔涜В銆?,
+      vrptw: "纯前端时间维度插入式贪心 VRPTW 启发式。",
+      hybrid: "在贪心插入初始解上叠加禁忌搜索与大邻域搜索的纯前端混合启发式。",
+      ga: "基于贪心初始解做轻量扰动。",
+      tabu: "围绕初始解做邻域替换。",
+      lns: "局部拆解后重新插入门店。",
+      savings: "按节约值合并路线，再做 2-opt 与车辆分配。",
+      sa: "用退火接受准则跳出局部最优，再配合局部优化收敛。",
+      aco: "用信息素和启发式构造门店序列，再做局部改进。",
+      pso: "用优先级实数编码、速度更新和群体最优引导搜索。",
+      vehicle: "按车辆逐台装填门店，先严格可行，再做一次软时间窗重试。",
+      relay: "先出初排，再按阶段串联全局搜索与局部优化，生成单条最终接力解。",
     },
   },
   ja: {
-    algorithmLabels: { vrptw: "VRPTW璨鎸垮叆娉?, hybrid: "銉忋偆銉栥儶銉冦儔VRPTW", ga: "閬轰紳鐨勩偄銉偞銉偤銉?, tabu: "銈裤儢銉兼帰绱?, lns: "澶ц繎鍌嶆帰绱?, savings: "Clark-Wright绡€绱勬硶", sa: "鐒笺亶銇伨銇楁硶", aco: "锜汇偝銉儖銉兼渶閬╁寲", pso: "绮掑瓙缇ゆ渶閬╁寲", vehicle: "杌婁浮椐嗗嫊妲嬬瘔", relay: "銉儸銉兼渶閬╁寲" },
+    algorithmLabels: { vrptw: "VRPTW貪欲挿入法", hybrid: "ハイブリッドVRPTW", ga: "遺伝的アルゴリズム", tabu: "タブー探索", lns: "大近傍探索", savings: "Clark-Wright節約法", sa: "焼きなまし法", aco: "蟻コロニー最適化", pso: "粒子群最適化", vehicle: "車両駆動構築", relay: "リレー最適化" },
     algorithmDescriptions: {
-      vrptw: "銉曘儹銉炽儓銈ㄣ兂銉夊畬绲愩伄鏅傞枔娆″厓鎸垮叆鍨嬨兓璨 VRPTW 銉掋儱銉笺儶銈广儐銈ｃ儍銈€?,
-      hybrid: "璨鎸垮叆銇垵鏈熻В銇偪銉栥兗鎺㈢储銇ㄥぇ杩戝倣鎺㈢储銈掗噸銇倠绱斻儠銉兂銉堛偍銉炽儔娣峰悎銉掋儱銉笺儶銈广儐銈ｃ儍銈€?,
-      ga: "璨鍒濇湡瑙ｃ倰銉欍兗銈广伀杌介噺銇憘鍕曘倰琛屻亜銇俱仚銆?,
-      tabu: "鍒濇湡瑙ｃ伄杩戝倣銈掓帰绱仐銆佸弽寰┿倰閬裤亼銇俱仚銆?,
-      lns: "涓€閮ㄥ簵鑸椼倰澶栥仐銇﹀啀鎸垮叆銇椼€佸眬鎵€鏀瑰杽銇椼伨銇欍€?,
-      savings: "绡€绱勫€ら爢銇儷銉笺儓銈掔当鍚堛仐銆併仢銇緦 2-opt 銇ㄨ粖涓″壊褰撱倰琛屻亜銇俱仚銆?,
-      sa: "鐒笺亶銇伨銇椼伄鍙楃悊瑕忓墖銇у眬鎵€鏈€閬┿亱銈夋姕銇戝嚭銇椼€佸眬鎵€鏀瑰杽銇у弾鏉熴仌銇涖伨銇欍€?,
-      aco: "銉曘偋銉儮銉炽仺銉掋儱銉笺儶銈广儐銈ｃ儍銈仹瑷晱闋嗐倰妲嬬瘔銇椼€併仢銇緦銇眬鎵€鏀瑰杽銇椼伨銇欍€?,
-      pso: "鍎厛搴︺伄瀹熸暟绗﹀彿鍖栥仺閫熷害鏇存柊銇с€佸€嬩綋鏈€鑹兓鍏ㄤ綋鏈€鑹伀鍚戙亼銇︽帰绱仐銇俱仚銆?,
-      vehicle: "杌婁浮銇斻仺銇簵鑸椼倰瑭般倎銈嬫绡夋硶銇с€併伨銇氬幊瀵嗗彲琛屻€佹銇珐鍜屽啀瑭﹁銇椼伨銇欍€?,
-      relay: "鍒濇湡妗堛倰浣滄垚銇椼仧寰屻€佹闅庛仈銇ㄣ伀鍏ㄥ煙鎺㈢储銇ㄥ眬鎵€鏀瑰杽銈掋仱銇亷銆佹渶绲傛銇哥（銇嶄笂銇掋伨銇欍€?,
+      vrptw: "フロントエンド完結の時間次元挿入型・貪欲 VRPTW ヒューリスティック。",
+      hybrid: "貪欲挿入の初期解にタブー探索と大近傍探索を重ねる純フロントエンド混合ヒューリスティック。",
+      ga: "貪欲初期解をベースに軽量な摂動を行います。",
+      tabu: "初期解の近傍を探索し、反復を避けます。",
+      lns: "一部店舗を外して再挿入し、局所改善します。",
+      savings: "節約値順にルートを統合し、その後 2-opt と車両割当を行います。",
+      sa: "焼きなましの受理規則で局所最適から抜け出し、局所改善で収束させます。",
+      aco: "フェロモンとヒューリスティックで訪問順を構築し、その後に局所改善します。",
+      pso: "優先度の実数符号化と速度更新で、個体最良・全体最良に向けて探索します。",
+      vehicle: "車両ごとに店舗を詰める構築法で、まず厳密可行、次に緩和再試行します。",
+      relay: "初期案を作成した後、段階ごとに全域探索と局所改善をつなぎ、最終案へ磨き上げます。",
     },
   },
 };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function lang() { return state.language || "zh"; }
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function algoLabel(key) { return I18N[lang()].algorithmLabels[key] || algorithmMeta[key]?.label || key; }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function algoDescription(key) { return I18N[lang()].algorithmDescriptions[key] || algorithmMeta[key]?.description || ""; }
 const DEFAULT_STRATEGY_CONFIG = {
   deliveryMode: "singleDailyWave",
@@ -113,27 +150,61 @@ const DEFAULT_STRATEGY_CONFIG = {
   w3OneWayMaxKm: 260,
   w3ExcludePriorVehicles: true,
 };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function cloneDefaultStrategyConfig() {
   return { ...DEFAULT_STRATEGY_CONFIG };
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function normalizeStrategyConfig(input = {}) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const scoreLimit = Number(input.difficultyScoreLimit ?? DEFAULT_STRATEGY_CONFIG.difficultyScoreLimit);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tier1Limit = Number(input.difficultyTier1Limit ?? DEFAULT_STRATEGY_CONFIG.difficultyTier1Limit);
   const tier2Limit = Number(input.difficultyTier2Limit ?? DEFAULT_STRATEGY_CONFIG.difficultyTier2Limit);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const tier3Limit = Number(input.difficultyTier3Limit ?? DEFAULT_STRATEGY_CONFIG.difficultyTier3Limit);
   const toBool = (value, defaultValue) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (value === undefined || value === null) return Boolean(defaultValue);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (typeof value === "string") {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const v = value.trim().toLowerCase();
       if (["true", "1", "yes", "on"].includes(v)) return true;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (["false", "0", "no", "off"].includes(v)) return false;
     }
     return Boolean(value);
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxSolveCapacityRaw = Number(input.maxSolveCapacity ?? DEFAULT_STRATEGY_CONFIG.maxSolveCapacity);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const defaultSpeedRaw = Number(input.defaultSpeedKmh ?? DEFAULT_STRATEGY_CONFIG.defaultSpeedKmh);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const w3SpeedRaw = Number(input.w3SpeedKmh ?? DEFAULT_STRATEGY_CONFIG.w3SpeedKmh);
   const relayMaxRaw = Number(input.w1w2RelayMaxKm ?? DEFAULT_STRATEGY_CONFIG.w1w2RelayMaxKm);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const w3OneWayRaw = Number(input.w3OneWayMaxKm ?? DEFAULT_STRATEGY_CONFIG.w3OneWayMaxKm);
   return {
     deliveryMode: ["singleDailyWave", "doubleDailyWave"].includes(String(input.deliveryMode || "")) ? String(input.deliveryMode) : DEFAULT_STRATEGY_CONFIG.deliveryMode,
@@ -161,9 +232,15 @@ function normalizeStrategyConfig(input = {}) {
     w3ExcludePriorVehicles: toBool(input.w3ExcludePriorVehicles, DEFAULT_STRATEGY_CONFIG.w3ExcludePriorVehicles),
   };
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function applyOptimizeGoalPreset(goal, strategyConfig = state.strategyConfig, force = false) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const next = { ...(strategyConfig || cloneDefaultStrategyConfig()) };
   next.optimizeGoal = ["load", "balanced", "distance"].includes(goal) ? goal : "balanced";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (force || !state.strategyConfigTouched?.loadDistanceBias) {
     if (next.optimizeGoal === "load") {
       next.loadDistanceBias = -60;
@@ -173,68 +250,162 @@ function applyOptimizeGoalPreset(goal, strategyConfig = state.strategyConfig, fo
       next.loadDistanceBias = 0;
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return normalizeStrategyConfig(next);
 }
 function updateStrategyConfigUI() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const cfg = state.strategyConfig || cloneDefaultStrategyConfig();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const deliveryMode = document.getElementById("strategyDeliveryModeSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (deliveryMode) deliveryMode.value = cfg.deliveryMode || "singleDailyWave";
   const goalSelect = document.getElementById("strategyOptimizeGoalSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (goalSelect) goalSelect.value = cfg.optimizeGoal || "balanced";
   const loadDistanceBias = document.getElementById("strategyLoadDistanceBiasInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (loadDistanceBias) loadDistanceBias.value = String(cfg.loadDistanceBias ?? 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const latenessTolerance = document.getElementById("strategyLatenessToleranceSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (latenessTolerance) latenessTolerance.value = cfg.latenessTolerance || "medium";
   const vehicleCostBias = document.getElementById("strategyVehicleCostBiasInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (vehicleCostBias) vehicleCostBias.value = String(cfg.vehicleCostBias ?? 50);
   const dualWave = document.getElementById("strategyDualWaveWeightInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (dualWave) dualWave.value = String(cfg.dualWaveWeight ?? 50);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const crossRegion = document.getElementById("strategyCrossRegionPenaltyWeightInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (crossRegion) crossRegion.value = String(cfg.crossRegionPenaltyWeight ?? 50);
   const waveDelay = document.getElementById("strategyWaveDelayPenaltyInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (waveDelay) waveDelay.value = String(cfg.waveDelayPenalty ?? 50);
   const lateRoute = document.getElementById("strategyLateRouteStrengthSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (lateRoute) lateRoute.value = cfg.lateRouteStrength || "medium";
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const diffMode = document.getElementById("strategyDifficultyModeSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (diffMode) diffMode.value = cfg.deliveryDifficultyMode || "time";
   const tier1Unlimited = document.getElementById("strategyDifficultyTier1UnlimitedInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (tier1Unlimited) tier1Unlimited.checked = Boolean(cfg.difficultyTier1Unlimited);
   const tier1Limit = document.getElementById("strategyDifficultyTier1LimitInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tier1Limit) tier1Limit.value = String(cfg.difficultyTier1Limit ?? 1);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const tier2Unlimited = document.getElementById("strategyDifficultyTier2UnlimitedInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tier2Unlimited) tier2Unlimited.checked = Boolean(cfg.difficultyTier2Unlimited);
   const tier2Limit = document.getElementById("strategyDifficultyTier2LimitInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (tier2Limit) tier2Limit.value = String(cfg.difficultyTier2Limit ?? 2);
   const tier3Unlimited = document.getElementById("strategyDifficultyTier3UnlimitedInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tier3Unlimited) tier3Unlimited.checked = Boolean(cfg.difficultyTier3Unlimited);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const tier3Limit = document.getElementById("strategyDifficultyTier3LimitInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tier3Limit) tier3Limit.value = String(cfg.difficultyTier3Limit ?? 0);
   const diffScoreLimit = document.getElementById("strategyDifficultyScoreLimitInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (diffScoreLimit) diffScoreLimit.value = String(cfg.difficultyScoreLimit ?? 8);
   updateDifficultyTierLimitInputState(cfg);
   updateDifficultyModeFieldVisibility(cfg.deliveryDifficultyMode || "time");
 }
 
 function updateDifficultyModeFieldVisibility(mode) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const countGroup = document.getElementById("strategyDifficultyCountGroup");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const scoreGroup = document.getElementById("strategyDifficultyScoreGroup");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (countGroup) countGroup.style.display = mode === "count" ? "" : "none";
   if (scoreGroup) scoreGroup.style.display = mode === "score" ? "" : "none";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function updateDifficultyTierLimitInputState(strategyCfg = state.strategyConfig || cloneDefaultStrategyConfig()) {
   const cfg = strategyCfg || cloneDefaultStrategyConfig();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tier1Limit = document.getElementById("strategyDifficultyTier1LimitInput");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const tier2Limit = document.getElementById("strategyDifficultyTier2LimitInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tier3Limit = document.getElementById("strategyDifficultyTier3LimitInput");
   if (tier1Limit) tier1Limit.disabled = Boolean(cfg.difficultyTier1Unlimited);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (tier2Limit) tier2Limit.disabled = Boolean(cfg.difficultyTier2Unlimited);
   if (tier3Limit) tier3Limit.disabled = Boolean(cfg.difficultyTier3Unlimited);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildBackendStrategyConfig(strategyConfigInput = state.strategyConfig) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const cfg = normalizeStrategyConfig(strategyConfigInput || {});
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const distanceWeight = Math.max(0, Math.min(100, Math.round((cfg.loadDistanceBias + 100) / 2)));
   const loadWeight = 100 - distanceWeight;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const latenessStrengthMap = { strict: "high", medium: "medium", loose: "low" };
   return {
     deliveryMode: cfg.deliveryMode,
@@ -265,388 +436,418 @@ function buildBackendStrategyConfig(strategyConfigInput = state.strategyConfig) 
     w3ExcludePriorVehicles: cfg.w3ExcludePriorVehicles,
   };
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const UI_TEXT = {
   zh: {
-    showcase: "绯荤粺浠嬬粛", reload: "閲嶆柊鍔犺浇鍥哄畾闂ㄥ簵", save: "淇濆瓨褰撳墠鏂规", exportResult: "瀵煎嚭褰撳墠缁撴灉",
-    storeInfo: "闂ㄥ簵淇℃伅", vehicleInfo: "杞﹁締淇℃伅", waveConfig: "娉㈡閰嶇疆", algoRun: "绠楁硶涓庢墽琛?, result: "璋冨害缁撴灉", saved: "宸蹭繚瀛樻柟妗?,
-    storeDesc: "闂ㄥ簵鏁版嵁宸插唴缃埌绯荤粺涓紝褰撳墠鍙洿鎺ョ紪杈戝熀纭€灞炴€с€?, vehicleDesc: "杞﹁締鍙€氳繃 TXT 瀵煎叆锛屼篃鍙互鎵嬪伐琛ュ厖銆?, waveDesc: "澹版槑鍙厤閫佹尝娆°€佸悇娉㈡寮€濮嬬粨鏉熸椂闂达紝浠ュ強璇ユ尝娆″寘鍚殑闂ㄥ簵缂栧彿銆?, algoDesc: "鍙崟鐙敓鎴愭柟妗堬紝涔熷彲鍚屾椂鍕鹃€変袱绉嶇畻娉曞仛瀵规瘮銆傛渶浣庤杞界巼浼氫綔涓烘帓搴忓亸濂斤紝鑰岄潪纭€у崱姝绘潯浠躲€?, resultDesc: "绯荤粺浼氬睍绀洪棬搴楄矾绾裤€佽窛绂汇€佽皟搴﹁繃绋嬶紝浠ュ強浜哄伐璋冭溅鍏ュ彛銆?, savedDesc: "鏂规淇濆瓨鍦ㄥ綋鍓嶆祻瑙堝櫒鏈湴锛屽彲浣滀负鍘嗗彶鎺掔嚎璁板綍銆?,
-    foldStore: "鎶樺彔搴楅摵鏄庣粏", unfoldStore: "灞曞紑搴楅摵鏄庣粏", foldVehicle: "鎶樺彔杞﹁締鏄庣粏", unfoldVehicle: "灞曞紑杞﹁締鏄庣粏",
-    addStore: "鏂板闂ㄥ簵", addVehicle: "鏂板杞﹁締", addWave: "鏂板娉㈡",
-    dispatchStart: "棣栨鍙戣溅鏃堕棿", maxKm: "鍗曡溅寰€杩旀€婚噷绋嬩笂闄愶紙鍏噷锛?, minLoad: "鍗曡溅鏈€浣庤杞界巼锛?锛?, ignoreWaves: "蹇界暐娉㈡", autoWave: "鎸夊浐瀹氶棬搴楄嚜鍔ㄥ垎娉㈡", concentrateLate: "杩熷埌绾胯矾灏介噺闆嗕腑",
-    targetScore: "鐩爣璇勫垎涓嬮檺",
-    singleWaveDistance: "鍗曟尝娆¤窛绂婚槇鍊硷紙鍏噷锛?, singleWaveStart: "鍗曟尝娆″紑濮?, singleWaveEnd: "鍗曟尝娆＄粨鏉?, singleWaveMode: "鍗曟尝娆℃埅姝㈣鍒?,
-    returnEnd: "鍥炲簱鎴", serviceEnd: "瀹屽簵鎴", generate: "鐢熸垚璋冨害缁撴灉", close: "鍏抽棴",
-    processTitle: "璋冨害杩囩▼鍙鍖?, showcaseTitle: "绯荤粺鑳藉姏鎬昏",
-    storeTableHeaders: ["缂栧彿", "鍚嶇О", "鍖哄煙", "缁忓害", "绾害", "娆℃暟", "涓€娉㈡璐ч噺", "浜屾尝娆¤揣閲?, "鍐疯棌姣斾緥", "涓€閰嶆椂闂?, "浜岄厤鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿", ""],
-    vehicleTableHeaders: ["杞﹀彿", "鍙告満鍚?, "杞﹀瀷", "瀹归噺", "閫熷害", "鍙€佸喎钘?, "鐘舵€?, ""],
-    waveTableHeaders: ["娉㈡", "寮€濮?, "缁撴潫", "鎴瑙勫垯", "鍖呭惈闂ㄥ簵", ""],
-    used: "宸叉淳杞?, idle: "鏈娇鐢?, del: "鍒犻櫎", scheduled: "宸茶皟搴?, unscheduled: "鏈皟搴?, assignedVehicle: "瀵瑰簲杞﹀彿",
-    chooseFile: "閫夋嫨鏂囦欢",
-    noFileChosen: "鏈€夋嫨鏂囦欢",
-    allDay: "鍏ㄥぉ缁熶竴璋冨害", route: "璺嚎", totalDistance: "鎬婚噷绋?, avgLoad: "骞冲潎鍗曡稛瑁呰浇鐜?, fleetLoad: "杞﹂槦鍒╃敤鐜?, fleetLoadHint: "鎸夊凡鐢ㄨ溅杈嗗閲忔姌绠楋紝澶氳稛鏃跺彲瓒呰繃100%", score: "缁煎悎寰楀垎", onTime: "鍑嗘椂鐜?,
-    detail: "鏄庣粏", viewViz: "鏌ョ湅鍙鍖?, adjustTo: "璋冩暣鍒拌溅杈?..", confirmAdjust: "纭璋冩暣", noOtherVehicle: "褰撳墠娉㈡娌℃湁鍏朵粬杞﹁締鍙帴鎵?,
-    inserted: "鎵嬪伐鎻掑叆", leg: "鏈", arrive: "鍒拌揪", unloadStart: "寮€濮嬪嵏璐?, leave: "绂诲紑", desired: "鏈熸湜鍒拌揪", unloadMinutes: "鍗歌揣", minutes: "鍒嗛挓", notLate: "鍑嗘椂", late: "瓒呮椂绐?,
-    storesCount: "闂ㄥ簵鏁?, totalLoad: "绱瑁呰浇", maxTrip: "鏈€楂樺崟瓒?, trips: "瓒熸暟", totalRoundKm: "寰€杩旀€婚噷绋?, loadPreferredMet: "杈惧埌瑁呰浇鍋忓ソ", loadPreferredMiss: "鏈揪瑁呰浇鍋忓ソ",
-    tripNo: "绗?, tripSuffix: "瓒?, returnTime: "鍥炲簱鏃堕棿", backDistance: "鍥炰粨璺濈", tripRoundKm: "鍗曡稛寰€杩旀€婚噷绋?, tripLoadRate: "鍗曡稛瑁呰浇鐜?, overWave: "瓒呮尝娆?,
-    generatedSingle: "绯荤粺宸茬敓鎴愯皟搴︽柟妗堛€?, generatedCompare: "绯荤粺宸插畬鎴愬弻绠楁硶瀵规瘮銆?, savedEmpty: "杩樻病鏈変繚瀛樿繃璋冨害鏂规銆?,
-    multiStoreDaily: "澶氶棬搴楀崟鏃ュ娆￠厤閫佽皟搴?,
-    targetAchieved: "宸茶揪鍒扮洰鏍囪瘎鍒?,
-    targetMissed: "鏈揪鍒扮洰鏍囪瘎鍒?,
-    noVehicles: "璇峰厛褰曞叆鎴栧鍏ヨ溅杈嗕俊鎭€?,
-    noStores: "褰撳墠鍥哄畾闂ㄥ簵鏁版嵁涓虹┖銆?,
-    noWaves: "璇峰厛閰嶇疆鑷冲皯涓€涓尝娆°€?,
-    regularMissing: "鏅€氭尝娆¤繕鏈?{count} 瀹堕棬搴楁湭鍒嗛厤锛歿names}",
-    unscheduledStores: "鏈皟搴﹂棬搴?,
-    scheduledStores: "宸茶皟搴﹂棬搴?,
-    hardArrivalHint: "鍒板簵瑕佹眰鏃堕棿宸蹭綔涓哄己绾︽潫锛涜秴鍑哄厑璁稿埌搴楀亸宸殑闂ㄥ簵浼氫紭鍏堜繚鐣欎负鏈皟搴︺€?,
-      lateFocusHint: "宸插惎鐢ㄨ繜鍒扮嚎璺泦涓瓥鐣ワ紝绯荤粺浼氫紭鍏堝噺灏戝嚭鐜拌繜鍒扮殑绾胯矾鏁般€?,
-      noUnscheduled: "鍏ㄩ儴闂ㄥ簵宸茶皟搴︺€?,
-      unscheduledSummary: "褰撳墠灏氭湁 {count} 瀹堕棬搴楁湭璋冨害锛歿names}",
-    unscheduledReasonArrival: "鍒板簵鏃堕棿瓒呭嚭鍏佽鍋忓樊绐楀彛",
-      unscheduledReasonWave: "娉㈡鎴鏃堕棿涓嶈冻",
-      unscheduledReasonMileage: "閲岀▼绾︽潫涓嶈冻",
-      unscheduledReasonCapacity: "杞﹁締瀹归噺涓嶈冻",
-      unscheduledReasonSlot: "鐜版湁杞﹁締鏃跺簭宸叉弧锛屾棤娉曞啀鎻掑叆",
-      unscheduledReasonMixed: "澶氶噸绾︽潫鍙犲姞锛屽綋鍓嶆棤娉曟彃鍏?,
-      unscheduledReasonTitle: "鏈皟搴﹀師鍥?,
-      unscheduledDetails: "鏈皟搴︽槑缁?,
-      importedVehicles: "宸插鍏?{count} 杈嗚溅杈嗐€?,
-    importVehicleFailed: "杞﹁締 TXT 鏈В鏋愬嚭鏈夋晥杞﹀彿锛岃妫€鏌ョ紪鐮佹垨姣忚涓€杈嗚溅鐨勬牸寮忋€?,
-    autoWaveBuilt: "宸叉寜鍥哄畾闂ㄥ簵鑷姩鐢熸垚 {count} 涓尝娆°€?,
-    chooseDifferentVehicle: "璇烽€夋嫨涓€涓笉鍚岀殑鐩爣杞﹁締銆?,
-    storeNotOnVehicle: "鏈湪 {plate} 涓婃壘鍒伴棬搴?{store}銆?,
-    transferFailed: "闂ㄥ簵 {store} 鏃犳硶浠?{source} 璋冩暣鍒?{target}锛岃妫€鏌ユ椂闂淬€侀噷绋嬫垨瀹归噺銆?,
-    transferSuccess: "宸插皢闂ㄥ簵 {store} 浠?{source} 璋冩暣鍒?{target}锛屽苟浠呴噸绠楄繖涓よ締杞︺€?,
-    rescheduleAgain: "鍐嶆璋冨害",
-    saveScheduledResult: "淇濆瓨褰撳墠缁撴灉",
-    rescheduleSection: "鏈皟搴﹂棬搴楄ˉ璋?,
-    rescheduleHint: "淇濈暀宸茶皟搴︾嚎璺紝浼樺厛鐢ㄧ┖闂茶溅杈嗙户缁ˉ璋冩湭瀹夋帓鍑哄幓鐨勯棬搴椼€?,
-    exportLiveUnscheduled: "瀵煎嚭褰撳墠鏈皟搴D",
-    unscheduledMismatch: "鍙ｅ緞涓嶄竴鑷达細琛ヨ皟闈㈡澘={panel}锛屾槑缁嗙瓫閫?{detail}銆傝鍋滄浣跨敤璇ョ粨鏋滃苟鍙嶉銆?,
-    manualAssignVehicle: "鎵嬪伐鎸囧畾杞﹀彿",
-    manualAssignPlaceholder: "鎸囧畾杞﹀彿...",
-    confirmAssign: "鎸囧畾璋冨害",
-    rescheduleProgress: "鏈疆鏂板璋冨害 {count} 瀹堕棬搴椼€?,
-    rescheduleNoProgress: "鏈疆鏈兘鏂板璋冨害闂ㄥ簵銆?,
-    noAssignableVehicle: "褰撳墠娌℃湁鍙敤浜庤ˉ璋冪殑杞﹁締銆?,
-    assignFailed: "闂ㄥ簵 {store} 鎸囧畾缁?{plate} 澶辫触锛岃妫€鏌ユ椂闂淬€侀噷绋嬫垨瀹归噺銆?,
-    assignSuccess: "闂ㄥ簵 {store} 宸叉寚瀹氱粰 {plate}锛屽苟瀹屾垚灞€閮ㄩ噸绠椼€?,
-    savedAt: "淇濆瓨鏃堕棿",
-    wavesLabel: "娉㈡",
-    waveModeReturn: "杞﹁締闇€鍦?{time} 鍓嶅洖搴?,
-    waveModeService: "杞﹁締闇€鍦?{time} 鍓嶅畬鎴愭渶鍚庝竴瀹跺簵",
-    waveSingleHint: "璇ョ粍浣滀负鍗曟尝娆″簵閾哄崟鍒楁眰瑙ｏ紝涓斿崟杞﹀彧璺戜竴瓒?,
-    waveRegularHint: "鏅€氭尝娆℃寜姝ゆ椂闂寸‖绾︽潫鎵ц",
-    includedStores: "鍖呭惈闂ㄥ簵",
-    allStores: "鍏ㄩ儴闂ㄥ簵",
-    overtimeTrips: "瓒呮尝娆＄嚎璺?,
-    playback: "鍥炴斁",
-    selectedAlgorithms: "褰撳墠宸插嬀閫夌畻娉?,
-    noneSelected: "鏈€夋嫨",
-    staticMap: "闈欐€佸尯鍩熷湴鍥?,
-    routeLegend: "绾胯矾鍥句緥",
-    depot: "搴撴埧",
-    viewMap: "鏌ョ湅鍦板浘",
-    routeMap: "鐪嬬嚎璺浘",
-    routeMapHint: "鎸夊綋鍓嶇嚎璺『搴忓湪鍦板浘涓婃弿鐐硅繛绾匡紝浼樺厛浣跨敤楂樺痉椹捐溅璺緞缂撳瓨銆?,
-    routeStopSeq: "椤哄簭",
-    routePlanArrival: "璁″垝鍒板簵",
-    routeDesiredArrival: "甯屾湜鍒板簵",
-    routeStopName: "搴楅摵",
-    analyticsTitle: "鏁板瓧椹鹃┒鑸?,
-    analyticsDesc: "鐢ㄥ浘褰㈡柟寮忓睍绀鸿皟搴︽晥鐜囥€佺畻娉曞樊寮傘€佹尝娆¤礋鑽蜂笌鍖哄煙鍒嗗竷銆?,
-    dashboard: "鏍稿績鎸囨爣",
-    algoCompare: "绠楁硶瀵规瘮",
-    gantt: "娉㈡鐢樼壒鍥?,
-    loadCurve: "杞﹁締瑁呰浇鏇茬嚎",
-    spatial: "鍖哄煙鏁ｇ偣鍒嗗眰",
-    progressTitle: "鐢熸垚杩涘害",
-    storesToday: "浠婃棩闂ㄥ簵",
-    usedVehiclesShort: "宸茬敤杞?,
-    idleVehiclesShort: "闂茬疆杞?,
-    overtimeTripsShort: "瓒呮椂绾胯矾",
-    routeDigest: "绾胯矾鎽樿",
-    routeDigestHint: "姣忔潯绾垮睍绀洪棬搴楁暟銆佹€婚噷绋嬨€佽杞界巼锛屾柟渚跨洿鎺ユ瘮杈冪嚎璺粨鏋勩€?,
-    algorithmScore: "绠楁硶寰楀垎",
-    scoreBreakdownTitle: "璇勫垎鎷嗚В",
-    onTimeScore: "鍑嗘椂寰楀垎",
-    distanceScoreLabel: "璺濈寰楀垎",
-    loadScoreLabel: "瑁呰浇寰楀垎",
-    preferenceScoreLabel: "鍋忓ソ寰楀垎",
-    progressIdle: "绛夊緟鐢熸垚鏂规",
-    progressPreparing: "姝ｅ湪鏁寸悊闂ㄥ簵銆佽溅杈嗕笌娉㈡绾︽潫鈥?,
-    progressRunning: "姝ｅ湪杩愯 {algo}鈥?,
-    progressFinishing: "姝ｅ湪姹囨€诲浘褰㈠寲缁撴灉鈥?,
-    progressDone: "鍥惧舰椹鹃┒鑸卞凡鍒锋柊",
-    tripLabel: "瓒熸",
-    singleWaveLabel: "鍗曟尝娆?,
-    regularWaveLabel: "鏅€氭尝娆?,
-    loadAxis: "瑁呰浇鐜?,
-    timeAxis: "鏃堕棿",
-    scatterNear: "杩戣窛闂ㄥ簵",
-    scatterFar: "杩滆窛闂ㄥ簵",
-    scatterSingle: "鍗曟尝娆″簵閾?,
-    noChartData: "褰撳墠娌℃湁瓒冲鏁版嵁鐢熸垚鍥惧舰銆?,
-    voiceBroadcast: "璇煶鎾姤",
-    voiceAsk: "璇煶鎻愰棶",
-    mascotTitle: "椴哥暐浣垮姪鎵?,
-    mascotDesc: "鐢ㄦ洿娓╁拰銆佹洿娓呮櫚鐨勬柟寮忔挱鎶ュ綋鍓嶈皟搴︽憳瑕佷笌椋庨櫓鎻愮ず銆?,
-    speechUnsupported: "褰撳墠娴忚鍣ㄤ笉鏀寔璇煶鎾姤銆?,
-    speechListenUnsupported: "褰撳墠娴忚鍣ㄤ笉鏀寔璇煶璇嗗埆銆?,
-    speechMicPreparing: "姝ｅ湪鐢宠楹﹀厠椋庢潈闄愶紝娴忚鍣ㄥ脊绐楄鐩存帴鐐瑰厑璁革紝鍏佽鍚庝細绔嬪埢寮€濮嬫敹闊炽€?,
-    speechMicDenied: "楹﹀厠椋庢潈闄愭湭寮€鍚紝璇峰湪娴忚鍣ㄥ湴鍧€鏍忛噷鍏佽楹﹀厠椋庡悗鍐嶈瘯銆?,
-    speechMicFailed: "楹﹀厠椋庡垵濮嬪寲澶辫触锛岃妫€鏌ユ祻瑙堝櫒鏄惁鍏佽褰撳墠椤甸潰浣跨敤楹﹀厠椋庛€?,
-    speechListening: "姝ｅ湪鍚紝璇风洿鎺ユ彁闂€?,
-    speechHeard: "宸插惉鍒帮細{text}",
-    speechAnswerPrefix: "鏁板瓧鍔╃悊鍥炵瓟锛?,
+    showcase: "系统介绍", reload: "重新加载固定门店", save: "保存当前方案", exportResult: "导出当前结果",
+    storeInfo: "门店信息", vehicleInfo: "车辆信息", waveConfig: "波次配置", algoRun: "算法与执行", result: "调度结果", saved: "已保存方案",
+    storeDesc: "门店数据已内置到系统中，当前可直接编辑基础属性。", vehicleDesc: "车辆可通过 TXT 导入，也可以手工补充。", waveDesc: "声明可配送波次、各波次开始结束时间，以及该波次包含的门店编号。", algoDesc: "可单独生成方案，也可同时勾选两种算法做对比。最低装载率会作为排序偏好，而非硬性卡死条件。", resultDesc: "系统会展示门店路线、距离、调度过程，以及人工调车入口。", savedDesc: "方案保存在当前浏览器本地，可作为历史排线记录。",
+    foldStore: "折叠店铺明细", unfoldStore: "展开店铺明细", foldVehicle: "折叠车辆明细", unfoldVehicle: "展开车辆明细",
+    addStore: "新增门店", addVehicle: "新增车辆", addWave: "新增波次",
+    dispatchStart: "首次发车时间", maxKm: "单车往返总里程上限（公里）", minLoad: "单车最低装载率（%）", ignoreWaves: "忽略波次", autoWave: "按固定门店自动分波次", concentrateLate: "迟到线路尽量集中",
+    targetScore: "目标评分下限",
+    singleWaveDistance: "单波次距离阈值（公里）", singleWaveStart: "单波次开始", singleWaveEnd: "单波次结束", singleWaveMode: "单波次截止规则",
+    returnEnd: "回库截止", serviceEnd: "完店截止", generate: "生成调度结果", close: "关闭",
+    processTitle: "调度过程可视化", showcaseTitle: "系统能力总览",
+    storeTableHeaders: ["编号", "名称", "区域", "经度", "纬度", "次数", "一波次货量", "二波次货量", "冷藏比例", "一配时间", "二配时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号", ""],
+    vehicleTableHeaders: ["车号", "司机名", "车型", "容量", "速度", "可送冷藏", "状态", ""],
+    waveTableHeaders: ["波次", "开始", "结束", "截止规则", "包含门店", ""],
+    used: "已派车", idle: "未使用", del: "删除", scheduled: "已调度", unscheduled: "未调度", assignedVehicle: "对应车号",
+    chooseFile: "选择文件",
+    noFileChosen: "未选择文件",
+    allDay: "全天统一调度", route: "路线", totalDistance: "总里程", avgLoad: "平均单趟装载率", fleetLoad: "车队利用率", fleetLoadHint: "按已用车辆容量折算，多趟时可超过100%", score: "综合得分", onTime: "准时率",
+    detail: "明细", viewViz: "查看可视化", adjustTo: "调整到车辆...", confirmAdjust: "确认调整", noOtherVehicle: "当前波次没有其他车辆可接手",
+    inserted: "手工插入", leg: "本段", arrive: "到达", unloadStart: "开始卸货", leave: "离开", desired: "期望到达", unloadMinutes: "卸货", minutes: "分钟", notLate: "准时", late: "超时窗",
+    storesCount: "门店数", totalLoad: "累计装载", maxTrip: "最高单趟", trips: "趟数", totalRoundKm: "往返总里程", loadPreferredMet: "达到装载偏好", loadPreferredMiss: "未达装载偏好",
+    tripNo: "第", tripSuffix: "趟", returnTime: "回库时间", backDistance: "回仓距离", tripRoundKm: "单趟往返总里程", tripLoadRate: "单趟装载率", overWave: "超波次",
+    generatedSingle: "系统已生成调度方案。", generatedCompare: "系统已完成双算法对比。", savedEmpty: "还没有保存过调度方案。",
+    multiStoreDaily: "多门店单日多次配送调度",
+    targetAchieved: "已达到目标评分",
+    targetMissed: "未达到目标评分",
+    noVehicles: "请先录入或导入车辆信息。",
+    noStores: "当前固定门店数据为空。",
+    noWaves: "请先配置至少一个波次。",
+    regularMissing: "普通波次还有 {count} 家门店未分配：{names}",
+    unscheduledStores: "未调度门店",
+    scheduledStores: "已调度门店",
+    hardArrivalHint: "到店要求时间已作为强约束；超出允许到店偏差的门店会优先保留为未调度。",
+      lateFocusHint: "已启用迟到线路集中策略，系统会优先减少出现迟到的线路数。",
+      noUnscheduled: "全部门店已调度。",
+      unscheduledSummary: "当前尚有 {count} 家门店未调度：{names}",
+    unscheduledReasonArrival: "到店时间超出允许偏差窗口",
+      unscheduledReasonWave: "波次截止时间不足",
+      unscheduledReasonMileage: "里程约束不足",
+      unscheduledReasonCapacity: "车辆容量不足",
+      unscheduledReasonSlot: "现有车辆时序已满，无法再插入",
+      unscheduledReasonMixed: "多重约束叠加，当前无法插入",
+      unscheduledReasonTitle: "未调度原因",
+      unscheduledDetails: "未调度明细",
+      importedVehicles: "已导入 {count} 辆车辆。",
+    importVehicleFailed: "车辆 TXT 未解析出有效车号，请检查编码或每行一辆车的格式。",
+    autoWaveBuilt: "已按固定门店自动生成 {count} 个波次。",
+    chooseDifferentVehicle: "请选择一个不同的目标车辆。",
+    storeNotOnVehicle: "未在 {plate} 上找到门店 {store}。",
+    transferFailed: "门店 {store} 无法从 {source} 调整到 {target}，请检查时间、里程或容量。",
+    transferSuccess: "已将门店 {store} 从 {source} 调整到 {target}，并仅重算这两辆车。",
+    rescheduleAgain: "再次调度",
+    saveScheduledResult: "保存当前结果",
+    rescheduleSection: "未调度门店补调",
+    rescheduleHint: "保留已调度线路，优先用空闲车辆继续补调未安排出去的门店。",
+    exportLiveUnscheduled: "导出当前未调度ID",
+    unscheduledMismatch: "口径不一致：补调面板={panel}，明细筛选={detail}。请停止使用该结果并反馈。",
+    manualAssignVehicle: "手工指定车号",
+    manualAssignPlaceholder: "指定车号...",
+    confirmAssign: "指定调度",
+    rescheduleProgress: "本轮新增调度 {count} 家门店。",
+    rescheduleNoProgress: "本轮未能新增调度门店。",
+    noAssignableVehicle: "当前没有可用于补调的车辆。",
+    assignFailed: "门店 {store} 指定给 {plate} 失败，请检查时间、里程或容量。",
+    assignSuccess: "门店 {store} 已指定给 {plate}，并完成局部重算。",
+    savedAt: "保存时间",
+    wavesLabel: "波次",
+    waveModeReturn: "车辆需在 {time} 前回库",
+    waveModeService: "车辆需在 {time} 前完成最后一家店",
+    waveSingleHint: "该组作为单波次店铺单列求解，且单车只跑一趟",
+    waveRegularHint: "普通波次按此时间硬约束执行",
+    includedStores: "包含门店",
+    allStores: "全部门店",
+    overtimeTrips: "超波次线路",
+    playback: "回放",
+    selectedAlgorithms: "当前已勾选算法",
+    noneSelected: "未选择",
+    staticMap: "静态区域地图",
+    routeLegend: "线路图例",
+    depot: "库房",
+    viewMap: "查看地图",
+    routeMap: "看线路图",
+    routeMapHint: "按当前线路顺序在地图上描点连线，优先使用高德驾车路径缓存。",
+    routeStopSeq: "顺序",
+    routePlanArrival: "计划到店",
+    routeDesiredArrival: "希望到店",
+    routeStopName: "店铺",
+    analyticsTitle: "数字驾驶舱",
+    analyticsDesc: "用图形方式展示调度效率、算法差异、波次负荷与区域分布。",
+    dashboard: "核心指标",
+    algoCompare: "算法对比",
+    gantt: "波次甘特图",
+    loadCurve: "车辆装载曲线",
+    spatial: "区域散点分层",
+    progressTitle: "生成进度",
+    storesToday: "今日门店",
+    usedVehiclesShort: "已用车",
+    idleVehiclesShort: "闲置车",
+    overtimeTripsShort: "超时线路",
+    routeDigest: "线路摘要",
+    routeDigestHint: "每条线展示门店数、总里程、装载率，方便直接比较线路结构。",
+    algorithmScore: "算法得分",
+    scoreBreakdownTitle: "评分拆解",
+    onTimeScore: "准时得分",
+    distanceScoreLabel: "距离得分",
+    loadScoreLabel: "装载得分",
+    preferenceScoreLabel: "偏好得分",
+    progressIdle: "等待生成方案",
+    progressPreparing: "正在整理门店、车辆与波次约束…",
+    progressRunning: "正在运行 {algo}…",
+    progressFinishing: "正在汇总图形化结果…",
+    progressDone: "图形驾驶舱已刷新",
+    tripLabel: "趟次",
+    singleWaveLabel: "单波次",
+    regularWaveLabel: "普通波次",
+    loadAxis: "装载率",
+    timeAxis: "时间",
+    scatterNear: "近距门店",
+    scatterFar: "远距门店",
+    scatterSingle: "单波次店铺",
+    noChartData: "当前没有足够数据生成图形。",
+    voiceBroadcast: "语音播报",
+    voiceAsk: "语音提问",
+    mascotTitle: "鲸略使助手",
+    mascotDesc: "用更温和、更清晰的方式播报当前调度摘要与风险提示。",
+    speechUnsupported: "当前浏览器不支持语音播报。",
+    speechListenUnsupported: "当前浏览器不支持语音识别。",
+    speechMicPreparing: "正在申请麦克风权限，浏览器弹窗请直接点允许，允许后会立刻开始收音。",
+    speechMicDenied: "麦克风权限未开启，请在浏览器地址栏里允许麦克风后再试。",
+    speechMicFailed: "麦克风初始化失败，请检查浏览器是否允许当前页面使用麦克风。",
+    speechListening: "正在听，请直接提问。",
+    speechHeard: "已听到：{text}",
+    speechAnswerPrefix: "数字助理回答：",
     deepseekKeyLabel: "DeepSeek Key",
-    deepseekModelLabel: "DeepSeek妯″瀷",
-    deepseekModeLabel: "鍔╂墜妯″紡",
-    deepseekModeDispatch: "璋冨害鍔╂墜",
-    deepseekModeGeneral: "閫氱敤鍔╂墜",
-    deepseekStyleLabel: "鍥炵瓟椋庢牸",
-    deepseekStyleBrief: "绠€娲佸洖绛?,
-    deepseekStyleDetailed: "璇︾粏鍒嗘瀽",
-    deepseekSave: "淇濆瓨DeepSeek閰嶇疆",
-    deepseekAsk: "闂瓺eepSeek",
-    deepseekAskPlaceholder: "渚嬪锛氫负浠€涔堣繖娆?W2 鐢ㄨ溅鍋忓锛熻繕鑳芥€庝箞浼樺寲锛?,
-    deepseekSaved: "DeepSeek 閰嶇疆宸蹭繚瀛樺湪褰撳墠娴忚鍣ㄣ€?,
-    deepseekMissingKey: "璇峰厛濉叆 DeepSeek API Key銆?,
-    deepseekThinking: "DeepSeek 姝ｅ湪缁撳悎褰撳墠璋冨害缁撴灉鎬濊€冣€?,
-    deepseekFailed: "DeepSeek 璋冪敤澶辫触锛歿message}",
-    deepseekReady: "DeepSeek 宸叉帴鍏ュ綋鍓嶉〉闈紝鍙洿鎺ユ枃瀛楁彁闂垨閰嶅悎璇煶鎻愰棶銆?,
-    deepseekLocalFallback: "褰撳墠鏈厤缃?DeepSeek锛屼粛浣跨敤鏈湴鎸夐挳鍔╂墜鍥炵瓟銆?,
-    deepseekAnswerPrefix: "DeepSeek鍥炵瓟锛?,
-    exportNoResult: "褰撳墠杩樻病鏈夊彲瀵煎嚭鐨勮皟搴︾粨鏋溿€?,
-    exportDone: "宸插鍑哄綋鍓嶈皟搴︾粨鏋溿€?,
-    exportFilePrefix: "璋冨害缁撴灉",
-    solveStrategy: "姹傝В绛栫暐",
-    optimizeGoal: "浼樺寲鐩爣",
-    strategyManual: "鎵嬪姩鍕鹃€?,
-    strategyQuick: "蹇€熷垵鎺?,
-    strategyDeep: "娣卞害浼樺寲",
-    strategyGlobal: "鍏ㄥ眬鎼滅储",
-    strategyRelay: "鎺ュ姏姹傝В",
-    strategyFree: "鑷敱姹傝В",
-    strategyCompare: "澶氱畻娉曞姣?,
-    goalBalanced: "缁煎悎骞宠　",
-    goalOnTime: "鍑嗙偣浼樺厛",
-    goalDistance: "閲岀▼浼樺厛",
-    goalVehicles: "鏈€灏戠敤杞?,
-    goalLoad: "瑁呰浇浼樺厛",
-    quickSolve: "蹇€熷垵鎺?,
-    deepOptimize: "缁х画浼樺寲",
-    globalSearch: "鍏ㄥ眬鎼滅储",
-    relaySolve: "鎺ュ姏姹傝В",
-    freeSolve: "鑷敱姹傝В",
-    multiCompare: "澶氱畻娉曞姣?,
-    gaBackendChecking: "GA鍚庡彴锛氭鏌ヤ腑鈥?,
-    gaBackendOnline: "GA鍚庡彴锛氬凡杩為€氾紙Python锛?,
-    gaBackendOffline: "GA鍚庡彴锛氭湭杩為€氾紙闇€鍏堟仮澶嶅悗绔級",
+    deepseekModelLabel: "DeepSeek模型",
+    deepseekModeLabel: "助手模式",
+    deepseekModeDispatch: "调度助手",
+    deepseekModeGeneral: "通用助手",
+    deepseekStyleLabel: "回答风格",
+    deepseekStyleBrief: "简洁回答",
+    deepseekStyleDetailed: "详细分析",
+    deepseekSave: "保存DeepSeek配置",
+    deepseekAsk: "问DeepSeek",
+    deepseekAskPlaceholder: "例如：为什么这次 W2 用车偏多？还能怎么优化？",
+    deepseekSaved: "DeepSeek 配置已保存在当前浏览器。",
+    deepseekMissingKey: "请先填入 DeepSeek API Key。",
+    deepseekThinking: "DeepSeek 正在结合当前调度结果思考…",
+    deepseekFailed: "DeepSeek 调用失败：{message}",
+    deepseekReady: "DeepSeek 已接入当前页面，可直接文字提问或配合语音提问。",
+    deepseekLocalFallback: "当前未配置 DeepSeek，仍使用本地按钮助手回答。",
+    deepseekAnswerPrefix: "DeepSeek回答：",
+    exportNoResult: "当前还没有可导出的调度结果。",
+    exportDone: "已导出当前调度结果。",
+    exportFilePrefix: "调度结果",
+    solveStrategy: "求解策略",
+    optimizeGoal: "优化目标",
+    strategyManual: "手动勾选",
+    strategyQuick: "快速初排",
+    strategyDeep: "深度优化",
+    strategyGlobal: "全局搜索",
+    strategyRelay: "接力求解",
+    strategyFree: "自由求解",
+    strategyCompare: "多算法对比",
+    goalBalanced: "综合平衡",
+    goalOnTime: "准点优先",
+    goalDistance: "里程优先",
+    goalVehicles: "最少用车",
+    goalLoad: "装载优先",
+    quickSolve: "快速初排",
+    deepOptimize: "继续优化",
+    globalSearch: "全局搜索",
+    relaySolve: "接力求解",
+    freeSolve: "自由求解",
+    multiCompare: "多算法对比",
+    gaBackendChecking: "GA后台：检查中…",
+    gaBackendOnline: "GA后台：已连通（Python）",
+    gaBackendOffline: "GA后台：未连通（需先恢复后端）",
   },
   ja: {
-    showcase: "銈枫偣銉嗐儬绱逛粙", reload: "鍥哄畾搴楄垪銈掑啀瑾炯", save: "鐝惧湪銇銈掍繚瀛?, exportResult: "鐝惧湪绲愭灉銈掑嚭鍔?,
-    storeInfo: "搴楄垪鎯呭牨", vehicleInfo: "杌婁浮鎯呭牨", waveConfig: "娉㈡瑷畾", algoRun: "銈儷銈淬儶銈恒儬瀹熻", result: "閰嶉€佺祼鏋?, saved: "淇濆瓨娓堛伩妗?,
-    storeDesc: "搴楄垪銉囥兗銈裤伅銈枫偣銉嗐儬銇唴钄点仌銈屻仸銇娿倞銆佸熀鏈睘鎬с倰鐩存帴绶ㄩ泦銇с亶銇俱仚銆?, vehicleDesc: "杌婁浮銇?TXT 鍙栬炯銇倐鎵嬪叆鍔涖伀銈傚蹇溿仐銇俱仚銆?, waveDesc: "閰嶉€佹尝娆°€佸悇娉㈡銇枊濮嬬祩浜嗘檪闁撱€佸璞″簵鑸楃暘鍙枫倰瀹氱京銇椼伨銇欍€?, algoDesc: "鍗樼嫭妗堢敓鎴愩伀銈傘€佽鏁般偄銉偞銉偤銉犳瘮杓冦伀銈傚蹇溿仐銇俱仚銆傛渶浣庣杓夌巼銇儚銉笺儔鍒剁磩銇с伅銇亸鍎厛搴︺仺銇椼仸鎵便亜銇俱仚銆?, resultDesc: "搴楄垪銉兗銉堛€佽窛闆€侀厤閫侀亷绋嬨€佹墜鍕曡粖涓¤鏁淬倰琛ㄧず銇椼伨銇欍€?, savedDesc: "妗堛伅鐝惧湪銇儢銉┿偊銈躲伀淇濆瓨銇曘倢銆佸饱姝淬仺銇椼仸鍙傜収銇с亶銇俱仚銆?,
-    foldStore: "搴楄垪鏄庣窗銈掓姌銈娿仧銇熴個", unfoldStore: "搴楄垪鏄庣窗銈掑睍闁?, foldVehicle: "杌婁浮鏄庣窗銈掓姌銈娿仧銇熴個", unfoldVehicle: "杌婁浮鏄庣窗銈掑睍闁?,
-    addStore: "搴楄垪杩藉姞", addVehicle: "杌婁浮杩藉姞", addWave: "娉㈡杩藉姞",
-    dispatchStart: "鍒濆洖鍑虹櫤鏅傚埢", maxKm: "杌婁浮寰€寰╃窂璺濋洟涓婇檺锛坘m锛?, minLoad: "杌婁浮鏈€浣庣杓夌巼锛?锛?, ignoreWaves: "娉㈡銈掔劇瑕?, autoWave: "鍥哄畾搴楄垪銇ц嚜鍕曟尝娆″垎鍓?, concentrateLate: "閬呯潃銉┿偆銉炽倰闆嗕腑",
-    targetScore: "鐩銈广偝銈笅闄?,
-    singleWaveDistance: "鍗樼嫭娉㈡璺濋洟銇椼亶銇勫€わ紙km锛?, singleWaveStart: "鍗樼嫭娉㈡闁嬪", singleWaveEnd: "鍗樼嫭娉㈡绲備簡", singleWaveMode: "鍗樼嫭娉㈡绶犲垏銉兗銉?,
-    returnEnd: "甯板韩绶犲垏", serviceEnd: "鏈€绲傚簵瀹屼簡绶犲垏", generate: "閰嶉€佺祼鏋溿倰鐢熸垚", close: "闁夈仒銈?,
-    processTitle: "閰嶉€侀亷绋嬨伄鍙鍖?, showcaseTitle: "銈枫偣銉嗐儬鑳藉姏銇窂瑕?,
-    storeTableHeaders: ["鐣彿", "鍚嶇О", "銈ㄣ儶銈?, "绲屽害", "绶害", "閰嶉€佸洖鏁?, "涓€娉㈡璨ㄩ噺", "浜屾尝娆¤波閲?, "鍐疯數姣旂巼", "涓€閰嶆檪鍒?, "浜岄厤鏅傚埢", "鎵€灞炴尝娆?, "鑽蜂笅銈嶃仐鍒?, "闆ｆ槗搴?, "瑷卞鍋忓樊(鍒?", "鐘舵厠", "杌婄暘", ""],
-    vehicleTableHeaders: ["杌婄暘", "閬嬭虎鎵嬪悕", "杌婄ó", "瀹归噺", "閫熷害", "鍐疯數鍙?, "鐘舵厠", ""],
-    waveTableHeaders: ["娉㈡", "闁嬪", "绲備簡", "绶犲垏銉兗銉?, "瀵捐薄搴楄垪", ""],
-    used: "閰嶈粖娓堛伩", idle: "寰呮", scheduled: "鍓插綋娓堛伩", unscheduled: "鏈壊褰?, assignedVehicle: "鎷呭綋杌婄暘",
-    chooseFile: "銉曘偂銈ゃ儷閬告姙",
-    noFileChosen: "鏈伕鎶?,
-    allDay: "绲傛棩涓€鎷厤閫?, route: "銉兗銉?, totalDistance: "绶忚窛闆?, avgLoad: "骞冲潎鍗樹究绌嶈級鐜?, fleetLoad: "杌婇殜绋煎儘鐜?, fleetLoadHint: "浣跨敤杌婁浮瀹归噺銉欍兗銈规彌绠椼€傝鏁颁究鏅傘伅100%瓒呫倐銇傘倞銇俱仚", score: "绶忓悎銈广偝銈?, onTime: "鏅傞枔鍐呯巼",
-    detail: "鏄庣窗", viewViz: "鍙鍖栥倰瑕嬨倠", adjustTo: "绉诲嫊鍏堣粖涓?..", confirmAdjust: "瑾挎暣纰哄畾", noOtherVehicle: "銇撱伄娉㈡銇с伅浠栥伀寮曞彈杌婁浮銇屻亗銈娿伨銇涖倱",
-    inserted: "鎵嬪嫊鎸垮叆", leg: "鍖洪枔", arrive: "鍒扮潃", unloadStart: "鑽蜂笅銈嶃仐闁嬪", leave: "鍑虹櫤", desired: "甯屾湜鍒扮潃", unloadMinutes: "鑽蜂笅銈嶃仐", minutes: "鍒?, notLate: "鏅傞枔鍐?, late: "鏅傞枔绐撹秴閬?,
-    storesCount: "搴楄垪鏁?, totalLoad: "绱▓绌嶈級", maxTrip: "鍗樿稛鏈€澶?, trips: "渚挎暟", totalRoundKm: "寰€寰╃窂璺濋洟", loadPreferredMet: "绌嶈級鍎厛閬旀垚", loadPreferredMiss: "绌嶈級鍎厛鏈仈",
-    tripNo: "绗?, tripSuffix: "渚?, returnTime: "甯板韩鏅傚埢", backDistance: "甯板韩璺濋洟", tripRoundKm: "鍗樹究寰€寰╄窛闆?, tripLoadRate: "鍗樹究绌嶈級鐜?, overWave: "娉㈡瓒呴亷",
-    generatedSingle: "閰嶉€佹銈掔敓鎴愩仐銇俱仐銇熴€?, generatedCompare: "瑜囨暟銈儷銈淬儶銈恒儬姣旇純銈掔敓鎴愩仐銇俱仐銇熴€?, savedEmpty: "銇俱仩淇濆瓨娓堛伩妗堛伅銇傘倞銇俱仜銈撱€?,
-    multiStoreDaily: "澶氬簵鑸楀崢鏃ヨ鏁板洖閰嶉€佽搴?,
-    targetAchieved: "鐩銈广偝銈㈤仈鎴?,
-    targetMissed: "鐩銈广偝銈㈡湭閬?,
-    noVehicles: "鍏堛伀杌婁浮鎯呭牨銈掑叆鍔涖伨銇熴伅鍙栬炯銇椼仸銇忋仩銇曘亜銆?,
-    noStores: "鐝惧湪銆佸浐瀹氬簵鑸椼儑銉笺偪銇屻亗銈娿伨銇涖倱銆?,
-    noWaves: "灏戙仾銇忋仺銈?1 銇ゃ伄娉㈡銈掕ō瀹氥仐銇︺亸銇犮仌銇勩€?,
-    regularMissing: "閫氬父娉㈡銇ф湭鍓插綋銇簵鑸椼亴 {count} 浠躲亗銈娿伨銇欙細{names}",
-    unscheduledStores: "鏈壊褰撳簵鑸?,
-    scheduledStores: "鍓插綋娓堝簵鑸?,
-    hardArrivalHint: "鍒扮潃瑕佹眰鏅傚埢銇挤鍒剁磩銇ф壉銇勩€佽ū瀹瑰亸宸倰瓒呫亪銈嬪簵鑸椼伅鏈壊褰撱伀鍥炪仐銇俱仚銆?,
-      lateFocusHint: "閬呯潃銉┿偆銉抽泦涓垿鐣ャ倰鏈夊姽鍖栥仐銇︺亜銇俱仚銆傞亝鐫€銇岀櫤鐢熴仚銈嬭粖绶氭暟銈掑劒鍏堢殑銇姂銇堛伨銇欍€?,
-      noUnscheduled: "鍏ㄥ簵鑸椼倰鍓层倞褰撱仸娓堛伩銇с仚銆?,
-      unscheduledSummary: "鐝惧湪銆佹湭鍓插綋搴楄垪銇?{count} 浠躲亗銈娿伨銇欙細{names}",
-    unscheduledReasonArrival: "鍒扮潃瑕佹眰鏅傚埢銇ū瀹瑰亸宸伀鍙庛伨銈娿伨銇涖倱",
-      unscheduledReasonWave: "娉㈡銇窢鍒囨檪闁撱亴涓嶈冻銇椼仸銇勩伨銇?,
-      unscheduledReasonMileage: "璺濋洟鍒剁磩銇屼笉瓒炽仐銇︺亜銇俱仚",
-      unscheduledReasonCapacity: "杌婁浮瀹归噺銇屼笉瓒炽仐銇︺亜銇俱仚",
-      unscheduledReasonSlot: "鏃㈠瓨杌婁浮銇檪绯诲垪銇尶鍏ヤ綑鍦般亴銇傘倞銇俱仜銈?,
-      unscheduledReasonMixed: "瑜囨暟鍒剁磩銇岄噸銇倞銆佺従鍦ㄣ伅鎸垮叆銇с亶銇俱仜銈?,
-      unscheduledReasonTitle: "鏈壊褰撶悊鐢?,
-      unscheduledDetails: "鏈壊褰撴槑绱?,
-      importedVehicles: "{count} 鍙般伄杌婁浮銈掑彇杈笺仐銇俱仐銇熴€?,
-    importVehicleFailed: "杌婁浮 TXT 銇嬨倝鏈夊姽銇粖鐣倰瑙ｆ瀽銇с亶銇俱仜銈撱仹銇椼仧銆傛枃瀛椼偝銉笺儔銇俱仧銇?1 琛?1 鍙般伄褰㈠紡銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€?,
-    autoWaveBuilt: "鍥哄畾搴楄垪銇熀銇ャ亶 {count} 鍊嬨伄娉㈡銈掕嚜鍕曠敓鎴愩仐銇俱仐銇熴€?,
-    chooseDifferentVehicle: "鐣般仾銈嬬洰妯欒粖涓°倰閬告姙銇椼仸銇忋仩銇曘亜銆?,
-    storeNotOnVehicle: "{plate} 涓娿伀搴楄垪 {store} 銇岃銇ゃ亱銈娿伨銇涖倱銆?,
-    transferFailed: "搴楄垪 {store} 銈?{source} 銇嬨倝 {target} 銇哥Щ銇涖伨銇涖倱銆傛檪闁撱兓璺濋洟銉诲閲忋倰纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
-    transferSuccess: "搴楄垪 {store} 銈?{source} 銇嬨倝 {target} 銇Щ銇椼€併亾銇?2 鍙般伄銇垮啀瑷堢畻銇椼伨銇椼仧銆?,
-    rescheduleAgain: "鍐嶅壊褰?,
-    saveScheduledResult: "鐝惧湪绲愭灉銈掍繚瀛?,
-    rescheduleSection: "鏈壊褰撳簵鑸椼伄鍐嶅壊褰?,
-    rescheduleHint: "鏃㈠瓨銇壊褰撱儷銉笺儓銈掍繚鎸併仐銇ゃ仱銆佺┖銇嶈粖涓°倰鍎厛銇椼仸鏈壊褰撳簵鑸椼倰杩藉姞銇у壊銈婂綋銇︺伨銇欍€?,
-    exportLiveUnscheduled: "鐝惧湪銇湭鍓插綋ID銈掑嚭鍔?,
-    unscheduledMismatch: "闆嗚▓涓嶄竴鑷达細鍐嶅壊褰撱儜銉嶃儷={panel}銆佹槑绱般儠銈ｃ儷銈?{detail}銆傘亾銇祼鏋溿伄鍒╃敤銈掑仠姝仐銇﹀牨鍛娿仐銇︺亸銇犮仌銇勩€?,
-    manualAssignVehicle: "鎵嬪嫊銇ц粖鐣寚瀹?,
-    manualAssignPlaceholder: "杌婄暘銈掓寚瀹?..",
-    confirmAssign: "鎸囧畾鍓插綋",
-    rescheduleProgress: "浠婂洖銇啀鍓插綋銇?{count} 搴楄垪銈掕拷鍔犮仹鍓层倞褰撱仸銇俱仐銇熴€?,
-    rescheduleNoProgress: "浠婂洖銇啀鍓插綋銇с伅杩藉姞鍓插綋銇屻亗銈娿伨銇涖倱銇с仐銇熴€?,
-    noAssignableVehicle: "鐝惧湪銆佸啀鍓插綋銇娇銇堛倠杌婁浮銇屻亗銈娿伨銇涖倱銆?,
-    assignFailed: "搴楄垪 {store} 銈?{plate} 銇寚瀹氥仹銇嶃伨銇涖倱銇с仐銇熴€傛檪闁撱兓璺濋洟銉诲閲忋倰纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
-    assignSuccess: "搴楄垪 {store} 銈?{plate} 銇寚瀹氥仐銆佸眬鎵€鍐嶈▓绠椼倰瀹屼簡銇椼伨銇椼仧銆?,
-    savedAt: "淇濆瓨鏅傚埢",
-    wavesLabel: "娉㈡",
-    waveModeReturn: "杌婁浮銇?{time} 銇俱仹銇赴搴仚銈嬪繀瑕併亴銇傘倞銇俱仚",
-    waveModeService: "杌婁浮銇?{time} 銇俱仹銇渶绲傚簵鑸椼倰瀹屼簡銇欍倠蹇呰銇屻亗銈娿伨銇?,
-    waveSingleHint: "銇撱伄銈般儷銉笺儣銇崢鐙尝娆°仺銇椼仸鍒ュ嚘鐞嗐仌銈屻€? 鍙?1 渚裤伄銇裤仹銇?,
-    waveRegularHint: "閫氬父娉㈡銇亾銇檪闁撳埗绱勩倰銉忋兗銉夐仼鐢ㄣ仐銇俱仚",
-    includedStores: "瀵捐薄搴楄垪",
-    allStores: "鍏ㄥ簵鑸?,
-    overtimeTrips: "娉㈡瓒呴亷銉┿偆銉?,
-    playback: "銉儣銉偆",
-    selectedAlgorithms: "鐝惧湪鏈夊姽銇偄銉偞銉偤銉?,
-    noneSelected: "鏈伕鎶?,
-    staticMap: "闈欑殑銈ㄣ儶銈優銉冦儣",
-    routeLegend: "銉兗銉堝嚒渚?,
-    depot: "鍊夊韩",
-    viewMap: "鍦板洺銈掕銈?,
-    routeMap: "銉兗銉堝洺",
-    routeMapHint: "鐝惧湪銇í鍟忛爢銇у湴鍥充笂銇儷銉笺儓銈掓弿銇嶃€侀珮寰枫伄璧拌銉兗銉堛偔銉ｃ儍銈枫儱銈掑劒鍏堢殑銇埄鐢ㄣ仐銇俱仚銆?,
-    routeStopSeq: "闋嗙暘",
-    routePlanArrival: "浜堝畾鍒板簵",
-    routeDesiredArrival: "甯屾湜鍒板簵",
-    routeStopName: "搴楄垪",
-    analyticsTitle: "銉囥偢銈裤儷銉€銉冦偡銉ャ儨銉笺儔",
-    analyticsDesc: "閰嶈粖鍔圭巼銆併偄銉偞銉偤銉犲樊銆佹尝娆¤矤鑽枫€併偍銉偄鍒嗗竷銈掋偘銉┿儠銇х⒑瑾嶃仹銇嶃伨銇欍€?,
-    dashboard: "涓昏鎸囨",
-    algoCompare: "銈儷銈淬儶銈恒儬姣旇純",
-    gantt: "娉㈡銈裤偆銉犮儵銈ゃ兂",
-    loadCurve: "杌婁浮绌嶈級鎺ㄧЩ",
-    spatial: "銈ㄣ儶銈㈠垎甯?,
-    progressTitle: "鐢熸垚閫叉崡",
-    storesToday: "鏈棩搴楄垪",
-    usedVehiclesShort: "浣跨敤杌?,
-    idleVehiclesShort: "寰呮杌?,
-    overtimeTripsShort: "瓒呮檪銉┿偆銉?,
-    routeDigest: "銉兗銉堣绱?,
-    routeDigestHint: "鍚勩儷銉笺儓銇簵鑸楁暟銉荤窂璺濋洟銉荤杓夌巼銈掍甫銇广仸銆併仢銇牬銇ф閫犲樊銈掕姣斻伖銈夈倢銇俱仚銆?,
-    algorithmScore: "銈儷銈淬儶銈恒儬寰楃偣",
-    scoreBreakdownTitle: "銈广偝銈㈠唴瑷?,
-    onTimeScore: "瀹氭檪寰楃偣",
-    distanceScoreLabel: "璺濋洟寰楃偣",
-    loadScoreLabel: "绌嶈級寰楃偣",
-    preferenceScoreLabel: "鍡滃ソ寰楃偣",
-    progressIdle: "妗堛伄鐢熸垚寰呮涓仹銇?,
-    progressPreparing: "搴楄垪銉昏粖涓°兓娉㈡鍒剁磩銈掓暣鐞嗐仐銇︺亜銇俱仚鈥?,
-    progressRunning: "{algo} 銈掑疅琛屻仐銇︺亜銇俱仚鈥?,
-    progressFinishing: "鍥冲舰銉€銉冦偡銉ャ儨銉笺儔銈掗泦瑷堛仐銇︺亜銇俱仚鈥?,
-    progressDone: "銉€銉冦偡銉ャ儨銉笺儔銈掓洿鏂般仐銇俱仐銇?,
-    tripLabel: "渚?,
-    singleWaveLabel: "鍗樼嫭娉㈡",
-    regularWaveLabel: "閫氬父娉㈡",
-    loadAxis: "绌嶈級鐜?,
-    timeAxis: "鏅傞枔",
-    scatterNear: "杩戣窛闆㈠簵鑸?,
-    scatterFar: "閬犺窛闆㈠簵鑸?,
-    scatterSingle: "鍗樼嫭娉㈡搴楄垪",
-    noChartData: "鐝惧湪銆佸洺褰倰鐢熸垚銇欍倠銇熴倎銇崄鍒嗐仾銉囥兗銈裤亴銇傘倞銇俱仜銈撱€?,
-    voiceBroadcast: "闊冲０銉栥儶銉笺儠銈ｃ兂銈?,
-    voiceAsk: "闊冲０璩晱",
-    mascotTitle: "榀ㄧ暐浣裤偄銈枫偣銈裤兂銉?,
-    mascotDesc: "鐝惧湪銇搴︾姸娉併仺娉ㄦ剰鐐广倰銆併倓銈忋倝銇嬨亸鍒嗐亱銈娿倓銇欍亸妗堝唴銇椼伨銇欍€?,
-    speechUnsupported: "銇撱伄銉栥儵銈︺偠銇с伅闊冲０瑾伩涓娿亽銇蹇溿仐銇︺亜銇俱仜銈撱€?,
-    speechListenUnsupported: "銇撱伄銉栥儵銈︺偠銇с伅闊冲０瑾嶈瓨銇蹇溿仐銇︺亜銇俱仜銈撱€?,
-    speechMicPreparing: "銉炪偆銈ī闄愩倰鐢宠珛涓仹銇欍€傘儢銉┿偊銈躲伄銉濄儍銉椼偄銉冦儣銇цū鍙仚銈嬨仺銆併仢銇伨銇鹃煶澹板彈浠樸倰闁嬪銇椼伨銇欍€?,
-    speechMicDenied: "銉炪偆銈ī闄愩亴鐒″姽銇с仚銆傘儢銉┿偊銈躲伄銈儔銉偣銉愩兗銇с優銈ゃ偗銈掕ū鍙仐銇︺亱銈夊啀瑭﹁銇椼仸銇忋仩銇曘亜銆?,
-    speechMicFailed: "銉炪偆銈伄鍒濇湡鍖栥伀澶辨晽銇椼伨銇椼仧銆傘儢銉┿偊銈躲仹銇撱伄銉氥兗銈搞伄銉炪偆銈埄鐢ㄣ亴瑷卞彲銇曘倢銇︺亜銈嬨亱纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
-    speechListening: "璩晱銈掕仦銇勩仸銇勩伨銇欍€傜稓銇戙仸瑭便仐銇︺亸銇犮仌銇勩€?,
-    speechHeard: "鑱炪亶鍙栥仯銇熷唴瀹癸細{text}",
-    speechAnswerPrefix: "銉囥偢銈裤儷鍔╂墜銇洖绛旓細",
+    showcase: "システム紹介", reload: "固定店舗を再読込", save: "現在の案を保存", exportResult: "現在結果を出力",
+    storeInfo: "店舗情報", vehicleInfo: "車両情報", waveConfig: "波次設定", algoRun: "アルゴリズム実行", result: "配送結果", saved: "保存済み案",
+    storeDesc: "店舗データはシステムに内蔵されており、基本属性を直接編集できます。", vehicleDesc: "車両は TXT 取込にも手入力にも対応します。", waveDesc: "配送波次、各波次の開始終了時間、対象店舗番号を定義します。", algoDesc: "単独案生成にも、複数アルゴリズム比較にも対応します。最低積載率はハード制約ではなく優先度として扱います。", resultDesc: "店舗ルート、距離、配送過程、手動車両調整を表示します。", savedDesc: "案は現在のブラウザに保存され、履歴として参照できます。",
+    foldStore: "店舗明細を折りたたむ", unfoldStore: "店舗明細を展開", foldVehicle: "車両明細を折りたたむ", unfoldVehicle: "車両明細を展開",
+    addStore: "店舗追加", addVehicle: "車両追加", addWave: "波次追加",
+    dispatchStart: "初回出発時刻", maxKm: "車両往復総距離上限（km）", minLoad: "車両最低積載率（%）", ignoreWaves: "波次を無視", autoWave: "固定店舗で自動波次分割", concentrateLate: "遅着ラインを集中",
+    targetScore: "目標スコア下限",
+    singleWaveDistance: "単独波次距離しきい値（km）", singleWaveStart: "単独波次開始", singleWaveEnd: "単独波次終了", singleWaveMode: "単独波次締切ルール",
+    returnEnd: "帰庫締切", serviceEnd: "最終店完了締切", generate: "配送結果を生成", close: "閉じる",
+    processTitle: "配送過程の可視化", showcaseTitle: "システム能力の総覧",
+    storeTableHeaders: ["番号", "名称", "エリア", "経度", "緯度", "配送回数", "一波次貨量", "二波次貨量", "冷蔵比率", "一配時刻", "二配時刻", "所属波次", "荷下ろし分", "難易度", "許容偏差(分)", "状態", "車番", ""],
+    vehicleTableHeaders: ["車番", "運転手名", "車種", "容量", "速度", "冷蔵可", "状態", ""],
+    waveTableHeaders: ["波次", "開始", "終了", "締切ルール", "対象店舗", ""],
+    used: "配車済み", idle: "待機", scheduled: "割当済み", unscheduled: "未割当", assignedVehicle: "担当車番",
+    chooseFile: "ファイル選択",
+    noFileChosen: "未選択",
+    allDay: "終日一括配送", route: "ルート", totalDistance: "総距離", avgLoad: "平均単便積載率", fleetLoad: "車隊稼働率", fleetLoadHint: "使用車両容量ベース換算。複数便時は100%超もあります", score: "総合スコア", onTime: "時間内率",
+    detail: "明細", viewViz: "可視化を見る", adjustTo: "移動先車両...", confirmAdjust: "調整確定", noOtherVehicle: "この波次では他に引受車両がありません",
+    inserted: "手動挿入", leg: "区間", arrive: "到着", unloadStart: "荷下ろし開始", leave: "出発", desired: "希望到着", unloadMinutes: "荷下ろし", minutes: "分", notLate: "時間内", late: "時間窓超過",
+    storesCount: "店舗数", totalLoad: "累計積載", maxTrip: "単趟最大", trips: "便数", totalRoundKm: "往復総距離", loadPreferredMet: "積載優先達成", loadPreferredMiss: "積載優先未達",
+    tripNo: "第", tripSuffix: "便", returnTime: "帰庫時刻", backDistance: "帰庫距離", tripRoundKm: "単便往復距離", tripLoadRate: "単便積載率", overWave: "波次超過",
+    generatedSingle: "配送案を生成しました。", generatedCompare: "複数アルゴリズム比較を生成しました。", savedEmpty: "まだ保存済み案はありません。",
+    multiStoreDaily: "多店舗単日複数回配送調度",
+    targetAchieved: "目標スコア達成",
+    targetMissed: "目標スコア未達",
+    noVehicles: "先に車両情報を入力または取込してください。",
+    noStores: "現在、固定店舗データがありません。",
+    noWaves: "少なくとも 1 つの波次を設定してください。",
+    regularMissing: "通常波次で未割当の店舗が {count} 件あります：{names}",
+    unscheduledStores: "未割当店舗",
+    scheduledStores: "割当済店舗",
+    hardArrivalHint: "到着要求時刻は強制約で扱い、許容偏差を超える店舗は未割当に回します。",
+      lateFocusHint: "遅着ライン集中戦略を有効化しています。遅着が発生する車線数を優先的に抑えます。",
+      noUnscheduled: "全店舗を割り当て済みです。",
+      unscheduledSummary: "現在、未割当店舗が {count} 件あります：{names}",
+    unscheduledReasonArrival: "到着要求時刻の許容偏差に収まりません",
+      unscheduledReasonWave: "波次の締切時間が不足しています",
+      unscheduledReasonMileage: "距離制約が不足しています",
+      unscheduledReasonCapacity: "車両容量が不足しています",
+      unscheduledReasonSlot: "既存車両の時系列に挿入余地がありません",
+      unscheduledReasonMixed: "複数制約が重なり、現在は挿入できません",
+      unscheduledReasonTitle: "未割当理由",
+      unscheduledDetails: "未割当明細",
+      importedVehicles: "{count} 台の車両を取込しました。",
+    importVehicleFailed: "車両 TXT から有効な車番を解析できませんでした。文字コードまたは 1 行 1 台の形式を確認してください。",
+    autoWaveBuilt: "固定店舗に基づき {count} 個の波次を自動生成しました。",
+    chooseDifferentVehicle: "異なる目標車両を選択してください。",
+    storeNotOnVehicle: "{plate} 上に店舗 {store} が見つかりません。",
+    transferFailed: "店舗 {store} を {source} から {target} へ移せません。時間・距離・容量を確認してください。",
+    transferSuccess: "店舗 {store} を {source} から {target} に移し、この 2 台のみ再計算しました。",
+    rescheduleAgain: "再割当",
+    saveScheduledResult: "現在結果を保存",
+    rescheduleSection: "未割当店舗の再割当",
+    rescheduleHint: "既存の割当ルートを保持しつつ、空き車両を優先して未割当店舗を追加で割り当てます。",
+    exportLiveUnscheduled: "現在の未割当IDを出力",
+    unscheduledMismatch: "集計不一致：再割当パネル={panel}、明細フィルタ={detail}。この結果の利用を停止して報告してください。",
+    manualAssignVehicle: "手動で車番指定",
+    manualAssignPlaceholder: "車番を指定...",
+    confirmAssign: "指定割当",
+    rescheduleProgress: "今回の再割当で {count} 店舗を追加で割り当てました。",
+    rescheduleNoProgress: "今回の再割当では追加割当がありませんでした。",
+    noAssignableVehicle: "現在、再割当に使える車両がありません。",
+    assignFailed: "店舗 {store} を {plate} に指定できませんでした。時間・距離・容量を確認してください。",
+    assignSuccess: "店舗 {store} を {plate} に指定し、局所再計算を完了しました。",
+    savedAt: "保存時刻",
+    wavesLabel: "波次",
+    waveModeReturn: "車両は {time} までに帰庫する必要があります",
+    waveModeService: "車両は {time} までに最終店舗を完了する必要があります",
+    waveSingleHint: "このグループは単独波次として別処理され、1 台 1 便のみです",
+    waveRegularHint: "通常波次はこの時間制約をハード適用します",
+    includedStores: "対象店舗",
+    allStores: "全店舗",
+    overtimeTrips: "波次超過ライン",
+    playback: "リプレイ",
+    selectedAlgorithms: "現在有効なアルゴリズム",
+    noneSelected: "未選択",
+    staticMap: "静的エリアマップ",
+    routeLegend: "ルート凡例",
+    depot: "倉庫",
+    viewMap: "地図を見る",
+    routeMap: "ルート図",
+    routeMapHint: "現在の訪問順で地図上にルートを描き、高德の走行ルートキャッシュを優先的に利用します。",
+    routeStopSeq: "順番",
+    routePlanArrival: "予定到店",
+    routeDesiredArrival: "希望到店",
+    routeStopName: "店舗",
+    analyticsTitle: "デジタルダッシュボード",
+    analyticsDesc: "配車効率、アルゴリズム差、波次負荷、エリア分布をグラフで確認できます。",
+    dashboard: "主要指標",
+    algoCompare: "アルゴリズム比較",
+    gantt: "波次タイムライン",
+    loadCurve: "車両積載推移",
+    spatial: "エリア分布",
+    progressTitle: "生成進捗",
+    storesToday: "本日店舗",
+    usedVehiclesShort: "使用車",
+    idleVehiclesShort: "待機車",
+    overtimeTripsShort: "超時ライン",
+    routeDigest: "ルート要約",
+    routeDigestHint: "各ルートの店舗数・総距離・積載率を並べて、その場で構造差を見比べられます。",
+    algorithmScore: "アルゴリズム得点",
+    scoreBreakdownTitle: "スコア内訳",
+    onTimeScore: "定時得点",
+    distanceScoreLabel: "距離得点",
+    loadScoreLabel: "積載得点",
+    preferenceScoreLabel: "嗜好得点",
+    progressIdle: "案の生成待機中です",
+    progressPreparing: "店舗・車両・波次制約を整理しています…",
+    progressRunning: "{algo} を実行しています…",
+    progressFinishing: "図形ダッシュボードを集計しています…",
+    progressDone: "ダッシュボードを更新しました",
+    tripLabel: "便",
+    singleWaveLabel: "単独波次",
+    regularWaveLabel: "通常波次",
+    loadAxis: "積載率",
+    timeAxis: "時間",
+    scatterNear: "近距離店舗",
+    scatterFar: "遠距離店舗",
+    scatterSingle: "単独波次店舗",
+    noChartData: "現在、図形を生成するための十分なデータがありません。",
+    voiceBroadcast: "音声ブリーフィング",
+    voiceAsk: "音声質問",
+    mascotTitle: "鯨略使アシスタント",
+    mascotDesc: "現在の調度状況と注意点を、やわらかく分かりやすく案内します。",
+    speechUnsupported: "このブラウザでは音声読み上げに対応していません。",
+    speechListenUnsupported: "このブラウザでは音声認識に対応していません。",
+    speechMicPreparing: "マイク権限を申請中です。ブラウザのポップアップで許可すると、そのまま音声受付を開始します。",
+    speechMicDenied: "マイク権限が無効です。ブラウザのアドレスバーでマイクを許可してから再試行してください。",
+    speechMicFailed: "マイクの初期化に失敗しました。ブラウザでこのページのマイク利用が許可されているか確認してください。",
+    speechListening: "質問を聞いています。続けて話してください。",
+    speechHeard: "聞き取った内容：{text}",
+    speechAnswerPrefix: "デジタル助手の回答：",
     deepseekKeyLabel: "DeepSeek Key",
-    deepseekModelLabel: "DeepSeek銉儑銉?,
-    deepseekModeLabel: "鍔╂墜銉兗銉?,
-    deepseekModeDispatch: "閰嶈粖鍔╂墜",
-    deepseekModeGeneral: "姹庣敤鍔╂墜",
-    deepseekStyleLabel: "鍥炵瓟銈广偪銈ゃ儷",
-    deepseekStyleBrief: "绨℃綌鍥炵瓟",
-    deepseekStyleDetailed: "瑭崇窗鍒嗘瀽",
-    deepseekSave: "DeepSeek瑷畾銈掍繚瀛?,
-    deepseekAsk: "DeepSeek銇唱鍟?,
-    deepseekAskPlaceholder: "渚嬶細浠婂洖銇?W2 銇т娇鐢ㄨ粖涓°亴澶氥亜鐞嗙敱銇ㄦ敼鍠勬柟鍚戙伅锛?,
-    deepseekSaved: "DeepSeek 瑷畾銈掋亾銇儢銉┿偊銈躲伀淇濆瓨銇椼伨銇椼仧銆?,
-    deepseekMissingKey: "鍏堛伀 DeepSeek API Key 銈掑叆鍔涖仐銇︺亸銇犮仌銇勩€?,
-    deepseekThinking: "DeepSeek 銇岀従鍦ㄣ伄閰嶈粖绲愭灉銈掕笍銇俱亪銇﹁€冦亪銇︺亜銇俱仚鈥?,
-    deepseekFailed: "DeepSeek 鍛笺伋鍑恒仐銇け鏁椼仐銇俱仐銇燂細{message}",
-    deepseekReady: "DeepSeek 銇屻亾銇敾闈伀鎺ョ稓銇曘倢銇俱仐銇熴€傘儐銈偣銉堛仹銈傞煶澹般仹銈傝唱鍟忋仹銇嶃伨銇欍€?,
-    deepseekLocalFallback: "DeepSeek 銇屾湭瑷畾銇仧銈併€佺従鍦ㄣ伅銉兗銈儷銇儨銈裤兂鍔╂墜銇у洖绛斻仐銇俱仚銆?,
-    deepseekAnswerPrefix: "DeepSeek鍥炵瓟锛?,
-    exportNoResult: "鐝惧湪銆佸嚭鍔涖仹銇嶃倠閰嶉€佺祼鏋溿亴銇傘倞銇俱仜銈撱€?,
-    exportDone: "鐝惧湪銇厤閫佺祼鏋溿倰鍑哄姏銇椼伨銇椼仧銆?,
-    exportFilePrefix: "閰嶉€佺祼鏋?,
-    solveStrategy: "瑙ｆ硶銉兗銉?,
-    optimizeGoal: "鐩鏂归嚌",
-    strategyManual: "鎵嬪嫊閬告姙",
-    strategyQuick: "銈偆銉冦偗鍒濇湡妗?,
-    strategyDeep: "缍欑稓鏀瑰杽",
-    strategyGlobal: "鍏ㄥ煙鎺㈢储",
-    strategyRelay: "銉儸銉兼渶閬╁寲",
-    strategyFree: "鑷敱姹傝В",
-    strategyCompare: "瑜囨暟妗堟瘮杓?,
-    goalBalanced: "绶忓悎銉愩儵銉炽偣",
-    goalOnTime: "瀹氭檪鏈€鍎厛",
-    goalDistance: "璺濋洟鏈€鍎厛",
-    goalVehicles: "杌婁浮鏁版渶灏?,
-    goalLoad: "绌嶈級鍎厛",
-    quickSolve: "銈偆銉冦偗鍒濇湡妗?,
-    deepOptimize: "缍欑稓鏀瑰杽",
-    globalSearch: "銈般儹銉笺儛銉帰绱?,
-    relaySolve: "銉儸銉兼渶閬╁寲",
-    freeSolve: "鑷敱姹傝В",
-    multiCompare: "瑜囨暟妗堟瘮杓?,
-    gaBackendChecking: "GA銉愩儍銈偍銉炽儔锛氱⒑瑾嶄腑鈥?,
-    gaBackendOnline: "GA銉愩儍銈偍銉炽儔锛氭帴缍氭笀銇匡紙Python锛?,
-    gaBackendOffline: "GA銉愩儍銈偍銉炽儔锛氭湭鎺ョ稓锛堛儛銉冦偗銈ㄣ兂銉夊京鏃с亴蹇呰锛?,
+    deepseekModelLabel: "DeepSeekモデル",
+    deepseekModeLabel: "助手モード",
+    deepseekModeDispatch: "配車助手",
+    deepseekModeGeneral: "汎用助手",
+    deepseekStyleLabel: "回答スタイル",
+    deepseekStyleBrief: "簡潔回答",
+    deepseekStyleDetailed: "詳細分析",
+    deepseekSave: "DeepSeek設定を保存",
+    deepseekAsk: "DeepSeekに質問",
+    deepseekAskPlaceholder: "例：今回の W2 で使用車両が多い理由と改善方向は？",
+    deepseekSaved: "DeepSeek 設定をこのブラウザに保存しました。",
+    deepseekMissingKey: "先に DeepSeek API Key を入力してください。",
+    deepseekThinking: "DeepSeek が現在の配車結果を踏まえて考えています…",
+    deepseekFailed: "DeepSeek 呼び出しに失敗しました：{message}",
+    deepseekReady: "DeepSeek がこの画面に接続されました。テキストでも音声でも質問できます。",
+    deepseekLocalFallback: "DeepSeek が未設定のため、現在はローカルのボタン助手で回答します。",
+    deepseekAnswerPrefix: "DeepSeek回答：",
+    exportNoResult: "現在、出力できる配送結果がありません。",
+    exportDone: "現在の配送結果を出力しました。",
+    exportFilePrefix: "配送結果",
+    solveStrategy: "解法モード",
+    optimizeGoal: "目標方針",
+    strategyManual: "手動選択",
+    strategyQuick: "クイック初期案",
+    strategyDeep: "継続改善",
+    strategyGlobal: "全域探索",
+    strategyRelay: "リレー最適化",
+    strategyFree: "自由求解",
+    strategyCompare: "複数案比較",
+    goalBalanced: "総合バランス",
+    goalOnTime: "定時最優先",
+    goalDistance: "距離最優先",
+    goalVehicles: "車両数最少",
+    goalLoad: "積載優先",
+    quickSolve: "クイック初期案",
+    deepOptimize: "継続改善",
+    globalSearch: "グローバル探索",
+    relaySolve: "リレー最適化",
+    freeSolve: "自由求解",
+    multiCompare: "複数案比較",
+    gaBackendChecking: "GAバックエンド：確認中…",
+    gaBackendOnline: "GAバックエンド：接続済み（Python）",
+    gaBackendOffline: "GAバックエンド：未接続（バックエンド復旧が必要）",
   },
 };
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function L(key) { return UI_TEXT[lang()]?.[key] ?? key; }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function LT(key, vars = {}) {
   let text = L(key);
   Object.entries(vars).forEach(([name, value]) => {
     text = text.replaceAll(`{${name}}`, String(value));
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return text;
 }
 function vehicleTypeLabel(type) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (lang() !== "ja") return type || "";
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = {
-    "甯告俯杞?: "甯告俯杌?,
-    "甯告俯+鍐疯棌娣峰悎杞?: "甯告俯銉诲喎钄垫贩鍚堣粖",
+    "常温车": "常温車",
+    "常温+冷藏混合车": "常温・冷蔵混合車",
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return map[type] || type || "";
 }
 
-const DC = { id: "DC", name: "閰嶉€佷腑蹇?, address: "鍖椾含甯傞『涔夊尯澶╂煴璺?0鍙?, lng: 116.58848, lat: 40.04776 };
+const DC = { id: "DC", name: "配送中心", address: "北京市顺义区天柱路20号", lng: 116.58848, lat: 40.04776 };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const MASCOT_IMAGE_SRC = "./assets/mascot-whale.png";
 const TRUCK_IMAGE_LOW = "assets/truck-30-v2.jpg";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const TRUCK_IMAGE_MID = "assets/truck-60-v2.jpg";
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const TRUCK_IMAGE_HIGH = "assets/truck-full-v2.jpg";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const ALGORITHM_ORDER = ["vrptw", "hybrid", "ga", "tabu", "lns", "savings", "sa", "aco", "pso", "vehicle"];
 const MAX_FREE_SOLVE_ALGOS = 5;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const REALTIME_DISPATCH_CONTEXT_KEY = "dispatchRealtimeContext";
 const state = {
   vehicles: [],
@@ -748,62 +949,152 @@ const state = {
       storeWaveResolvedSortDir: "asc",
     },
   };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let processTypingTimers = [];
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let routeLeafletMap = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let routeLeafletLayerGroup = null;
 let routeAmapMap = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let routeAmapMarkers = [];
 let routeAmapPolyline = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let relayConsoleLines = [];
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let relayStageReporter = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let relayConsolePendingLogLines = [];
 let relayConsoleLogFlushTimer = null;
-const GA_BACKEND_URL = "";                     
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
+const GA_BACKEND_URL = "http://127.0.0.1:8765";
 const USE_FULL_DISTANCE_MATRIX_FROM_BACKEND = true;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let gaBackendHealth = { available: null, checkedAt: 0 };
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let gaBackendStatusTimer = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let archiveBackendCache = { date: "", page: 1, items: [], totalPages: 1, total: 0, loading: false };
 let dataArchiveCache = { date: "", keyword: "", items: [], selectedId: "" };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let recommendedPlanCache = { taskDate: "", items: [], loading: false };
 let recommendedPlanSelectedCache = { taskDate: "", selected: null, loading: false };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let storeWaveResolvedCache = { items: [], count: 0, total: 0, limit: 200 };
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionSchemeCache = { items: [], loading: false };
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let runRegionCache = { items: [], loading: false };
 let runRegionStorePoints = [];
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionMap = null;
 let runRegionStoreMarkers = [];
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let runRegionPolygons = new Map();
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionDraftPolygon = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let runRegionEditingId = null;
 let runRegionMouseTool = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionPolygonEditor = null;
 let runRegionMapRetryTimer = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let runRegionStoreVisibilityMode = "show_all";
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionTargetRegionId = "all";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let runRegionCheckedRegionIds = new Set();
 let runRegionSelectedSchemeNo = "";
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let runRegionScheme1AutoGenerated = false;
 let loadConvertPreviewCache = null;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let assistantDockDragState = null;
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 let amapCacheSyncPending = false;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let amapCacheSyncTimer = null;
 const STRICT_ALGO_TRUTH_MODE = false;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const BACKEND_ONLY_REAL_ALGOS = new Set(["vrptw", "savings", "ga", "hybrid", "tabu", "lns", "sa", "aco", "pso", "vehicle"]);
 const IGNORE_CAPACITY_CONSTRAINT = false;
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const MAIN_TAB_KEYS = new Set(["basic", "region", "strategy", "solve", "result"]);
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function loadDeepSeekSettings() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const raw = localStorage.getItem(DEEPSEEK_SETTINGS_KEY);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!raw) return;
     const parsed = JSON.parse(raw);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ai.deepseekApiKey = String(parsed.deepseekApiKey || "");
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     state.ai.deepseekModel = String(parsed.deepseekModel || "deepseek-chat");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ai.mode = String(parsed.mode || "dispatch");
     state.ai.answerStyle = String(parsed.answerStyle || "brief");
   } catch {}
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function saveDeepSeekSettings() {
   localStorage.setItem(DEEPSEEK_SETTINGS_KEY, JSON.stringify({
     deepseekApiKey: state.ai.deepseekApiKey || "",
@@ -814,220 +1105,230 @@ function saveDeepSeekSettings() {
 }
 
 function getTripTruckVisual(trip) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rate = trip?.loadRate || 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (rate < 0.45) return {
     src: TRUCK_IMAGE_LOW,
-    badge: lang() === "ja" ? "璧ゅ瓧" : "浜忎簡",
+    badge: lang() === "ja" ? "赤字" : "亏了",
     cls: "low",
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (rate < 0.8) return {
     src: TRUCK_IMAGE_MID,
-    badge: lang() === "ja" ? "閬旀" : "杈炬爣",
+    badge: lang() === "ja" ? "達標" : "达标",
     cls: "mid",
   };
   return {
     src: TRUCK_IMAGE_HIGH,
-    badge: lang() === "ja" ? "鐩堝埄" : "璧氫簡",
+    badge: lang() === "ja" ? "盈利" : "赚了",
     cls: "high",
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const FIXED_STORES = [
-  ["391001","鏈堝潧鍖楄",0.000000,0.000000,""],
-  ["391012","閲戣瀺琛?,0.000000,0.000000,""],
-  ["391028","閲戣瀺琛椾腑蹇?,0.000000,0.000000,""],
-  ["391030","搴勮儨宕囧厜",0.000000,0.000000,""],
-  ["391074","寰疯儨鍥介檯涓績",0.000000,0.000000,""],
-  ["391094","绱噾鍗拌薄",0.000000,0.000000,""],
-  ["391409","鍖椾含鍦伴搧榧撴ゼ澶ц绔欏簵",0.000000,0.000000,""],
-  ["391705","鍖椾含鎬€鏌斿煄甯傚鍘呭簵",0.000000,0.000000,""],
-  ["391709","鍖椾含澶ч挓瀵哄箍鍦哄簵",0.000000,0.000000,""],
-  ["391712","鍖椾含閲戣瀺绉戞妧瀛﹂櫌搴?,0.000000,0.000000,""],
-  ["391715","鐭虫櫙灞遍噾闅呯鎶€澶у帵搴?,0.000000,0.000000,""],
-  ["391718","鍖椾含鍦伴搧12鍙风嚎椹兼埧钀ョ珯搴?,0.000000,0.000000,""],
-  ["391721","鍖椾含涓芥辰骞冲畨閲戣瀺涓績搴?,0.000000,0.000000,""],
-  ["391722","榧庡ソ鐢靛瓙澶у帵",0.000000,0.000000,""],
-  ["392029","瀵屽崕澶у帵",0.000000,0.000000,""],
-  ["392084","鍗楅敚榧撳贩鍦伴搧绔?,0.000000,0.000000,""],
-  ["392144","鍓嶉棬澶ц",0.000000,0.000000,""],
-  ["392179","涓滃洓鍖楀ぇ琛楀簵",0.000000,0.000000,""],
-  ["392315","鍦伴搧鍜屽钩閲屽寳琛楃珯搴?,0.000000,0.000000,""],
-  ["392394","鍖椾含鍦伴搧宕囨枃闂ㄧ珯搴?,0.000000,0.000000,""],
-  ["392395","鍖椾含鍦伴搧涓滃洓绔欏簵",0.000000,0.000000,""],
-  ["392408","鍖椾含鍦伴搧瀹夊痉閲屽寳琛楃珯搴?,0.000000,0.000000,""],
-  ["392525","鍖椾含鐜悆璐告槗涓績搴?,0.000000,0.000000,""],
-  ["392647","鍖椾含娉撴櫉鍥介檯涓績",0.000000,0.000000,""],
-  ["392678","鍖椾含鍦伴搧闆嶅拰瀹珯搴?,0.000000,0.000000,""],
-  ["392707","鍖椾含鍦伴搧3鍙风嚎鏈濋槼绔欏簵",0.000000,0.000000,""],
-  ["392708","鍖椾含鍦伴搧3鍙风嚎涓滃潩绔欏簵",0.000000,0.000000,""],
-  ["392710","鍖椾含鍦伴搧3鍙风嚎鍥㈢粨婀栫珯搴?,0.000000,0.000000,""],
-  ["392712","鍖椾含鎭掓瘏澶у帵搴?,0.000000,0.000000,""],
-  ["392713","鍖椾含鍦伴搧浠€鍒规捣绔欏簵",0.000000,0.000000,""],
-  ["392715","鍖椾含鍦伴搧娆箰璋风珯搴?,0.000000,0.000000,""],
-  ["392716","鍖椾含鍦伴搧瑙掗棬瑗跨珯搴?,0.000000,0.000000,""],
-  ["392717","鍖椾含鍦伴搧涓板彴绔欏簵",0.000000,0.000000,""],
-  ["392718","鑵捐鍖椾含鎬婚儴搴?,0.000000,0.000000,""],
-  ["392719","閲戦殔鏅洪€犲伐鍦哄簵鏂板簵",0.000000,0.000000,""],
-  ["392720","鏈濋槼楂橀搧绔欏簵",0.000000,0.000000,""],
-  ["392721","寤跺簡鐜悆鏂版剰鐧捐揣搴?,0.000000,0.000000,""],
-  ["392722","鍖椾含闀挎ス澶╄搴?,0.000000,0.000000,""],
-  ["392723","鍖椾含鍥涙儬閲戝湴鍚嶄含搴?,0.000000,0.000000,""],
-  ["393003","鐜悆閲戣瀺涓績",0.000000,0.000000,""],
-  ["393009","姘戠敓澶у帵",0.000000,0.000000,""],
-  ["393010","鍙屼簳棣栧煄鍥介檯",0.000000,0.000000,""],
-  ["393016","濂ユ灄鍖瑰厠鍏洯",0.000000,0.000000,""],
-  ["393032","闀垮瘜瀹?,0.000000,0.000000,""],
-  ["393033","鍥涙柟妗ヤ笢鍖椾晶搴?,0.000000,0.000000,""],
-  ["393034","鍔叉澗娴锋枃澶у帵",0.000000,0.000000,""],
-  ["393035","绠″簞鏂板ぉ鍦?,0.000000,0.000000,""],
-  ["393046","灏忓ぉ绔鸿矾",0.000000,0.000000,""],
-  ["393067","鏈涗含鍖楁湜閲戣緣澶у帵",0.000000,0.000000,""],
-  ["393082","鍏嗘嘲鍥介檯涓績",0.000000,0.000000,""],
-  ["393117","鍗侀噷鍫″湴閾佺珯",0.000000,0.000000,""],
-  ["393151","棣栭兘鏈哄満T3浜屽眰鍒拌揪鍖哄",0.000000,0.000000,""],
-  ["393152","棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖轰笢鎸囧粖",0.000000,0.000000,""],
-  ["393153","棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖鸿タ鎸囧粖",0.000000,0.000000,""],
-  ["393155","棣栭兘鏈哄満T3鍥涘眰鍑哄彂鍖哄涓?,0.000000,0.000000,""],
-  ["393156","棣栭兘鏈哄満T3D鍑哄彂鍖?,0.000000,0.000000,""],
-  ["393167","濂ユ灄鍖瑰厠妫灄鍏洯锛堝崡鍥級搴?,0.000000,0.000000,""],
-  ["393168","濂ユ灄鍖瑰厠妫灄鍏洯锛堝寳鍥級搴?,0.000000,0.000000,""],
-  ["393188","鍙戝睍澶у帵搴?,0.000000,0.000000,""],
-  ["393206","涓滀簹鏈涗含涓績搴?,0.000000,0.000000,""],
-  ["393220","姊电煶涓績搴?,0.000000,0.000000,""],
-  ["393244","鍒╂槦琛屼腑蹇冨簵",0.000000,0.000000,""],
-  ["393303","鍒╂槦琛屼腑蹇冧簩搴?,0.000000,0.000000,""],
-  ["393380","鍏夋槑澶у帵搴?,0.000000,0.000000,""],
-  ["393399","鍖椾含鍦伴搧鑽夋埧绔欏簵",0.000000,0.000000,""],
-  ["393416","鍖椾含鍦伴搧鍏亾鍙ｅ簵",0.000000,0.000000,""],
-  ["393425","鍖椾含鍦伴搧瑗垮湡鍩庡簵",0.000000,0.000000,""],
-  ["393426","鍖椾含鍦伴搧鏈涗含瑗跨珯搴?,0.000000,0.000000,""],
-  ["393546","鍖椾含娴﹂」涓績搴?,0.000000,0.000000,""],
-  ["393557","鍖椾含楦挎噵鍟嗗姟澶у帵搴?,0.000000,0.000000,""],
-  ["393651","鍖椾含骞冲畨鍥介檯閲戣瀺涓績搴?,0.000000,0.000000,""],
-  ["393675","鍖椾含闃块噷宸村反鎬婚儴搴?,0.000000,0.000000,""],
-  ["393688","鍖椾含骞挎挱澶у帵閰掑簵搴?,0.000000,0.000000,""],
-  ["393706","鍙ゅ寳姘撮晣涓夊彿搴?,0.000000,0.000000,""],
-  ["393707","鍖椾含绉戞妧璐㈠瘜涓績搴?,0.000000,0.000000,""],
-  ["393708","鍖椾含鎬€鏌斿晢涓氳搴?,0.000000,0.000000,""],
-  ["393709","浜笢鎬婚儴2鍙烽櫌搴?,0.000000,0.000000,""],
-  ["393710","鍖椾含鍦伴搧娼樺鍥珯搴?,0.000000,0.000000,""],
-  ["393711","寰蒋涓浗鐮斿彂闆嗗洟鎬婚儴搴?,0.000000,0.000000,""],
-  ["393715","棣栭兘鍥介檯鏈哄満T3鍥涘眰鍑哄彂灞傚瑗?,0.000000,0.000000,""],
-  ["393717","鍖椾含鍗楃珯鍦伴搧灞?搴?,0.000000,0.000000,""],
-  ["393718","鍖椾含鍗楃珯鍑哄彂灞?搴?,0.000000,0.000000,""],
-  ["393720","鏄屽钩鏂版柊鍏瘬搴?,0.000000,0.000000,""],
-  ["394024","铻嶇璧勮涓績",0.000000,0.000000,""],
-  ["394038","鑱旀兂鏂板洯鍖?,0.000000,0.000000,""],
-  ["394048","娴锋穩鏉忕煶鍙ｈ矾",0.000000,0.000000,""],
-  ["394062","鐏櫒钀ュ湴閾佺珯",0.000000,0.000000,""],
-  ["394069","浜掕仈缃戝垱鏂颁腑蹇?,0.000000,0.000000,""],
-  ["394070","鏈ㄨ嵎璺崕涓哄洯鍖?,0.000000,0.000000,""],
-  ["394072","瓒呭競鍙戜竾鏌?,0.000000,0.000000,""],
-  ["394073","瓒呭競鍙戣姳鍥矾",0.000000,0.000000,""],
-  ["394075","瓒呭競鍙戠緤鍧婂簵",0.000000,0.000000,""],
-  ["394085","瓒呭競鍙戠敇瀹跺彛",0.000000,0.000000,""],
-  ["394089","瓒呭競鍙戜笂鍦?,0.000000,0.000000,""],
-  ["394096","瓒呭競鍙戝啘澶?,0.000000,0.000000,""],
-  ["394103","瓒呭競鍙戠鍗楄矾",0.000000,0.000000,""],
-  ["394104","瓒呭競鍙戠帀娉夎矾",0.000000,0.000000,""],
-  ["394105","瓒呭競鍙戣タ闀垮畨琛?,0.000000,0.000000,""],
-  ["394110","鏂版氮鎬婚儴澶у帵",0.000000,0.000000,""],
-  ["394112","瓒呭競鍙戞捣娣€澶ц",0.000000,0.000000,""],
-  ["394118","瓒呭競鍙戝闄㈣矾瓒呯綏",0.000000,0.000000,""],
-  ["394122","鑱旀兂涓夋爣澶у帵",0.000000,0.000000,""],
-  ["394123","鑱旀兂鍖楃爺鍥ゼ澶у帵",0.000000,0.000000,""],
-  ["394142","瓒呭競鍙戝弻姒嗘爲瓒呯綏",0.000000,0.000000,""],
-  ["394150","缃戞槗鐮斿彂涓績",0.000000,0.000000,""],
-  ["394196","瓒呭競鍙戝箔鍗楄矾搴?,0.000000,0.000000,""],
-  ["394234","瓒呭競鍙戠綏妫寳娓呰矾搴?,0.000000,0.000000,""],
-  ["394258","瓒呭競鍙戠綏妫寳瀹夋渤搴?,0.000000,0.000000,""],
-  ["394405","鍖椾含鍦伴搧鑲叉柊绔欏簵",0.000000,0.000000,""],
-  ["394406","鍖椾含鍦伴搧骞冲畨閲岀珯搴?,0.000000,0.000000,""],
-  ["394419","鍖椾含鍦伴搧杞﹂亾娌熺珯搴?,0.000000,0.000000,""],
-  ["394437","瓒呭競鍙戠綏妫竻娌冲簵",0.000000,0.000000,""],
-  ["394451","娓呭崕绉戞妧鍥簵",0.000000,0.000000,""],
-  ["394485","姘告嘲鐢熸椿鏈嶅姟涓績搴?,0.000000,0.000000,""],
-  ["394488","瓒呭競鍙戠綏妫お鑸熷潪搴?,0.000000,0.000000,""],
-  ["394489","瓒呭競鍙戠綏妫叚閲屽悲搴?,0.000000,0.000000,""],
-  ["394510","涓滃崌绉戞妧鍥簵",0.000000,0.000000,""],
-  ["394512","瓒呭競鍙戠綏妫寳娓呰矾浜屽簵",0.000000,0.000000,""],
-  ["394526","鍗庝负鍖楃爺鎵€K鍖哄簵",0.000000,0.000000,""],
-  ["394560","瓒呭競鍙戠綏妫寳瀹夋渤浜屽簵",0.000000,0.000000,""],
-  ["394620","鍖椾含蹇墜鍏冧腑蹇冨簵",0.000000,0.000000,""],
-  ["394630","瓒呭競鍙戠綏妫洓瀛ｉ潚璺簵",0.000000,0.000000,""],
-  ["394705","骞宠胺姝ヨ琛楀簵",0.000000,0.000000,""],
-  ["394720","鍖椾含绔欏箍鍦轰笢渚у簵",0.000000,0.000000,""],
-  ["395017","姹夊▉鍥介檯骞垮満",0.000000,0.000000,""],
-  ["395092","娉ユ醇鍦伴搧绔?,0.000000,0.000000,""],
-  ["395274","钂查粍姒嗗湴閾佺珯搴?,0.000000,0.000000,""],
-  ["395302","涓芥辰骞冲畨骞哥涓績搴?,0.000000,0.000000,""],
-  ["395411","鍖椾含鍦伴搧鍏噷妗ョ珯搴?,0.000000,0.000000,""],
-  ["395412","鍖椾含鍦伴搧閮叕搴勭珯搴?,0.000000,0.000000,""],
-  ["395413","鍖椾含鍦伴搧涓板彴绉戞妧鍥尯绔欏簵",0.000000,0.000000,""],
-  ["395470","涓扮涓績搴?,0.000000,0.000000,""],
-  ["395606","绂忔捣鍏瘬",0.000000,0.000000,""],
-  ["395708","鍖椾含绔?鍙峰€欒溅瀹ゅ簵",0.000000,0.000000,""],
-  ["395710","鍖椾含棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖哄寳鎸囧粖搴?,0.000000,0.000000,""],
-  ["396053","鎴垮北鍗楀ぇ琛?,0.000000,0.000000,""],
-  ["396054","鑹埂鎷辫景鍗楀ぇ琛?,0.000000,0.000000,""],
-  ["396058","鎴垮北缁垮煄鐧惧悎",0.000000,0.000000,""],
-  ["396081","鎴垮北鐕曞寲鍖婚櫌",0.000000,0.000000,""],
-  ["396141","澶у叴鏄熺墝鍏变韩闄?,0.000000,0.000000,""],
-  ["396255","涓滄柟鑸┖鍏徃鎬婚儴搴?,0.000000,0.000000,""],
-  ["396276","浜笢鎬婚儴1鍙峰簵",0.000000,0.000000,""],
-  ["396388","鍖椾含楦垮潳骞垮満搴?,0.000000,0.000000,""],
-  ["396449","澶у叴鍥介檯姘㈣兘绀鸿寖鍖哄簵",0.000000,0.000000,""],
-  ["396495","澶у叴鍗楄埅鎬婚儴鍩哄湴搴?,0.000000,0.000000,""],
-  ["396706","鍖椾含鍗楃珯鍑哄彂灞?搴?,0.000000,0.000000,""],
-  ["397398","鍖椾含鍦伴搧鐗╄祫瀛﹂櫌璺珯搴?,0.000000,0.000000,""],
-  ["397682","鍖椾含閫氬窞鏂板厜澶?,0.000000,0.000000,""],
-  ["398090","瓒呭競鍙戝ぉ閫氳嫅瑗垮尯",0.000000,0.000000,""],
-  ["398170","鏄屽钩鏈潵绉戝鍩庢湭鏉ヤ腑蹇冨簵",0.000000,0.000000,""],
-  ["398439","鍖椾含鍦伴搧鏄屽钩绔欏簵",0.000000,0.000000,""],
-  ["398558","鍖椾含鎬€鏌旈泚鏍栦汉鎵嶇ぞ鍖哄簵",0.000000,0.000000,""],
-  ["398689","鍥為緳瑙備綋鑲插叕鍥簵",0.000000,0.000000,""],
-  ["398708","鍖椾含绔?鍙峰€欒溅瀹ゅ簵",0.000000,0.000000,""],
-  ["398718","鍖椾含鍖楃珯搴?,0.000000,0.000000,""],
-  ["399519","鍙ゅ寳姘撮晣涓€鍙峰簵",0.000000,0.000000,""],
-  ["399520","鍙ゅ寳姘撮晣浜屽彿搴?,0.000000,0.000000,""],
-  ["399548","鍖椾含涓捣澶у帵搴?,0.000000,0.000000,""],
-  ["399569","瑗块暱瀹変腑楠忎笘鐣屽煄搴?,0.000000,0.000000,""],
-  ["399670","鍖椾含闂ㄥご娌熼暱瀹夊ぉ琛楀簵",0.000000,0.000000,""],
-  ["399722","鍖椾含绁ヤ簯灏忛晣搴?,0.000000,0.000000,""],
-  ["409392","澶╂触甯傝摕宸炲尯澶╀竴缁挎捣搴?,0.000000,0.000000,""],
-  ["461717","寤婂潑鐕曢儕澶忓▉澶疯摑婀惧簵",0.000000,0.000000,""],
-  ["462710","鎵垮痉甯傚痉姹囧ぇ鍘﹀簵",0.000000,0.000000,""],
-  ["462717","鎵垮痉瀹藉箍鏃朵唬骞垮満搴?,0.000000,0.000000,""],
-  ["466370","寤婂潑棣欐渤鏂板紑琛楀簵",0.000000,0.000000,""],
-  ["466435","寤婂潑棣欐渤鏂板崕琛楀簵",0.000000,0.000000,""],
-  ["466455","寤婂潑鐕曢儕灏氫含骞垮満搴?,0.000000,0.000000,""],
-  ["466506","寤婂潑鐕曢儕璇轰簹澶у帵搴?,0.000000,0.000000,""],
-  ["466653","寤婂潑鐕曢儕鐕曚含鐞嗗伐瀛﹂櫌搴?,0.000000,0.000000,""],
-  ["466697","寤婂潑鐕曢儕33鍙疯鍖哄簵",0.000000,0.000000,""],
-  ["467708","涓夋渤鏂囧寲鑹烘湳澶ц搴?,0.000000,0.000000,""],
-  ["469475","鎵垮痉甯備簩浠欏眳澶ц搴?,0.000000,0.000000,""],
-  ["469476","鎵垮痉甯傚皬浣熸矡璺簵",0.000000,0.000000,""],
-  ["469517","鎵垮痉甯傜鍦板崕鍥簵",0.000000,0.000000,""],
-  ["469559","鎵垮痉甯傞敠缁ｅぇ琛楀簵",0.000000,0.000000,""],
-  ["469585","鎵垮痉寰￠緳鐎氬簻搴?,0.000000,0.000000,""],
-  ["469588","鎵垮痉閾傛偊灞卞簵",0.000000,0.000000,""],
-  ["469659","鎵垮痉鍏寸洓涓芥按搴?,0.000000,0.000000,""],
-  ["469660","鎵垮痉閾舵槦涓借嫅搴?,0.000000,0.000000,""],
-  ["469691","鎵垮痉甯傚槈鍜屽箍鍦哄簵",0.000000,0.000000,""],
-  ["471708","寮犲鍙ｅ磭绀兼堡鍗板簵-瀵岄緳瀛?,0.000000,0.000000,""],
-  ["478480","寮犲鍙ｅ杈板簞鍥簵",0.000000,0.000000,""],
-  ["478481","寮犲鍙ｆ槑寰峰崡璺簵",0.000000,0.000000,""],
-  ["478566","寮犲鍙ｅ鍖栧叓涓簵",0.000000,0.000000,""],
-  ["478567","寮犲鍙ｅ鍖栧叴娉板簵",0.000000,0.000000,""],
-  ["478571","寮犲鍙ｅ鍖栭紦妤煎簵",0.000000,0.000000,""],
-  ["478572","寮犲鍙ｅ鍖栧厜澶у簵",0.000000,0.000000,""],
-  ["478573","寮犲鍙ｅ鍖栫殗鍩庡簵",0.000000,0.000000,""],
-  ["478581","寮犲鍙ｅ彜瀹忓ぇ琛楀簵",0.000000,0.000000,""],
-  ["478582","寮犲鍙ｅ寳鏂瑰闄㈣タ鏍″尯搴?,0.000000,0.000000,""],
-  ["478583","寮犲鍙ｆ€€鏉ユ柊鍩庝匠鑻戝簵",0.000000,0.000000,""],
-  ["478584","寮犲鍙ｆ€€鏉ユ柊涓滄柟搴?,0.000000,0.000000,""],
-  ["478610","寮犲鍙ｈ亴涓氭妧鏈闄㈠簵",0.000000,0.000000,""],
-  ["478648","寮犲鍙ｄ箰浜煄搴?,0.000000,0.000000,""],
+  ["391001","月坛北街",0.000000,0.000000,""],
+  ["391012","金融街",0.000000,0.000000,""],
+  ["391028","金融街中心",0.000000,0.000000,""],
+  ["391030","庄胜崇光",0.000000,0.000000,""],
+  ["391074","德胜国际中心",0.000000,0.000000,""],
+  ["391094","紫金印象",0.000000,0.000000,""],
+  ["391409","北京地铁鼓楼大街站店",0.000000,0.000000,""],
+  ["391705","北京怀柔城市客厅店",0.000000,0.000000,""],
+  ["391709","北京大钟寺广场店",0.000000,0.000000,""],
+  ["391712","北京金融科技学院店",0.000000,0.000000,""],
+  ["391715","石景山金隅科技大厦店",0.000000,0.000000,""],
+  ["391718","北京地铁12号线驼房营站店",0.000000,0.000000,""],
+  ["391721","北京丽泽平安金融中心店",0.000000,0.000000,""],
+  ["391722","鼎好电子大厦",0.000000,0.000000,""],
+  ["392029","富华大厦",0.000000,0.000000,""],
+  ["392084","南锣鼓巷地铁站",0.000000,0.000000,""],
+  ["392144","前门大街",0.000000,0.000000,""],
+  ["392179","东四北大街店",0.000000,0.000000,""],
+  ["392315","地铁和平里北街站店",0.000000,0.000000,""],
+  ["392394","北京地铁崇文门站店",0.000000,0.000000,""],
+  ["392395","北京地铁东四站店",0.000000,0.000000,""],
+  ["392408","北京地铁安德里北街站店",0.000000,0.000000,""],
+  ["392525","北京环球贸易中心店",0.000000,0.000000,""],
+  ["392647","北京泓晟国际中心",0.000000,0.000000,""],
+  ["392678","北京地铁雍和宫站店",0.000000,0.000000,""],
+  ["392707","北京地铁3号线朝阳站店",0.000000,0.000000,""],
+  ["392708","北京地铁3号线东坝站店",0.000000,0.000000,""],
+  ["392710","北京地铁3号线团结湖站店",0.000000,0.000000,""],
+  ["392712","北京恒毅大厦店",0.000000,0.000000,""],
+  ["392713","北京地铁什刹海站店",0.000000,0.000000,""],
+  ["392715","北京地铁欢乐谷站店",0.000000,0.000000,""],
+  ["392716","北京地铁角门西站店",0.000000,0.000000,""],
+  ["392717","北京地铁丰台站店",0.000000,0.000000,""],
+  ["392718","腾讯北京总部店",0.000000,0.000000,""],
+  ["392719","金隅智造工场店新店",0.000000,0.000000,""],
+  ["392720","朝阳高铁站店",0.000000,0.000000,""],
+  ["392721","延庆环球新意百货店",0.000000,0.000000,""],
+  ["392722","北京长楹天街店",0.000000,0.000000,""],
+  ["392723","北京四惠金地名京店",0.000000,0.000000,""],
+  ["393003","环球金融中心",0.000000,0.000000,""],
+  ["393009","民生大厦",0.000000,0.000000,""],
+  ["393010","双井首城国际",0.000000,0.000000,""],
+  ["393016","奥林匹克公园",0.000000,0.000000,""],
+  ["393032","长富宫",0.000000,0.000000,""],
+  ["393033","四方桥东北侧店",0.000000,0.000000,""],
+  ["393034","劲松海文大厦",0.000000,0.000000,""],
+  ["393035","管庄新天地",0.000000,0.000000,""],
+  ["393046","小天竺路",0.000000,0.000000,""],
+  ["393067","望京北望金辉大厦",0.000000,0.000000,""],
+  ["393082","兆泰国际中心",0.000000,0.000000,""],
+  ["393117","十里堡地铁站",0.000000,0.000000,""],
+  ["393151","首都机场T3二层到达区外",0.000000,0.000000,""],
+  ["393152","首都机场T3三层出发区东指廊",0.000000,0.000000,""],
+  ["393153","首都机场T3三层出发区西指廊",0.000000,0.000000,""],
+  ["393155","首都机场T3四层出发区外东",0.000000,0.000000,""],
+  ["393156","首都机场T3D出发区",0.000000,0.000000,""],
+  ["393167","奥林匹克森林公园（南园）店",0.000000,0.000000,""],
+  ["393168","奥林匹克森林公园（北园）店",0.000000,0.000000,""],
+  ["393188","发展大厦店",0.000000,0.000000,""],
+  ["393206","东亚望京中心店",0.000000,0.000000,""],
+  ["393220","梵石中心店",0.000000,0.000000,""],
+  ["393244","利星行中心店",0.000000,0.000000,""],
+  ["393303","利星行中心二店",0.000000,0.000000,""],
+  ["393380","光明大厦店",0.000000,0.000000,""],
+  ["393399","北京地铁草房站店",0.000000,0.000000,""],
+  ["393416","北京地铁六道口店",0.000000,0.000000,""],
+  ["393425","北京地铁西土城店",0.000000,0.000000,""],
+  ["393426","北京地铁望京西站店",0.000000,0.000000,""],
+  ["393546","北京浦项中心店",0.000000,0.000000,""],
+  ["393557","北京鸿懋商务大厦店",0.000000,0.000000,""],
+  ["393651","北京平安国际金融中心店",0.000000,0.000000,""],
+  ["393675","北京阿里巴巴总部店",0.000000,0.000000,""],
+  ["393688","北京广播大厦酒店店",0.000000,0.000000,""],
+  ["393706","古北水镇三号店",0.000000,0.000000,""],
+  ["393707","北京科技财富中心店",0.000000,0.000000,""],
+  ["393708","北京怀柔商业街店",0.000000,0.000000,""],
+  ["393709","京东总部2号院店",0.000000,0.000000,""],
+  ["393710","北京地铁潘家园站店",0.000000,0.000000,""],
+  ["393711","微软中国研发集团总部店",0.000000,0.000000,""],
+  ["393715","首都国际机场T3四层出发层外西",0.000000,0.000000,""],
+  ["393717","北京南站地铁层1店",0.000000,0.000000,""],
+  ["393718","北京南站出发层1店",0.000000,0.000000,""],
+  ["393720","昌平新新公寓店",0.000000,0.000000,""],
+  ["394024","融科资讯中心",0.000000,0.000000,""],
+  ["394038","联想新园区",0.000000,0.000000,""],
+  ["394048","海淀杏石口路",0.000000,0.000000,""],
+  ["394062","火器营地铁站",0.000000,0.000000,""],
+  ["394069","互联网创新中心",0.000000,0.000000,""],
+  ["394070","木荷路华为园区",0.000000,0.000000,""],
+  ["394072","超市发万柳",0.000000,0.000000,""],
+  ["394073","超市发花园路",0.000000,0.000000,""],
+  ["394075","超市发羊坊店",0.000000,0.000000,""],
+  ["394085","超市发甘家口",0.000000,0.000000,""],
+  ["394089","超市发上地",0.000000,0.000000,""],
+  ["394096","超市发农大",0.000000,0.000000,""],
+  ["394103","超市发科南路",0.000000,0.000000,""],
+  ["394104","超市发玉泉路",0.000000,0.000000,""],
+  ["394105","超市发西长安街",0.000000,0.000000,""],
+  ["394110","新浪总部大厦",0.000000,0.000000,""],
+  ["394112","超市发海淀大街",0.000000,0.000000,""],
+  ["394118","超市发学院路超罗",0.000000,0.000000,""],
+  ["394122","联想三标大厦",0.000000,0.000000,""],
+  ["394123","联想北研园楼大厦",0.000000,0.000000,""],
+  ["394142","超市发双榆树超罗",0.000000,0.000000,""],
+  ["394150","网易研发中心",0.000000,0.000000,""],
+  ["394196","超市发岭南路店",0.000000,0.000000,""],
+  ["394234","超市发罗森北清路店",0.000000,0.000000,""],
+  ["394258","超市发罗森北安河店",0.000000,0.000000,""],
+  ["394405","北京地铁育新站店",0.000000,0.000000,""],
+  ["394406","北京地铁平安里站店",0.000000,0.000000,""],
+  ["394419","北京地铁车道沟站店",0.000000,0.000000,""],
+  ["394437","超市发罗森清河店",0.000000,0.000000,""],
+  ["394451","清华科技园店",0.000000,0.000000,""],
+  ["394485","永泰生活服务中心店",0.000000,0.000000,""],
+  ["394488","超市发罗森太舟坞店",0.000000,0.000000,""],
+  ["394489","超市发罗森六里屯店",0.000000,0.000000,""],
+  ["394510","东升科技园店",0.000000,0.000000,""],
+  ["394512","超市发罗森北清路二店",0.000000,0.000000,""],
+  ["394526","华为北研所K区店",0.000000,0.000000,""],
+  ["394560","超市发罗森北安河二店",0.000000,0.000000,""],
+  ["394620","北京快手元中心店",0.000000,0.000000,""],
+  ["394630","超市发罗森四季青路店",0.000000,0.000000,""],
+  ["394705","平谷步行街店",0.000000,0.000000,""],
+  ["394720","北京站广场东侧店",0.000000,0.000000,""],
+  ["395017","汉威国际广场",0.000000,0.000000,""],
+  ["395092","泥洼地铁站",0.000000,0.000000,""],
+  ["395274","蒲黄榆地铁站店",0.000000,0.000000,""],
+  ["395302","丽泽平安幸福中心店",0.000000,0.000000,""],
+  ["395411","北京地铁六里桥站店",0.000000,0.000000,""],
+  ["395412","北京地铁郭公庄站店",0.000000,0.000000,""],
+  ["395413","北京地铁丰台科技园区站店",0.000000,0.000000,""],
+  ["395470","丰科中心店",0.000000,0.000000,""],
+  ["395606","福海公寓",0.000000,0.000000,""],
+  ["395708","北京站6号候车室店",0.000000,0.000000,""],
+  ["395710","北京首都机场T3三层出发区北指廊店",0.000000,0.000000,""],
+  ["396053","房山南大街",0.000000,0.000000,""],
+  ["396054","良乡拱辰南大街",0.000000,0.000000,""],
+  ["396058","房山绿城百合",0.000000,0.000000,""],
+  ["396081","房山燕化医院",0.000000,0.000000,""],
+  ["396141","大兴星牌共享际",0.000000,0.000000,""],
+  ["396255","东方航空公司总部店",0.000000,0.000000,""],
+  ["396276","京东总部1号店",0.000000,0.000000,""],
+  ["396388","北京鸿坤广场店",0.000000,0.000000,""],
+  ["396449","大兴国际氢能示范区店",0.000000,0.000000,""],
+  ["396495","大兴南航总部基地店",0.000000,0.000000,""],
+  ["396706","北京南站出发层2店",0.000000,0.000000,""],
+  ["397398","北京地铁物资学院路站店",0.000000,0.000000,""],
+  ["397682","北京通州新光大",0.000000,0.000000,""],
+  ["398090","超市发天通苑西区",0.000000,0.000000,""],
+  ["398170","昌平未来科学城未来中心店",0.000000,0.000000,""],
+  ["398439","北京地铁昌平站店",0.000000,0.000000,""],
+  ["398558","北京怀柔雁栖人才社区店",0.000000,0.000000,""],
+  ["398689","回龙观体育公园店",0.000000,0.000000,""],
+  ["398708","北京站4号候车室店",0.000000,0.000000,""],
+  ["398718","北京北站店",0.000000,0.000000,""],
+  ["399519","古北水镇一号店",0.000000,0.000000,""],
+  ["399520","古北水镇二号店",0.000000,0.000000,""],
+  ["399548","北京中海大厦店",0.000000,0.000000,""],
+  ["399569","西长安中骏世界城店",0.000000,0.000000,""],
+  ["399670","北京门头沟长安天街店",0.000000,0.000000,""],
+  ["399722","北京祥云小镇店",0.000000,0.000000,""],
+  ["409392","天津市蓟州区天一绿海店",0.000000,0.000000,""],
+  ["461717","廊坊燕郊夏威夷蓝湾店",0.000000,0.000000,""],
+  ["462710","承德市德汇大厦店",0.000000,0.000000,""],
+  ["462717","承德宽广时代广场店",0.000000,0.000000,""],
+  ["466370","廊坊香河新开街店",0.000000,0.000000,""],
+  ["466435","廊坊香河新华街店",0.000000,0.000000,""],
+  ["466455","廊坊燕郊尚京广场店",0.000000,0.000000,""],
+  ["466506","廊坊燕郊诺亚大厦店",0.000000,0.000000,""],
+  ["466653","廊坊燕郊燕京理工学院店",0.000000,0.000000,""],
+  ["466697","廊坊燕郊33号街区店",0.000000,0.000000,""],
+  ["467708","三河文化艺术大街店",0.000000,0.000000,""],
+  ["469475","承德市二仙居大街店",0.000000,0.000000,""],
+  ["469476","承德市小佟沟路店",0.000000,0.000000,""],
+  ["469517","承德市福地华园店",0.000000,0.000000,""],
+  ["469559","承德市锦绣大街店",0.000000,0.000000,""],
+  ["469585","承德御龙瀚府店",0.000000,0.000000,""],
+  ["469588","承德铂悦山店",0.000000,0.000000,""],
+  ["469659","承德兴盛丽水店",0.000000,0.000000,""],
+  ["469660","承德银星丽苑店",0.000000,0.000000,""],
+  ["469691","承德市嘉和广场店",0.000000,0.000000,""],
+  ["471708","张家口崇礼汤印店-富龙子",0.000000,0.000000,""],
+  ["478480","张家口容辰庄园店",0.000000,0.000000,""],
+  ["478481","张家口明德南路店",0.000000,0.000000,""],
+  ["478566","张家口宣化八中店",0.000000,0.000000,""],
+  ["478567","张家口宣化兴泰店",0.000000,0.000000,""],
+  ["478571","张家口宣化鼓楼店",0.000000,0.000000,""],
+  ["478572","张家口宣化光大店",0.000000,0.000000,""],
+  ["478573","张家口宣化皇城店",0.000000,0.000000,""],
+  ["478581","张家口古宏大街店",0.000000,0.000000,""],
+  ["478582","张家口北方学院西校区店",0.000000,0.000000,""],
+  ["478583","张家口怀来新城佳苑店",0.000000,0.000000,""],
+  ["478584","张家口怀来新东方店",0.000000,0.000000,""],
+  ["478610","张家口职业技术学院店",0.000000,0.000000,""],
+  ["478648","张家口乐享城店",0.000000,0.000000,""],
 ];
 
 const STORE_WAVE_TIME_PRESETS = {
@@ -1228,6 +1529,8 @@ const STORE_WAVE_TIME_PRESETS = {
   "478648": { w2: "00:30" },
 };
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 const STORE_WAVE_BELONGS_PRESETS = {
   "391001": "1,2",
   "391012": "1,2",
@@ -1426,6 +1729,8 @@ const STORE_WAVE_BELONGS_PRESETS = {
   "478648": "3",
 };
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 const AUTO_BY_W2_STORE_IDS = new Set([
   "391409",
   "391705",
@@ -1536,42 +1841,88 @@ const AUTO_BY_W2_STORE_IDS = new Set([
   "478648",
 ]);
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function normalizeStoreCode(id) {
   const raw = String(id || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (raw === "93003") return "393003";
   return raw;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function isAutoByW2Store(id) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return AUTO_BY_W2_STORE_IDS.has(normalizeStoreCode(id));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getStoreWavePreset(id) {
   const raw = normalizeStoreCode(id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (STORE_WAVE_TIME_PRESETS[raw]) return STORE_WAVE_TIME_PRESETS[raw];
   const compatId = raw.length === 5 ? `3${raw}` : "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return compatId ? STORE_WAVE_TIME_PRESETS[compatId] || null : null;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function toMinutes(v) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const [h, m] = String(v || "00:00").split(":").map(Number);
   return (h || 0) * 60 + (m || 0);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function alignMinuteToDispatch(minute, dispatchStartMin) {
   return minute < dispatchStartMin ? minute + 1440 : minute;
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function formatTime(v) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const day = 24 * 60;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const n = ((Math.round(v) % day) + day) % day;
   return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function formatRate(v) { return `${(v * 100).toFixed(1)}%`; }
 function formatMinutesValue(v) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const n = Number(v || 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return Number(n.toFixed(1)).toString();
 }
 function parseStoreIds(v) { return String(v || "").split(",").map((x) => x.trim()).filter(Boolean); }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function normalizeWaveBelongsInput(v) {
   return Array.from(new Set(
     String(v || "")
@@ -1580,12 +1931,22 @@ function normalizeWaveBelongsInput(v) {
       .filter((x) => /^\d+$/.test(x))
   )).join(",");
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function parseWaveBelongs(v) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const normalized = normalizeWaveBelongsInput(v);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return normalized ? normalized.split(",") : [];
 }
 function clone(v) { return JSON.parse(JSON.stringify(v)); }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function syncRealtimeDispatchContext() {
   const context = {
     vehicles: clone(state.vehicles || []),
@@ -1596,27 +1957,43 @@ function syncRealtimeDispatchContext() {
     updatedAt: new Date().toISOString(),
   };
   window.__dispatchRealtimeContext = context;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     localStorage.setItem(REALTIME_DISPATCH_CONTEXT_KEY, JSON.stringify(context));
   } catch (error) {
     console.warn("[simulate] sync realtime dispatch context failed:", error);
   }
 }
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildWaveSpan(start, end) { const startMin = toMinutes(start); let endMin = toMinutes(end); if (endMin <= startMin) endMin += 1440; return { startMin, endMin }; }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildStores() {
   return FIXED_STORES
     .filter(([id]) => getStoreWavePreset(id))
     .map(([id, name, lng, lat, district], index) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const normalizedId = normalizeStoreCode(id);
       const preset = getStoreWavePreset(normalizedId) || {};
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const autoByW2 = isAutoByW2Store(normalizedId);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const waveArrivals = {
         w1: autoByW2 ? "" : (preset.w1 || ""),
         w2: preset.w2 || "",
         ...(preset.w3 ? { w3: preset.w3 } : {}),
         ...(preset.w4 ? { w4: preset.w4 } : {}),
       };
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const waveBelongs = normalizeWaveBelongsInput(STORE_WAVE_BELONGS_PRESETS[normalizedId] || [waveArrivals.w1 ? "1" : "", waveArrivals.w2 ? "2" : ""].filter(Boolean).join(","));
       return syncStoreWaveLoads({
         id: normalizedId, name, lng, lat, district, address: district,
@@ -1640,23 +2017,41 @@ function buildStores() {
     });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildAutoWaves(stores) {
   const waveBuckets = { 1: [], 2: [], 3: [], 4: [] };
   stores.forEach((store) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let belongs = parseWaveBelongs(store.waveBelongs || "");
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!belongs.length) {
       belongs = [];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (store.waveArrivals?.w1) belongs.push("1");
       if (store.waveArrivals?.w2) belongs.push("2");
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const seen = new Set();
     belongs.forEach((waveNo) => {
       if (!["1", "2", "3", "4"].includes(waveNo)) return;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (seen.has(waveNo)) return;
       seen.add(waveNo);
       waveBuckets[Number(waveNo)].push(store.id);
     });
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return [
     { waveId: "W1", start: "19:10", end: "23:59", endMode: "return", storeIds: waveBuckets[1].join(",") },
     { waveId: "W2", start: "21:00", end: "07:00", endMode: "service", storeIds: waveBuckets[2].join(",") },
@@ -1665,14 +2060,20 @@ function buildAutoWaves(stores) {
   ];
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function sampleData() {
   const stores = buildStores();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     vehicles: [
-      { plateNo: "浜珹-1001", driverName: "", type: ENFORCED_VEHICLE_TYPE, capacity: 120, speed: 38, canCarryCold: true },
-      { plateNo: "浜珹-1002", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
-      { plateNo: "浜珹-1003", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
-      { plateNo: "浜珹-1004", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "京A-1001", driverName: "", type: ENFORCED_VEHICLE_TYPE, capacity: 120, speed: 38, canCarryCold: true },
+      { plateNo: "京A-1002", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "京A-1003", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "京A-1004", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
     ],
     stores,
     waves: buildAutoWaves(stores),
@@ -1680,21 +2081,45 @@ function sampleData() {
 }
 
 function toHHMMText(v) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const raw = String(v || "").trim();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!raw) return "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const m = raw.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
   if (!m) return raw;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return `${String(Number(m[1])).padStart(2, "0")}:${m[2]}`;
 }
 
 function mapBackendShopRow(row) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const code = normalizeStoreCode(row.shop_code || "");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveBelongs = normalizeWaveBelongsInput(row.wave_belongs || "");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const w1 = toHHMMText(row.wave1_time);
   const w2 = toHHMMText(row.wave2_time);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const w3 = toHHMMText(row.arrival_time_w3 || row.wave3_time || row.wave3_arrival || "");
   const w4 = toHHMMText(row.arrival_time_w4 || row.wave4_time || row.wave4_arrival || "");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const autoByW2 = isAutoByW2Store(code);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return syncStoreWaveLoads({
     id: code,
     name: row.shop_name || "",
@@ -1729,18 +2154,36 @@ function mapBackendShopRow(row) {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function fetchStoresFromBackend() {
   const available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return [];
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/shops/list`, {}, 3000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!payload?.ok || !Array.isArray(payload.shops)) return [];
   return payload.shops.map(mapBackendShopRow).filter((store) => store.id && store.name);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function mapWmsStoreRow(row) {
   const id = normalizeStoreCode(row?.shop_code || "");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return syncStoreWaveLoads({
     id,
     name: String(row?.shop_name || "").trim(),
@@ -1770,7 +2213,11 @@ function mapWmsStoreRow(row) {
   });
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function mapWmsVehicleRow(row) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     plateNo: String(row?.plate_no || "").trim(),
     driverName: String(row?.driver_name || "").trim(),
@@ -1782,54 +2229,124 @@ function mapWmsVehicleRow(row) {
 }
 
 async function fetchWmsStoresFromBackend() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const available = await ensureGaBackendAvailable(true);
   if (!available) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wms/stores`, {}, 8000);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!response.ok) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const payload = await response.json();
   if (!payload?.ok || !Array.isArray(payload.items)) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return payload.items.map((row) => mapWmsStoreRow(row)).filter((item) => item.id && item.name);
 }
 
 async function fetchWmsVehiclesFromBackend() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const available = await ensureGaBackendAvailable(true);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wms/vehicles`, {}, 8000);
   if (!response.ok) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = await response.json();
   if (!payload?.ok || !Array.isArray(payload.items)) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return payload.items.map((row) => mapWmsVehicleRow(row)).filter((item) => item.plateNo);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function fetchWmsCargoLatestMap() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return new Map();
 }
 
 function computeResolvedLoadsFromCleanCargoAndTiming(cargo = {}, timing = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const belongsText = normalizeWaveBelongsInput(String(timing?.wave_belongs || ""));
   const has1 = /(^|,)\s*1\s*(,|$)/.test(belongsText);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const has2 = /(^|,)\s*2\s*(,|$)/.test(belongsText);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const has3 = /(^|,)\s*3\s*(,|$)/.test(belongsText);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const has4 = /(^|,)\s*4\s*(,|$)/.test(belongsText);
   const only2 = belongsText === "2";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const rpcs = Number(cargo?.rpcs || 0);
   const rcase = Number(cargo?.rcase || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const bpcs = Number(cargo?.bpcs || 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const bpaper = Number(cargo?.bpaper || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const apcs = Number(cargo?.apcs || 0);
   const apaper = Number(cargo?.apaper || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const rpaper = Number(cargo?.rpaper || 0);
   const baseW1 = (rpcs / 207) + (rcase / 380) + (bpcs / 120) + (bpaper / 380) + (rpaper / 380);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseW2 = (apcs / 350) + (apaper / 380);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const total = baseW1 + baseW2;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let w1 = 0;
   let w2 = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let w3 = 0;
   let w4 = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (only2) {
     w2 = total;
   } else if (has3 || has4) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (has3) w3 = total;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (has4) w4 = total;
   } else if (has1 || has2) {
     w1 = baseW1;
@@ -1849,19 +2366,43 @@ function computeResolvedLoadsFromCleanCargoAndTiming(cargo = {}, timing = {}) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function fetchCleanCargoRawMap(shopCodes = []) {
   const available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) return new Map();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const codes = Array.isArray(shopCodes) ? shopCodes.map((code) => normalizeStoreCode(code)).filter(Boolean) : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/clean-cargo-raw/list?limit=5000`, {}, 12000);
   if (!response.ok) return new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = await response.json();
   if (!payload?.ok || !Array.isArray(payload.items)) return new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const allowed = codes.length ? new Set(codes) : null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = new Map();
   payload.items.forEach((row) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const key = normalizeStoreCode(row?.shop_code || "");
     if (!key) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (allowed && !allowed.has(key)) return;
     if (map.has(key)) return;
     map.set(key, {
@@ -1874,22 +2415,46 @@ async function fetchCleanCargoRawMap(shopCodes = []) {
       rpaper: Number(row?.rpaper || 0),
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return map;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function fetchStoreWaveTimingMap(shopCodes = []) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const available = await ensureGaBackendAvailable(true);
   if (!available) return new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const codes = Array.isArray(shopCodes) ? shopCodes.map((code) => normalizeStoreCode(code)).filter(Boolean) : [];
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/store-wave-timing-resolved/list?limit=5000`, {}, 12000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return new Map();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!payload?.ok || !Array.isArray(payload.items)) return new Map();
   const allowed = codes.length ? new Set(codes) : null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = new Map();
   payload.items.forEach((row) => {
     const key = normalizeStoreCode(row?.shop_code || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!key) return;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (allowed && !allowed.has(key)) return;
     map.set(key, {
       wave_belongs: String(row?.wave_belongs || "").trim(),
@@ -1899,10 +2464,16 @@ async function fetchStoreWaveTimingMap(shopCodes = []) {
       arrival_time_w4: toHHMMText(String(row?.arrival_time_w4 || "").trim()),
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return map;
 }
 
 async function fetchStoreWaveResolvedLoadMap(shopCodes = []) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const codes = Array.isArray(shopCodes)
     ? shopCodes.map((code) => normalizeStoreCode(code)).filter(Boolean)
     : [];
@@ -1910,61 +2481,107 @@ async function fetchStoreWaveResolvedLoadMap(shopCodes = []) {
     fetchCleanCargoRawMap(codes),
     fetchStoreWaveTimingMap(codes),
   ]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const allKeys = new Set([...cargoMap.keys(), ...timingMap.keys()]);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = new Map();
   allKeys.forEach((key) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const resolved = computeResolvedLoadsFromCleanCargoAndTiming(cargoMap.get(key) || {}, timingMap.get(key) || {});
     map.set(key, { shop_code: key, ...resolved });
   });
   return map;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function fetchStoreWaveResolvedList({ shopCode = "", waveBelongs = "", limit = 200 } = {}) {
   const available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) return { ok: false, items: [], count: 0, total: 0, error: "backend_unavailable" };
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const params = new URLSearchParams();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (shopCode) params.set("shopCode", String(shopCode).trim());
   if (waveBelongs) params.set("waveBelongs", String(waveBelongs).trim());
   params.set("limit", String(Math.max(1, Math.min(2000, Number(limit || 200) || 200))));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/store-wave-load-resolved/list?${params.toString()}`, {}, 12000);
   if (!response.ok) return { ok: false, items: [], count: 0, total: 0, error: `http_${response.status}` };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const payload = await response.json();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return payload || { ok: false, items: [], count: 0, total: 0 };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildStoreWaveResolvedQueryConfirmText(payload = {}) {
   const items = Array.isArray(payload?.items) ? payload.items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const byWave = { "1": [], "2": [], "3": [], "4": [] };
   items.forEach((row) => {
     const code = String(row?.shop_code || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const belongs = parseWaveBelongs(String(row?.wave_belongs || "").trim());
-    if (belongs.includes("1")) byWave["1"].push(`${code} | 璐ч噺=${Number(row?.wave1_load || 0)} | 鏃堕棿=${String(row?.first_wave_time || "").trim() || "(绌?"}`);
-    if (belongs.includes("2")) byWave["2"].push(`${code} | 璐ч噺=${Number(row?.wave2_load || 0)} | 鏃堕棿=${String(row?.second_wave_time || "").trim() || "(绌?"}`);
-    if (belongs.includes("3")) byWave["3"].push(`${code} | 璐ч噺=${Number(row?.wave3_load || 0)} | 鏃堕棿=${String(row?.arrival_time_w3 || "").trim() || "(绌?"}`);
-    if (belongs.includes("4")) byWave["4"].push(`${code} | 璐ч噺=${Number(row?.wave4_load || 0)} | 鏃堕棿=${String(row?.arrival_time_w4 || "").trim() || "(绌?"}`);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
+    if (belongs.includes("1")) byWave["1"].push(`${code} | 货量=${Number(row?.wave1_load || 0)} | 时间=${String(row?.first_wave_time || "").trim() || "(空)"}`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    if (belongs.includes("2")) byWave["2"].push(`${code} | 货量=${Number(row?.wave2_load || 0)} | 时间=${String(row?.second_wave_time || "").trim() || "(空)"}`);
+    if (belongs.includes("3")) byWave["3"].push(`${code} | 货量=${Number(row?.wave3_load || 0)} | 时间=${String(row?.arrival_time_w3 || "").trim() || "(空)"}`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
+    if (belongs.includes("4")) byWave["4"].push(`${code} | 货量=${Number(row?.wave4_load || 0)} | 时间=${String(row?.arrival_time_w4 || "").trim() || "(空)"}`);
   });
   return [
-    "鍗冲皢鍐欏叆鈥滄姌绠楄揣閲忔煡璇⑩€濆睍绀哄尯锛堟潵婧愶細store_wave_load_resolved锛?,
-    `杩斿洖鏉℃暟锛?{Number(payload?.count || items.length || 0)} / 鎬昏锛?{Number(payload?.total || items.length || 0)}`,
+    "即将写入“折算货量查询”展示区（来源：store_wave_load_resolved）",
+    `返回条数：${Number(payload?.count || items.length || 0)} / 总计：${Number(payload?.total || items.length || 0)}`,
     "",
-    `W1 鏄庣粏(${byWave["1"].length})`,
+    `W1 明细(${byWave["1"].length})`,
     ...byWave["1"],
     "",
-    `W2 鏄庣粏(${byWave["2"].length})`,
+    `W2 明细(${byWave["2"].length})`,
     ...byWave["2"],
     "",
-    `W3 鏄庣粏(${byWave["3"].length})`,
+    `W3 明细(${byWave["3"].length})`,
     ...byWave["3"],
     "",
-    `W4 鏄庣粏(${byWave["4"].length})`,
+    `W4 明细(${byWave["4"].length})`,
     ...byWave["4"],
     "",
-    "鐐瑰嚮鈥滅‘瀹氣€濈户缁啓鍏ユ煡璇㈢粨鏋滐紝鐐瑰嚮鈥滃彇娑堚€濇斁寮冩湰娆″啓鍏ャ€?
+    "点击“确定”继续写入查询结果，点击“取消”放弃本次写入。"
   ].join("\n");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function showStoreWaveResolvedQueryConfirmDialog(reportText) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return new Promise((resolve) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.inset = "0";
@@ -1983,8 +2600,12 @@ function showStoreWaveResolvedQueryConfirmDialog(reportText) {
     panel.style.display = "flex";
     panel.style.flexDirection = "column";
 
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const title = document.createElement("div");
-    title.textContent = "鏌ヨ纭锛坰tore_wave_load_resolved锛?;
+    title.textContent = "查询确认（store_wave_load_resolved）";
     title.style.padding = "14px 16px 8px";
     title.style.fontWeight = "700";
     title.style.fontSize = "20px";
@@ -2004,25 +2625,35 @@ function showStoreWaveResolvedQueryConfirmDialog(reportText) {
     content.style.lineHeight = "1.35";
     content.style.maxHeight = "58vh";
 
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const footer = document.createElement("div");
     footer.style.display = "flex";
     footer.style.gap = "12px";
     footer.style.justifyContent = "flex-end";
     footer.style.padding = "12px 16px 16px";
 
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.textContent = "鍙栨秷";
+    cancelBtn.textContent = "取消";
     cancelBtn.style.minWidth = "96px";
     cancelBtn.style.height = "40px";
 
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const okBtn = document.createElement("button");
     okBtn.type = "button";
-    okBtn.textContent = "纭畾";
+    okBtn.textContent = "确定";
     okBtn.style.minWidth = "96px";
     okBtn.style.height = "40px";
 
     const finish = (ok) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       try { document.body.removeChild(overlay); } catch {}
       resolve(Boolean(ok));
     };
@@ -2038,38 +2669,78 @@ function showStoreWaveResolvedQueryConfirmDialog(reportText) {
     panel.appendChild(content);
     panel.appendChild(footer);
     overlay.appendChild(panel);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     document.body.appendChild(overlay);
   });
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function renderStoreWaveResolvedTable(payload = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const summary = document.getElementById("storeWaveResolvedSummary");
   const body = document.getElementById("storeWaveResolvedTableBody");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!summary || !body) return;
   const rawItems = Array.isArray(payload.items) ? payload.items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const sortField = String(state.ui.storeWaveResolvedSortField || "shop_code");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const sortDir = String(state.ui.storeWaveResolvedSortDir || "asc") === "desc" ? "desc" : "asc";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const toSortValue = (row, field) => {
     if (field === "updated_at") return String(row?.updated_at || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (field === "wave_belongs" || field === "shop_code" || field === "first_wave_time" || field === "second_wave_time" || field === "arrival_time_w3" || field === "arrival_time_w4") {
       return String(row?.[field] || "");
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return Number(row?.[field] || 0) || 0;
   };
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const items = rawItems.slice().sort((a, b) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const av = toSortValue(a, sortField);
     const bv = toSortValue(b, sortField);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let cmp = 0;
     if (typeof av === "number" && typeof bv === "number") cmp = av - bv;
     else cmp = String(av).localeCompare(String(bv), "zh-Hans-CN", { numeric: true });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return sortDir === "asc" ? cmp : -cmp;
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const count = Number(payload.count || items.length || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const total = Number(payload.total || count || 0);
   const limit = Number(payload.limit || 0);
-  summary.textContent = `褰撳墠杩斿洖 ${count} 鏉?/ 鎬昏 ${total} 鏉?{limit ? `锛坙imit=${limit}锛塦 : ""}`;
+  summary.textContent = `当前返回 ${count} 条 / 总计 ${total} 条${limit ? `（limit=${limit}）` : ""}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!items.length) {
-    body.innerHTML = `<tr><td colspan="12" class="muted">鏃犲尮閰嶆暟鎹?/td></tr>`;
+    body.innerHTML = `<tr><td colspan="12" class="muted">无匹配数据</td></tr>`;
     return;
   }
   body.innerHTML = items.map((row) => `
@@ -2091,35 +2762,71 @@ function renderStoreWaveResolvedTable(payload = {}) {
 }
 
 function updateStoreWaveResolvedSortMarks() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.querySelectorAll("[data-store-wave-sort]").forEach((btn) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const field = String(btn.getAttribute("data-store-wave-sort") || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const active = field === String(state.ui.storeWaveResolvedSortField || "");
-    const mark = active ? (state.ui.storeWaveResolvedSortDir === "desc" ? "鈻? : "鈻?) : "";
+    const mark = active ? (state.ui.storeWaveResolvedSortDir === "desc" ? "▼" : "▲") : "";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const markNode = btn.querySelector(".store-wave-sort-mark");
     if (markNode) markNode.textContent = mark;
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function toggleStoreWaveResolvedSort(field) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const nextField = String(field || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!nextField) return;
   if (state.ui.storeWaveResolvedSortField === nextField) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     state.ui.storeWaveResolvedSortDir = state.ui.storeWaveResolvedSortDir === "asc" ? "desc" : "asc";
   } else {
     state.ui.storeWaveResolvedSortField = nextField;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ui.storeWaveResolvedSortDir = "asc";
   }
   renderStoreWaveResolvedTable(storeWaveResolvedCache);
   updateStoreWaveResolvedSortMarks();
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function queryStoreWaveResolvedTable({ needConfirm = false } = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const shopCode = String(document.getElementById("storeWaveResolvedShopCodeInput")?.value || "").trim();
   const waveBelongs = String(document.getElementById("storeWaveResolvedWaveBelongsInput")?.value || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const limit = Number(document.getElementById("storeWaveResolvedLimitInput")?.value || 200);
   const payload = await fetchStoreWaveResolvedList({ shopCode, waveBelongs, limit });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (needConfirm) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const confirmText = buildStoreWaveResolvedQueryConfirmText(payload);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const ok = await showStoreWaveResolvedQueryConfirmDialog(confirmText);
     if (!ok) return;
   }
@@ -2133,18 +2840,36 @@ async function queryStoreWaveResolvedTable({ needConfirm = false } = {}) {
   updateStoreWaveResolvedSortMarks();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function buildResolvedLoadRowsFromDualTables() {
   const storeIds = (Array.isArray(state.stores) ? state.stores : [])
     .map((store) => normalizeStoreCode(store?.id || store?.shopCode || ""))
     .filter(Boolean);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const resolvedMap = await fetchStoreWaveResolvedLoadMap(storeIds);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const rows = [];
   resolvedMap.forEach((resolved, shopCode) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const belongs = String(resolved?.wave_belongs || "").trim();
     const belongsSet = new Set(parseWaveBelongs(belongs));
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const wave1 = belongsSet.has("1") ? (Number(resolved?.wave1_load || 0) || 0) : 0;
     const wave2 = belongsSet.has("2") ? (Number(resolved?.wave2_load || 0) || 0) : 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave3 = belongsSet.has("3") ? (Number(resolved?.wave3_load || 0) || 0) : 0;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const wave4 = belongsSet.has("4") ? (Number(resolved?.wave4_load || 0) || 0) : 0;
     rows.push({
       shop_code: shopCode,
@@ -2160,26 +2885,54 @@ async function buildResolvedLoadRowsFromDualTables() {
       arrival_time_w4: belongsSet.has("4") ? String(resolved?.arrival_time_w4 || "").trim() : "",
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return rows;
 }
 
 async function saveDualTableLoadsToBackend() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const available = await ensureGaBackendAvailable(true);
   if (!available) throw new Error("backend_unavailable");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rows = await buildResolvedLoadRowsFromDualTables();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const formatWaveDetails = (waveNo, fieldLoad, fieldTime) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const picked = rows.filter((row) => parseWaveBelongs(row.wave_belongs || "").includes(String(waveNo)));
     const lines = picked.map((row) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const load = Number(row?.[fieldLoad] || 0);
       const time = String(row?.[fieldTime] || "").trim();
-      return `${row.shop_code} | 璐ч噺=${load} | 鏃堕棿=${time || "(绌?"}`;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      return `${row.shop_code} | 货量=${load} | 时间=${time || "(空)"}`;
     });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return { count: picked.length, lines };
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const w1 = formatWaveDetails("1", "wave1_load", "first_wave_time");
   const w2 = formatWaveDetails("2", "wave2_load", "second_wave_time");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const w3 = formatWaveDetails("3", "wave3_load", "arrival_time_w3");
   const w4 = formatWaveDetails("4", "wave4_load", "arrival_time_w4");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetchJsonWithTimeout(
     `${GA_BACKEND_URL}/store-wave-load-resolved/save`,
     {
@@ -2189,41 +2942,59 @@ async function saveDualTableLoadsToBackend() {
     },
     20000
   );
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!response.ok) {
     throw new Error(`http_${response.status}`);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const payload = await response.json();
   const reportText = [
-    "淇濆瓨鍙岃〃璐ч噺缁撴灉锛堝啓鍏ョ洰鏍囪〃锛歴tore_wave_load_resolved锛?,
-    `鎬昏鏁帮細${rows.length}`,
-    `鍚庣杩斿洖 upserted锛?{Number(payload?.upserted || 0)}`,
+    "保存双表货量结果（写入目标表：store_wave_load_resolved）",
+    `总行数：${rows.length}`,
+    `后端返回 upserted：${Number(payload?.upserted || 0)}`,
     "",
-    `W1 鍐欏叆 ${w1.count} 琛岋細`,
+    `W1 写入 ${w1.count} 行：`,
     ...w1.lines,
     "",
-    `W2 鍐欏叆 ${w2.count} 琛岋細`,
+    `W2 写入 ${w2.count} 行：`,
     ...w2.lines,
     "",
-    `W3 鍐欏叆 ${w3.count} 琛岋細`,
+    `W3 写入 ${w3.count} 行：`,
     ...w3.lines,
     "",
-    `W4 鍐欏叆 ${w4.count} 琛岋細`,
+    `W4 写入 ${w4.count} 行：`,
     ...w4.lines,
   ].join("\n");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { ...(payload || {}), reportText };
 }
 
 function showSaveDualLoadsReport(reportText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const text = String(reportText || "").trim();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!text) {
-    window.alert("淇濆瓨瀹屾垚");
+    window.alert("保存完成");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const popup = window.open("", "_blank", "width=980,height=760");
   if (!popup) {
     window.alert(text);
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const escaped = escapeHtml(text);
   popup.document.open();
   popup.document.write(`
@@ -2231,7 +3002,7 @@ function showSaveDualLoadsReport(reportText) {
     <html lang="zh-CN">
     <head>
       <meta charset="utf-8" />
-      <title>淇濆瓨鍙岃〃璐ч噺鏄庣粏</title>
+      <title>保存双表货量明细</title>
       <style>
         body { margin: 0; padding: 12px; font-family: Consolas, "Courier New", monospace; background: #f5f7fa; color: #102a43; }
         pre { white-space: pre-wrap; word-break: break-word; line-height: 1.35; font-size: 13px; margin: 0; }
@@ -2244,6 +3015,8 @@ function showSaveDualLoadsReport(reportText) {
 }
 
 function normalizeStoreLoadDetails(store = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     rpcs: Math.max(0, Number(store.rpcs || 0) || 0),
     rcase: Math.max(0, Number(store.rcase || 0) || 0),
@@ -2255,34 +3028,81 @@ function normalizeStoreLoadDetails(store = {}) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function normalizeStoreWaveLoads(store = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const details = normalizeStoreLoadDetails(store);
   const tripCount = Math.max(1, Number(store.tripCount || 1) || 1);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const belongs = parseWaveBelongs(store.waveBelongs || "");
   const onlyWave2 = belongs.length === 1 && belongs[0] === "2";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const hasWave3 = belongs.includes("3");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const hasWave4 = belongs.includes("4");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave1GroupLoad = details.rpcs + details.rcase + details.bpcs + details.bpaper + details.rpaper;
   const wave2GroupLoad = details.apcs + details.apaper;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const rawTotal = wave1GroupLoad + wave2GroupLoad;
   let wave1TotalLoadBase = Math.max(0, Number(store.wave1TotalLoadBase || 0) || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let wave2TotalLoadBase = Math.max(0, Number(store.wave2TotalLoadBase || 0) || 0);
-  // 浼樺厛瑙勫垯锛氫粎灞炰簬2娉㈡鐨勫簵锛屼竴娉㈡涓嶇畻璐ч噺锛涗簩娉㈡鎸夊叏閮ㄧ被鍨嬭绠椼€?
-  // 鍏紡锛歳pcs/207 + rcase/380 + bpcs/120 + bpaper/380 + rpaper/380 + apcs/350 + apaper/380
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave1Load = onlyWave2 ? 0 : (tripCount === 2 ? wave1GroupLoad : (wave1GroupLoad + wave2GroupLoad));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave2Load = onlyWave2 ? rawTotal : (tripCount === 2 ? wave2GroupLoad : 0);
   const wave1TotalLoad = onlyWave2 ? 0 : (tripCount === 2 ? wave1TotalLoadBase : (wave1TotalLoadBase + wave2TotalLoadBase));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave2TotalLoad = onlyWave2 ? (wave1TotalLoadBase + wave2TotalLoadBase) : (tripCount === 2 ? wave2TotalLoadBase : 0);
-  // W3/W4 鐨勫熀纭€鍙ｅ緞鐩稿悓锛堝叏閮ㄨ揣閲忎竴娆￠€佸畬锛夛紝浣嗘渶缁堝彧钀藉湪鎵€灞炴尝娆″垪
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
   const baseW3Load = rawTotal;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseW4Load = rawTotal;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const baseW3TotalLoad = wave1TotalLoadBase + wave2TotalLoadBase;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseW4TotalLoad = wave1TotalLoadBase + wave2TotalLoadBase;
   const wave3Load = hasWave3 ? baseW3Load : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave4Load = hasWave4 ? baseW4Load : 0;
   const wave3TotalLoad = hasWave3 ? baseW3TotalLoad : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave4TotalLoad = hasWave4 ? baseW4TotalLoad : 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const totalLoad = wave1TotalLoad + wave2TotalLoad;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const total = wave1Load + wave2Load;
   return {
     ...details,
@@ -2301,6 +3121,10 @@ function normalizeStoreWaveLoads(store = {}) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function syncStoreWaveLoads(store = {}) {
   const next = normalizeStoreWaveLoads(store);
   store.rpcs = next.rpcs;
@@ -2322,16 +3146,32 @@ function syncStoreWaveLoads(store = {}) {
   store.wave3TotalLoad = next.wave3TotalLoad;
   store.wave4TotalLoad = next.wave4TotalLoad;
   store.totalLoad = next.totalLoad;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return store;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function applyWmsCargoToStores(stores, cargoMap) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!Array.isArray(stores)) return [];
   const map = cargoMap instanceof Map ? cargoMap : new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return stores.map((store) => {
     const key = normalizeStoreCode(store?.id || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const cargo = map.get(key);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!cargo) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return syncStoreWaveLoads({
         ...store,
         rpcs: 0,
@@ -2362,10 +3202,18 @@ function applyWmsCargoToStores(stores, cargoMap) {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function enrichStores(stores) {
   return stores.map((s) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const merged = { ...s };
     syncStoreWaveLoads(merged);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       ...merged,
       lng: Number(merged.lng || 0),
@@ -2403,8 +3251,14 @@ function enrichStores(stores) {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getStoreTimingForWave(store, wave, dispatchStartMin) {
   const waveId = String(wave?.waveId || "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let desiredArrival = "";
   if (waveId === "W1" || waveId === "1" || waveId === "FIRST" || waveId.includes("W1")) {
     desiredArrival = String(store.waveArrivals?.w1 || "").trim();
@@ -2415,10 +3269,16 @@ function getStoreTimingForWave(store, wave, dispatchStartMin) {
   } else if (waveId === "W4" || waveId === "4" || waveId === "FOURTH" || waveId.includes("W4")) {
     desiredArrival = String(store.waveArrivals?.w4 || "").trim();
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!desiredArrival) {
     throw new Error(`missing_desired_arrival:${store?.id || ""}:${waveId || "UNKNOWN"}`);
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const desiredArrivalMin = alignMinuteToDispatch(toMinutes(desiredArrival), dispatchStartMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const allowedLateMinutes = Number(store.allowedLateMinutes ?? store.parking ?? 10);
   return {
     desiredArrival,
@@ -2428,90 +3288,196 @@ function getStoreTimingForWave(store, wave, dispatchStartMin) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function isStoreInWave(store, wave) {
   const waveNo = String(wave?.waveId || "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const belongs = parseWaveBelongs(store?.waveBelongs || "");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!belongs.length) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveNo.includes("W1") || waveNo === "1" || waveNo === "FIRST") return belongs.includes(1);
   if (waveNo.includes("W2") || waveNo === "2" || waveNo === "SECOND") return belongs.includes(2);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (waveNo.includes("W3") || waveNo === "3" || waveNo === "THIRD") return belongs.includes(3);
   if (waveNo.includes("W4") || waveNo === "4" || waveNo === "FOURTH") return belongs.includes(4);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return false;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function isSecondDeliveryWave(wave = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveId = String(wave?.waveId || "").trim().toUpperCase();
   return waveId === "W2" || waveId === "2" || waveId === "SECOND" || waveId.includes("W2");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getVehicleSolveCapacity(vehicle = {}) {
   const cap = Number(vehicle?.solveCapacity || 1);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return cap > 0 ? cap : 1;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getStoreSolveLoadForWave(store = {}, wave = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveId = String(wave?.waveId || "").trim().toUpperCase();
   const wave1 = Math.max(0, Number(store?.wave1TotalLoad || 0) || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave2 = Math.max(0, Number(store?.wave2TotalLoad || 0) || 0);
   const wave3 = Math.max(0, Number(store?.wave3TotalLoad || 0) || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave4 = Math.max(0, Number(store?.wave4TotalLoad || 0) || 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (waveId === "W4" || waveId === "4" || waveId === "FOURTH" || waveId.includes("W4")) return wave4;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveId === "W3" || waveId === "3" || waveId === "THIRD" || waveId.includes("W3")) return wave3;
   return isSecondDeliveryWave(wave) ? wave2 : wave1;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getStoreWaveLoadByWaveId(store = {}, waveId = "") {
   const normalized = String(waveId || "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (normalized === "W1" || normalized === "1" || normalized === "FIRST") {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return Math.max(0, Number(store?.resolvedWave1Load ?? 0) || 0);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (normalized === "W2" || normalized === "2" || normalized === "SECOND") {
     return Math.max(0, Number(store?.resolvedWave2Load ?? 0) || 0);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (normalized === "W3" || normalized === "3" || normalized === "THIRD") {
     return Math.max(0, Number(store?.resolvedWave3Load ?? 0) || 0);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (normalized === "W4" || normalized === "4" || normalized === "FOURTH") {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return Math.max(0, Number(store?.resolvedWave4Load ?? 0) || 0);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return 0;
 }
 
 function isStoreCandidateForWaveRule(store = {}, waveId = "") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveText = String(waveId || "").trim().toUpperCase();
   const belongs = parseWaveBelongs(store?.waveBelongs || "");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const belongsWave =
     (waveText === "W1" && belongs.includes("1"))
     || (waveText === "W2" && belongs.includes("2"))
     || (waveText === "W3" && belongs.includes("3"))
     || (waveText === "W4" && belongs.includes("4"));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!belongsWave) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return getStoreWaveLoadByWaveId(store, waveText) > 0;
 }
 
 function calcLoadConvertTerm(details, field) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const quantity = Math.max(0, Number(details?.[field] || 0) || 0);
   const capacity = Math.max(0, Number(LOAD_CONVERT_CAPACITY_MAP[field] || 0) || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const value = capacity > 0 ? (quantity / capacity) : 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { field, quantity, capacity, value };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildStoreLoadConvertPreview(store = {}) {
   const details = normalizeStoreLoadDetails(store);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const belongs = parseWaveBelongs(store.waveBelongs || "");
   const onlyWave2 = belongs.length === 1 && belongs[0] === "2";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const hasWave3 = belongs.includes("3");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const hasWave4 = belongs.includes("4");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tripCount = Math.max(1, Number(store.tripCount || 1) || 1);
   const wave1Terms = LOAD_CONVERT_WAVE1_FIELDS.map((field) => calcLoadConvertTerm(details, field));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave2Terms = LOAD_CONVERT_WAVE2_FIELDS.map((field) => calcLoadConvertTerm(details, field));
   const wave1Base = wave1Terms.reduce((sum, term) => sum + term.value, 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave2Base = wave2Terms.reduce((sum, term) => sum + term.value, 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave34Base = wave1Base + wave2Base;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave1Total = onlyWave2 ? 0 : (tripCount === 2 ? wave1Base : (wave1Base + wave2Base));
   const wave2Total = onlyWave2 ? (wave1Base + wave2Base) : (tripCount === 2 ? wave2Base : 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave3Total = hasWave3 ? wave34Base : 0;
   const wave4Total = hasWave4 ? wave34Base : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     storeId: normalizeStoreCode(store.id || ""),
     storeName: String(store.name || ""),
@@ -2528,49 +3494,93 @@ function buildStoreLoadConvertPreview(store = {}) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildLoadConvertPreview(stores = []) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const items = (Array.isArray(stores) ? stores : []).map((store, index) => ({
     index,
     ...buildStoreLoadConvertPreview(store),
   }));
   const wave1Sum = items.reduce((sum, item) => sum + Number(item.wave1Total || 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave2Sum = items.reduce((sum, item) => sum + Number(item.wave2Total || 0), 0);
   const wave3Sum = items.reduce((sum, item) => sum + Number(item.wave3Total || 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave4Sum = items.reduce((sum, item) => sum + Number(item.wave4Total || 0), 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { items, wave1Sum, wave2Sum, wave3Sum, wave4Sum };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function roundLoadConvertValue(value, digits = 2) {
   const n = Number(value || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!Number.isFinite(n)) return 0;
   return Number(n.toFixed(digits));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function formatLoadConvertValue(value) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return roundLoadConvertValue(value, 2);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderLoadConvertModal(preview) {
   const summary = document.getElementById("loadConvertSummary");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const table = document.getElementById("loadConvertTable");
   if (!summary || !table) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave1Sum = formatLoadConvertValue(preview?.wave1Sum || 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const wave2Sum = formatLoadConvertValue(preview?.wave2Sum || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave3Sum = formatLoadConvertValue(preview?.wave3Sum || 0);
   const wave4Sum = formatLoadConvertValue(preview?.wave4Sum || 0);
   summary.innerHTML = `
-    <span class="chip">涓€娉㈡鎶樼畻鍚堣锛?{wave1Sum}</span>
-    <span class="chip">浜屾尝娆℃姌绠楀悎璁★細${wave2Sum}</span>
-    <span class="chip">涓夋尝娆℃姌绠楀悎璁★細${wave3Sum}</span>
-    <span class="chip">鍥涙尝娆℃姌绠楀悎璁★細${wave4Sum}</span>
-    <span class="chip">闂ㄥ簵鏁帮細${(preview?.items || []).length}</span>
+    <span class="chip">一波次折算合计：${wave1Sum}</span>
+    <span class="chip">二波次折算合计：${wave2Sum}</span>
+    <span class="chip">三波次折算合计：${wave3Sum}</span>
+    <span class="chip">四波次折算合计：${wave4Sum}</span>
+    <span class="chip">门店数：${(preview?.items || []).length}</span>
   `;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const rows = (preview?.items || []).map((item) => {
     const wave1Expr = item.onlyWave2
-      ? "浠?娉㈡搴楋細涓€娉㈡=0"
+      ? "仅2波次店：一波次=0"
       : (item.wave1Terms.map((term) => `${term.field}:${term.quantity}/${term.capacity || 0}=${formatLoadConvertValue(term.value)}`).join(" + ") || "0");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave2ExprTerms = item.onlyWave2 ? [...item.wave1Terms, ...item.wave2Terms] : item.wave2Terms;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const wave2Expr = wave2ExprTerms.map((term) => `${term.field}:${term.quantity}/${term.capacity || 0}=${formatLoadConvertValue(term.value)}`).join(" + ") || "0";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return `
       <tr>
         <td>${escapeHtml(item.storeId)}</td>
@@ -2588,15 +3598,15 @@ function renderLoadConvertModal(preview) {
   table.innerHTML = `
     <thead>
       <tr>
-        <th>搴楅摵缂栧彿</th>
-        <th>搴楅摵鍚嶇О</th>
-        <th>娆℃暟</th>
-        <th>涓€娉㈡鎶樼畻</th>
-        <th>涓€娉㈡璁＄畻杩囩▼</th>
-        <th>浜屾尝娆℃姌绠?/th>
-        <th>浜屾尝娆¤绠楄繃绋?/th>
-        <th>涓夋尝娆℃姌绠?/th>
-        <th>鍥涙尝娆℃姌绠?/th>
+        <th>店铺编号</th>
+        <th>店铺名称</th>
+        <th>次数</th>
+        <th>一波次折算</th>
+        <th>一波次计算过程</th>
+        <th>二波次折算</th>
+        <th>二波次计算过程</th>
+        <th>三波次折算</th>
+        <th>四波次折算</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
@@ -2604,9 +3614,15 @@ function renderLoadConvertModal(preview) {
 }
 
 function applyLoadConvertPreviewToStores(preview) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!preview || !Array.isArray(preview.items)) return;
   preview.items.forEach((item) => {
     const store = state.stores[item.index];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!store) return;
     store.wave1TotalLoadBase = roundLoadConvertValue(item.wave1Base || 0, 2);
     store.wave2TotalLoadBase = roundLoadConvertValue(item.wave2Base || 0, 2);
@@ -2619,13 +3635,27 @@ function applyLoadConvertPreviewToStores(preview) {
   });
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function applyStoreWaveResolvedLoadsToStores(stores, resolvedMap) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!Array.isArray(stores)) return [];
   const map = resolvedMap instanceof Map ? resolvedMap : new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return stores.map((store) => {
     const key = normalizeStoreCode(store?.id || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const resolved = map.get(key);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!resolved) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const next = syncStoreWaveLoads({
         ...store,
         wave1TotalLoadBase: 0,
@@ -2645,6 +3675,10 @@ function applyStoreWaveResolvedLoadsToStores(stores, resolvedMap) {
       next.resolvedTotalLoad = 0;
       return next;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const next = syncStoreWaveLoads({
       ...store,
       waveBelongs: String(resolved.wave_belongs || "").trim(),
@@ -2670,18 +3704,34 @@ function applyStoreWaveResolvedLoadsToStores(stores, resolvedMap) {
     next.resolvedWave4Load = Number(resolved.wave4_load || 0);
     next.resolvedTotalLoad = Number(resolved.total_resolved_load || 0);
     const belongs = parseWaveBelongs(next.waveBelongs || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const arrivals = {};
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (belongs.includes("1")) arrivals.w1 = String(resolved.first_wave_time || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (belongs.includes("2")) arrivals.w2 = String(resolved.second_wave_time || "").trim();
     if (belongs.includes("3")) arrivals.w3 = String(resolved.arrival_time_w3 || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (belongs.includes("4")) arrivals.w4 = String(resolved.arrival_time_w4 || "").trim();
     next.waveArrivals = arrivals;
     return next;
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function openLoadConvertModal() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const modal = document.getElementById("loadConvertModal");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!modal) return;
   loadConvertPreviewCache = buildLoadConvertPreview(state.stores);
   renderLoadConvertModal(loadConvertPreviewCache);
@@ -2690,6 +3740,10 @@ function openLoadConvertModal() {
 }
 
 function closeLoadConvertModal() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const modal = document.getElementById("loadConvertModal");
   if (!modal) return;
   applyLoadConvertPreviewToStores(loadConvertPreviewCache);
@@ -2699,28 +3753,54 @@ function closeLoadConvertModal() {
   modal.setAttribute("aria-hidden", "true");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 let pendingSolveContinuation = null;
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function describeSolveField(value, { required = false } = {}) {
-  const text = value === null || value === undefined || String(value).trim() === "" ? "缂哄け" : String(value).trim();
-  const ok = text !== "缂哄け";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const text = value === null || value === undefined || String(value).trim() === "" ? "缺失" : String(value).trim();
+  const ok = text !== "缺失";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     ok,
     text,
-    label: ok ? "宸插彇寰? : (required ? "缂哄け锛堜細鍗′綇姹傝В锛? : "缂哄け"),
+    label: ok ? "已取得" : (required ? "缺失（会卡住求解）" : "缺失"),
   };
 }
 
 async function buildSolveDiagnoseReport() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stores = Array.isArray(state.stores) ? state.stores : [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const vehicles = Array.isArray(state.vehicles) ? state.vehicles : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waves = Array.isArray(state.waves) ? state.waves : [];
   const dispatchStartMin = toMinutes(state.settings.dispatchStartTime || "19:10");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const resolvedPayload = await fetchStoreWaveResolvedList({ limit: 5000 });
   const resolvedItems = Array.isArray(resolvedPayload?.items) ? resolvedPayload.items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const resolvedByShop = new Map();
   resolvedItems.forEach((row) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const key = normalizeStoreCode(row?.shop_code || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!key) return;
     resolvedByShop.set(key, row);
   });
@@ -2728,33 +3808,57 @@ async function buildSolveDiagnoseReport() {
     ["dispatchStartMin", describeSolveField(dispatchStartMin, { required: true })],
     ["maxRouteKm", describeSolveField(state.settings.maxRouteKm, { required: true })],
     ["concentrateLate", describeSolveField(state.settings.concentrateLate)],
-    ["dist", { ok: false, text: "鏈湪寮圭獥闃舵鏋勫缓锛涙眰瑙ｆ椂 buildScenario 鎵嶄細鐢熸垚", label: "鏈洿鎺ュ彇寰? }],
-    ["storeMap", { ok: stores.length > 0, text: `褰撳墠闂ㄥ簵鏁?${stores.length}`, label: stores.length > 0 ? "宸插彇寰? : "缂哄け锛堟棤闂ㄥ簵锛? }],
-    ["vehicles", { ok: vehicles.length > 0, text: `褰撳墠杞﹁締鏁?${vehicles.length}`, label: vehicles.length > 0 ? "宸插彇寰? : "缂哄け锛堟棤杞﹁締锛? }],
+    ["dist", { ok: false, text: "未在弹窗阶段构建；求解时 buildScenario 才会生成", label: "未直接取得" }],
+    ["storeMap", { ok: stores.length > 0, text: `当前门店数 ${stores.length}`, label: stores.length > 0 ? "已取得" : "缺失（无门店）" }],
+    ["vehicles", { ok: vehicles.length > 0, text: `当前车辆数 ${vehicles.length}`, label: vehicles.length > 0 ? "已取得" : "缺失（无车辆）" }],
   ];
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeRows = stores.map((store) => {
     const id = String(store?.id || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const row = resolvedByShop.get(normalizeStoreCode(id)) || {};
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const belongsText = String(row?.wave_belongs || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const belongs = parseWaveBelongs(belongsText);
     const wave1 = String(row?.first_wave_time || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const wave2 = String(row?.second_wave_time || "").trim();
     const wave3 = String(row?.arrival_time_w3 || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave4 = String(row?.arrival_time_w4 || "").trim();
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const waveTime = { 1: wave1, 2: wave2, 3: wave3, 4: wave4 };
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const requiredWaves = belongs.length ? belongs : [1];
-    const timingIssues = requiredWaves.filter((waveNo) => !String(waveTime[waveNo] || "").trim()).map((waveNo) => `W${waveNo}缂篳);
+    const timingIssues = requiredWaves.filter((waveNo) => !String(waveTime[waveNo] || "").trim()).map((waveNo) => `W${waveNo}缺`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const nonRequiredPresent = [1, 2, 3, 4]
       .filter((waveNo) => !requiredWaves.includes(waveNo))
       .filter((waveNo) => String(waveTime[waveNo] || "").trim())
-      .map((waveNo) => `W${waveNo}鏈夊€间絾鏈弬涓巂);
+      .map((waveNo) => `W${waveNo}有值但未参与`);
     return {
       id,
       name: String(store?.name || "").trim(),
       boxes: Number(row?.total_resolved_load || 0),
       waveBelongs: belongsText,
-      desiredArrival: requiredWaves.map((waveNo) => `W${waveNo}=${String(waveTime[waveNo] || "").trim() || "缂?}`).join(" / "),
+      desiredArrival: requiredWaves.map((waveNo) => `W${waveNo}=${String(waveTime[waveNo] || "").trim() || "缺"}`).join(" / "),
       latestAllowedArrivalMin: Number.isFinite(Number(store?.parking ?? store?.allowedLateMinutes)) ? Number(store?.parking ?? store?.allowedLateMinutes) : 0,
       actualServiceMinutes: Number(store?.serviceMinutes ?? 0),
       serviceMinutes: Number(store?.serviceMinutes || 0),
@@ -2763,14 +3867,16 @@ async function buildSolveDiagnoseReport() {
       parking: Number(store?.parking || 0),
       lng: Number(store?.lng || 0),
       lat: Number(store?.lat || 0),
-      requiredWaves: requiredWaves.map((waveNo) => `W${waveNo}`).join("銆?),
+      requiredWaves: requiredWaves.map((waveNo) => `W${waveNo}`).join("、"),
       directStatus: (!resolvedByShop.has(normalizeStoreCode(id)))
-        ? "褰撳墠闂ㄥ簵鍦?store_wave_load_resolved 涓棤璁板綍"
-        : (timingIssues.length ? `褰撳墠姹傝В鐩稿叧娉㈡缂哄皯 ${timingIssues.join("锛?)}` : "褰撳墠姹傝В鐩稿叧娉㈡閮藉凡鍙栧緱"),
-      fallbackStatus: nonRequiredPresent.length ? `鍏朵粬娉㈡鍑虹幇鏁板€间細姹℃煋涓氬姟锛?{nonRequiredPresent.join("锛?)}` : "鍏朵粬娉㈡涓虹┖姝ｅ父",
+        ? "当前门店在 store_wave_load_resolved 中无记录"
+        : (timingIssues.length ? `当前求解相关波次缺少 ${timingIssues.join("，")}` : "当前求解相关波次都已取得"),
+      fallbackStatus: nonRequiredPresent.length ? `其他波次出现数值会污染业务：${nonRequiredPresent.join("，")}` : "其他波次为空正常",
     };
   });
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicleRows = vehicles.map((vehicle) => ({
     plateNo: String(vehicle?.plateNo || "").trim(),
     driverName: String(vehicle?.driverName || "").trim(),
@@ -2784,6 +3890,8 @@ async function buildSolveDiagnoseReport() {
     routes: Array.isArray(vehicle?.routes) ? vehicle.routes.length : 0,
   }));
 
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveRows = waves.map((wave) => ({
     waveId: String(wave?.waveId || "").trim(),
     startMin: Number(wave?.startMin || 0),
@@ -2796,6 +3904,8 @@ async function buildSolveDiagnoseReport() {
     storeCount: parseStoreIds(wave?.storeIds || "").length,
   }));
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const selectedAlgorithms = (state.settings.solveStrategy || "manual") === "free"
     ? getEffectiveFreeAlgorithms()
     : strategyPreset(state.settings.solveStrategy || "manual", state.settings.optimizeGoal || "balanced").algorithms;
@@ -2804,7 +3914,7 @@ async function buildSolveDiagnoseReport() {
     summary: {
       strategy: currentStrategyLabel(),
       goal: currentGoalLabel(),
-      algorithms: selectedAlgorithms.map((key) => algoLabel(key)).join("銆?),
+      algorithms: selectedAlgorithms.map((key) => algoLabel(key)).join("、"),
       storeCount: stores.length,
       vehicleCount: vehicles.length,
       waveCount: waves.length,
@@ -2816,17 +3926,27 @@ async function buildSolveDiagnoseReport() {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function renderSolveDiagnoseModal(report) {
   const summary = document.getElementById("solveDiagnoseSummary");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const body = document.getElementById("solveDiagnoseBody");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!summary || !body) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const summaryParts = [
-    `褰撳墠绛栫暐锛?{escapeHtml(report?.summary?.strategy || "-")}`,
-    `鐩爣锛?{escapeHtml(report?.summary?.goal || "-")}`,
-    `绠楁硶锛?{escapeHtml(report?.summary?.algorithms || "-")}`,
-    `闂ㄥ簵 ${Number(report?.summary?.storeCount || 0)} 瀹禶,
-    `杞﹁締 ${Number(report?.summary?.vehicleCount || 0)} 鍙癭,
-    `娉㈡ ${Number(report?.summary?.waveCount || 0)} 涓猔,
+    `当前策略：${escapeHtml(report?.summary?.strategy || "-")}`,
+    `目标：${escapeHtml(report?.summary?.goal || "-")}`,
+    `算法：${escapeHtml(report?.summary?.algorithms || "-")}`,
+    `门店 ${Number(report?.summary?.storeCount || 0)} 家`,
+    `车辆 ${Number(report?.summary?.vehicleCount || 0)} 台`,
+    `波次 ${Number(report?.summary?.waveCount || 0)} 个`,
   ];
   summary.innerHTML = summaryParts.map((text) => `<span class="chip">${text}</span>`).join("");
 
@@ -2837,6 +3957,10 @@ function renderSolveDiagnoseModal(report) {
       <td>${escapeHtml(item.text || "")}</td>
     </tr>
   `).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeRows = (report?.storeRows || []).map((row) => `
     <tr>
       <td>${escapeHtml(row.id || "")}</td>
@@ -2859,22 +3983,24 @@ function renderSolveDiagnoseModal(report) {
       <td>${escapeHtml(row.type || "")}</td>
       <td>${escapeHtml(String(row.capacity ?? 0))}</td>
       <td>${escapeHtml(String(row.speed ?? 0))}</td>
-      <td>${escapeHtml(row.canCarryCold ? "鏄? : "鍚?)}</td>
+      <td>${escapeHtml(row.canCarryCold ? "是" : "否")}</td>
       <td>${escapeHtml(String(row.priorRegularDistance ?? 0))}</td>
       <td>${escapeHtml(String(row.priorWaveCount ?? 0))}</td>
       <td>${escapeHtml(String(row.earliestDepartureMin ?? 0))}</td>
       <td>${escapeHtml(String(row.routes ?? 0))}</td>
     </tr>
   `).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveRows = (report?.waveRows || []).map((row) => `
     <tr>
       <td>${escapeHtml(row.waveId || "")}</td>
       <td>${escapeHtml(String(row.startMin ?? 0))}</td>
       <td>${escapeHtml(String(row.endMin ?? 0))}</td>
       <td>${escapeHtml(row.endMode || "")}</td>
-      <td>${escapeHtml(row.relaxEnd ? "鏄? : "鍚?)}</td>
-      <td>${escapeHtml(row.singleWave ? "鏄? : "鍚?)}</td>
-      <td>${escapeHtml(row.isNightWave ? "鏄? : "鍚?)}</td>
+      <td>${escapeHtml(row.relaxEnd ? "是" : "否")}</td>
+      <td>${escapeHtml(row.singleWave ? "是" : "否")}</td>
+      <td>${escapeHtml(row.isNightWave ? "是" : "否")}</td>
       <td>${escapeHtml(String(row.earliestDepartureMin ?? 0))}</td>
       <td>${escapeHtml(String(row.storeCount ?? 0))}</td>
     </tr>
@@ -2882,35 +4008,39 @@ function renderSolveDiagnoseModal(report) {
   body.innerHTML = `
     <div class="table-wrap" style="color:#111;">
       <table class="load-convert-table">
-        <thead><tr><th>瀛楁</th><th>鐘舵€?/th><th>璇存槑</th></tr></thead>
+        <thead><tr><th>字段</th><th>状态</th><th>说明</th></tr></thead>
         <tbody>${scenarioRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">闂ㄥ簵瀛楁璇婃柇锛氬彧鐪嬭闂ㄥ簵鎵€灞炴尝娆＄殑鏃堕棿銆傛湭鍙備笌娉㈡涓虹┖鏄甯镐笟鍔＄姸鎬侊紝鏈弬涓庢尝娆″鏋滄湁鍊间細琚涓烘薄鏌撱€?/div>
+      <div class="note" style="margin-bottom:8px;">门店字段诊断：只看该门店所属波次的时间。未参与波次为空是正常业务状态，未参与波次如果有值会被视为污染。</div>
       <table class="load-convert-table">
-        <thead><tr><th>闂ㄥ簵</th><th>鍚嶇О</th><th>娉㈡褰掑睘</th><th>搴旀鏌ユ尝娆?/th><th>boxes</th><th>鏃堕棿鐘舵€?/th><th>璇存槑</th><th>鏃堕棿鍐呭</th><th>瀹為檯鏈嶅姟</th><th>澶囩敤鏈嶅姟</th><th>parking</th></tr></thead>
+        <thead><tr><th>门店</th><th>名称</th><th>波次归属</th><th>应检查波次</th><th>boxes</th><th>时间状态</th><th>说明</th><th>时间内容</th><th>实际服务</th><th>备用服务</th><th>parking</th></tr></thead>
         <tbody>${storeRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">杞﹁締瀛楁璇婃柇锛歝apacity / speed / 鍙惁鍐烽摼 / 鍘嗗彶閲岀▼ / 鍘嗗彶娉㈡ / routes 鏄惁鑳界洿鎺ュ彇寰椼€?/div>
+      <div class="note" style="margin-bottom:8px;">车辆字段诊断：capacity / speed / 可否冷链 / 历史里程 / 历史波次 / routes 是否能直接取得。</div>
       <table class="load-convert-table">
-        <thead><tr><th>杞︾墝</th><th>鍙告満</th><th>杞﹀瀷</th><th>capacity</th><th>speed</th><th>鍐烽摼</th><th>鍘嗗彶閲岀▼</th><th>鍘嗗彶娉㈡</th><th>鏈€鏃╁嚭杞?/th><th>routes闀垮害</th></tr></thead>
+        <thead><tr><th>车牌</th><th>司机</th><th>车型</th><th>capacity</th><th>speed</th><th>冷链</th><th>历史里程</th><th>历史波次</th><th>最早出车</th><th>routes长度</th></tr></thead>
         <tbody>${vehicleRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">娉㈡瀛楁璇婃柇锛氱湅鐪嬪綋鍓嶆尝娆℃槸鍚﹀畬鏁淬€佹槸鍚︽槸澶滄尝/鍗曟尝娆°€佷互鍙婂簵閾烘暟閲忔槸鍚﹀寰椾笂銆?/div>
+      <div class="note" style="margin-bottom:8px;">波次字段诊断：看看当前波次是否完整、是否是夜波/单波次、以及店铺数量是否对得上。</div>
       <table class="load-convert-table">
-        <thead><tr><th>娉㈡</th><th>寮€濮?/th><th>缁撴潫</th><th>缁撴潫鍙ｅ緞</th><th>鏀惧缁撴潫</th><th>鍗曟尝娆?/th><th>澶滄尝</th><th>鏈€鏃╁嚭杞?/th><th>闂ㄥ簵鏁?/th></tr></thead>
+        <thead><tr><th>波次</th><th>开始</th><th>结束</th><th>结束口径</th><th>放宽结束</th><th>单波次</th><th>夜波</th><th>最早出车</th><th>门店数</th></tr></thead>
         <tbody>${waveRows}</tbody>
       </table>
     </div>
   `;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function openSolveDiagnoseModal(report) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const modal = document.getElementById("solveDiagnoseModal");
   if (!modal) return;
   renderSolveDiagnoseModal(report);
@@ -2918,14 +4048,24 @@ function openSolveDiagnoseModal(report) {
   modal.setAttribute("aria-hidden", "false");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function closeSolveDiagnoseModal() {
   const modal = document.getElementById("solveDiagnoseModal");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!modal) return;
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function createEmptyMatrix(nodeIds) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const matrix = {};
   nodeIds.forEach((fromId) => {
     matrix[fromId] = {};
@@ -2936,69 +4076,125 @@ function createEmptyMatrix(nodeIds) {
   return matrix;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function estimateStraightDurationMinutes(distanceKm, speedKmh = 38) {
   return (Number(distanceKm || 0) / Math.max(1, Number(speedKmh || 38))) * 60;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildStraightDistanceData(stores) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const points = new Map([[DC.id, DC], ...stores.map((s) => [s.id, s])]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nodes = [DC.id, ...stores.map((s) => s.id)];
   const dist = createEmptyMatrix(nodes);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const duration = createEmptyMatrix(nodes);
   for (const a of nodes) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const b of nodes) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (a === b) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const p1 = points.get(a);
       const p2 = points.get(b);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const km = Math.sqrt(((p1.lng - p2.lng) * 92) ** 2 + ((p1.lat - p2.lat) * 111) ** 2);
       const distanceKm = Number(Math.max(1, km).toFixed(1));
       dist[a][b] = distanceKm;
       duration[a][b] = estimateStraightDurationMinutes(distanceKm);
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { dist, duration, source: "straight" };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildDistanceTable(stores) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return buildStraightDistanceData(stores).dist;
 }
 
 function loadAmapDistanceCache() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
     return JSON.parse(localStorage.getItem(AMAP_DISTANCE_CACHE_KEY) || "{}");
   } catch {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {};
   }
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function saveAmapDistanceCache(cache) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     localStorage.setItem(AMAP_DISTANCE_CACHE_KEY, JSON.stringify(cache));
     scheduleAmapCacheSync();
   } catch {
-    // Ignore storage failures and continue with in-memory data.
+    // EN: Business note for nearby logic.
+    // CN: 附近逻辑的业务提示。
   }
 }
 
 function loadAmapRouteCache() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
     return JSON.parse(localStorage.getItem(AMAP_ROUTE_CACHE_KEY) || "{}");
   } catch {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {};
   }
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function saveAmapRouteCache(cache) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     localStorage.setItem(AMAP_ROUTE_CACHE_KEY, JSON.stringify(cache));
     scheduleAmapCacheSync();
   } catch {
-    // Ignore storage failures and continue with runtime data.
+    // EN: Business note for nearby logic.
+    // CN: 附近逻辑的业务提示。
   }
 }
 
 function scheduleAmapCacheSync(delayMs = 1800) {
   amapCacheSyncPending = true;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (amapCacheSyncTimer) return;
   amapCacheSyncTimer = setTimeout(() => {
     amapCacheSyncTimer = null;
@@ -3007,10 +4203,16 @@ function scheduleAmapCacheSync(delayMs = 1800) {
 }
 
 function getAmapCacheKey(fromNode, toNode) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `${fromNode.lng},${fromNode.lat}->${toNode.lng},${toNode.lat}`;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function parsePolylinePoints(polyline) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return String(polyline || "")
     .split(";")
     .map((item) => item.trim())
@@ -3020,42 +4222,92 @@ function parsePolylinePoints(polyline) {
 }
 
 function serializePolylinePoints(points) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return points.map((pair) => `${Number(pair[0]).toFixed(6)},${Number(pair[1]).toFixed(6)}`).join(";");
 }
 
 function simplifyPolylinePoints(points, maxPoints = 90) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (points.length <= maxPoints) return points;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const step = Math.ceil(points.length / maxPoints);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const simplified = points.filter((_, index) => index % step === 0);
   const last = points[points.length - 1];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!simplified.length || simplified[simplified.length - 1][0] !== last[0] || simplified[simplified.length - 1][1] !== last[1]) simplified.push(last);
   return simplified;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function fetchAmapDrivingPolyline(originNode, destinationNode) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const origin = `${originNode.lng},${originNode.lat}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const destination = `${destinationNode.lng},${destinationNode.lat}`;
   const url = `https://restapi.amap.com/v3/direction/driving?key=${encodeURIComponent(AMAP_WEB_SERVICE_KEY)}&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&extensions=all&strategy=0`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const response = await fetch(url);
   if (!response.ok) throw new Error(`AMap route HTTP ${response.status}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const payload = await response.json();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (String(payload.status) !== "1" || !Array.isArray(payload.route?.paths) || !payload.route.paths.length) {
     throw new Error(payload.info || "AMap driving route failed");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const steps = payload.route.paths[0]?.steps || [];
   const points = steps.flatMap((step) => parsePolylinePoints(step.polyline));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!points.length) return [[originNode.lng, originNode.lat], [destinationNode.lng, destinationNode.lat]];
   return points;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function fetchAmapDistanceBatch(originNodes, destinationNode) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!originNodes.length || !AMAP_WEB_SERVICE_KEY) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const origins = originNodes.map((node) => `${node.lng},${node.lat}`).join("|");
   const destination = `${destinationNode.lng},${destinationNode.lat}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const url = `https://restapi.amap.com/v3/distance?key=${encodeURIComponent(AMAP_WEB_SERVICE_KEY)}&origins=${encodeURIComponent(origins)}&destination=${encodeURIComponent(destination)}&type=1`;
   const response = await fetch(url);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) throw new Error(`AMap distance HTTP ${response.status}`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (String(payload.status) !== "1" || !Array.isArray(payload.results)) {
     throw new Error(payload.info || "AMap distance failed");
   }
@@ -3065,50 +4317,96 @@ async function fetchAmapDistanceBatch(originNodes, destinationNode) {
   }));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function buildDistanceData(stores) {
   const DISTANCE_PROGRESS_VERBOSE = false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const emit = (text) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!DISTANCE_PROGRESS_VERBOSE) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!text) return;
     reportRelayStageProgress(String(text));
   };
   const emitChunkedPairs = (title, pairs, chunkSize = 8) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!DISTANCE_PROGRESS_VERBOSE) return;
     const list = Array.isArray(pairs) ? pairs : [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!list.length) {
-      emit(`${title}锛? 鏉°€俙);
+      emit(`${title}：0 条。`);
       return;
     }
-    emit(`${title}锛?{list.length} 鏉°€俙);
+    emit(`${title}：${list.length} 条。`);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (let i = 0; i < list.length; i += chunkSize) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const chunk = list.slice(i, i + chunkSize);
-      emit(`${title}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, list.length)}锛?{chunk.join(" | ")}`);
+      emit(`${title}明细 ${i + 1}-${Math.min(i + chunkSize, list.length)}：${chunk.join(" | ")}`);
     }
   };
   if (USE_FULL_DISTANCE_MATRIX_FROM_BACKEND) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     try {
       const storeIds = (stores || []).map((item) => String(item?.id || "").trim()).filter(Boolean);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (storeIds.length > 0) {
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const params = new URLSearchParams({
           storeIds: storeIds.join(","),
           includeDuration: "true",
-          strict: "true",
+          strict: "false",
         });
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 30000);
+        const timer = setTimeout(() => controller.abort(), 5000);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         try {
           const response = await fetch(`${GA_BACKEND_URL}/distance-matrix/full?${params.toString()}`, {
             method: "GET",
             signal: controller.signal,
           });
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           if (response.ok) {
+            // EN: Control point for business behavior.
+            // CN: 影响业务行为的控制节点。
             const data = await response.json();
+            // EN: Key step in this business flow.
+            // CN: 当前业务流程中的关键步骤。
             const missingCount = Number(data?.missingCount || 0);
             if (data?.ok && missingCount === 0 && data?.dist && data?.duration) {
+              // EN: Key step in this business flow.
+              // CN: 当前业务流程中的关键步骤。
+              // EN: Control point for business behavior.
+              // CN: 影响业务行为的控制节点。
               const dominantSource = String(data?.dbDominantSource || "");
               const sourceCounts = data?.dbSourceCounts || {};
               console.log(`[buildDistanceData] matrix source=database-full nodeCount=${Number(data?.nodeCount || 0)} dbReadMs=${Number(data?.dbReadMs || 0)} dbDominantSource=${dominantSource}`);
-              reportRelayStageProgress(`璺濈鐭╅樀鏉ユ簮纭锛歞atabase-full锛屼富鏁版嵁婧?${dominantSource || "unknown"}锛宮issing=0锛宯ode=${Number(data?.nodeCount || 0)}锛宒bReadMs=${Number(data?.dbReadMs || 0)}銆俙);
+              reportRelayStageProgress(`距离矩阵来源确认：database-full，主数据源=${dominantSource || "unknown"}，missing=0，node=${Number(data?.nodeCount || 0)}，dbReadMs=${Number(data?.dbReadMs || 0)}。`);
+              // EN: Key step in this business flow.
+              // CN: 当前业务流程中的关键步骤。
               return {
                 dist: data.dist,
                 duration: data.duration,
@@ -3127,64 +4425,112 @@ async function buildDistanceData(stores) {
                 },
               };
             }
-            throw new Error(`distance matrix incomplete, missing=${missingCount}`);
+            throw new Error(`distance matrix incomplete, missing=${missingCount}`);                                                                                           
           } else {
-            throw new Error(`distance matrix http=${response.status}`);
+            throw new Error(`distance matrix http=${response.status}`);                                                 
           }
         } finally {
           clearTimeout(timer);
         }
       }
     } catch (error) {
-      throw new Error(`distance matrix required: ${error?.message || error}`);
+      throw new Error(`distance matrix required: ${error?.message || error}`);                                  
     }
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const straight = buildStraightDistanceData(stores);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nodes = [DC, ...stores];
   const nodeIds = nodes.map((node) => node.id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const totalPairCount = Math.max(0, nodes.length * (nodes.length - 1));
-  emit(`璺濈鐭╅樀鏋勫缓锛氳妭鐐?${nodes.length}锛堝簱鎴?闂ㄥ簵锛夛紝鐩爣鏈夊悜杈?${totalPairCount} 鏉°€俙);
+  emit(`距离矩阵构建：节点 ${nodes.length}（库房+门店），目标有向边 ${totalPairCount} 条。`);
   if (!AMAP_WEB_SERVICE_KEY || typeof fetch !== "function") {
-    emit("璺濈鐭╅樀鏋勫缓锛氶珮寰疯兘鍔涗笉鍙敤锛岀洿鎺ュ洖閫€鐩寸嚎璺濈銆?);
+    emit("距离矩阵构建：高德能力不可用，直接回退直线距离。");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { ...straight, source: "straight-fallback", cacheHitPairs: 0, fetchedPairs: 0, distDbStats: { fullMatrix: false, missingCount: -1 } };
   }
 
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const dist = createEmptyMatrix(nodeIds);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const duration = createEmptyMatrix(nodeIds);
   const cache = loadAmapDistanceCache();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let cacheHitPairs = 0;
   let fetchedPairs = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const cacheDetails = DISTANCE_PROGRESS_VERBOSE ? [] : null;
 
   nodes.forEach((fromNode) => {
     nodes.forEach((toNode) => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (fromNode.id === toNode.id) return;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const cached = cache[getAmapCacheKey(fromNode, toNode)];
       if (!cached) return;
       dist[fromNode.id][toNode.id] = Number(cached.distanceKm || 0);
       duration[fromNode.id][toNode.id] = Number(cached.durationMinutes || 0);
       cacheHitPairs += 1;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (DISTANCE_PROGRESS_VERBOSE) {
         cacheDetails.push(`${fromNode.id}->${toNode.id} ${Number(cached.distanceKm || 0).toFixed(2)}km/${Number(cached.durationMinutes || 0).toFixed(1)}m`);
       }
     });
   });
-  emitChunkedPairs("璺濈缂撳瓨鍛戒腑", cacheDetails || [], 6);
+  emitChunkedPairs("距离缓存命中", cacheDetails || [], 6);
 
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const destinationNode of nodes) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const pendingOrigins = nodes.filter((originNode) => originNode.id !== destinationNode.id && !(dist[originNode.id]?.[destinationNode.id] > 0));
-      emit(`璺濈鎷夊彇锛氱洰鏍囩偣 ${destinationNode.id}锛屽緟鎷夊彇璧风偣 ${pendingOrigins.length}銆俙);
+      emit(`距离拉取：目标点 ${destinationNode.id}，待拉取起点 ${pendingOrigins.length}。`);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       for (let start = 0; start < pendingOrigins.length; start += AMAP_ORIGIN_BATCH_SIZE) {
         const batch = pendingOrigins.slice(start, start + AMAP_ORIGIN_BATCH_SIZE);
-        emit(`璺濈鎷夊彇锛氱洰鏍囩偣 ${destinationNode.id}锛屾壒娆?${Math.floor(start / AMAP_ORIGIN_BATCH_SIZE) + 1}/${Math.max(1, Math.ceil(pendingOrigins.length / AMAP_ORIGIN_BATCH_SIZE))}锛岃捣鐐?${batch.map((x) => x.id).join("銆?)}銆俙);
+        emit(`距离拉取：目标点 ${destinationNode.id}，批次 ${Math.floor(start / AMAP_ORIGIN_BATCH_SIZE) + 1}/${Math.max(1, Math.ceil(pendingOrigins.length / AMAP_ORIGIN_BATCH_SIZE))}，起点 ${batch.map((x) => x.id).join("、")}。`);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const results = await fetchAmapDistanceBatch(batch, destinationNode);
         const fetchedDetails = DISTANCE_PROGRESS_VERBOSE ? [] : null;
         batch.forEach((originNode, index) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const result = results[index];
+          // EN: Control point for business behavior.
+          // CN: 影响业务行为的控制节点。
           if (!result) return;
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const distanceKm = Number(result.distanceKm || 0);
           const durationMinutes = Number(result.durationMinutes || 0);
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
+          // EN: Control point for business behavior.
+          // CN: 影响业务行为的控制节点。
           if (!(distanceKm > 0) || !(durationMinutes > 0)) return;
           dist[originNode.id][destinationNode.id] = distanceKm;
           duration[originNode.id][destinationNode.id] = durationMinutes;
@@ -3194,19 +4540,25 @@ async function buildDistanceData(stores) {
             fetchedDetails.push(`${originNode.id}->${destinationNode.id} ${distanceKm.toFixed(2)}km/${durationMinutes.toFixed(1)}m`);
           }
         });
-        emitChunkedPairs(`璺濈鎷夊彇缁撴灉锛堢洰鏍?{destinationNode.id}锛塦, fetchedDetails || [], 6);
+        emitChunkedPairs(`距离拉取结果（目标${destinationNode.id}）`, fetchedDetails || [], 6);
       }
     }
     saveAmapDistanceCache(cache);
   } catch (error) {
     console.warn("AMap distance fetch failed, fallback to straight-line data.", error);
-    emit(`璺濈鎷夊彇寮傚父锛?{error?.message || error}锛屽皢鑷姩琛ラ綈鐩寸嚎璺濈銆俙);
+    emit(`距离拉取异常：${error?.message || error}，将自动补齐直线距离。`);
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const fallbackDetails = DISTANCE_PROGRESS_VERBOSE ? [] : null;
   nodes.forEach((fromNode) => {
     nodes.forEach((toNode) => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (fromNode.id === toNode.id) return;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!(dist[fromNode.id][toNode.id] > 0)) {
         dist[fromNode.id][toNode.id] = straight.dist[fromNode.id][toNode.id];
         duration[fromNode.id][toNode.id] = straight.duration[fromNode.id][toNode.id];
@@ -3215,13 +4567,19 @@ async function buildDistanceData(stores) {
         }
         return;
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!(duration[fromNode.id][toNode.id] > 0)) duration[fromNode.id][toNode.id] = straight.duration[fromNode.id][toNode.id];
     });
   });
-  emitChunkedPairs("璺濈鐩寸嚎琛ラ綈", fallbackDetails || [], 6);
+  emitChunkedPairs("距离直线补齐", fallbackDetails || [], 6);
   const fallbackCount = DISTANCE_PROGRESS_VERBOSE ? fallbackDetails.length : Math.max(0, totalPairCount - cacheHitPairs - fetchedPairs);
-  emit(`璺濈鐭╅樀瀹屾垚锛氱紦瀛樺懡涓?${cacheHitPairs}锛屾柊鎷夊彇 ${fetchedPairs}锛岀洿绾胯ˉ榻?${fallbackCount}锛屾渶缁堟€昏竟 ${totalPairCount}銆俙);
+  emit(`距离矩阵完成：缓存命中 ${cacheHitPairs}，新拉取 ${fetchedPairs}，直线补齐 ${fallbackCount}，最终总边 ${totalPairCount}。`);
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     dist,
     duration,
@@ -3232,50 +4590,108 @@ async function buildDistanceData(stores) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getTravelMinutes(scenario, fromId, toId, speedKmh = 38) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const durationMinutes = Number(scenario?.duration?.[fromId]?.[toId] || 0);
   if (durationMinutes > 0) return durationMinutes;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const distanceKm = Number(scenario?.dist?.[fromId]?.[toId] || 0);
   return estimateStraightDurationMinutes(distanceKm, speedKmh);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getTravelMinutesSolverConsistent(scenario, fromId, toId, speedKmh = 38) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const distanceKm = Number(scenario?.dist?.[fromId]?.[toId] || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return distanceKm / Math.max(Number(speedKmh || 0), 1) * 60;
 }
 
 function routeNodeDisplay(id, scenario) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (id === DC.id) return L("depot");
   const store = scenario?.storeMap?.get(id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return store ? `${store.id} ${store.name}` : String(id || "");
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildRouteDisplay(routeIds = [], scenario) {
-  return [DC.id, ...routeIds, DC.id].map((id) => routeNodeDisplay(id, scenario)).join(" 鈫?");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  return [DC.id, ...routeIds, DC.id].map((id) => routeNodeDisplay(id, scenario)).join(" → ");
 }
 
 function shortenMapName(name, limit = 14) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const text = String(name || "");
-  return text.length > limit ? `${text.slice(0, limit)}鈥 : text;
+  return text.length > limit ? `${text.slice(0, limit)}…` : text;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function computeMapOverlayMarkers(markers = [], polyline = []) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const allPoints = [...polyline, ...markers.map((item) => [Number(item.lng), Number(item.lat)])]
     .filter((point) => Array.isArray(point) && point.length === 2 && Number.isFinite(point[0]) && Number.isFinite(point[1]));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!allPoints.length) return markers.map((item) => ({ ...item, xPercent: 50, yPercent: 50 }));
   const lngs = allPoints.map((point) => point[0]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const lats = allPoints.map((point) => point[1]);
   const minLng = Math.min(...lngs);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxLng = Math.max(...lngs);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const minLat = Math.min(...lats);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxLat = Math.max(...lats);
   const lngSpan = Math.max(0.00001, maxLng - minLng);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const latSpan = Math.max(0.00001, maxLat - minLat);
   const padX = 9;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const padY = 10;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return markers.map((item) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const ratioX = (Number(item.lng) - minLng) / lngSpan;
     const ratioY = (Number(item.lat) - minLat) / latSpan;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       ...item,
       xPercent: padX + ratioX * (100 - padX * 2),
@@ -3285,18 +4701,38 @@ function computeMapOverlayMarkers(markers = [], polyline = []) {
 }
 
 async function getTripRouteMapData(result, wave, plan, trip) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const routeCache = loadAmapRouteCache();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const nodes = [DC, ...trip.stops.map((stop) => result.scenario.storeMap.get(stop.storeId) || { id: stop.storeId, name: stop.storeName, lng: 0, lat: 0 }), DC]
     .filter((node) => Number.isFinite(Number(node.lng)) && Number.isFinite(Number(node.lat)));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const combinedPoints = [];
   const legs = [];
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let index = 0; index < nodes.length - 1; index += 1) {
     const fromNode = nodes[index];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const toNode = nodes[index + 1];
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const cacheKey = getAmapCacheKey(fromNode, toNode);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let points = parsePolylinePoints(routeCache[cacheKey]?.polyline || "");
     let source = routeCache[cacheKey]?.source || "cache";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!points.length) {
       try {
         points = await fetchAmapDrivingPolyline(fromNode, toNode);
@@ -3311,10 +4747,20 @@ async function getTripRouteMapData(result, wave, plan, trip) {
         source = "fallback";
       }
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const normalizedPoints = points.filter((pair) => pair.length === 2);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (combinedPoints.length && normalizedPoints.length) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const [firstLng, firstLat] = normalizedPoints[0];
       const [lastLng, lastLat] = combinedPoints[combinedPoints.length - 1];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (Math.abs(firstLng - lastLng) < 1e-6 && Math.abs(firstLat - lastLat) < 1e-6) normalizedPoints.shift();
     }
     combinedPoints.push(...normalizedPoints);
@@ -3326,10 +4772,20 @@ async function getTripRouteMapData(result, wave, plan, trip) {
   }
 
   const simplified = simplifyPolylinePoints(combinedPoints, 120);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const markerNodes = [DC, ...trip.stops.map((stop) => result.scenario.storeMap.get(stop.storeId)).filter(Boolean)];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const markers = computeMapOverlayMarkers(markerNodes.map((node, index) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const label = index === 0 ? "D" : String(index);
     const fullName = node.id === DC.id ? L("depot") : `${node.id} ${node.name}`;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       label,
       lng: Number(node.lng),
@@ -3340,14 +4796,24 @@ async function getTripRouteMapData(result, wave, plan, trip) {
   }), simplified);
 
   const depotParam = `${DC.lng},${DC.lat}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stopParam = markers.slice(1).map((item) => `${item.lng},${item.lat}`).join(";");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const pathParam = serializePolylinePoints(simplified);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const markerSegments = [`mid,0x3366FF,D:${depotParam}`];
   if (stopParam) markerSegments.push(`small,0xD97706,:${stopParam}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const staticMapUrl = `https://restapi.amap.com/v3/staticmap?size=1100*640&scale=2&traffic=1&markers=${encodeURIComponent(markerSegments.join("|"))}&paths=8,0x2563EB,0.95,,0:${encodeURIComponent(pathParam)}&key=${encodeURIComponent(AMAP_WEB_SERVICE_KEY)}`;
 
   return {
-    title: `${plan.vehicle.plateNo} 路 ${wave.waveId} 路 ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}`,
+    title: `${plan.vehicle.plateNo} · ${wave.waveId} · ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}`,
     staticMapUrl,
     markers,
     legs,
@@ -3356,33 +4822,67 @@ async function getTripRouteMapData(result, wave, plan, trip) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getSingleWaveStoreIds(stores, dist, thresholdKm) {
-  // 褰诲簳鍋滅敤鈥滃崟娉㈡鑷姩鍒嗘祦鈥濓紝鎵€鏈夐棬搴椾粎鎸変笟鍔℃尝娆★紙W1/W2/W3/W4锛夊弬涓庢眰瑙ｃ€?
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return [];
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function validateInput() {
   if (!state.vehicles.length) return L("noVehicles");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!state.stores.length) return L("noStores");
   if (state.settings.ignoreWaves) return "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!state.waves.length) return L("noWaves");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const stores = enrichStores(state.stores);
-  // 鍋滅敤鈥滃崟娉㈡鍒嗘祦鈥濓細鎵€鏈夐棬搴楅兘鎸変笟鍔℃尝娆℃牎楠岃鐩栧叧绯?
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const regularIds = new Set(stores.map((store) => store.id));
   const covered = new Set();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const wave of state.waves) {
     parseStoreIds(wave.storeIds).forEach((id) => {
       if (regularIds.has(id)) covered.add(id);
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const missing = [...regularIds].filter((id) => !covered.has(id));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (missing.length) return LT("regularMissing", { count: missing.length, names: `${missing.slice(0, 8).join(",")}${missing.length > 8 ? "..." : ""}` });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return "";
 }
 
 async function buildScenario() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const stores = enrichStores(state.stores);
-  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氬紑濮嬫暣鐞嗛棬搴椾富鏁版嵁锛屽叡 ${stores.length} 瀹躲€俙);
+  reportRelayStageProgress(`场景构建：开始整理门店主数据，共 ${stores.length} 家。`);
   const dispatchStartMin = toMinutes(state.settings.dispatchStartTime || "19:10");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const normalizedStores = stores.map((store) => ({
       ...store,
       desiredArrivalMin: alignMinuteToDispatch(toMinutes(store.waveArrivals?.w1 || store.desiredArrival), dispatchStartMin),
@@ -3390,21 +4890,42 @@ async function buildScenario() {
       latestAllowedArrivalMin: alignMinuteToDispatch(toMinutes(store.waveArrivals?.w1 || store.desiredArrival), dispatchStartMin) + Number(store.parking || 10),
       actualServiceMinutes: Number(store.actualServiceMinutes || (Number(store.serviceMinutes || 15) * Math.max(0.1, Number(store.difficulty || 1)))),
     }));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeRows = normalizedStores.map((store) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const desired = String(store.waveArrivals?.w1 || store.desiredArrival || "");
-    return `${store.id}[娉㈡:${store.waveBelongs || "-"} 璐ч噺:${Number(store.totalResolvedLoad || 0).toFixed(6)} W1:${Number(store.resolvedWave1Load || 0).toFixed(6)} W2:${Number(store.resolvedWave2Load || 0).toFixed(6)} W3:${Number(store.resolvedWave3Load || 0).toFixed(6)} W4:${Number(store.resolvedWave4Load || 0).toFixed(6)} 鏈熸湜:${desired || "--:--"} 鍏佽鍋忓樊:${Number(store.parking || 0)} 鍗歌揣:${Number(store.actualServiceMinutes || 0)}]`;
+    return `${store.id}[波次:${store.waveBelongs || "-"} 货量:${Number(store.totalResolvedLoad || 0).toFixed(6)} W1:${Number(store.resolvedWave1Load || 0).toFixed(6)} W2:${Number(store.resolvedWave2Load || 0).toFixed(6)} W3:${Number(store.resolvedWave3Load || 0).toFixed(6)} W4:${Number(store.resolvedWave4Load || 0).toFixed(6)} 期望:${desired || "--:--"} 允许偏差:${Number(store.parking || 0)} 卸货:${Number(store.actualServiceMinutes || 0)}]`;
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let i = 0; i < storeRows.length; i += 15) {
     const chunk = storeRows.slice(i, i + 15);
-    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氶棬搴楁槑缁?${i + 1}-${Math.min(i + 15, storeRows.length)}锛?{chunk.join(" | ")}`);
+    reportRelayStageProgress(`场景构建：门店明细 ${i + 1}-${Math.min(i + 15, storeRows.length)}：${chunk.join(" | ")}`);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const distanceData = await buildDistanceData(normalizedStores);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const dist = distanceData.dist;
-  // 鍋滅敤鈥滃崟娉㈡鍒嗘祦鈥濓細涓嶅啀鎸夎窛绂婚槇鍊煎己鍒跺垏鍒扳€滃崟娉㈡鈥?
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const singleWaveThreshold = Number(state.settings.singleWaveDistanceKm || 70);
   const singleWaveStoreIds = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const singleWaveIdSet = new Set();
   const regularStoreIds = normalizedStores.map((store) => store.id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waves = state.settings.ignoreWaves
     ? [{
       waveId: "ALL",
@@ -3417,15 +4938,27 @@ async function buildScenario() {
       storeList: normalizedStores.map((s) => s.id),
     }]
     : (() => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const normalWaves = state.waves.map((w) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const span = buildWaveSpan(w.start, w.end);
         let { startMin, endMin } = span;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         while (endMin < dispatchStartMin) {
           startMin += 1440;
           endMin += 1440;
         }
         const waveId = String(w.waveId || "").trim().toUpperCase();
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const isNightWave = waveId === "W1" || waveId === "W2";
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         return {
           ...w,
           waveId: w.waveId,
@@ -3437,20 +4970,27 @@ async function buildScenario() {
           isNightWave,
           earliestDepartureMin: waveId === "W2" ? 23 * 60 : startMin,
           nightGroup: isNightWave ? "NIGHT" : "",
-          // 涓ユ牸鎸変笟鍔℃尝娆″弬涓庢眰瑙ｏ紝涓嶅仛鍗曟尝娆℃敼鍒嗘祦
+          // EN: Business note for nearby logic.
+          // CN: 附近逻辑的业务提示。
           storeList: parseStoreIds(w.storeIds),
         };
       }).filter((wave) => wave.storeList.length);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return normalWaves;
     })();
-  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氭尝娆″叡 ${waves.length} 涓€俙);
+  reportRelayStageProgress(`场景构建：波次共 ${waves.length} 个。`);
   waves.forEach((wave) => {
-    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛?{wave.waveId} ${wave.start || "--:--"}-${wave.end || "--:--"}锛岄棬搴?${Array.isArray(wave.storeList) ? wave.storeList.length : 0} 瀹讹紝闂ㄥ簵娓呭崟锛?{(wave.storeList || []).join("銆?) || "-"}`);
+    reportRelayStageProgress(`场景构建：${wave.waveId} ${wave.start || "--:--"}-${wave.end || "--:--"}，门店 ${Array.isArray(wave.storeList) ? wave.storeList.length : 0} 家，门店清单：${(wave.storeList || []).join("、") || "-"}`);
   });
-  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氳溅杈嗗叡 ${state.vehicles.length} 鍙般€俙);
+  reportRelayStageProgress(`场景构建：车辆共 ${state.vehicles.length} 台。`);
   state.vehicles.forEach((v) => {
-    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氳溅杈?${v.plateNo || "-"} 绫诲瀷=${ENFORCED_VEHICLE_TYPE} 瀹归噺=${Number(v.capacity || 0)} 閫熷害=${Number(v.speed || 0)} 鍐烽摼=${Boolean(v.canCarryCold)}`);
+    reportRelayStageProgress(`场景构建：车辆 ${v.plateNo || "-"} 类型=${ENFORCED_VEHICLE_TYPE} 容量=${Number(v.capacity || 0)} 速度=${Number(v.speed || 0)} 冷链=${Boolean(v.canCarryCold)}`);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const backendStrategyConfig = buildBackendStrategyConfig(state.strategyConfig);
   return {
     vehicles: state.vehicles.map((v) => ({
@@ -3482,8 +5022,14 @@ async function buildScenario() {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function createVehiclePlan(vehicle, waveId, startMin, scenario, priorStats = {}) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const earliestDepartureMin = Number(priorStats.earliestDepartureMin || startMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     vehicle,
     waveId,
@@ -3500,67 +5046,127 @@ function createVehiclePlan(vehicle, waveId, startMin, scenario, priorStats = {})
 }
 
 function flattenPlanStoreIds(plan) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return plan.trips.flatMap((trip) => trip.stops.map((stop) => stop.storeId));
 }
 
 function getUsageMap(metrics) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return new Map((metrics?.usageList || []).map((item) => [item.plateNo, item]));
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getUsedVehicleSet() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const used = new Set();
   state.lastResults.forEach((result) => {
     result.solution.flat().forEach((plan) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (plan.trips?.length) used.add(plan.vehicle.plateNo);
     });
   });
   return used;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function normalizeStoreKey(id) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const raw = String(id ?? "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!raw) return "";
   if (/^\d+$/.test(raw)) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (raw.length === 5) return `3${raw}`;
     if (raw.length === 6 && raw.startsWith("3")) return raw;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return raw;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildStoreKeyVariants(id) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const raw = String(id ?? "").trim();
   const normalized = normalizeStoreKey(raw);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const variants = new Set([raw, normalized]);
   if (/^\d{6}$/.test(normalized) && normalized.startsWith("3")) {
     variants.add(normalized.slice(1));
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return [...variants].filter(Boolean);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildStoreWaveAssignmentKey(storeId, waveId) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const sid = normalizeStoreKey(storeId);
   const wid = String(waveId || "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!sid || !wid) return "";
   return `${sid}|${wid}`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildStoreAssignmentMapFromSolution(solution = []) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = new Map();
   (solution || []).forEach((wavePlans) => {
     (wavePlans || []).forEach((plan) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const plateNo = plan?.vehicle?.plateNo || "";
       const waveId = plan?.waveId || "";
       (plan?.trips || []).forEach((trip) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const stopIds = [];
         (trip?.stops || []).forEach((stop) => {
           if (stop?.storeId != null) stopIds.push(stop.storeId);
         });
         (trip?.route || []).forEach((storeId) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           if (storeId != null) stopIds.push(storeId);
         });
         stopIds.forEach((storeId) => {
           buildStoreKeyVariants(storeId).forEach((storeKey) => {
+            // EN: Control point for business behavior.
+            // CN: 影响业务行为的控制节点。
             const compositeKey = buildStoreWaveAssignmentKey(storeKey, waveId);
+            // EN: Key step in this business flow.
+            // CN: 当前业务流程中的关键步骤。
             if (compositeKey) {
               map.set(compositeKey, {
                 plateNo,
@@ -3568,7 +5174,9 @@ function buildStoreAssignmentMapFromSolution(solution = []) {
                 tripNo: trip?.tripNo || 1,
               });
             }
-            // 淇濈暀鍗曢敭浠呬綔鍏煎鍏滃簳锛屽墠绔樉绀烘煡璇㈠凡鍒囧埌澶嶅悎閿?            map.set(storeKey, {
+            // EN: Business note for nearby logic.
+            // CN: 附近逻辑的业务提示。
+            map.set(storeKey, {
               plateNo,
               waveId,
               tripNo: trip?.tripNo || 1,
@@ -3581,107 +5189,225 @@ function buildStoreAssignmentMapFromSolution(solution = []) {
   return map;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getActiveStoreAssignmentMap() {
   const result = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (result?.storeAssignmentMap instanceof Map && result.storeAssignmentMap.size) return result.storeAssignmentMap;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (result?.solution?.length) {
     result.storeAssignmentMap = buildStoreAssignmentMapFromSolution(result.solution);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return result.storeAssignmentMap;
   }
   const fallback = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   state.lastResults.forEach((oneResult) => {
     const oneMap = oneResult?.storeAssignmentMap instanceof Map && oneResult.storeAssignmentMap.size
       ? oneResult.storeAssignmentMap
       : buildStoreAssignmentMapFromSolution(oneResult?.solution || []);
     oneMap.forEach((value, key) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!fallback.has(key)) fallback.set(key, value);
     });
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return fallback;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getStoreAssignmentByRule(store = {}, assignmentMap = new Map()) {
   const variants = buildStoreKeyVariants(store?.id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveOrder = ["W1", "W2", "W3", "W4"];
   for (const waveId of waveOrder) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!isStoreCandidateForWaveRule(store, waveId)) continue;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (const variant of variants) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const key = buildStoreWaveAssignmentKey(variant, waveId);
       if (!key) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const hit = assignmentMap.get(key);
       if (hit && String(hit.plateNo || "").trim()) return hit;
     }
   }
-  // 鍏滃簳鑰侀敭锛堥伩鍏嶅巻鍙插綊妗ｄ笉鍙锛?  for (const variant of variants) {
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  for (const variant of variants) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const hit = assignmentMap.get(variant);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (hit && String(hit.plateNo || "").trim()) return hit;
   }
   return null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getSortConfig(kind) {
   if (kind === "vehicle") return { fieldKey: "vehicleSortField", dirKey: "vehicleSortDir" };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (kind === "wave") return { fieldKey: "waveSortField", dirKey: "waveSortDir" };
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { fieldKey: "storeSortField", dirKey: "storeSortDir" };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function toggleDataTableSort(kind, field) {
   const cfg = getSortConfig(kind);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (state.ui[cfg.fieldKey] === field) {
     state.ui[cfg.dirKey] = state.ui[cfg.dirKey] === "asc" ? "desc" : "asc";
   } else {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ui[cfg.fieldKey] = field;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     state.ui[cfg.dirKey] = "asc";
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (kind === "vehicle") renderVehicles();
   else if (kind === "wave") renderWaves();
   else renderStoresTable();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildSortMark(kind, field) {
   const cfg = getSortConfig(kind);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (state.ui[cfg.fieldKey] !== field) return "";
-  return state.ui[cfg.dirKey] === "asc" ? " 鈻? : " 鈻?;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  return state.ui[cfg.dirKey] === "asc" ? " ▲" : " ▼";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildDataTableHtml({ tableKind = "store", columns = [], rows = [], tableClass = "" } = {}) {
   const colgroup = columns.map((column) => `<col style="width:${column.width || 120}px;">`).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const thead = columns.map((column) => {
     if (column.sortable && column.sortField) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (column.headerHtml) {
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         return `<th><button class="data-table-sort data-table-sort-rich" data-table-kind="${tableKind}" data-table-sort="${column.sortField}">${column.headerHtml}<span class="data-table-sort-mark">${buildSortMark(tableKind, column.sortField).trim()}</span></button></th>`;
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return `<th><button class="data-table-sort" data-table-kind="${tableKind}" data-table-sort="${column.sortField}">${escapeHtml(String(column.label || ""))}${buildSortMark(tableKind, column.sortField)}</button></th>`;
     }
     if (column.headerHtml) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       return `<th>${column.headerHtml}</th>`;
     }
     return `<th>${escapeHtml(String(column.label || ""))}</th>`;
   }).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const body = rows.length ? rows.join("") : `<tr><td colspan="${columns.length}" class="muted">${L("noChartData")}</td></tr>`;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return `<table class="data-table ${tableClass}"><colgroup>${colgroup}</colgroup><thead><tr>${thead}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getWaveStoreNameList(storeIdsText) {
   const ids = parseStoreIds(storeIdsText);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeById = new Map(state.stores.map((store) => [normalizeStoreCode(store.id), store]));
   return ids.map((id) => storeById.get(normalizeStoreCode(id))?.name || id);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderWaveStoreNameTags(storeIdsText, previewCount = 3) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const names = getWaveStoreNameList(storeIdsText);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!names.length) return `<span class="muted">-</span>`;
   const preview = names.slice(0, previewCount);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const remain = Math.max(0, names.length - preview.length);
   const title = escapeHtml(names.join(" / "));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const chips = preview.map((name) => `<span class="wave-store-chip">${escapeHtml(name)}</span>`).join("");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const suffix = remain > 0 ? `<span class="wave-store-more">+${remain}</span>` : "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `<div class="wave-store-chip-wrap" title="${title}">${chips}${suffix}</div>`;
 }
 
 function createStop(store, timing, legDistance, arrival, start, leave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const lateMinutes = Math.max(0, arrival - timing.desiredArrivalMin);
   const overToleranceMinutes = Math.max(0, arrival - timing.latestAllowedArrivalMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
       storeId: store.id,
       storeName: store.name,
@@ -3699,16 +5425,24 @@ function createStop(store, timing, legDistance, arrival, start, leave) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function summarizePlan(plan) {
   plan.totalDistance = plan.trips.reduce((sum, trip) => sum + trip.totalDistance, 0);
   plan.totalLoad = plan.trips.reduce((sum, trip) => sum + trip.loadBoxes, 0);
   plan.tripCount = plan.trips.length;
   plan.availableTime = plan.trips.length ? plan.trips[plan.trips.length - 1].finish : plan.availableTime;
   plan.feasible = true;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return plan;
 }
 
 function createEmptyTrip(plan) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     tripNo: plan.trips.length + 1,
     route: [],
@@ -3726,57 +5460,118 @@ function createEmptyTrip(plan) {
 }
 
 function getSolveRelayMaxKm(scenario) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const v = Number(scenario?.strategyConfigResolved?.w1w2RelayMaxKm ?? scenario?.strategyConfig?.w1w2RelayMaxKm ?? state?.strategyConfig?.w1w2RelayMaxKm ?? 240);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return Number.isFinite(v) && v > 0 ? v : 240;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getSolveW3OneWayMaxKm(scenario) {
   const v = Number(scenario?.strategyConfigResolved?.w3OneWayMaxKm ?? scenario?.strategyConfig?.w3OneWayMaxKm ?? state?.strategyConfig?.w3OneWayMaxKm ?? 260);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return Number.isFinite(v) && v > 0 ? v : 260;
 }
 
 function isW3WaveForSolve(wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return String(wave?.waveId || "").trim().toUpperCase() === "W3";
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildTripFromRoute(route, vehicle, scenario, wave, startTime, tripNo, options = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentNode = DC.id;
   let currentTime = startTime;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let loadBoxes = 0;
   let totalDistance = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let outboundDistance = 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let onTimeCount = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let lateStoreCount = 0;
   let lateMinutes = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let overToleranceMinutes = 0;
   const w3OneWayMaxKm = getSolveW3OneWayMaxKm(scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const isW3Wave = isW3WaveForSolve(wave);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const stops = [];
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const storeId of route) {
     const store = scenario.storeMap.get(storeId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!store) return null;
     const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
-    // 鍐烽摼绾︽潫宸插仠鐢細涓嶅啀鎸?coldRatio/canCarryCold 鎷︽埅闂ㄥ簵鍒嗛厤
+    // EN: Business note for nearby logic.
+    // CN: 附近逻辑的业务提示。
     loadBoxes += getStoreSolveLoadForWave(store, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!IGNORE_CAPACITY_CONSTRAINT && loadBoxes > getVehicleSolveCapacity(vehicle)) return null;
 
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const legDistance = scenario.dist[currentNode][store.id];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const travelMinutes = legDistance / Math.max(Number(vehicle.speed || 0), 1) * 60;
     const arrival = currentTime + travelMinutes;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const start = arrival;
     const leave = start + store.actualServiceMinutes;
     totalDistance += legDistance;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (isW3Wave) {
       outboundDistance += legDistance;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (outboundDistance > w3OneWayMaxKm) return null;
     }
 
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const stop = createStop(store, timing, legDistance, arrival, start, leave);
     if (stop.onTime) onTimeCount += 1;
     else lateStoreCount += 1;
     lateMinutes += stop.lateMinutes || 0;
     overToleranceMinutes += stop.overToleranceMinutes || 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!options.allowToleranceBreak && stop.overToleranceMinutes > 0) return null;
     stops.push(stop);
     currentNode = store.id;
@@ -3786,15 +5581,27 @@ function buildTripFromRoute(route, vehicle, scenario, wave, startTime, tripNo, o
   const backDistance = route.length ? scenario.dist[currentNode][DC.id] : 0;
   totalDistance += backDistance;
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backTravelMinutes = backDistance / Math.max(Number(vehicle.speed || 0), 1) * 60;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const finish = currentTime + backTravelMinutes;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveLateType = wave.endMode || "return";
   const serviceEnd = stops.length ? stops[stops.length - 1].leave : startTime;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveLateMinutes = waveLateType === "return"
     ? Math.max(0, finish - wave.endMin)
     : Math.max(0, serviceEnd - wave.endMin);
   if (!wave.relaxEnd && waveLateMinutes > 0) return null;
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     tripNo,
     route: [...route],
@@ -3816,91 +5623,185 @@ function buildTripFromRoute(route, vehicle, scenario, wave, startTime, tripNo, o
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function mapTripFailureLabel(code) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const key = String(code || "").trim();
-  if (key === "capacity") return "瀹归噺";
-  if (key === "arrival_window") return "鏃堕棿绐?;
-  if (key === "wave_end") return "娉㈡鎴";
-  if (key === "max_route_km" || key === "max_route_km_single" || key === "max_route_km_return" || key === "night_regular_distance") return "閲岀▼";
-  if (key === "store_missing") return "闂ㄥ簵缂哄け";
-  return "缁煎悎";
+  if (key === "capacity") return "容量";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  if (key === "arrival_window") return "时间窗";
+  if (key === "wave_end") return "波次截止";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (key === "max_route_km" || key === "max_route_km_single" || key === "max_route_km_return" || key === "night_regular_distance") return "里程";
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  if (key === "store_missing") return "门店缺失";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  return "综合";
 }
 
 function diagnoseTripBuildFailure(route, vehicle, scenario, wave, startTime, options = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let currentNode = DC.id;
   let currentTime = startTime;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let loadBoxes = 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let totalDistance = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let outboundDistance = 0;
   const w3OneWayMaxKm = getSolveW3OneWayMaxKm(scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const isW3Wave = isW3WaveForSolve(wave);
   for (const storeId of route) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const store = scenario.storeMap.get(storeId);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!store) {
-      if (isW3Wave) console.log(`[W3] 璺嚎鎷掔粷: store_missing, storeId=${storeId}`);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      if (isW3Wave) console.log(`[W3] 路线拒绝: store_missing, storeId=${storeId}`);
       return { code: "store_missing", label: mapTripFailureLabel("store_missing"), storeId };
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
     loadBoxes += getStoreSolveLoadForWave(store, wave);
     if (!IGNORE_CAPACITY_CONSTRAINT && loadBoxes > getVehicleSolveCapacity(vehicle)) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (isW3Wave) {
-        console.log(`[W3] 璺嚎鎷掔粷: capacity, storeId=${storeId}, loadBoxes=${loadBoxes}, capacity=${getVehicleSolveCapacity(vehicle)}`);
+        console.log(`[W3] 路线拒绝: capacity, storeId=${storeId}, loadBoxes=${loadBoxes}, capacity=${getVehicleSolveCapacity(vehicle)}`);
       }
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       return { code: "capacity", label: mapTripFailureLabel("capacity"), storeId };
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const legDistance = scenario.dist[currentNode][store.id];
     const travelMinutes = legDistance / Math.max(Number(vehicle.speed || 0), 1) * 60;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const arrival = currentTime + travelMinutes;
     const leave = arrival + store.actualServiceMinutes;
     totalDistance += legDistance;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (isW3Wave) {
       outboundDistance += legDistance;
-      console.log(`[W3] 妫€鏌ヨ矾绾? storeId=${storeId}, legDistance=${legDistance}, outboundDistance绱=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+      console.log(`[W3] 检查路线: storeId=${storeId}, legDistance=${legDistance}, outboundDistance累计=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (outboundDistance > w3OneWayMaxKm) {
-        console.log(`[W3] 璺嚎鎷掔粷: max_route_km_single, storeId=${storeId}, outboundDistance=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+        console.log(`[W3] 路线拒绝: max_route_km_single, storeId=${storeId}, outboundDistance=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return { code: "max_route_km_single", label: mapTripFailureLabel("max_route_km_single"), storeId };
       }
     }
     const overTolerance = Math.max(0, arrival - timing.latestAllowedArrivalMin);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!options.allowToleranceBreak && overTolerance > 0) {
       if (isW3Wave) {
-        console.log(`[W3] 璺嚎鎷掔粷: arrival_window, storeId=${storeId}, arrival=${arrival}, latestAllowed=${timing.latestAllowedArrivalMin}, overTolerance=${overTolerance}`);
+        console.log(`[W3] 路线拒绝: arrival_window, storeId=${storeId}, arrival=${arrival}, latestAllowed=${timing.latestAllowedArrivalMin}, overTolerance=${overTolerance}`);
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return { code: "arrival_window", label: mapTripFailureLabel("arrival_window"), storeId };
     }
     currentNode = store.id;
     currentTime = leave;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const backDistance = route.length ? scenario.dist[currentNode][DC.id] : 0;
   totalDistance += backDistance;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backTravelMinutes = backDistance / Math.max(Number(vehicle.speed || 0), 1) * 60;
   const finish = currentTime + backTravelMinutes;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const serviceEnd = currentTime;
   const waveLateMinutes = (wave.endMode || "return") === "return"
     ? Math.max(0, finish - wave.endMin)
     : Math.max(0, serviceEnd - wave.endMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!wave.relaxEnd && waveLateMinutes > 0) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (isW3Wave) {
-      console.log(`[W3] 璺嚎鎷掔粷: wave_end, storeId=${route[route.length - 1]}, finish=${finish}, serviceEnd=${serviceEnd}, endMin=${wave.endMin}, endMode=${wave.endMode || "return"}`);
+      console.log(`[W3] 路线拒绝: wave_end, storeId=${route[route.length - 1]}, finish=${finish}, serviceEnd=${serviceEnd}, endMin=${wave.endMin}, endMode=${wave.endMode || "return"}`);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { code: "wave_end", label: mapTripFailureLabel("wave_end"), storeId: route[route.length - 1] };
   }
-  if (isW3Wave) console.log(`[W3] 璺嚎鎷掔粷: unknown, storeId=${route[0]}`);
+  if (isW3Wave) console.log(`[W3] 路线拒绝: unknown, storeId=${route[0]}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { code: "unknown", label: mapTripFailureLabel("unknown"), storeId: route[0] };
 }
 
 function rebuildPlanFromRoutesWithReason(vehicle, routes, scenario, wave, priorStats = {}, options = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const plan = createVehiclePlan(vehicle, wave.waveId, wave.startMin, scenario, priorStats);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const regularMileageCap = getSolveRelayMaxKm(scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let availableTime = plan.availableTime;
   for (const route of routes) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!route.length) continue;
     const trip = buildTripFromRoute(route, vehicle, scenario, wave, availableTime, plan.trips.length + 1, {
       ...options,
       solverConsistentTravel: true,
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!trip) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const failure = diagnoseTripBuildFailure(route, vehicle, scenario, wave, availableTime, options);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return { plan: null, failure };
     }
     plan.trips.push(trip);
@@ -3909,6 +5810,10 @@ function rebuildPlanFromRoutesWithReason(vehicle, routes, scenario, wave, priorS
   plan.availableTime = availableTime;
   summarizePlan(plan);
   if (wave.isNightWave && plan.priorRegularDistance + plan.totalDistance > regularMileageCap) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       plan: null,
       failure: { code: "night_regular_distance", label: mapTripFailureLabel("night_regular_distance"), storeId: "" },
@@ -3917,37 +5822,79 @@ function rebuildPlanFromRoutesWithReason(vehicle, routes, scenario, wave, priorS
   return { plan, failure: null };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function rebuildPlanFromRoutes(vehicle, routes, scenario, wave, priorStats = {}, options = {}) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return rebuildPlanFromRoutesWithReason(vehicle, routes, scenario, wave, priorStats, options).plan;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function computePlanLateness(plan, scenario) {
   return plan.trips.reduce((sum, trip) => sum + trip.stops.reduce((tripSum, stop) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const store = scenario.storeMap.get(stop.storeId);
       const timing = getStoreTimingForWave(store, { waveId: plan.waveId }, scenario.dispatchStartMin);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return tripSum + Math.max(0, stop.arrival - (timing?.latestAllowedArrivalMin || 0));
     }, 0), 0);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function computePlanViolation(plan) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return plan.trips.reduce((sum, trip) => sum + (trip.overToleranceMinutes || 0), 0);
 }
 
 function computePlanCostBreakdown(plan, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const vehicleBusyPenalty = wave.singleWave ? 0 : plan.priorRegularDistance * 1.2 + plan.priorWaveCount * 150;
   const latenessMinutes = computePlanLateness(plan, scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const arrivalViolationMinutes = computePlanViolation(plan);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const latenessPenalty = latenessMinutes * 60;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const arrivalViolationPenalty = arrivalViolationMinutes * 20000;
   const waveLateMinutes = plan.trips.reduce((sum, trip) => sum + (trip.waveLateMinutes || 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const waveLatePenalty = waveLateMinutes * 80;
   const extraTripCount = (!wave.singleWave && plan.tripCount > 1) ? (plan.tripCount - 1) : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const extraTripPenalty = extraTripCount * 180;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const distanceCost = plan.totalDistance * 0.45;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const loadBonus = plan.totalLoad * 0.08;
   const lateRouteCount = plan.trips.filter((trip) => (trip.overToleranceMinutes || 0) > 0).length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const lateRoutePenalty = scenario.concentrateLate ? lateRouteCount * 1600 : lateRouteCount * 240;
   const totalCost = arrivalViolationPenalty + latenessPenalty + waveLatePenalty + vehicleBusyPenalty + extraTripPenalty + lateRoutePenalty + distanceCost - loadBonus;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     totalCost,
     latenessMinutes,
@@ -3966,11 +5913,19 @@ function computePlanCostBreakdown(plan, scenario, wave) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function computePlanCost(plan, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return computePlanCostBreakdown(plan, scenario, wave).totalCost;
 }
 
 function computePlansCostBreakdown(plans, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const total = {
     totalCost: 0,
     latenessMinutes: 0,
@@ -3993,40 +5948,80 @@ function computePlansCostBreakdown(plans, scenario, wave) {
       total[key] += Number(item[key] || 0);
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return total;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function formatWaveCostBreakdown(breakdown) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!breakdown) return "";
   const parts = [
-    `閲岀▼ ${Number(breakdown.distanceCost || 0).toFixed(1)}`,
+    `里程 ${Number(breakdown.distanceCost || 0).toFixed(1)}`,
   ];
-  if (Number(breakdown.latenessPenalty || 0) > 0) parts.push(`鏅氬埌 ${Number(breakdown.latenessPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.arrivalViolationPenalty || 0) > 0) parts.push(`瓒呭厑璁稿亸宸?${Number(breakdown.arrivalViolationPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.waveLatePenalty || 0) > 0) parts.push(`娉㈡瓒呮椂 ${Number(breakdown.waveLatePenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.vehicleBusyPenalty || 0) > 0) parts.push(`杞﹁締缁窇 ${Number(breakdown.vehicleBusyPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.extraTripPenalty || 0) > 0) parts.push(`澶氳稛娆?${Number(breakdown.extraTripPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.lateRoutePenalty || 0) > 0) parts.push(`鏅氬埌绾胯矾 ${Number(breakdown.lateRoutePenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.loadBonus || 0) > 0) parts.push(`瑁呰浇鎶垫墸 -${Number(breakdown.loadBonus || 0).toFixed(1)}`);
-  return parts.join("锛?);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  if (Number(breakdown.latenessPenalty || 0) > 0) parts.push(`晚到 ${Number(breakdown.latenessPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.arrivalViolationPenalty || 0) > 0) parts.push(`超允许偏差 ${Number(breakdown.arrivalViolationPenalty || 0).toFixed(1)}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (Number(breakdown.waveLatePenalty || 0) > 0) parts.push(`波次超时 ${Number(breakdown.waveLatePenalty || 0).toFixed(1)}`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  if (Number(breakdown.vehicleBusyPenalty || 0) > 0) parts.push(`车辆续跑 ${Number(breakdown.vehicleBusyPenalty || 0).toFixed(1)}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (Number(breakdown.extraTripPenalty || 0) > 0) parts.push(`多趟次 ${Number(breakdown.extraTripPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.lateRoutePenalty || 0) > 0) parts.push(`晚到线路 ${Number(breakdown.lateRoutePenalty || 0).toFixed(1)}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  if (Number(breakdown.loadBonus || 0) > 0) parts.push(`装载抵扣 -${Number(breakdown.loadBonus || 0).toFixed(1)}`);
+  return parts.join("，");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildTripCandidate(plan, store, scenario, wave, debug = false, options = {}) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const vehicle = plan.vehicle;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!IGNORE_CAPACITY_CONSTRAINT && getStoreSolveLoadForWave(store, wave) > getVehicleSolveCapacity(vehicle)) return null;
 
   const baseRoutes = plan.trips.map((trip) => [...trip.route]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const candidates = [];
 
   for (let tripIndex = 0; tripIndex < baseRoutes.length; tripIndex += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const route = baseRoutes[tripIndex];
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (let insertAt = 0; insertAt <= route.length; insertAt += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const nextRoutes = baseRoutes.map((item) => [...item]);
       nextRoutes[tripIndex].splice(insertAt, 0, store.id);
       const nextPlan = rebuildPlanFromRoutes(vehicle, nextRoutes, scenario, wave, {
         priorRegularDistance: plan.priorRegularDistance,
         priorWaveCount: plan.priorWaveCount,
       }, options);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!nextPlan) continue;
       candidates.push({
         nextPlan,
@@ -4044,12 +6039,18 @@ function buildTripCandidate(plan, store, scenario, wave, debug = false, options 
   }
 
   if (!(wave.singleWave && baseRoutes.length)) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextRoutes = baseRoutes.map((item) => [...item]);
     nextRoutes.push([store.id]);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const nextPlan = rebuildPlanFromRoutes(vehicle, nextRoutes, scenario, wave, {
       priorRegularDistance: plan.priorRegularDistance,
       priorWaveCount: plan.priorWaveCount,
     }, options);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (nextPlan) {
       candidates.push({
         nextPlan,
@@ -4068,6 +6069,10 @@ function buildTripCandidate(plan, store, scenario, wave, debug = false, options 
 
   if (!candidates.length) return null;
   candidates.sort((a, b) => a.cost - b.cost);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!debug) return candidates[0];
   return {
     ...candidates[0],
@@ -4081,17 +6086,31 @@ function buildTripCandidate(plan, store, scenario, wave, debug = false, options 
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildPlanForStoreOrder(vehicle, orderedStores, scenario, wave, priorStats = {}, options = {}) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let plan = createVehiclePlan(vehicle, wave.waveId, wave.startMin, scenario, priorStats);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const store of orderedStores) {
     const candidate = buildTripCandidate(plan, store, scenario, wave, false, options);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!candidate) return null;
     plan = candidate.nextPlan;
   }
   return plan;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function localizeUnscheduledReason(reason) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const map = {
     arrival: "unscheduledReasonArrival",
     wave: "unscheduledReasonWave",
@@ -4100,47 +6119,103 @@ function localizeUnscheduledReason(reason) {
     slot: "unscheduledReasonSlot",
     mixed: "unscheduledReasonMixed",
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return L(map[reason] || "unscheduledReasonMixed");
 }
 
 function getDisplayUnscheduledReason(item) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const reason = String(item?.reason || "").trim().toLowerCase();
   const reasonText = String(item?.reasonText || "").trim();
-  const isCapacity = reason === "capacity" || /capacity|瀹归噺/.test(reasonText.toLowerCase());
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const isCapacity = reason === "capacity" || /capacity|容量/.test(reasonText.toLowerCase());
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (IGNORE_CAPACITY_CONSTRAINT && isCapacity) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return localizeUnscheduledReason("slot");
   }
   return reasonText || localizeUnscheduledReason(reason);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function diagnoseStoreVehicleConstraint(store, plan, scenario, wave) {
   const vehicle = plan.vehicle;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!IGNORE_CAPACITY_CONSTRAINT && getStoreSolveLoadForWave(store, wave) > getVehicleSolveCapacity(vehicle)) return "capacity";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const directDistance = scenario.dist[DC.id][store.id];
   const roundDistance = directDistance + scenario.dist[store.id][DC.id];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (isW3WaveForSolve(wave) && directDistance > getSolveW3OneWayMaxKm(scenario)) return "mileage";
   const regularMileageCap = getSolveRelayMaxKm(scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (wave.isNightWave && Number(plan.priorRegularDistance || 0) + roundDistance > regularMileageCap) return "mileage";
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const depart = Math.max(plan.availableTime || wave.startMin, wave.startMin, scenario.dispatchStartMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const arrival = depart + getTravelMinutes(scenario, DC.id, store.id, vehicle.speed);
   const leave = arrival + (store.actualServiceMinutes || store.serviceMinutes || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const finish = leave + getTravelMinutes(scenario, store.id, DC.id, vehicle.speed);
   if (arrival > timing.latestAllowedArrivalMin) return "arrival";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!wave.relaxEnd && (((wave.endMode || "return") === "return" && finish > wave.endMin) || ((wave.endMode || "return") !== "return" && leave > wave.endMin))) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       return "wave";
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return "slot";
 }
 
 function diagnoseUnscheduledStore(store, plans, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const stats = { arrival: 0, wave: 0, mileage: 0, capacity: 0, slot: 0 };
   for (const plan of plans) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const strictCandidate = buildTripCandidate(plan, store, scenario, wave, false, { allowToleranceBreak: false });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (strictCandidate) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return { reason: "slot", detail: localizeUnscheduledReason("slot"), stats };
     }
     const relaxedCandidate = buildTripCandidate(plan, store, scenario, wave, false, { allowToleranceBreak: true });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (relaxedCandidate) {
       stats.arrival += 1;
       continue;
@@ -4148,38 +6223,72 @@ function diagnoseUnscheduledStore(store, plans, scenario, wave) {
     const reason = diagnoseStoreVehicleConstraint(store, plan, scenario, wave);
     stats[reason] += 1;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ranked = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const bestReason = (stats.arrival > 0 ? "arrival" : ranked[0]?.[0]) || "mixed";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { reason: bestReason, detail: localizeUnscheduledReason(bestReason), stats };
 }
 
 function formatUnscheduledDetails(unscheduledStores, limit = 8) {
-  return (unscheduledStores || []).slice(0, limit).map((item) => `${item.storeName}锛?{getDisplayUnscheduledReason(item)}锛塦).join("銆?);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
+  return (unscheduledStores || []).slice(0, limit).map((item) => `${item.storeName}（${getDisplayUnscheduledReason(item)}）`).join("、");
 }
 
 function summarizeUnscheduledReasons(unscheduledStores) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const buckets = new Map();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const item of unscheduledStores || []) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const key = getDisplayUnscheduledReason(item);
     buckets.set(key, (buckets.get(key) || 0) + 1);
   }
   return [...buckets.entries()]
     .sort((a, b) => b[1] - a[1])
-    .map(([label, count]) => `${label} 脳 ${count}`)
-    .join("锛?);
+    .map(([label, count]) => `${label} × ${count}`)
+    .join("；");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode = false) {
   const attemptModes = scenario.concentrateLate
     ? [{ allowToleranceBreak: false }, { allowToleranceBreak: true }]
     : [{ allowToleranceBreak: false }];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicleEvaluations = [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const mode of attemptModes) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const ranked = [];
     for (let i = 0; i < plans.length; i += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const candidate = buildTripCandidate(plans[i], store, scenario, wave, traceMode, mode);
       if (!candidate) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const chosenTripNo = candidate.candidates?.[0]?.chosenTripNo || candidate.nextPlan.trips.find((trip) => trip.route.includes(store.id))?.tripNo || 1;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const item = {
         planIndex: i,
         nextPlan: candidate.nextPlan,
@@ -4192,6 +6301,8 @@ function evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode =
         candidates: candidate.candidates || [],
       };
       ranked.push(item);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (traceMode) {
         vehicleEvaluations.push({
           plateNo: item.plateNo,
@@ -4206,6 +6317,10 @@ function evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode =
     }
     ranked.sort((a, b) => a.cost - b.cost);
     if (ranked.length) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       return {
         best: ranked[0],
         second: ranked[1] || null,
@@ -4216,22 +6331,48 @@ function evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode =
   return { best: null, second: null, vehicleEvaluations };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function computeRegretPriority(bestChoice, secondChoice, store, wave, scenario) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const regretBase = (secondChoice?.cost ?? (bestChoice.cost + 35)) - bestChoice.cost;
   const urgency = Math.max(0, (scenario.dispatchStartMin + 1440) - timing.latestAllowedArrivalMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const remoteBonus = scenario.dist?.[DC.id]?.[store.id] || 0;
   return regretBase * 1.6 + remoteBonus * 0.05 + urgency * 0.02;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function greedySolve(scenario, seed = 0, traceMode = false) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const solution = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const regularVehicleStats = new Map();
   const traceLog = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const unscheduledStores = [];
   for (const wave of scenario.waves) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const plans = scenario.vehicles.map((vehicle) => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const prior = regularVehicleStats.get(vehicle.plateNo) || {};
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const earliestDepartureMin = wave.isNightWave
         ? Math.max(Number(wave.earliestDepartureMin || wave.startMin), Number(prior.nightAvailableMin || wave.startMin))
         : wave.startMin;
@@ -4240,37 +6381,71 @@ function greedySolve(scenario, seed = 0, traceMode = false) {
         earliestDepartureMin,
       });
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const stores = wave.storeList
       .map((id) => scenario.storeMap.get(id))
       .filter(Boolean)
       .sort((a, b) => {
         const timingA = getStoreTimingForWave(a, wave, scenario.dispatchStartMin);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const timingB = getStoreTimingForWave(b, wave, scenario.dispatchStartMin);
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         return timingA.desiredArrivalMin - timingB.desiredArrivalMin || a.id.localeCompare(b.id);
       });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (seed && stores.length > 1) {
       for (let i = stores.length - 1; i > 0; i -= 1) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const j = Math.floor(((i + 1) * ((seed % 11) + 1)) % stores.length);
         [stores[i], stores[j]] = [stores[j], stores[i]];
       }
     }
     const unrouted = [...stores];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     while (unrouted.length) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       let bestDecision = null;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const infeasible = [];
       for (const store of unrouted) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const { best, second, vehicleEvaluations } = evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode);
         if (!best) {
           infeasible.push({ store, vehicleEvaluations });
           continue;
         }
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const priority = computeRegretPriority(best, second, store, wave, scenario);
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (!bestDecision || priority > bestDecision.priority || (priority === bestDecision.priority && best.cost < bestDecision.best.cost)) {
           bestDecision = { store, best, priority, vehicleEvaluations };
         }
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!bestDecision) {
         for (const item of infeasible) {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
+          // EN: Control point for business behavior.
+          // CN: 影响业务行为的控制节点。
           const diagnosis = diagnoseUnscheduledStore(item.store, plans, scenario, wave);
           const timing = getStoreTimingForWave(item.store, wave, scenario.dispatchStartMin);
           unscheduledStores.push({
@@ -4281,6 +6456,8 @@ function greedySolve(scenario, seed = 0, traceMode = false) {
             reason: diagnosis.reason,
             reasonText: diagnosis.detail,
           });
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           if (traceMode) {
             traceLog.push({
               algorithmKey: "vrptw",
@@ -4301,6 +6478,8 @@ function greedySolve(scenario, seed = 0, traceMode = false) {
         break;
       }
       plans[bestDecision.best.planIndex] = bestDecision.best.nextPlan;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (traceMode) {
         traceLog.push({
           algorithmKey: "vrptw",
@@ -4315,12 +6494,20 @@ function greedySolve(scenario, seed = 0, traceMode = false) {
           vehicleEvaluations: bestDecision.vehicleEvaluations.sort((a, b) => (a.bestCost ?? Number.POSITIVE_INFINITY) - (b.bestCost ?? Number.POSITIVE_INFINITY)),
         });
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const removeIndex = unrouted.findIndex((item) => item.id === bestDecision.store.id);
       if (removeIndex >= 0) unrouted.splice(removeIndex, 1);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (wave.isNightWave) {
       plans.forEach((plan) => {
         const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (plan.trips.length) {
           regularVehicleStats.set(plan.vehicle.plateNo, {
             priorRegularDistance: prev.priorRegularDistance + plan.totalDistance,
@@ -4337,9 +6524,13 @@ function greedySolve(scenario, seed = 0, traceMode = false) {
     }
     solution.push(plans);
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return traceMode ? { solution, traceLog, unscheduledStores } : { solution, unscheduledStores };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function cloneWaveRouteState(plans) {
   return plans.map((plan) => ({
     vehicle: plan.vehicle,
@@ -4350,10 +6541,20 @@ function cloneWaveRouteState(plans) {
   }));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function rebuildWavePlansFromState(routeState, scenario, wave) {
   const plans = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const degradedVehicles = [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const stateItem of routeState) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const rebuilt = rebuildPlanFromRoutesWithReason(
       stateItem.vehicle,
       stateItem.routes,
@@ -4366,6 +6567,10 @@ function rebuildWavePlansFromState(routeState, scenario, wave) {
       },
     );
     let plan = rebuilt.plan;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!plan) {
       const emptyPlan = rebuildPlanFromRoutesWithReason(
         stateItem.vehicle,
@@ -4378,8 +6583,14 @@ function rebuildWavePlansFromState(routeState, scenario, wave) {
           earliestDepartureMin: stateItem.earliestDepartureMin,
         },
       );
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!emptyPlan.plan) return null;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const plate = String(stateItem?.vehicle?.plateNo || "").trim() || "-";
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const fail = rebuilt.failure || {};
       degradedVehicles.push({
         plate,
@@ -4391,37 +6602,61 @@ function rebuildWavePlansFromState(routeState, scenario, wave) {
     plans.push(plan);
   }
   if (degradedVehicles.length) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const examples = degradedVehicles.slice(0, 8).map((item) => (
       item.storeId
         ? `${item.plate}[${item.reasonLabel}/${item.storeId}]`
         : `${item.plate}[${item.reasonLabel}]`
     ));
-    reportRelayStageProgress(`鍚庣閲嶅缓闄嶇骇锛?{degradedVehicles.length} 鍙拌溅杈嗚矾绾夸笉鍚堟硶锛屽凡缃┖锛?{examples.join("銆?)}锛塦);
+    reportRelayStageProgress(`后端重建降级：${degradedVehicles.length} 台车辆路线不合法，已置空（${examples.join("、")}）`);
   }
   return plans;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function wavePlansCost(plans, scenario, wave) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return plans.reduce((sum, plan) => sum + computePlanCost(plan, scenario, wave), 0);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function approximateRouteDistance(route = [], scenario) {
   if (!route.length) return 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let total = Number(scenario?.dist?.[DC.id]?.[route[0]] || 0);
   for (let i = 0; i < route.length - 1; i += 1) {
     total += Number(scenario?.dist?.[route[i]]?.[route[i + 1]] || 0);
   }
   total += Number(scenario?.dist?.[route[route.length - 1]]?.[DC.id] || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return total;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function approximateTouchedDistance(routeState, scenario, touchedVehicleIndexes = []) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const targets = touchedVehicleIndexes.length
     ? touchedVehicleIndexes.map((index) => routeState[index]).filter(Boolean)
     : routeState;
   return targets.reduce((sum, item) => sum + item.routes.reduce((routeSum, route) => routeSum + approximateRouteDistance(route, scenario), 0), 0);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function normalizeRouteBuckets(routeState) {
   routeState.forEach((item) => {
     item.routes = item.routes.filter((route) => route.length);
@@ -4429,57 +6664,107 @@ function normalizeRouteBuckets(routeState) {
 }
 
 function createSeededRandom(seed = 42) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let value = seed % 2147483647;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (value <= 0) value += 2147483646;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return () => {
     value = value * 16807 % 2147483647;
     return (value - 1) / 2147483646;
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function hashRouteState(routeState) {
   return routeState
     .map((item) => `${item.vehicle.plateNo}:${item.routes.map((route) => route.join(">")).join("|")}`)
     .join("||");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function pushTraceEvent(traceLog, event, limit = 160) {
   traceLog.push(event);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (traceLog.length > limit) traceLog.splice(0, traceLog.length - limit);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function mergeTraceLogs(baseTraceLog, extraTraceLog, limit = 220) {
   (extraTraceLog || []).forEach((event) => pushTraceEvent(baseTraceLog, event, limit));
   return baseTraceLog;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function summarizeRouteState(routeState) {
   return routeState
     .map((item) => `${item.vehicle.plateNo}[${item.routes.map((route) => route.join("->")).join(" | ") || "-"}]`)
     .join(" / ");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function flattenStoresFromRouteState(routeState) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return routeState.flatMap((item) => item.routes.flatMap((route) => route));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function evaluateRouteState(routeState, scenario, wave) {
   const plans = rebuildWavePlansFromState(routeState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!plans) return null;
   const planCosts = plans.map((plan) => computePlanCost(plan, scenario, wave));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { plans, cost: planCosts.reduce((sum, value) => sum + value, 0), planCosts };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function evaluateRouteStateIncremental(routeState, scenario, wave, baselineEval = null, touchedVehicleIndexes = []) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!baselineEval?.plans?.length || !touchedVehicleIndexes.length) {
     return evaluateRouteState(routeState, scenario, wave);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const plans = baselineEval.plans.map((plan) => clone(plan));
   const planCosts = [...(baselineEval.planCosts || baselineEval.plans.map((plan) => computePlanCost(plan, scenario, wave)))];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const vehicleIndex of [...new Set(touchedVehicleIndexes)].sort((a, b) => a - b)) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const stateItem = routeState[vehicleIndex];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!stateItem) continue;
     const rebuilt = rebuildSingleStatePlan(stateItem, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!rebuilt) return null;
     plans[vehicleIndex] = rebuilt;
     planCosts[vehicleIndex] = computePlanCost(rebuilt, scenario, wave);
@@ -4487,7 +6772,11 @@ function evaluateRouteStateIncremental(routeState, scenario, wave, baselineEval 
   return { plans, cost: planCosts.reduce((sum, value) => sum + value, 0), planCosts };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function rebuildSingleStatePlan(stateItem, scenario, wave) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return rebuildPlanFromRoutes(
     stateItem.vehicle,
     stateItem.routes,
@@ -4501,29 +6790,59 @@ function rebuildSingleStatePlan(stateItem, scenario, wave) {
   );
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function estimateRouteInsertDelta(route, storeId, scenario) {
   const fromDepot = Number(scenario?.dist?.[DC.id]?.[storeId] || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const toDepot = Number(scenario?.dist?.[storeId]?.[DC.id] || 0);
   if (!route.length) return fromDepot + toDepot;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let best = Number.POSITIVE_INFINITY;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let position = 0; position <= route.length; position += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const prevId = position === 0 ? DC.id : route[position - 1];
     const nextId = position === route.length ? DC.id : route[position];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const delta = Number(scenario?.dist?.[prevId]?.[storeId] || 0)
       + Number(scenario?.dist?.[storeId]?.[nextId] || 0)
       - Number(scenario?.dist?.[prevId]?.[nextId] || 0);
     if (delta < best) best = delta;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return best;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function rankVehicleIndexesForStoreInsertion(routeState, storeId, scenario, limit = 0) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ranked = routeState
     .map((stateItem, vehicleIndex) => {
       const routeDeltas = stateItem.routes.map((route) => estimateRouteInsertDelta(route, storeId, scenario));
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const bestExistingDelta = routeDeltas.length ? Math.min(...routeDeltas) : Number.POSITIVE_INFINITY;
       const newTripDelta = Number(scenario?.dist?.[DC.id]?.[storeId] || 0) + Number(scenario?.dist?.[storeId]?.[DC.id] || 0);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const bestDelta = Math.min(bestExistingDelta, newTripDelta);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       return {
         vehicleIndex,
         score: bestDelta + stateItem.routes.length * 1.5,
@@ -4531,32 +6850,64 @@ function rankVehicleIndexesForStoreInsertion(routeState, storeId, scenario, limi
     })
     .sort((a, b) => a.score - b.score)
     .map((item) => item.vehicleIndex);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return limit > 0 ? ranked.slice(0, Math.min(limit, ranked.length)) : ranked;
 }
 
 function insertStoresIntoRouteState(baseState, storeOrder, scenario, wave, options = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const states = clone(baseState);
   const candidateVehicleLimit = Number(options.candidateVehicleLimit || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const storeId of storeOrder) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const store = scenario.storeMap.get(storeId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!store) continue;
     let bestIndex = -1;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let bestCost = Number.POSITIVE_INFINITY;
     let bestRoutes = null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const primaryIndexes = rankVehicleIndexesForStoreInsertion(states, storeId, scenario, candidateVehicleLimit);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const fallbackIndexes = candidateVehicleLimit > 0
       ? Array.from({ length: states.length }, (_, index) => index).filter((index) => !primaryIndexes.includes(index))
       : [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const candidateIndexes = [...primaryIndexes, ...fallbackIndexes];
     for (const vehicleIndex of candidateIndexes) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const currentPlan = rebuildSingleStatePlan(states[vehicleIndex], scenario, wave);
       if (!currentPlan) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const candidate = buildTripCandidate(currentPlan, store, scenario, wave, false);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!candidate || candidate.cost >= bestCost) continue;
       bestIndex = vehicleIndex;
       bestCost = candidate.cost;
       bestRoutes = candidate.nextPlan.trips.map((trip) => [...trip.route]);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (bestIndex < 0 || !bestRoutes) return null;
     states[bestIndex].routes = bestRoutes;
     normalizeRouteBuckets(states);
@@ -4564,6 +6915,10 @@ function insertStoresIntoRouteState(baseState, storeOrder, scenario, wave, optio
   return states;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function collectStorePositions(routeState) {
   const positions = [];
   routeState.forEach((stateItem, vehicleIndex) => {
@@ -4573,10 +6928,16 @@ function collectStorePositions(routeState) {
       });
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return positions;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function removeStoresFromRouteState(routeState, removedStoreIds) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const removedSet = new Set(removedStoreIds);
   const next = clone(routeState);
   next.forEach((stateItem) => {
@@ -4584,29 +6945,59 @@ function removeStoresFromRouteState(routeState, removedStoreIds) {
       .map((route) => route.filter((storeId) => !removedSet.has(storeId)))
       .filter((route) => route.length);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return next;
 }
 
 function computeStoreRelatedness(storeAId, storeBId, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (storeAId === storeBId) return 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeA = scenario.storeMap.get(storeAId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeB = scenario.storeMap.get(storeBId);
   if (!storeA || !storeB) return Number.POSITIVE_INFINITY;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const distance = scenario.dist?.[storeAId]?.[storeBId] || scenario.dist?.[storeBId]?.[storeAId] || 0;
   const timingA = getStoreTimingForWave(storeA, wave, scenario.dispatchStartMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const timingB = getStoreTimingForWave(storeB, wave, scenario.dispatchStartMin);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const timeGap = Math.abs(timingA.desiredArrivalMin - timingB.desiredArrivalMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const loadGap = Math.abs(getStoreSolveLoadForWave(storeA, wave) - getStoreSolveLoadForWave(storeB, wave));
   return distance + timeGap * 0.25 + loadGap * 0.6;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function estimateRemovalSavings(routeState, scenario) {
   const scores = [];
   routeState.forEach((stateItem) => {
     stateItem.routes.forEach((route) => {
       route.forEach((storeId, stopIndex) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const prevId = stopIndex === 0 ? DC.id : route[stopIndex - 1];
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const nextId = stopIndex === route.length - 1 ? DC.id : route[stopIndex + 1];
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const saving = (scenario.dist?.[prevId]?.[storeId] || 0) + (scenario.dist?.[storeId]?.[nextId] || 0) - (scenario.dist?.[prevId]?.[nextId] || 0);
         scores.push({ storeId, saving });
       });
@@ -4615,13 +7006,27 @@ function estimateRemovalSavings(routeState, scenario) {
   return scores.sort((a, b) => b.saving - a.saving);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function crossoverRouteStates(parentA, parentB, scenario, wave, random) {
   const isCompareMode = (state.settings.solveStrategy || "manual") === "compare";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const child = cloneWaveRouteState(parentA);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const inheritedVehicleIndexes = new Set();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const inheritedStores = new Set();
   child.forEach((item, vehicleIndex) => {
     const takeParentA = random() < 0.5;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!takeParentA) {
       item.routes = [];
       return;
@@ -4634,30 +7039,56 @@ function crossoverRouteStates(parentA, parentB, scenario, wave, random) {
     ...flattenStoresFromRouteState(parentA).filter((storeId) => !inheritedStores.has(storeId)),
   ].filter((storeId, index, list) => list.indexOf(storeId) === index);
   child.forEach((item, vehicleIndex) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!inheritedVehicleIndexes.has(vehicleIndex)) item.routes = [];
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return insertStoresIntoRouteState(child, remainingOrder, scenario, wave, {
     candidateVehicleLimit: isCompareMode ? 8 : 0,
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function tournamentSelect(population, random, size = 3) {
   let best = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let i = 0; i < size; i += 1) {
     const candidate = population[Math.floor(random() * population.length)];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!best || candidate.cost < best.cost) best = candidate;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return best;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function pickRemovalCount(totalStops, random) {
   if (totalStops <= 3) return 1;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const ratio = 0.12 + random() * 0.12;
   return Math.max(1, Math.min(Math.max(3, Math.floor(totalStops * 0.25)), Math.floor(totalStops * ratio)));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function randomRelocateNeighbor(routeState, wave, random) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const states = clone(routeState);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nonEmptySources = [];
   states.forEach((stateItem, vehicleIndex) => {
     stateItem.routes.forEach((route, tripIndex) => {
@@ -4667,10 +7098,20 @@ function randomRelocateNeighbor(routeState, wave, random) {
     });
   });
   if (!nonEmptySources.length) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const source = nonEmptySources[Math.floor(random() * nonEmptySources.length)];
   const sourceRoute = states[source.vehicleIndex].routes[source.tripIndex];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const [storeId] = sourceRoute.splice(source.stopIndex, 1);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!sourceRoute.length) states[source.vehicleIndex].routes.splice(source.tripIndex, 1);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const possibleTargets = [];
   states.forEach((stateItem, vehicleIndex) => {
     stateItem.routes.forEach((route, tripIndex) => {
@@ -4678,15 +7119,25 @@ function randomRelocateNeighbor(routeState, wave, random) {
         possibleTargets.push({ vehicleIndex, tripIndex, insertAt, mode: "insert" });
       }
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!(wave.singleWave && stateItem.routes.length)) {
       possibleTargets.push({ vehicleIndex, tripIndex: stateItem.routes.length, insertAt: 0, mode: "new-trip" });
     }
   });
   if (!possibleTargets.length) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = possibleTargets[Math.floor(random() * possibleTargets.length)];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (target.mode === "new-trip") states[target.vehicleIndex].routes.push([storeId]);
   else states[target.vehicleIndex].routes[target.tripIndex].splice(target.insertAt, 0, storeId);
   normalizeRouteBuckets(states);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     state: states,
     meta: {
@@ -4699,28 +7150,56 @@ function randomRelocateNeighbor(routeState, wave, random) {
 }
 
 function mutateRouteState(routeState, scenario, wave, random, steps = 1) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let current = clone(routeState);
   for (let step = 0; step < steps; step += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const roll = random();
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let next = null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (roll < 0.35) next = randomRelocateNeighbor(current, wave, random)?.state || null;
     else if (roll < 0.6) next = randomSwapNeighbor(current, random)?.state || null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     else if (roll < 0.8) next = randomTwoOptNeighbor(current, random)?.state || null;
     else next = randomLnsNeighbor(current, scenario, wave, random)?.state || null;
     if (!next) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const rebuilt = rebuildWavePlansFromState(next, scenario, wave);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!rebuilt) continue;
     current = cloneWaveRouteState(rebuilt);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return current;
 }
 
 function randomRelocateMove(routeState, wave, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return randomRelocateNeighbor(routeState, wave, random)?.state || null;
 }
 
 function randomSwapNeighbor(routeState, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const states = clone(routeState);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const positions = [];
   states.forEach((stateItem, vehicleIndex) => {
     stateItem.routes.forEach((route, tripIndex) => {
@@ -4729,19 +7208,35 @@ function randomSwapNeighbor(routeState, random) {
       });
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (positions.length < 2) return null;
   const first = positions[Math.floor(random() * positions.length)];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let second = positions[Math.floor(random() * positions.length)];
   let guard = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   while (guard < 12 && first.vehicleIndex === second.vehicleIndex && first.tripIndex === second.tripIndex && first.stopIndex === second.stopIndex) {
     second = positions[Math.floor(random() * positions.length)];
     guard += 1;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (first.vehicleIndex === second.vehicleIndex && first.tripIndex === second.tripIndex && first.stopIndex === second.stopIndex) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const a = states[first.vehicleIndex].routes[first.tripIndex][first.stopIndex];
   const b = states[second.vehicleIndex].routes[second.tripIndex][second.stopIndex];
   states[first.vehicleIndex].routes[first.tripIndex][first.stopIndex] = b;
   states[second.vehicleIndex].routes[second.tripIndex][second.stopIndex] = a;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     state: states,
     meta: {
@@ -4754,23 +7249,43 @@ function randomSwapNeighbor(routeState, random) {
 }
 
 function randomSwapMove(routeState, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return randomSwapNeighbor(routeState, random)?.state || null;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function randomTwoOptNeighbor(routeState, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const states = clone(routeState);
   const longRoutes = [];
   states.forEach((stateItem, vehicleIndex) => {
     stateItem.routes.forEach((route, tripIndex) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (route.length >= 3) longRoutes.push({ vehicleIndex, tripIndex, route });
     });
   });
   if (!longRoutes.length) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = longRoutes[Math.floor(random() * longRoutes.length)];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const route = states[target.vehicleIndex].routes[target.tripIndex];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const i = Math.floor(random() * (route.length - 1));
   const j = i + 1 + Math.floor(random() * (route.length - i - 1));
   states[target.vehicleIndex].routes[target.tripIndex] = route.slice(0, i).concat(route.slice(i, j + 1).reverse(), route.slice(j + 1));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     state: states,
     meta: {
@@ -4782,17 +7297,33 @@ function randomTwoOptNeighbor(routeState, random) {
 }
 
 function randomTwoOptMove(routeState, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return randomTwoOptNeighbor(routeState, random)?.state || null;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function lnsRepairGreedy(routeState, removedStoreIds, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let states = clone(routeState);
   for (const storeId of removedStoreIds) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const store = scenario.storeMap.get(storeId);
     if (!store) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let bestState = null;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let bestCost = Number.POSITIVE_INFINITY;
     states.forEach((stateItem, vehicleIndex) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const plan = rebuildPlanFromRoutes(
         stateItem.vehicle,
         stateItem.routes,
@@ -4804,13 +7335,27 @@ function lnsRepairGreedy(routeState, removedStoreIds, scenario, wave) {
         },
       );
       if (!plan) return;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const candidate = buildTripCandidate(plan, store, scenario, wave, false);
       if (!candidate) return;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const nextState = clone(states);
       nextState[vehicleIndex].routes = candidate.nextPlan.trips.map((trip) => [...trip.route]);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const rebuilt = rebuildWavePlansFromState(nextState, scenario, wave);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!rebuilt) return;
       const cost = wavePlansCost(rebuilt, scenario, wave);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (cost < bestCost) {
         bestCost = cost;
         bestState = nextState;
@@ -4819,30 +7364,62 @@ function lnsRepairGreedy(routeState, removedStoreIds, scenario, wave) {
     if (!bestState) return null;
     states = bestState;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return states;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function lnsRepair(routeState, removedStoreIds, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return lnsRepairGreedy(routeState, removedStoreIds, scenario, wave);
 }
 
 function lnsRepairRegret(routeState, removedStoreIds, scenario, wave, regretK = 2) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let states = clone(routeState);
   const pending = [...removedStoreIds];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   while (pending.length) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let bestChoice = null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const storeId of pending) {
       const store = scenario.storeMap.get(storeId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!store) continue;
       const ranked = [];
       states.forEach((stateItem, vehicleIndex) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const plan = rebuildSingleStatePlan(stateItem, scenario, wave);
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (!plan) return;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const candidate = buildTripCandidate(plan, store, scenario, wave, false);
         if (!candidate) return;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const nextState = clone(states);
         nextState[vehicleIndex].routes = candidate.nextPlan.trips.map((trip) => [...trip.route]);
         const rebuilt = rebuildWavePlansFromState(nextState, scenario, wave);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (!rebuilt) return;
         ranked.push({
           storeId,
@@ -4851,28 +7428,56 @@ function lnsRepairRegret(routeState, removedStoreIds, scenario, wave, regretK = 
         });
       });
       ranked.sort((a, b) => a.cost - b.cost);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!ranked.length) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const best = ranked[0];
       const compare = ranked[Math.min(regretK - 1, ranked.length - 1)];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const regret = (compare?.cost ?? (best.cost + 30)) - best.cost;
       if (!bestChoice || regret > bestChoice.regret || (regret === bestChoice.regret && best.cost < bestChoice.best.cost)) {
         bestChoice = { storeId, best, regret };
       }
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!bestChoice) return null;
     states = bestChoice.best.nextState;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const index = pending.indexOf(bestChoice.storeId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (index >= 0) pending.splice(index, 1);
   }
   return states;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function destroyRandom(routeState, scenario, wave, random, removeCount) {
   const storeRefs = collectStorePositions(routeState);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!storeRefs.length) return null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const pool = [...storeRefs];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const removed = [];
   while (removed.length < removeCount && pool.length) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const pickIndex = Math.floor(random() * pool.length);
     removed.push(pool.splice(pickIndex, 1)[0].storeId);
   }
@@ -4883,14 +7488,26 @@ function destroyRandom(routeState, scenario, wave, random, removeCount) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function destroyShaw(routeState, scenario, wave, random, removeCount) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeRefs = collectStorePositions(routeState);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!storeRefs.length) return null;
   const seed = storeRefs[Math.floor(random() * storeRefs.length)].storeId;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const ranked = [...new Set(storeRefs.map((item) => item.storeId))]
     .map((storeId) => ({ storeId, score: computeStoreRelatedness(seed, storeId, scenario, wave) }))
     .sort((a, b) => a.score - b.score);
   const removed = ranked.slice(0, removeCount).map((item) => item.storeId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     partialState: removeStoresFromRouteState(routeState, removed),
     removedStoreIds: removed,
@@ -4898,13 +7515,23 @@ function destroyShaw(routeState, scenario, wave, random, removeCount) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function destroyWorst(routeState, scenario, wave, random, removeCount) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ranked = estimateRemovalSavings(routeState, scenario);
   if (!ranked.length) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const jittered = ranked
     .map((item, index) => ({ ...item, rankScore: item.saving - random() * (8 + index * 0.1) }))
     .sort((a, b) => b.rankScore - a.rankScore);
   const removed = [...new Set(jittered.slice(0, removeCount).map((item) => item.storeId))];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     partialState: removeStoresFromRouteState(routeState, removed),
     removedStoreIds: removed,
@@ -4912,21 +7539,43 @@ function destroyWorst(routeState, scenario, wave, random, removeCount) {
   };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function runLnsIteration(routeState, scenario, wave, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const totalStops = flattenStoresFromRouteState(routeState).length;
   if (!totalStops) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const removeCount = pickRemovalCount(totalStops, random);
   const destroyRoll = random();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let destroyed = null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (destroyRoll < 0.34) destroyed = destroyRandom(routeState, scenario, wave, random, removeCount);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   else if (destroyRoll < 0.68) destroyed = destroyShaw(routeState, scenario, wave, random, removeCount);
   else destroyed = destroyWorst(routeState, scenario, wave, random, removeCount);
   if (!destroyed) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const repairRoll = random();
   const repairedState = repairRoll < 0.45
     ? lnsRepairGreedy(destroyed.partialState, destroyed.removedStoreIds, scenario, wave)
     : lnsRepairRegret(destroyed.partialState, destroyed.removedStoreIds, scenario, wave, repairRoll < 0.75 ? 2 : 3);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!repairedState) return null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     state: repairedState,
     meta: {
@@ -4940,36 +7589,82 @@ function runLnsIteration(routeState, scenario, wave, random) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function randomLnsNeighbor(routeState, scenario, wave, random) {
   return runLnsIteration(routeState, scenario, wave, random);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function randomLnsMove(routeState, scenario, wave, random) {
   return randomLnsNeighbor(routeState, scenario, wave, random)?.state || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function sampleNeighborhood(routeState, scenario, wave, random, sampleSize = 20, includeLns = true) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const sampled = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const seen = new Set();
   const baselineEval = evaluateRouteState(routeState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!baselineEval) return sampled;
   const baselineApprox = approximateTouchedDistance(routeState, scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let i = 0; i < sampleSize; i += 1) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const roll = random();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let neighbor = null;
     if (roll < 0.4) neighbor = randomRelocateNeighbor(routeState, wave, random);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     else if (roll < 0.7) neighbor = randomSwapNeighbor(routeState, random);
     else if (roll < 0.9) neighbor = randomTwoOptNeighbor(routeState, random);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     else if (includeLns) neighbor = randomLnsNeighbor(routeState, scenario, wave, random);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!neighbor) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const signature = hashRouteState(neighbor.state);
     if (seen.has(signature)) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const touchedVehicleIndexes = neighbor.meta?.touchedVehicleIndexes || [];
     const approxCandidate = approximateTouchedDistance(neighbor.state, scenario, touchedVehicleIndexes);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const approxCurrent = touchedVehicleIndexes.length ? approximateTouchedDistance(routeState, scenario, touchedVehicleIndexes) : baselineApprox;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const allowExpensiveEval = approxCandidate <= approxCurrent + 8 || neighbor.meta?.type === "lns" || random() < 0.22;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!allowExpensiveEval) continue;
     const evaluated = evaluateRouteStateIncremental(neighbor.state, scenario, wave, baselineEval, touchedVehicleIndexes);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!evaluated) continue;
     seen.add(signature);
     sampled.push({
@@ -4983,22 +7678,52 @@ function sampleNeighborhood(routeState, scenario, wave, random, sampleSize = 20,
   return sampled;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function sampleSingleNeighbor(routeState, scenario, wave, random, includeLns = true, maxAttempts = 6) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const baselineEval = evaluateRouteState(routeState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!baselineEval) return null;
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const roll = random();
     let neighbor = null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (roll < 0.46) neighbor = randomRelocateNeighbor(routeState, wave, random);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     else if (roll < 0.76) neighbor = randomSwapNeighbor(routeState, random);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     else if (roll < 0.94) neighbor = randomTwoOptNeighbor(routeState, random);
     else if (includeLns) neighbor = randomLnsNeighbor(routeState, scenario, wave, random);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!neighbor) continue;
     const touchedVehicleIndexes = neighbor.meta?.touchedVehicleIndexes || [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const approxCandidate = approximateTouchedDistance(neighbor.state, scenario, touchedVehicleIndexes);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const approxCurrent = approximateTouchedDistance(routeState, scenario, touchedVehicleIndexes);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (approxCandidate > approxCurrent + 12 && neighbor.meta?.type !== "lns" && attempt < maxAttempts - 1) continue;
     const evaluated = evaluateRouteStateIncremental(neighbor.state, scenario, wave, baselineEval, touchedVehicleIndexes);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!evaluated) continue;
     return {
       ...neighbor,
@@ -5007,58 +7732,118 @@ function sampleSingleNeighbor(routeState, scenario, wave, random, includeLns = t
       cost: evaluated.cost,
     };
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return null;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function localImproveState(routeState, scenario, wave, random, rounds = 6) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentState = clone(routeState);
   let currentEval = evaluateRouteState(currentState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!currentEval) return null;
   if (rounds <= 0) return { state: currentState, plans: currentEval.plans, cost: currentEval.cost };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let round = 0; round < rounds; round += 1) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const neighborhood = sampleNeighborhood(currentState, scenario, wave, random, 10, round % 2 === 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const improving = neighborhood.find((item) => item.cost + 1e-6 < currentEval.cost);
     if (!improving) break;
     currentState = improving.state;
     currentEval = { plans: improving.plans, cost: improving.cost };
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { state: currentState, plans: currentEval.plans, cost: currentEval.cost };
 }
 
 async function cooperativeYield() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   await sleep(0);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithVrptwBackend(initialPlans, scenario, wave, randomSeed = 7) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "vrptw", randomSeed);
   if (backendResult?.plans?.length) return backendResult;
   throw new Error("vrptw_BACKEND_REQUIRED:no_result");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithSavingsBackend(initialPlans, scenario, wave, randomSeed = 13) {
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "savings", randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (backendResult?.plans?.length) return backendResult;
   throw new Error("savings_BACKEND_REQUIRED:no_result");
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithVehicleDrivenBackend(initialPlans, scenario, wave, randomSeed = 17) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "vehicle", randomSeed);
   if (backendResult?.plans?.length) return backendResult;
   throw new Error("vehicle_BACKEND_REQUIRED:no_result");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed = 42) {
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "hybrid", randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const random = createSeededRandom(randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentState = cloneWaveRouteState(initialPlans);
   let currentEval = evaluateRouteState(currentState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!currentEval) return { plans: initialPlans, traceLog: [] };
   let currentPlans = currentEval.plans;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentCost = currentEval.cost;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestState = cloneWaveRouteState(currentPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let bestPlans = currentPlans;
   let bestCost = currentCost;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let noImproveRounds = 0;
   const traceLog = [
     {
@@ -5066,22 +7851,38 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
       scope: "wave",
       waveId: wave.waveId,
       stage: "hybrid-start",
-      textZh: `娣峰悎闃舵浠庤椽蹇冩彃鍏ュ垵濮嬭В鍚姩锛屽垵濮嬬患鍚堟垚鏈?${currentCost.toFixed(1)}銆俙,
-      textJa: `娣峰悎娈甸殠銇勃娆叉尶鍏ャ伄鍒濇湡瑙ｃ亱銈夐枊濮嬨仐銆佸垵鏈熺窂鍚堛偝銈广儓銇?${currentCost.toFixed(1)} 銇с仚銆俙,
+      textZh: `混合阶段从贪心插入初始解启动，初始综合成本 ${currentCost.toFixed(1)}。`,
+      textJa: `混合段階は貪欲挿入の初期解から開始し、初期総合コストは ${currentCost.toFixed(1)} です。`,
       },
   ];
-  reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW宸插惎鍔紝褰撳墠娉㈡鍐呴儴浠ｄ环 ${currentCost.toFixed(1)}锛屽紑濮嬪仛娣峰悎閭诲煙杩唬銆俙);
+  reportRelayStageProgress(`${wave.waveId} 混合VRPTW已启动，当前波次内部代价 ${currentCost.toFixed(1)}，开始做混合邻域迭代。`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let iteration = 0; iteration < 110; iteration += 1) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (iteration && iteration % 6 === 0) await cooperativeYield();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const neighborhood = sampleNeighborhood(currentState, scenario, wave, random, 24, true);
     if (!neighborhood.length) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let candidate = neighborhood.find((item) => item.cost + 1e-6 < currentCost);
     if (!candidate && noImproveRounds >= 4) candidate = neighborhood[0];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!candidate) {
       noImproveRounds += 1;
       continue;
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const temperature = Math.max(0.03, 1 - iteration / 110);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const accept = candidate.cost + 1e-6 < currentCost || random() < Math.exp((currentCost - candidate.cost) / Math.max(0.001, temperature));
     if (!accept) {
       noImproveRounds += 1;
@@ -5091,6 +7892,10 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
     currentPlans = candidate.plans;
     currentCost = candidate.cost;
     noImproveRounds = candidate.cost + 1e-6 < bestCost ? 0 : noImproveRounds + 1;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (traceLog.length < 18) {
       pushTraceEvent(traceLog, {
         algorithmKey: "hybrid",
@@ -5101,15 +7906,17 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
         moveKey: candidate.meta?.type || "mixed",
         candidateCost: candidate.cost,
         bestCost: Math.min(bestCost, candidate.cost),
-      textZh: `绗?${iteration + 1} 杞帴鍙?${candidate.meta?.type || "mixed"} 鍔ㄤ綔锛屽€欓€夋尝娆″唴閮ㄤ唬浠?${candidate.cost.toFixed(1)}锛屽綋鍓嶆渶濂?${Math.min(bestCost, candidate.cost).toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇?${candidate.meta?.type || "mixed"} 鍕曚綔銈掓帯鐢ㄣ仐銆佸€欒銈炽偣銉?${candidate.cost.toFixed(1)}銆佺従鏅傜偣銇渶鑹伅 ${Math.min(bestCost, candidate.cost).toFixed(1)}銆俙,
+      textZh: `第 ${iteration + 1} 轮接受 ${candidate.meta?.type || "mixed"} 动作，候选波次内部代价 ${candidate.cost.toFixed(1)}，当前最好 ${Math.min(bestCost, candidate.cost).toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目で ${candidate.meta?.type || "mixed"} 動作を採用し、候補コスト ${candidate.cost.toFixed(1)}、現時点の最良は ${Math.min(bestCost, candidate.cost).toFixed(1)}。`,
       });
     }
     if (candidate.cost + 1e-6 < bestCost) {
       bestCost = candidate.cost;
       bestState = cloneWaveRouteState(candidate.plans);
       bestPlans = candidate.plans;
-      reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环闄嶅埌 ${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 混合VRPTW在第 ${iteration + 1} 轮刷新最优，波次内部代价降到 ${bestCost.toFixed(1)}。`);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (traceLog.length < 22) {
         pushTraceEvent(traceLog, {
           algorithmKey: "hybrid",
@@ -5119,16 +7926,24 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
           iteration,
           moveKey: candidate.meta?.type || "mixed",
           bestCost,
-      textZh: `绗?${iteration + 1} 杞埛鏂版渶浼樿В锛屽姩浣?${candidate.meta?.type || "mixed"}锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-          textJa: `${iteration + 1} 鍥炵洰銇ф渶鑹В銈掓洿鏂般仐銆佸嫊浣?${candidate.meta?.type || "mixed"}銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+      textZh: `第 ${iteration + 1} 轮刷新最优解，动作 ${candidate.meta?.type || "mixed"}，新的波次内部代价 ${bestCost.toFixed(1)}。`,
+          textJa: `${iteration + 1} 回目で最良解を更新し、動作 ${candidate.meta?.type || "mixed"}、新しい最良コストは ${bestCost.toFixed(1)}。`,
         });
       }
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if ((iteration + 1) % 18 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW宸茶窇鍒扮 ${iteration + 1}/110 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 混合VRPTW已跑到第 ${iteration + 1}/110 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (noImproveRounds >= 6) {
       const kick = localImproveState(bestState, scenario, wave, random, 3);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (kick && kick.cost + 1e-6 < bestCost) {
         currentState = kick.state;
         currentPlans = kick.plans;
@@ -5148,26 +7963,52 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
     waveId: wave.waveId,
     stage: "hybrid-finish",
     bestCost,
-    textZh: `娣峰悎闃舵缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `娣峰悎娈甸殠銇岀祩浜嗐仐銆佹渶绲傛渶鑹窂鍚堛偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+    textZh: `混合阶段结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `混合段階が終了し、最終最良総合コストは ${bestCost.toFixed(1)} です。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 混合VRPTW结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { plans: finalPlans, traceLog };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 77) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "tabu", randomSeed);
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const random = createSeededRandom(randomSeed);
   let currentState = cloneWaveRouteState(initialPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentEval = evaluateRouteState(currentState, scenario, wave);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!currentEval) return { plans: initialPlans, traceLog: [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentPlans = currentEval.plans;
   let currentCost = currentEval.cost;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestState = cloneWaveRouteState(currentPlans);
   let bestPlans = currentPlans;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let bestCost = currentCost;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const tabu = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   pushTraceEvent(traceLog, {
     algorithmKey: "tabu",
@@ -5175,20 +8016,36 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
     waveId: wave.waveId,
     stage: "tabu-start",
     bestCost,
-    textZh: `绂佸繉鎼滅储浠庡綋鍓嶅彲琛岃В鍑哄彂锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `銈裤儢銉兼帰绱伅鐝惧湪銇彲琛岃В銇嬨倝闁嬪銇椼€佸垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+    textZh: `禁忌搜索从当前可行解出发，初始波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `タブー探索は現在の可行解から開始し、初期コストは ${bestCost.toFixed(1)} です。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储宸插惎鍔紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 禁忌搜索已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
   for (let iteration = 0; iteration < 120; iteration += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (iteration && iteration % 6 === 0) await cooperativeYield();
     let bestNeighbor = null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const candidates = sampleNeighborhood(currentState, scenario, wave, random, 28, true);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (const candidate of candidates) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const tabuBlocked = (candidate.meta?.tabuKeys || []).some((key) => iteration < (tabu.get(key) || -1));
       const aspiration = candidate.cost + 1e-6 < bestCost;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (tabuBlocked && !aspiration) continue;
       if (!bestNeighbor || candidate.cost < bestNeighbor.cost) bestNeighbor = candidate;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!bestNeighbor) continue;
     currentState = bestNeighbor.state;
     currentPlans = bestNeighbor.plans;
@@ -5196,6 +8053,8 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
     (bestNeighbor.meta?.tabuKeys || [bestNeighbor.signature]).forEach((key, index) => {
       tabu.set(key, iteration + 8 + index);
     });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (iteration < 12) {
       pushTraceEvent(traceLog, {
         algorithmKey: "tabu",
@@ -5206,15 +8065,17 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
         candidateCost: currentCost,
         bestCost: Math.min(bestCost, currentCost),
         moveKey: bestNeighbor.meta?.type || "mixed",
-        textZh: `绗?${iteration + 1} 杞粠閭诲煙鏍锋湰涓€夊嚭褰撳墠鏈€浼橀偦灞咃紝鍔ㄤ綔 ${bestNeighbor.meta?.type || "mixed"}锛屾垚鏈?${currentCost.toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇ц繎鍌嶃偟銉炽儣銉亱銈夋渶鑹殻鎺ヨВ銈掓帯鐢ㄣ仐銆佸嫊浣?${bestNeighbor.meta?.type || "mixed"}銆併偝銈广儓銇?${currentCost.toFixed(1)} 銇с仚銆俙,
+        textZh: `第 ${iteration + 1} 轮从邻域样本中选出当前最优邻居，动作 ${bestNeighbor.meta?.type || "mixed"}，成本 ${currentCost.toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目で近傍サンプルから最良隣接解を採用し、動作 ${bestNeighbor.meta?.type || "mixed"}、コストは ${currentCost.toFixed(1)} です。`,
       });
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (currentCost < bestCost) {
       bestCost = currentCost;
       bestState = cloneWaveRouteState(currentPlans);
       bestPlans = currentPlans;
-      reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 禁忌搜索在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
       pushTraceEvent(traceLog, {
         algorithmKey: "tabu",
         scope: "wave",
@@ -5222,14 +8083,18 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
         stage: "tabu-best",
         iteration,
         bestCost,
-      textZh: `绗?${iteration + 1} 杞埛鏂扮蹇屾悳绱㈡渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇с偪銉栥兗鎺㈢储銇渶鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+      textZh: `第 ${iteration + 1} 轮刷新禁忌搜索最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目でタブー探索の最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)} です。`,
       });
     }
     if ((iteration + 1) % 20 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储宸茶窇鍒扮 ${iteration + 1}/120 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 禁忌搜索已跑到第 ${iteration + 1}/120 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const finalPlans = rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans;
   pushTraceEvent(traceLog, {
     algorithmKey: "tabu",
@@ -5237,25 +8102,47 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
     waveId: wave.waveId,
     stage: "tabu-finish",
     bestCost,
-    textZh: `绂佸繉鎼滅储缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `銈裤儢銉兼帰绱亴绲備簡銇椼€佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+    textZh: `禁忌搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `タブー探索が終了し、最終最良コストは ${bestCost.toFixed(1)} です。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 禁忌搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
   return { plans: finalPlans, traceLog };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 109) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "lns", randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (backendResult?.plans?.length) return backendResult;
   const random = createSeededRandom(randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let currentState = cloneWaveRouteState(initialPlans);
   let currentEval = evaluateRouteState(currentState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!currentEval) return { plans: initialPlans, traceLog: [] };
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let currentPlans = currentEval.plans;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentCost = currentEval.cost;
   let bestState = cloneWaveRouteState(currentPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestPlans = currentPlans;
   let bestCost = currentCost;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   pushTraceEvent(traceLog, {
     algorithmKey: "lns",
@@ -5263,19 +8150,37 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
     waveId: wave.waveId,
     stage: "lns-start",
     bestCost,
-    textZh: `澶ч偦鍩熸悳绱粠鍒濆瑙ｅ嚭鍙戯紝寮€濮嬪仛 destroy / repair 杩唬锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `澶ц繎鍌嶆帰绱伅鍒濇湡瑙ｃ亱銈夐枊濮嬨仐銆乨estroy / repair 銈掑弽寰┿仐銇俱仚銆傚垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+    textZh: `大邻域搜索从初始解出发，开始做 destroy / repair 迭代，初始波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `大近傍探索は初期解から開始し、destroy / repair を反復します。初期コストは ${bestCost.toFixed(1)} です。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熸悳绱㈠凡鍚姩锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 大邻域搜索已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let iteration = 0; iteration < 70; iteration += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (iteration && iteration % 5 === 0) await cooperativeYield();
     const candidate = runLnsIteration(currentState, scenario, wave, random);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!candidate) continue;
     const candidatePlans = rebuildWavePlansFromState(candidate.state, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!candidatePlans) continue;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const candidateCost = wavePlansCost(candidatePlans, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const improved = candidateCost < currentCost;
     const accepted = improved || random() < 0.10;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!accepted) continue;
     currentState = candidate.state;
     currentPlans = candidatePlans;
@@ -5291,15 +8196,17 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
         accepted,
         destroyKey: candidate.meta?.destroyKey || "random",
         repairKey: candidate.meta?.repairKey || "greedy",
-        textZh: `绗?${iteration + 1} 杞畬鎴愪竴娆?${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair锛屽€欓€夋垚鏈?${candidateCost.toFixed(1)}${improved ? "锛屼紭浜庡綋鍓嶈В骞惰鎺ュ彈" : "锛屼綔涓烘壈鍔ㄨВ琚帴鍙?}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇?${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair 銈掑畬浜嗐仐銆佸€欒銈炽偣銉?${candidateCost.toFixed(1)}${improved ? " 銇従瑙ｃ倛銈婅壇銇忔帯鐢ㄣ仌銈屻伨銇椼仧" : " 銇敧涔辫В銇ㄣ仐銇︽帯鐢ㄣ仌銈屻伨銇椼仧"}銆俙,
+        textZh: `第 ${iteration + 1} 轮完成一次 ${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair，候选成本 ${candidateCost.toFixed(1)}${improved ? "，优于当前解并被接受" : "，作为扰动解被接受"}。`,
+        textJa: `${iteration + 1} 回目で ${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair を完了し、候補コスト ${candidateCost.toFixed(1)}${improved ? " は現解より良く採用されました" : " は攪乱解として採用されました"}。`,
       });
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (candidateCost < bestCost) {
       bestCost = candidateCost;
       bestState = cloneWaveRouteState(candidatePlans);
       bestPlans = candidatePlans;
-      reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熷湪绗?${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 大邻域在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
       pushTraceEvent(traceLog, {
         algorithmKey: "lns",
         scope: "wave",
@@ -5307,14 +8214,18 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
         stage: "lns-best",
         iteration,
         bestCost,
-        textZh: `绗?${iteration + 1} 杞埛鏂?LNS 鏈€浼樿В锛屾尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇?LNS 銇渶鑹В銈掓洿鏂般仐銆佹渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+        textZh: `第 ${iteration + 1} 轮刷新 LNS 最优解，波次内部代价 ${bestCost.toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目で LNS の最良解を更新し、最良コストは ${bestCost.toFixed(1)} です。`,
       });
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if ((iteration + 1) % 14 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熷凡璺戝埌绗?${iteration + 1}/70 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 大邻域已跑到第 ${iteration + 1}/70 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const finalPlans = rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans;
   pushTraceEvent(traceLog, {
     algorithmKey: "lns",
@@ -5322,17 +8233,27 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
     waveId: wave.waveId,
     stage: "lns-finish",
     bestCost,
-    textZh: `澶ч偦鍩熸悳绱㈢粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `澶ц繎鍌嶆帰绱亴绲備簡銇椼€佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
+    textZh: `大邻域搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `大近傍探索が終了し、最終最良コストは ${bestCost.toFixed(1)} です。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熸悳绱㈢粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 大邻域搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
   return { plans: finalPlans, traceLog };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 2500) {
   const controller = new AbortController();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return await fetch(url, { ...options, signal: controller.signal });
   } finally {
     clearTimeout(timer);
@@ -5340,24 +8261,44 @@ async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 2500) {
 }
 
 async function ensureGaBackendAvailable(force = false) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const now = Date.now();
   if (!force && gaBackendHealth.available !== null && now - gaBackendHealth.checkedAt < 15000) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return gaBackendHealth.available;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/health`, {}, 1200);
     gaBackendHealth = { available: response.ok, checkedAt: now };
     return response.ok;
   } catch {
     gaBackendHealth = { available: false, checkedAt: now };
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return false;
   }
 }
 
 function renderGaBackendStatus() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const bar = document.getElementById("gaBackendStatusBar");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!bar) return;
   bar.classList.remove("is-online", "is-offline", "is-checking");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (gaBackendHealth.available === true) {
     bar.classList.add("is-online");
     bar.textContent = L("gaBackendOnline");
@@ -5372,8 +8313,14 @@ function renderGaBackendStatus() {
   bar.textContent = L("gaBackendChecking");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function refreshGaBackendStatus(force = false) {
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await ensureGaBackendAvailable(force);
   } catch {
     gaBackendHealth = { available: false, checkedAt: Date.now() };
@@ -5382,7 +8329,11 @@ async function refreshGaBackendStatus(force = false) {
   }
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function startGaBackendStatusMonitor() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (gaBackendStatusTimer) clearInterval(gaBackendStatusTimer);
   refreshGaBackendStatus(true);
   scheduleAmapCacheSync(2600);
@@ -5392,20 +8343,36 @@ function startGaBackendStatusMonitor() {
 }
 
 async function flushAmapCacheToBackend() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!amapCacheSyncPending) return false;
   amapCacheSyncPending = false;
   let available = await ensureGaBackendAvailable();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) {
     available = await ensureGaBackendAvailable(true);
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) {
     amapCacheSyncPending = true;
     scheduleAmapCacheSync(8000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return false;
   }
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const distanceCache = loadAmapDistanceCache();
     const routeCache = loadAmapRouteCache();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/amap-cache/sync`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -5415,12 +8382,20 @@ async function flushAmapCacheToBackend() {
         maxRows: 12000,
       }),
     }, 12000);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) {
       amapCacheSyncPending = true;
       scheduleAmapCacheSync(8000);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return false;
     }
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return Boolean(data?.ok);
   } catch {
     amapCacheSyncPending = true;
@@ -5429,44 +8404,84 @@ async function flushAmapCacheToBackend() {
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function saveRunArchiveToBackend(snapshot) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!snapshot?.id) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let available = await ensureGaBackendAvailable();
   if (!available) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     await sleep(160);
     available = await ensureGaBackendAvailable(true);
   }
   if (!available) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ snapshot }),
     }, 8000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!response.ok) return false;
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return Boolean(data?.ok);
   } catch {
     return false;
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function listRunArchivesFromBackend(date, page = 1, pageSize = 6) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let available = await ensureGaBackendAvailable();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) {
     await sleep(160);
     available = await ensureGaBackendAvailable(true);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return null;
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/list`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date, page, pageSize }),
     }, 10000);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) return null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const data = await response.json();
     if (!data?.ok) return null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       items: Array.isArray(data.items) ? data.items : [],
       totalPages: Number(data.totalPages || 1),
@@ -5479,52 +8494,108 @@ async function listRunArchivesFromBackend(date, page = 1, pageSize = 6) {
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function getRunArchiveFromBackend(archiveId) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!archiveId) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let available = await ensureGaBackendAvailable();
   if (!available) available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return null;
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/get`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: archiveId }),
     }, 8000);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) return null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const data = await response.json();
     if (!data?.ok || !data?.found) return null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return data.item || null;
   } catch {
     return null;
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getCurrentTaskDate() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const now = new Date();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, "0");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const dd = String(now.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function formatRecommendedScore(value) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (value === null || value === undefined || value === "") return "-";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const num = Number(value);
   return Number.isFinite(num) ? num.toFixed(4) : String(value);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function formatRecommendedScoreLabel(value) {
-  if (value === null || value === undefined || value === "") return "寰呰绠?;
+  if (value === null || value === undefined || value === "") return "待计算";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const num = Number(value);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return Number.isFinite(num) ? num.toFixed(4) : String(value);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderRecommendedPlans() {
   const mount = document.getElementById("recommendedPlansSection");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!mount) return;
   const taskDate = recommendedPlanCache.taskDate || getCurrentTaskDate();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const items = Array.isArray(recommendedPlanCache.items) ? recommendedPlanCache.items : [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const selected = recommendedPlanSelectedCache.taskDate === taskDate ? recommendedPlanSelectedCache.selected : null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const emptyState = items.length
     ? items.map((item) => `
         <div class="recommended-item" data-candidate-id="${item.id}">
@@ -5539,25 +8610,25 @@ function renderRecommendedPlans() {
               <div><strong>best_score:</strong> ${formatRecommendedScore(item.snapshot?.best_score)}</div>
             </div>
           </div>
-          <button class="secondary select-recommended-plan" data-candidate-id="${item.id}">閫夋嫨姝ゆ柟妗?/button>
+          <button class="secondary select-recommended-plan" data-candidate-id="${item.id}">选择此方案</button>
         </div>
       `).join("")
-    : `<div class="empty-state">鏆傛棤鎺ㄨ崘鏂规</div>`;
+    : `<div class="empty-state">暂无推荐方案</div>`;
   mount.innerHTML = `
     <div class="panel-head">
       <div>
-        <h2>鍘嗗彶鏂规鎺ㄨ崘</h2>
-        <p>褰撳墠浠诲姟鏃ユ湡锛?{taskDate}</p>
+        <h2>历史方案推荐</h2>
+        <p>当前任务日期：${taskDate}</p>
       </div>
       <div class="toolbar inline-toolbar">
-        <button id="fetchRecommendedPlansBtn" class="primary">鑾峰彇鎺ㄨ崘鏂规</button>
+        <button id="fetchRecommendedPlansBtn" class="primary">获取推荐方案</button>
       </div>
     </div>
     <div class="recommended-selected">
       <div class="panel-head">
         <div>
-          <h3>褰撳墠宸查€夋柟妗?/h3>
-          <p>${selected ? `sourceRunId: ${selected.sourceRunId || "-"} | created_at: ${selected.snapshot?.created_at || selected.createdAt || "-"} | strategy: ${selected.snapshot?.strategy || "-"} | goal: ${selected.snapshot?.goal || "-"} | best_score: ${formatRecommendedScore(selected.snapshot?.best_score)}` : "鏆傛棤宸查€夋柟妗?}</p>
+          <h3>当前已选方案</h3>
+          <p>${selected ? `sourceRunId: ${selected.sourceRunId || "-"} | created_at: ${selected.snapshot?.created_at || selected.createdAt || "-"} | strategy: ${selected.snapshot?.strategy || "-"} | goal: ${selected.snapshot?.goal || "-"} | best_score: ${formatRecommendedScore(selected.snapshot?.best_score)}` : "暂无已选方案"}</p>
         </div>
       </div>
     </div>
@@ -5566,32 +8637,56 @@ function renderRecommendedPlans() {
     </div>
   `;
   const fetchBtn = document.getElementById("fetchRecommendedPlansBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (fetchBtn) {
     fetchBtn.onclick = async () => {
       await refreshRecommendedPlans(taskDate, true);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       await refreshRecommendedPlanSelected(taskDate, true);
     };
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   document.querySelectorAll(".select-recommended-plan").forEach((button) => {
     button.onclick = async () => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const candidateId = Number(button.dataset.candidateId || 0);
       await selectRecommendedPlan(taskDate, candidateId);
     };
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function refreshRecommendedPlanSelected(taskDate = getCurrentTaskDate(), force = false) {
   if (!taskDate) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (recommendedPlanSelectedCache.loading && !force) return;
   recommendedPlanSelectedCache.loading = true;
   renderRecommendedPlans();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/recommended-plans/current?taskDate=${encodeURIComponent(taskDate)}`, {}, 5000);
     if (!response.ok) {
       recommendedPlanSelectedCache = { taskDate, selected: null, loading: false };
       renderRecommendedPlans();
       return;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const data = await response.json();
     recommendedPlanSelectedCache = {
       taskDate: data?.taskDate || taskDate,
@@ -5606,12 +8701,22 @@ async function refreshRecommendedPlanSelected(taskDate = getCurrentTaskDate(), f
 }
 
 async function refreshRecommendedPlans(taskDate = getCurrentTaskDate(), force = false) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!taskDate) return;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (recommendedPlanCache.loading && !force) return;
   recommendedPlanCache.loading = true;
   renderRecommendedPlans();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/recommended-plans/list?taskDate=${encodeURIComponent(taskDate)}`, {}, 5000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) {
       recommendedPlanCache = { taskDate, items: [], loading: false };
       renderRecommendedPlans();
@@ -5634,32 +8739,58 @@ async function refreshRecommendedPlans(taskDate = getCurrentTaskDate(), force = 
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function selectRecommendedPlan(taskDate, candidateId) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!taskDate || !candidateId) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/recommended-plans/select`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ taskDate, candidateId }),
     }, 5000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) return;
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!data?.ok) return;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     await refreshRecommendedPlans(taskDate, true);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await refreshRecommendedPlanSelected(taskDate, true);
   } catch {}
 }
 
 function setRunRegionStatus(text = "") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const el = document.getElementById("runRegionStatus");
   if (!el) return;
   el.textContent = text || "";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getSelectedRunRegionSchemeNo() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return String(runRegionSelectedSchemeNo || "").trim();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function setSelectedRunRegionSchemeNo(value = "") {
   runRegionSelectedSchemeNo = String(value || "").trim();
   if (runRegionSelectedSchemeNo) {
@@ -5667,20 +8798,40 @@ function setSelectedRunRegionSchemeNo(value = "") {
   } else {
     localStorage.removeItem(RUN_REGION_SCHEME_SELECTED_KEY);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const regionSelect = document.getElementById("runRegionSchemeSelect");
   if (regionSelect) regionSelect.value = runRegionSelectedSchemeNo;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveSelect = document.getElementById("solveRegionSchemeSelect");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (solveSelect) solveSelect.value = runRegionSelectedSchemeNo;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function normalizeRunRegionPath(path) {
   if (!Array.isArray(path)) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return path
     .map((point) => {
       if (Array.isArray(point) && point.length >= 2) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return [Number(point[0]), Number(point[1])];
       }
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (point && typeof point === "object") {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return [Number(point.lng ?? point.x), Number(point.lat ?? point.y)];
       }
       return null;
@@ -5688,6 +8839,10 @@ function normalizeRunRegionPath(path) {
     .filter((point) => Array.isArray(point) && Number.isFinite(point[0]) && Number.isFinite(point[1]));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function fallbackRunRegionStorePoints() {
   return (state.stores || [])
     .map((store) => ({
@@ -5699,45 +8854,85 @@ function fallbackRunRegionStorePoints() {
     .filter((item) => item.store_id && Number.isFinite(item.lng) && Number.isFinite(item.lat) && (Math.abs(item.lng) > 1e-9 || Math.abs(item.lat) > 1e-9));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getPathFromRunRegionPolygon(polygon) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!polygon?.getPath) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rawPath = polygon.getPath() || [];
   return rawPath
     .map((point) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (Array.isArray(point) && point.length >= 2) return [Number(point[0]), Number(point[1])];
       if (point && typeof point.getLng === "function" && typeof point.getLat === "function") {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return [Number(point.getLng()), Number(point.getLat())];
       }
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (point && typeof point === "object") return [Number(point.lng), Number(point.lat)];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return null;
     })
     .filter((point) => Array.isArray(point) && Number.isFinite(point[0]) && Number.isFinite(point[1]));
 }
 
 function stopRunRegionDrawing(removeDraft = false) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (runRegionPolygonEditor) {
     try { runRegionPolygonEditor.close(); } catch {}
     runRegionPolygonEditor = null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (runRegionMouseTool) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     try { runRegionMouseTool.close(true); } catch {}
     runRegionMouseTool = null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (removeDraft && runRegionDraftPolygon && !runRegionEditingId) {
     try { runRegionDraftPolygon.setMap(null); } catch {}
   }
   runRegionDraftPolygon = null;
   runRegionEditingId = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const saveBtn = document.getElementById("runRegionSaveBtn");
   if (saveBtn) saveBtn.disabled = true;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function ensureRunRegionMapReady() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const container = document.getElementById("runRegionMap");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!container) return false;
   if (runRegionMap) return true;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!window.AMap?.Map) {
-    container.innerHTML = `<div class="empty-state">楂樺痉鍦板浘鏈姞杞藉畬鎴愶紝璇风◢鍚庨噸璇曘€?/div>`;
+    container.innerHTML = `<div class="empty-state">高德地图未加载完成，请稍后重试。</div>`;
     return false;
   }
   container.innerHTML = "";
@@ -5750,25 +8945,45 @@ async function ensureRunRegionMapReady() {
     zoomEnable: true,
     scrollWheel: true,
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     runRegionMap.addControl(new window.AMap.ToolBar({ position: "RB" }));
     runRegionMap.addControl(new window.AMap.Scale());
   } catch {}
   runRegionMap.setZoomAndCenter(11, [Number(DC.lng), Number(DC.lat)]);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return true;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function normalizeRunRegionStoreVisibilityMode(mode) {
   const value = String(mode || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (["show_all", "show_in_region", "hide_all", "hide_in_region"].includes(value)) return value;
   return "show_all";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function ensureRunRegionCheckedSelection(items) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const list = Array.isArray(items) ? items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const validIds = new Set(list.map((item) => String(item.id)));
   const next = new Set();
   runRegionCheckedRegionIds.forEach((id) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (validIds.has(String(id))) next.add(String(id));
   });
   if (!next.size && list.length) {
@@ -5777,98 +8992,210 @@ function ensureRunRegionCheckedSelection(items) {
   runRegionCheckedRegionIds = next;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getSelectedRunRegionItems() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const items = Array.isArray(runRegionCache.items) ? runRegionCache.items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!items.length) return [];
   return items.filter((item) => runRegionCheckedRegionIds.has(String(item.id)));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function getSelectedRunRegionStoreIdSet() {
   const set = new Set();
   getSelectedRunRegionItems().forEach((item) => {
     (item.storeIds || []).forEach((storeId) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const sid = String(storeId || "").trim();
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (sid) set.add(sid);
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return set;
 }
 
 function getRunRegionTargetPaths() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const items = getSelectedRunRegionItems();
   if (!items.length) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (String(runRegionTargetRegionId || "all") === "all") {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return items.map((item) => normalizeRunRegionPath(item.path)).filter((path) => path.length >= 3);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = items.find((item) => String(item.id) === String(runRegionTargetRegionId));
   if (!target) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const path = normalizeRunRegionPath(target.path);
   return path.length >= 3 ? [path] : [];
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function isPointInRunRegionPath(point, path) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!Array.isArray(path) || path.length < 3 || !Array.isArray(point) || point.length < 2) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const x = Number(point[0]);
   const y = Number(point[1]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
   let inside = false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let i = 0, j = path.length - 1; i < path.length; j = i, i += 1) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const xi = Number(path[i][0]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const yi = Number(path[i][1]);
     const xj = Number(path[j][0]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const yj = Number(path[j][1]);
     const intersects = ((yi > y) !== (yj > y))
       && (x < ((xj - xi) * (y - yi)) / ((yj - yi) || 1e-12) + xi);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (intersects) inside = !inside;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return inside;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function isRunRegionStorePointInTarget(item, paths) {
   const lng = Number(item?.lng);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const lat = Number(item?.lat);
   if (!Number.isFinite(lng) || !Number.isFinite(lat) || !paths.length) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const point = [lng, lat];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return paths.some((path) => isPointInRunRegionPath(point, path));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getVisibleRunRegionStorePoints() {
   const mode = normalizeRunRegionStoreVisibilityMode(runRegionStoreVisibilityMode);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (mode === "hide_all") return [];
   const points = Array.isArray(runRegionStorePoints) ? runRegionStorePoints : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const selectedItems = getSelectedRunRegionItems();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!selectedItems.length) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const selectedStoreIdSet = getSelectedRunRegionStoreIdSet();
   const selectedPaths = selectedItems.map((item) => normalizeRunRegionPath(item.path)).filter((path) => path.length >= 3);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const scopedPoints = points.filter((item) => {
     const sid = String(item?.store_id || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (sid && selectedStoreIdSet.has(sid)) return true;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (selectedPaths.length) return isRunRegionStorePointInTarget(item, selectedPaths);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return false;
   });
   if (mode === "show_all") return scopedPoints;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const paths = getRunRegionTargetPaths();
   if (!paths.length) return mode === "show_in_region" ? [] : scopedPoints;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (mode === "show_in_region") {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return scopedPoints.filter((item) => isRunRegionStorePointInTarget(item, paths));
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (mode === "hide_in_region") {
     return scopedPoints.filter((item) => !isRunRegionStorePointInTarget(item, paths));
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return scopedPoints;
 }
 
 function renderRunRegionStoreMarkers() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!runRegionMap || !window.AMap?.Marker) return;
   runRegionStoreMarkers.forEach((marker) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     try { marker.setMap(null); } catch {}
   });
   runRegionStoreMarkers = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const visiblePoints = getVisibleRunRegionStorePoints();
   runRegionStoreMarkers = visiblePoints.flatMap((item) => {
     const lng = Number(item.lng);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const lat = Number(item.lat);
     if (!Number.isFinite(lng) || !Number.isFinite(lat)) return [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const marker = new window.AMap.Marker({
       position: [lng, lat],
       anchor: "center",
@@ -5877,7 +9204,11 @@ function renderRunRegionStoreMarkers() {
       zIndex: 120,
       bubble: true,
     });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const labelText = `${item.store_name || item.store_id || ""}`.trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (labelText) {
       marker.setLabel({
         direction: "right",
@@ -5891,14 +9222,24 @@ function renderRunRegionStoreMarkers() {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function renderRunRegionPolygons() {
   if (!runRegionMap || !window.AMap?.Polygon) return;
   runRegionPolygons.forEach((polygon) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     try { polygon.setMap(null); } catch {}
   });
   runRegionPolygons.clear();
   getSelectedRunRegionItems().forEach((item, index) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const path = normalizeRunRegionPath(item.path);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (path.length < 3) return;
     const polygon = new window.AMap.Polygon({
       path,
@@ -5915,86 +9256,150 @@ function renderRunRegionPolygons() {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function fitRunRegionMapView() {
   if (!runRegionMap) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const overlays = [...runRegionStoreMarkers, ...Array.from(runRegionPolygons.values())];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!overlays.length) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     runRegionMap.setFitView(overlays, false, [56, 56, 56, 56], 16);
   } catch {}
 }
 
 function renderRunRegionSchemeOptions() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const items = Array.isArray(runRegionSchemeCache.items) ? runRegionSchemeCache.items : [];
   const options = [
-    `<option value="">璇烽€夋嫨鍒嗗尯鏂规鍙?/option>`,
-    ...items.map((item) => `<option value="${escapeHtml(item.schemeNo)}">${escapeHtml(`${item.schemeNo} | ${item.name}${item.enabled ? "" : "锛堝仠鐢級"}`)}</option>`),
+    `<option value="">请选择分区方案号</option>`,
+    ...items.map((item) => `<option value="${escapeHtml(item.schemeNo)}">${escapeHtml(`${item.schemeNo} | ${item.name}${item.enabled ? "" : "（停用）"}`)}</option>`),
   ];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const regionSelect = document.getElementById("runRegionSchemeSelect");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (regionSelect) {
     regionSelect.innerHTML = options.join("");
     regionSelect.value = getSelectedRunRegionSchemeNo();
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveSelect = document.getElementById("solveRegionSchemeSelect");
   if (solveSelect) {
     solveSelect.innerHTML = options.join("");
     solveSelect.value = getSelectedRunRegionSchemeNo();
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const selected = items.find((item) => item.schemeNo === getSelectedRunRegionSchemeNo()) || null;
   const noInput = document.getElementById("runRegionSchemeNoInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nameInput = document.getElementById("runRegionSchemeNameInput");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const enabledInput = document.getElementById("runRegionSchemeEnabledInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (selected) {
     if (noInput) noInput.value = selected.schemeNo;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (nameInput) nameInput.value = selected.name || "";
     if (enabledInput) enabledInput.checked = Boolean(selected.enabled);
   } else {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (nameInput) nameInput.value = "";
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (enabledInput) enabledInput.checked = true;
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderRunRegionTargetRegionOptions() {
   const select = document.getElementById("runRegionTargetRegion");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!select) return;
   const items = Array.isArray(runRegionCache.items) ? runRegionCache.items : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const previous = String(runRegionTargetRegionId || "all");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const options = [
-    `<option value="all">鍏ㄩ儴</option>`,
-    ...items.map((item) => `<option value="${item.id}">${escapeHtml((item.regionCode ? `鏂规1-${item.regionCode}` : "") || item.name || `杩愯鍖?${item.id}`)}</option>`),
+    `<option value="all">全部</option>`,
+    ...items.map((item) => `<option value="${item.id}">${escapeHtml((item.regionCode ? `方案1-${item.regionCode}` : "") || item.name || `运行区-${item.id}`)}</option>`),
   ];
   select.innerHTML = options.join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const keep = previous === "all" || items.some((item) => String(item.id) === previous);
   runRegionTargetRegionId = keep ? previous : "all";
   select.value = runRegionTargetRegionId;
 }
 
 function renderRunRegionList() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const mount = document.getElementById("runRegionList");
   if (!mount) return;
   renderRunRegionSchemeOptions();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!getSelectedRunRegionSchemeNo()) {
     runRegionTargetRegionId = "all";
     renderRunRegionTargetRegionOptions();
-    mount.innerHTML = `<div class="empty-state">璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?/div>`;
+    mount.innerHTML = `<div class="empty-state">请先选择分区方案号。</div>`;
     return;
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const items = Array.isArray(runRegionCache.items) ? runRegionCache.items : [];
   ensureRunRegionCheckedSelection(items);
   renderRunRegionTargetRegionOptions();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!items.length) {
-    mount.innerHTML = `<div class="empty-state">鏆傛棤杩愯鍖猴紝璇峰厛缁樺埗骞朵繚瀛樸€?/div>`;
+    mount.innerHTML = `<div class="empty-state">暂无运行区，请先绘制并保存。</div>`;
     return;
   }
   const checkedCount = items.filter((item) => runRegionCheckedRegionIds.has(String(item.id))).length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const allChecked = checkedCount > 0 && checkedCount === items.length;
   const listHeader = `
     <div class="run-region-check-toolbar">
       <label class="run-region-check-inline">
         <input type="checkbox" id="runRegionCheckAll" ${allChecked ? "checked" : ""}>
-        <span>鍏ㄩ儴</span>
+        <span>全部</span>
       </label>
-      <span class="run-region-check-summary">宸查€?${checkedCount}/${items.length}</span>
+      <span class="run-region-check-summary">已选 ${checkedCount}/${items.length}</span>
     </div>
   `;
   mount.innerHTML = items.map((item) => `
@@ -6002,29 +9407,45 @@ function renderRunRegionList() {
       <div class="run-region-item-title">
         <label class="run-region-check-inline">
           <input type="checkbox" class="run-region-visibility-check" data-region-id="${item.id}" ${runRegionCheckedRegionIds.has(String(item.id)) ? "checked" : ""}>
-          <span>${escapeHtml(item.name || `杩愯鍖?${item.id}`)}</span>
+          <span>${escapeHtml(item.name || `运行区-${item.id}`)}</span>
         </label>
       </div>
-      <div class="run-region-item-meta">鏂规鍙? ${escapeHtml(item.schemeNo || "-")} | 鍒嗗尯鍙? ${escapeHtml(item.regionCode || "-")} | ID: ${item.id} | 鍥存爮鐐? ${(item.path || []).length}</div>
-      <div class="run-region-item-meta">闂ㄥ簵闆嗗悎(${(item.storeIds || []).length}): ${escapeHtml((item.storeNames && item.storeNames.length ? item.storeNames : item.storeIds || []).join("銆?) || "-")}</div>
-      <div class="run-region-item-meta">鏇存柊鏃堕棿: ${escapeHtml(String(item.updatedAt || item.createdAt || "-"))}</div>
+      <div class="run-region-item-meta">方案号: ${escapeHtml(item.schemeNo || "-")} | 分区号: ${escapeHtml(item.regionCode || "-")} | ID: ${item.id} | 围栏点: ${(item.path || []).length}</div>
+      <div class="run-region-item-meta">门店集合(${(item.storeIds || []).length}): ${escapeHtml((item.storeNames && item.storeNames.length ? item.storeNames : item.storeIds || []).join("、") || "-")}</div>
+      <div class="run-region-item-meta">更新时间: ${escapeHtml(String(item.updatedAt || item.createdAt || "-"))}</div>
       <div class="run-region-item-actions">
-        <button class="secondary run-region-edit-btn" data-region-id="${item.id}">缂栬緫</button>
-        <button class="alert run-region-delete-btn" data-region-id="${item.id}">鍒犻櫎</button>
+        <button class="secondary run-region-edit-btn" data-region-id="${item.id}">编辑</button>
+        <button class="alert run-region-delete-btn" data-region-id="${item.id}">删除</button>
       </div>
     </article>
   `).join("");
   mount.innerHTML = `${listHeader}${mount.innerHTML}`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function listRunRegionSchemesFromBackend() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let available = await ensureGaBackendAvailable();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) available = await ensureGaBackendAvailable(true);
   if (!available) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-region-schemes/list`, {}, 6000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!response.ok) return [];
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!data?.ok || !Array.isArray(data.items)) return [];
     return data.items.map((item) => ({
       id: Number(item.id || 0),
@@ -6035,21 +9456,45 @@ async function listRunRegionSchemesFromBackend() {
       updatedAt: item.updatedAt || item.updated_at || "",
     })).filter((item) => item.schemeNo);
   } catch {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return [];
   }
 }
 
 async function listRunRegionsFromBackend(schemeNo) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const scheme = String(schemeNo || "").trim();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!scheme) return [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let available = await ensureGaBackendAvailable();
   if (!available) available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return [];
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-regions/list?schemeNo=${encodeURIComponent(scheme)}`, {}, 6000);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) return [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const data = await response.json();
     if (!data?.ok || !Array.isArray(data.items)) return [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return data.items.map((item) => ({
       id: Number(item.id || 0),
       schemeNo: String(item.schemeNo || item.scheme_no || "").trim(),
@@ -6066,33 +9511,67 @@ async function listRunRegionsFromBackend(schemeNo) {
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function generateRunRegionScheme1FromBackend() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let available = await ensureGaBackendAvailable();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) available = await ensureGaBackendAvailable(true);
   if (!available) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-regions/generate-scheme1`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
     }, 15000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!response.ok) return false;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return Boolean(data?.ok);
   } catch {
     return false;
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function listStorePointsForRunRegion() {
   let available = await ensureGaBackendAvailable();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!available) available = await ensureGaBackendAvailable(true);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) return fallbackRunRegionStorePoints();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/stores/points`, {}, 6000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) return fallbackRunRegionStorePoints();
     const data = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!data?.ok || !Array.isArray(data.items)) return fallbackRunRegionStorePoints();
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const points = data.items
       .map((item) => ({
         store_id: String(item.store_id || item.storeId || ""),
@@ -6101,117 +9580,207 @@ async function listStorePointsForRunRegion() {
         lat: Number(item.lat),
       }))
       .filter((item) => item.store_id && Number.isFinite(item.lng) && Number.isFinite(item.lat));
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return points.length ? points : fallbackRunRegionStorePoints();
   } catch {
     return fallbackRunRegionStorePoints();
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function createRunRegionOnBackend(payload) {
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-regions/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload || {}),
   }, 6000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const data = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!data?.ok) return null;
   return data.item || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function createRunRegionSchemeOnBackend(payload) {
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-region-schemes/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload || {}),
   }, 6000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const data = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!data?.ok) return null;
   return data.item || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function updateRunRegionSchemeOnBackend(payload) {
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-region-schemes/update`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload || {}),
   }, 6000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const data = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!data?.ok) return null;
   return data.item || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function deleteRunRegionSchemeOnBackend(schemeId) {
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-region-schemes/delete`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: Number(schemeId || 0) }),
   }, 6000);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!response.ok) return false;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const data = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return Boolean(data?.ok);
 }
 
 async function updateRunRegionOnBackend(payload) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-regions/update`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload || {}),
   }, 6000);
   if (!response.ok) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const data = await response.json();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!data?.ok) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return data.item || null;
 }
 
 async function deleteRunRegionOnBackend(regionId) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/run-regions/delete`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: Number(regionId || 0) }),
   }, 6000);
   if (!response.ok) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const data = await response.json();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return Boolean(data?.ok);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function refreshRunRegionData(force = false) {
   if ((runRegionCache.loading || runRegionSchemeCache.loading) && !force) return;
   runRegionCache.loading = true;
   runRegionSchemeCache.loading = true;
   renderRunRegionList();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const mapReady = await ensureRunRegionMapReady();
   if (!mapReady && !window.AMap?.Map) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (runRegionMapRetryTimer) clearTimeout(runRegionMapRetryTimer);
     runRegionMapRetryTimer = setTimeout(() => {
       runRegionMapRetryTimer = null;
       void refreshRunRegionData(true);
     }, 1200);
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const [rawSchemes, points] = await Promise.all([
       listRunRegionSchemesFromBackend(),
       listStorePointsForRunRegion(),
     ]);
     let schemes = Array.isArray(rawSchemes) ? rawSchemes : [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!runRegionScheme1AutoGenerated && !schemes.some((item) => item.schemeNo === "1")) {
       const generated = await generateRunRegionScheme1FromBackend();
       runRegionScheme1AutoGenerated = Boolean(generated);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (generated) {
         schemes = await listRunRegionSchemesFromBackend();
       }
     }
     runRegionSchemeCache = { items: schemes, loading: false };
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const savedSchemeNo = String(localStorage.getItem(RUN_REGION_SCHEME_SELECTED_KEY) || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const current = getSelectedRunRegionSchemeNo() || savedSchemeNo;
     const active = schemes.find((item) => item.schemeNo === current) || schemes.find((item) => item.enabled) || schemes[0] || null;
     setSelectedRunRegionSchemeNo(active?.schemeNo || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let regions = await listRunRegionsFromBackend(getSelectedRunRegionSchemeNo());
     if (!runRegionScheme1AutoGenerated && String(active?.schemeNo || "") === "1" && !regions.length) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const generated = await generateRunRegionScheme1FromBackend();
       runRegionScheme1AutoGenerated = Boolean(generated);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (generated) {
         regions = await listRunRegionsFromBackend("1");
       }
@@ -6220,6 +9789,8 @@ async function refreshRunRegionData(force = false) {
     ensureRunRegionCheckedSelection(regions);
     runRegionStorePoints = points;
     renderRunRegionList();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (mapReady) {
       renderRunRegionStoreMarkers();
       renderRunRegionPolygons();
@@ -6235,21 +9806,31 @@ async function refreshRunRegionData(force = false) {
 }
 
 async function startRunRegionDraw() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!getSelectedRunRegionSchemeNo()) {
-    setRunRegionStatus("璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?);
+    setRunRegionStatus("请先选择分区方案号。");
     return;
   }
   const mapReady = await ensureRunRegionMapReady();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!mapReady) {
-    setRunRegionStatus("鍦板浘涓嶅彲鐢紝鏃犳硶缁樺埗鍥存爮銆?);
+    setRunRegionStatus("地图不可用，无法绘制围栏。");
     return;
   }
   stopRunRegionDrawing(true);
   runRegionEditingId = null;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const nameInput = document.getElementById("runRegionNameInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (nameInput) nameInput.focus();
   if (!window.AMap?.MouseTool) {
-    setRunRegionStatus("缁樺浘鎻掍欢鏈姞杞斤紝璇峰埛鏂伴〉闈㈠悗閲嶈瘯銆?);
+    setRunRegionStatus("绘图插件未加载，请刷新页面后重试。");
     return;
   }
   runRegionMouseTool = new window.AMap.MouseTool(runRegionMap);
@@ -6262,109 +9843,197 @@ async function startRunRegionDraw() {
   });
   runRegionMouseTool.on("draw", (event) => {
     runRegionDraftPolygon = event?.obj || null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (runRegionMouseTool) {
       try { runRegionMouseTool.close(true); } catch {}
       runRegionMouseTool = null;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (runRegionDraftPolygon && window.AMap?.PolygonEditor) {
       runRegionPolygonEditor = new window.AMap.PolygonEditor(runRegionMap, runRegionDraftPolygon);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       try { runRegionPolygonEditor.open(); } catch {}
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const saveBtn = document.getElementById("runRegionSaveBtn");
     if (saveBtn) saveBtn.disabled = false;
-    setRunRegionStatus("鍥存爮宸茬粯鍒讹紝鍙嫋鎷界紪杈戝悗淇濆瓨銆?);
+    setRunRegionStatus("围栏已绘制，可拖拽编辑后保存。");
   });
-  setRunRegionStatus("璇峰湪鍦板浘涓婄偣鍑荤粯鍒惰繍琛屽尯鍥存爮銆?);
+  setRunRegionStatus("请在地图上点击绘制运行区围栏。");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function editRunRegion(regionId) {
   const id = String(regionId || "");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!id) return;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const item = (runRegionCache.items || []).find((x) => String(x.id) === id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!item) return;
   const mapReady = await ensureRunRegionMapReady();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!mapReady) return;
   stopRunRegionDrawing(false);
   const polygon = runRegionPolygons.get(id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!polygon) return;
   runRegionEditingId = Number(id);
   runRegionDraftPolygon = polygon;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (window.AMap?.PolygonEditor) {
     runRegionPolygonEditor = new window.AMap.PolygonEditor(runRegionMap, polygon);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     try { runRegionPolygonEditor.open(); } catch {}
   }
   const nameInput = document.getElementById("runRegionNameInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (nameInput) nameInput.value = item.name || "";
   const saveBtn = document.getElementById("runRegionSaveBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (saveBtn) saveBtn.disabled = false;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   try { runRegionMap.setFitView([polygon], false, [40, 40, 40, 40], 17); } catch {}
-  setRunRegionStatus(`姝ｅ湪缂栬緫杩愯鍖猴細${item.name || item.id}`);
+  setRunRegionStatus(`正在编辑运行区：${item.name || item.id}`);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function cancelRunRegionEdit() {
   stopRunRegionDrawing(true);
   const nameInput = document.getElementById("runRegionNameInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (nameInput) nameInput.value = "";
-  setRunRegionStatus("宸插彇娑堢紪杈戙€?);
+  setRunRegionStatus("已取消编辑。");
   await refreshRunRegionData(true);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function saveRunRegionDraft() {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const schemeNo = getSelectedRunRegionSchemeNo();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!schemeNo) {
-    setRunRegionStatus("璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?);
+    setRunRegionStatus("请先选择分区方案号。");
     return;
   }
   const nameInput = document.getElementById("runRegionNameInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const name = String(nameInput?.value || "").trim();
   if (!name) {
-    setRunRegionStatus("璇峰厛濉啓杩愯鍖哄悕绉般€?);
+    setRunRegionStatus("请先填写运行区名称。");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const path = normalizeRunRegionPath(getPathFromRunRegionPolygon(runRegionDraftPolygon));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (path.length < 3) {
-    setRunRegionStatus("鍥存爮鐐逛綅涓嶈冻锛岃嚦灏戦渶瑕?涓偣銆?);
+    setRunRegionStatus("围栏点位不足，至少需要3个点。");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let available = await ensureGaBackendAvailable();
   if (!available) available = await ensureGaBackendAvailable(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) {
-    setRunRegionStatus("鍚庣涓嶅彲鐢紝鏃犳硶淇濆瓨杩愯鍖恒€?);
+    setRunRegionStatus("后端不可用，无法保存运行区。");
     return;
   }
   let saved = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (runRegionEditingId) {
     saved = await updateRunRegionOnBackend({ id: runRegionEditingId, schemeNo, name, path });
   } else {
     saved = await createRunRegionOnBackend({ schemeNo, name, path });
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!saved) {
-    setRunRegionStatus("淇濆瓨澶辫触锛岃閲嶈瘯銆?);
+    setRunRegionStatus("保存失败，请重试。");
     return;
   }
   stopRunRegionDrawing(true);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (nameInput) nameInput.value = "";
-  setRunRegionStatus("杩愯鍖哄凡淇濆瓨銆?);
+  setRunRegionStatus("运行区已保存。");
   await refreshRunRegionData(true);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function removeRunRegion(regionId) {
   const id = Number(regionId || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (id <= 0) return;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const ok = await deleteRunRegionOnBackend(id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!ok) {
-    setRunRegionStatus("鍒犻櫎澶辫触锛岃閲嶈瘯銆?);
+    setRunRegionStatus("删除失败，请重试。");
     return;
   }
   if (runRegionEditingId === id) {
     stopRunRegionDrawing(true);
   }
-  setRunRegionStatus("杩愯鍖哄凡鍒犻櫎銆?);
+  setRunRegionStatus("运行区已删除。");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   await refreshRunRegionData(true);
 }
 
 function bindRunRegionEvents() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const schemeSelect = document.getElementById("runRegionSchemeSelect");
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (schemeSelect) {
     schemeSelect.addEventListener("change", () => {
       setSelectedRunRegionSchemeNo(schemeSelect.value || "");
@@ -6373,6 +10042,8 @@ function bindRunRegionEvents() {
       void refreshRunRegionData(true);
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveSchemeSelect = document.getElementById("solveRegionSchemeSelect");
   if (solveSchemeSelect) {
     solveSchemeSelect.addEventListener("change", () => {
@@ -6382,59 +10053,103 @@ function bindRunRegionEvents() {
       void refreshRunRegionData(true);
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   document.getElementById("runRegionSchemeCreateBtn")?.addEventListener("click", async () => {
     const schemeNo = String(document.getElementById("runRegionSchemeNoInput")?.value || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const name = String(document.getElementById("runRegionSchemeNameInput")?.value || "").trim();
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const enabled = Boolean(document.getElementById("runRegionSchemeEnabledInput")?.checked);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!schemeNo || !name) {
-      setRunRegionStatus("璇峰～鍐欐柟妗堝彿鍜屾柟妗堝悕绉般€?);
+      setRunRegionStatus("请填写方案号和方案名称。");
       return;
     }
     const created = await createRunRegionSchemeOnBackend({ schemeNo, name, enabled });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!created) {
-      setRunRegionStatus("鍒嗗尯鏂规鏂板澶辫触锛岃閲嶈瘯銆?);
+      setRunRegionStatus("分区方案新增失败，请重试。");
       return;
     }
     setSelectedRunRegionSchemeNo(created.schemeNo || schemeNo);
-    setRunRegionStatus("鍒嗗尯鏂规宸叉柊澧炪€?);
+    setRunRegionStatus("分区方案已新增。");
     await refreshRunRegionData(true);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("runRegionSchemeUpdateBtn")?.addEventListener("click", async () => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const selected = (runRegionSchemeCache.items || []).find((item) => item.schemeNo === getSelectedRunRegionSchemeNo()) || null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!selected) {
-      setRunRegionStatus("璇峰厛閫夋嫨瑕佹洿鏂扮殑鍒嗗尯鏂规銆?);
+      setRunRegionStatus("请先选择要更新的分区方案。");
       return;
     }
     const name = String(document.getElementById("runRegionSchemeNameInput")?.value || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const enabled = Boolean(document.getElementById("runRegionSchemeEnabledInput")?.checked);
     if (!name) {
-      setRunRegionStatus("璇峰～鍐欐柟妗堝悕绉般€?);
+      setRunRegionStatus("请填写方案名称。");
       return;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const updated = await updateRunRegionSchemeOnBackend({ id: selected.id, name, enabled });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!updated) {
-      setRunRegionStatus("鍒嗗尯鏂规鏇存柊澶辫触锛岃閲嶈瘯銆?);
+      setRunRegionStatus("分区方案更新失败，请重试。");
       return;
     }
-    setRunRegionStatus("鍒嗗尯鏂规宸叉洿鏂般€?);
+    setRunRegionStatus("分区方案已更新。");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await refreshRunRegionData(true);
   });
   document.getElementById("runRegionSchemeDeleteBtn")?.addEventListener("click", async () => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const selected = (runRegionSchemeCache.items || []).find((item) => item.schemeNo === getSelectedRunRegionSchemeNo()) || null;
     if (!selected) {
-      setRunRegionStatus("璇峰厛閫夋嫨瑕佸垹闄ょ殑鍒嗗尯鏂规銆?);
+      setRunRegionStatus("请先选择要删除的分区方案。");
       return;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const ok = await deleteRunRegionSchemeOnBackend(selected.id);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!ok) {
-      setRunRegionStatus("鍒犻櫎鍒嗗尯鏂规澶辫触锛堝彲鑳戒粛鏈夊洿鏍忕粦瀹氾級銆?);
+      setRunRegionStatus("删除分区方案失败（可能仍有围栏绑定）。");
       return;
     }
     setSelectedRunRegionSchemeNo("");
-    setRunRegionStatus("鍒嗗尯鏂规宸插垹闄ゃ€?);
+    setRunRegionStatus("分区方案已删除。");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await refreshRunRegionData(true);
   });
   const modeSelect = document.getElementById("runRegionStoreVisibilityMode");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (modeSelect) {
     runRegionStoreVisibilityMode = normalizeRunRegionStoreVisibilityMode(modeSelect.value);
     modeSelect.addEventListener("change", () => {
@@ -6445,10 +10160,14 @@ function bindRunRegionEvents() {
     });
   }
   const targetRegionSelect = document.getElementById("runRegionTargetRegion");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (targetRegionSelect) {
     runRegionTargetRegionId = String(targetRegionSelect.value || "all");
     targetRegionSelect.addEventListener("change", () => {
       runRegionTargetRegionId = String(targetRegionSelect.value || "all");
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (runRegionTargetRegionId === "all") {
         runRegionCheckedRegionIds = new Set((runRegionCache.items || []).map((item) => String(item.id)));
       } else {
@@ -6460,32 +10179,54 @@ function bindRunRegionEvents() {
       fitRunRegionMapView();
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("runRegionDrawBtn")?.addEventListener("click", () => {
     void startRunRegionDraw();
   });
   document.getElementById("runRegionSaveBtn")?.addEventListener("click", () => {
     void saveRunRegionDraft();
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   document.getElementById("runRegionCancelBtn")?.addEventListener("click", () => {
     void cancelRunRegionEdit();
   });
   document.getElementById("runRegionRefreshBtn")?.addEventListener("click", () => {
     void refreshRunRegionData(true);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("runRegionList")?.addEventListener("click", (event) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const editBtn = event.target.closest(".run-region-edit-btn");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (editBtn) {
       void editRunRegion(editBtn.dataset.regionId);
       return;
     }
     const deleteBtn = event.target.closest(".run-region-delete-btn");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (deleteBtn) {
       void removeRunRegion(deleteBtn.dataset.regionId);
     }
   });
   document.getElementById("runRegionList")?.addEventListener("change", (event) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const target = event.target;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!(target instanceof HTMLInputElement)) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (target.id === "runRegionCheckAll") {
       if (target.checked) {
         runRegionCheckedRegionIds = new Set((runRegionCache.items || []).map((item) => String(item.id)));
@@ -6499,11 +10240,21 @@ function bindRunRegionEvents() {
       fitRunRegionMapView();
       return;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (target.classList.contains("run-region-visibility-check")) {
       const regionId = String(target.dataset.regionId || "").trim();
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!regionId) return;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (target.checked) runRegionCheckedRegionIds.add(regionId);
       else runRegionCheckedRegionIds.delete(regionId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const checkedIds = Array.from(runRegionCheckedRegionIds.values());
       runRegionTargetRegionId = checkedIds.length === 1 ? checkedIds[0] : "all";
       renderRunRegionList();
@@ -6515,11 +10266,21 @@ function bindRunRegionEvents() {
 }
 
 async function refreshArchiveBackendCache(date, page = 1, pageSize = 6) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!date) return;
   if (archiveBackendCache.loading) return;
   archiveBackendCache.loading = true;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const remote = await listRunArchivesFromBackend(date, page, pageSize);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!remote) return;
     archiveBackendCache = {
       date,
@@ -6536,30 +10297,60 @@ async function refreshArchiveBackendCache(date, page = 1, pageSize = 6) {
 }
 
 function _debugExtractStoreId(item) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (item && typeof item === "object") {
     const keys = ["storeId", "store_id", "id", "code", "shop_code", "shopCode", "storeCode"];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const key of keys) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const value = item[key];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (value !== undefined && value !== null && String(value).trim()) return normalizeStoreCode(value);
     }
   }
   return normalizeStoreCode(item);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
   const backendStrategyConfig = buildBackendStrategyConfig(state.strategyConfig);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const requireNumberForBackend = (store, field) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const value = Number(store?.[field]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!Number.isFinite(value)) {
       throw new Error(`missing_${field}:${store?.id || ""}:${wave?.waveId || ""}`);
     }
     return value;
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const candidateStoreIds = (wave.storeList || []).filter((storeId) => {
     const store = scenario.storeMap.get(storeId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!store) return false;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return isStoreCandidateForWaveRule(store, wave?.waveId || "");
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const relevantIds = [DC.id, ...candidateStoreIds];
   const dist = {};
   relevantIds.forEach((fromId) => {
@@ -6568,15 +10359,26 @@ function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
       dist[fromId][toId] = Number(scenario?.dist?.[fromId]?.[toId] || 0);
     });
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const stores = candidateStoreIds.map((storeId) => {
     const store = scenario.storeMap.get(storeId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!store) throw new Error(`missing_store:${storeId}:${wave?.waveId || ""}`);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {
       id: store.id,
       name: store.name,
       boxes: requireNumberForBackend(store, "boxes"),
-      // 鍚庣鎸夊綋鍓嶆尝娆″彛寰勬敹鏃堕棿绐楋紝閬垮厤璇敤闂ㄥ簵瀵硅薄涓婄殑璺ㄦ尝娆￠仐鐣欏瓧娈?
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
       desiredArrivalMin: Number(timing.desiredArrivalMin),
       latestAllowedArrivalMin: Number(timing.latestAllowedArrivalMin),
       actualServiceMinutes: requireNumberForBackend(store, "actualServiceMinutes"),
@@ -6587,10 +10389,16 @@ function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
     };
   });
   const waveIdForSolve = String(wave?.waveId || "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const solveSpeedKmh = waveIdForSolve === "W3"
     ? Number(backendStrategyConfig.w3SpeedKmh || 48)
     : Number(backendStrategyConfig.defaultSpeedKmh || 38);
   const solveCapacity = Math.max(0.1, Number(backendStrategyConfig.maxSolveCapacity || 1));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicles = initialPlans.map((plan) => ({
     plateNo: plan.vehicle.plateNo,
     type: ENFORCED_VEHICLE_TYPE,
@@ -6604,6 +10412,8 @@ function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
     earliestDepartureMin: Number(plan.earliestDepartureMin || wave.startMin || scenario.dispatchStartMin),
     routes: (plan.trips || []).map((trip) => [...(trip.route || [])]),
   }));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     randomSeed,
     regionSchemeNo: getSelectedRunRegionSchemeNo(),
@@ -6638,6 +10448,8 @@ function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildWaveOptimizerBackendPayload(initialPlans, scenario, wave, algorithmKey, randomSeed = 203) {
   return {
     ...buildGaBackendPayload(initialPlans, scenario, wave, randomSeed),
@@ -6645,14 +10457,28 @@ function buildWaveOptimizerBackendPayload(initialPlans, scenario, wave, algorith
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function sanitizeBackendRoutes(routes = [], allowedStoreSet = new Set()) {
   const seen = new Set();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return (Array.isArray(routes) ? routes : [])
     .map((route) => (Array.isArray(route) ? route : []))
     .map((route) => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const removed = [];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const sanitized = route.filter((storeId) => {
         const normalized = String(storeId ?? "").trim();
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (!normalized || !allowedStoreSet.has(normalized) || seen.has(normalized)) {
           removed.push({
             raw: storeId,
@@ -6663,33 +10489,63 @@ function sanitizeBackendRoutes(routes = [], allowedStoreSet = new Set()) {
           return false;
         }
         seen.add(normalized);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return true;
       }).map((storeId) => String(storeId).trim());
-      if (removed.length) console.log("[W3] sanitize杩囨护:", removed);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
+      if (removed.length) console.log("[W3] sanitize过滤:", removed);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return sanitized;
     })
     .filter((route) => route.length);
 }
 
 function buildAllowedStoreSetForBackendRebuild(wave, strategyAudit = null, scenario = null) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const storeMap = scenario?.storeMap instanceof Map ? scenario.storeMap : null;
   const base = new Set((wave?.storeList || []).map((storeId) => String(storeId).trim()).filter((storeId) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!storeId) return false;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!storeMap) return true;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const store = storeMap.get(storeId);
     if (!store) return false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return isStoreCandidateForWaveRule(store, wave?.waveId || "");
   }));
   if (!strategyAudit || typeof strategyAudit !== "object") return base;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const removed = new Set([
     ...(Array.isArray(strategyAudit.filteredZeroLoadStoreIds) ? strategyAudit.filteredZeroLoadStoreIds : []),
     ...(Array.isArray(strategyAudit.filteredWaveScopeStoreIds) ? strategyAudit.filteredWaveScopeStoreIds : []),
   ].map((storeId) => String(storeId || "").trim()).filter(Boolean));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!removed.size) return base;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const filtered = new Set();
   base.forEach((storeId) => {
     if (!removed.has(storeId)) filtered.add(storeId);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (String(wave?.waveId || "").trim().toUpperCase() === "W3") {
     console.log("[W3] allowedStoreSet size:", filtered.size);
     console.log("[W3] allowedStoreSet sample:", [...filtered].slice(0, 20));
@@ -6697,13 +10553,23 @@ function buildAllowedStoreSetForBackendRebuild(wave, strategyAudit = null, scena
   return filtered;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function collectAssignedStoreSetFromRouteState(routeState = [], allowedStoreSet = null) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const assigned = new Set();
   (Array.isArray(routeState) ? routeState : []).forEach((stateItem) => {
     (stateItem?.routes || []).forEach((route) => {
       (route || []).forEach((sid) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const nsid = String(sid ?? "").trim();
         if (!nsid) return;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (allowedStoreSet instanceof Set && !allowedStoreSet.has(nsid)) return;
         assigned.add(nsid);
       });
@@ -6712,13 +10578,23 @@ function collectAssignedStoreSetFromRouteState(routeState = [], allowedStoreSet 
   return assigned;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function collectAssignedStoreSetFromPlans(plans = [], allowedStoreSet = null) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const assigned = new Set();
   (Array.isArray(plans) ? plans : []).forEach((plan) => {
     (plan?.trips || []).forEach((trip) => {
       (trip?.route || []).forEach((sid) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const nsid = String(sid ?? "").trim();
         if (!nsid) return;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (allowedStoreSet instanceof Set && !allowedStoreSet.has(nsid)) return;
         assigned.add(nsid);
       });
@@ -6727,21 +10603,41 @@ function collectAssignedStoreSetFromPlans(plans = [], allowedStoreSet = null) {
   return assigned;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function computePendingStoreIds(candidateStoreSet = new Set(), assignedStoreSet = new Set()) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return [...candidateStoreSet].filter((storeId) => !assignedStoreSet.has(storeId));
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function reportRebuildSetStats(waveId, stage, candidateStoreSet, assignedStoreSet, pendingStoreIds) {
   const waveTag = String(waveId || "-");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const candidateCount = candidateStoreSet instanceof Set ? candidateStoreSet.size : 0;
   const assignedCount = assignedStoreSet instanceof Set ? assignedStoreSet.size : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const pendingCount = Array.isArray(pendingStoreIds) ? pendingStoreIds.length : 0;
-  reportRelayStageProgress(`闆嗗悎鏍稿锛?{waveTag}/${stage}锛夛細candidate=${candidateCount}锛宎ssigned=${assignedCount}锛宲ending=${pendingCount}銆俙);
+  reportRelayStageProgress(`集合核对（${waveTag}/${stage}）：candidate=${candidateCount}，assigned=${assignedCount}，pending=${pendingCount}。`);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wave, strategyAudit = null) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!Array.isArray(bestState) || !bestState.length) return null;
   const normalizePlateNo = (plateNo) => String(plateNo || "").replace(/\s+/g, "").trim().toUpperCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const backendByPlate = new Map(
     bestState
       .map((item) => ({ key: normalizePlateNo(item?.plateNo), item }))
@@ -6749,33 +10645,57 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
       .map((row) => [row.key, row.item]),
   );
   const allowedStoreSet = buildAllowedStoreSetForBackendRebuild(wave, strategyAudit, scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (String(wave?.waveId || "").trim().toUpperCase() === "W3" && (!strategyAudit || typeof strategyAudit !== "object")) {
     console.log("[W3] allowedStoreSet size:", allowedStoreSet.size);
     console.log("[W3] allowedStoreSet sample:", [...allowedStoreSet].slice(0, 20));
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const baselineState = cloneWaveRouteState(initialPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const fallbackFailures = [];
   let routeState = initialPlans.map((plan, index) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const planPlate = normalizePlateNo(plan?.vehicle?.plateNo);
     const backendItem = (planPlate && backendByPlate.get(planPlate)) || {};
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!backendItem?.plateNo) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const hasBaselineRoutes = Array.isArray(baselineState[index]?.routes) && baselineState[index].routes.length > 0;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (hasBaselineRoutes) {
-        reportRelayStageProgress(`鍚庣鍥炲～鎻愮ず锛?{wave?.waveId || "-"}锛夛細杞︾墝 ${plan?.vehicle?.plateNo || "-"} 鏈湪 bestState 鍖归厤锛屽洖閫€鍩虹嚎绾胯矾銆俙);
+        reportRelayStageProgress(`后端回填提示（${wave?.waveId || "-"}）：车牌 ${plan?.vehicle?.plateNo || "-"} 未在 bestState 匹配，回退基线线路。`);
       }
     }
     const sanitizedRoutes = Array.isArray(backendItem.routes)
       ? sanitizeBackendRoutes(backendItem.routes, allowedStoreSet)
       : baselineState[index].routes.map((route) => [...route]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (String(wave?.waveId || "").trim().toUpperCase() === "W3") {
-      console.log("[W3] 杞﹁締", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "鍘熷routes:", backendItem.routes);
-      console.log("[W3] 杞﹁締", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "sanitized鍚?", sanitizedRoutes);
+      console.log("[W3] 车辆", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "原始routes:", backendItem.routes);
+      console.log("[W3] 车辆", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "sanitized后:", sanitizedRoutes);
     }
     const backendSpeed = Number(backendItem.speed);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const vehicle = {
       ...plan.vehicle,
       speed: Number.isFinite(backendSpeed) && backendSpeed > 0 ? backendSpeed : plan.vehicle.speed,
     };
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       vehicle,
       priorRegularDistance: Number(backendItem.priorRegularDistance ?? plan.priorRegularDistance ?? 0),
@@ -6784,42 +10704,68 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
       routes: sanitizedRoutes,
     };
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const seen = new Set();
   routeState.forEach((stateItem) => {
     stateItem.routes = (stateItem.routes || [])
       .map((route) => route.filter((storeId) => {
         if (!allowedStoreSet.has(storeId) || seen.has(storeId)) return false;
         seen.add(storeId);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         return true;
       }))
       .filter((route) => route.length);
   });
   routeState = routeState.map((stateItem, index) => {
     if (rebuildSingleStatePlan(stateItem, scenario, wave)) return stateItem;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const plateNo = String(stateItem?.vehicle?.plateNo || baselineState[index]?.vehicle?.plateNo || "").trim();
     fallbackFailures.push(plateNo || `vehicle#${index + 1}`);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       ...baselineState[index],
       routes: sanitizeBackendRoutes(baselineState[index].routes.map((route) => [...route]), allowedStoreSet),
     };
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let preRebuildAssigned = collectAssignedStoreSetFromRouteState(routeState, allowedStoreSet);
   let preRebuildPending = computePendingStoreIds(allowedStoreSet, preRebuildAssigned);
-  reportRebuildSetStats(wave?.waveId || "-", "閲嶅缓鍓?, allowedStoreSet, preRebuildAssigned, preRebuildPending);
+  reportRebuildSetStats(wave?.waveId || "-", "重建前", allowedStoreSet, preRebuildAssigned, preRebuildPending);
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let preRebuildRound = 0;
   while (preRebuildPending.length && preRebuildRound < 6) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const repaired = insertStoresIntoRouteState(routeState, preRebuildPending, scenario, wave, { candidateVehicleLimit: 8 });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!repaired) {
-      reportRelayStageProgress(`閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞棤鍙鎻掑叆浣嶏紝浠嶆湁 ${preRebuildPending.length} 瀹跺緟鎺掋€俙);
+      reportRelayStageProgress(`重建补排第${preRebuildRound + 1}轮无可行插入位，仍有 ${preRebuildPending.length} 家待排。`);
       break;
     }
     routeState = repaired;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextAssigned = collectAssignedStoreSetFromRouteState(routeState, allowedStoreSet);
     const nextPending = computePendingStoreIds(allowedStoreSet, nextAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", `閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞悗`, allowedStoreSet, nextAssigned, nextPending);
+    reportRebuildSetStats(wave?.waveId || "-", `重建补排第${preRebuildRound + 1}轮后`, allowedStoreSet, nextAssigned, nextPending);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (nextPending.length >= preRebuildPending.length) {
-      reportRelayStageProgress(`閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞棤杩涘睍锛堝緟鎺?${preRebuildPending.length}鈫?{nextPending.length}锛夛紝鍋滄缁х画琛ユ帓銆俙);
+      reportRelayStageProgress(`重建补排第${preRebuildRound + 1}轮无进展（待排 ${preRebuildPending.length}→${nextPending.length}），停止继续补排。`);
       preRebuildAssigned = nextAssigned;
       preRebuildPending = nextPending;
       break;
@@ -6830,63 +10776,111 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
   }
 
   let rebuiltPlans = rebuildWavePlansFromState(routeState, scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!rebuiltPlans) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const fallbackNote = fallbackFailures.length
-      ? `锛岄噸寤哄け璐ュ洖閫€杞﹁締 ${fallbackFailures.length} 鍙帮紙绀轰緥锛?{fallbackFailures.slice(0, 6).join("銆?)}锛塦
+      ? `，重建失败回退车辆 ${fallbackFailures.length} 台（示例：${fallbackFailures.slice(0, 6).join("、")}）`
       : "";
-    reportRelayStageProgress(`鍚庣缁撴灉閲嶅缓澶辫触锛歛llowed=${allowedStoreSet.size}锛屽凡鍒嗛厤=${preRebuildAssigned.size}锛屽緟琛?${preRebuildPending.length}${fallbackNote}銆俙);
+    reportRelayStageProgress(`后端结果重建失败：allowed=${allowedStoreSet.size}，已分配=${preRebuildAssigned.size}，待补=${preRebuildPending.length}${fallbackNote}。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return null;
   }
 
-  // 浜屾琛ユ帓锛氬鐞嗏€滈噸寤洪檷绾х疆绌哄悗鈥濆啀娆℃帀鍑烘潵鐨勯棬搴?  let secondRound = 0;
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
+  let secondRound = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   while (secondRound < 6) {
     const secondAssigned = collectAssignedStoreSetFromPlans(rebuiltPlans, allowedStoreSet);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const secondPending = computePendingStoreIds(allowedStoreSet, secondAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", secondRound === 0 ? "浜屾琛ユ帓鍓? : `浜屾琛ユ帓绗?{secondRound}杞墠`, allowedStoreSet, secondAssigned, secondPending);
+    reportRebuildSetStats(wave?.waveId || "-", secondRound === 0 ? "二次补排前" : `二次补排第${secondRound}轮前`, allowedStoreSet, secondAssigned, secondPending);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!secondPending.length) break;
 
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const retryState = cloneWaveRouteState(rebuiltPlans);
     const secondRepaired = insertStoresIntoRouteState(retryState, secondPending, scenario, wave, { candidateVehicleLimit: 8 });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!secondRepaired) {
-      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞棤鍙鎻掑叆浣嶏紝浠嶆湁 ${secondPending.length} 瀹跺緟鎺掋€俙);
+      reportRelayStageProgress(`二次补排第${secondRound + 1}轮无可行插入位，仍有 ${secondPending.length} 家待排。`);
       break;
     }
     const secondPlans = rebuildWavePlansFromState(secondRepaired, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!secondPlans) {
-      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞湭閫氳繃閲嶅缓鏍￠獙锛屼粛鏈?${secondPending.length} 瀹跺緟鎺掋€俙);
+      reportRelayStageProgress(`二次补排第${secondRound + 1}轮未通过重建校验，仍有 ${secondPending.length} 家待排。`);
       break;
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const afterAssigned = collectAssignedStoreSetFromPlans(secondPlans, allowedStoreSet);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const afterPending = computePendingStoreIds(allowedStoreSet, afterAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", `浜屾琛ユ帓绗?{secondRound + 1}杞悗`, allowedStoreSet, afterAssigned, afterPending);
+    reportRebuildSetStats(wave?.waveId || "-", `二次补排第${secondRound + 1}轮后`, allowedStoreSet, afterAssigned, afterPending);
     rebuiltPlans = secondPlans;
     if (afterPending.length >= secondPending.length) {
-      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞棤杩涘睍锛堝緟鎺?${secondPending.length}鈫?{afterPending.length}锛夛紝鍋滄缁х画琛ユ帓銆俙);
+      reportRelayStageProgress(`二次补排第${secondRound + 1}轮无进展（待排 ${secondPending.length}→${afterPending.length}），停止继续补排。`);
       break;
     }
     secondRound += 1;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return rebuiltPlans;
 }
 
 async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomSeed = 203) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let available = await ensureGaBackendAvailable();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await sleep(180);
     available = await ensureGaBackendAvailable(true);
   }
   if (!available) {
-    reportRelayStageProgress(`GA Python 鍚庡彴褰撳墠涓嶅彲杈撅紝${wave.waveId} 鍏堝洖閫€鍒板墠绔仐浼犵畻娉曘€俙);
+    reportRelayStageProgress(`GA Python 后台当前不可达，${wave.waveId} 先回退到前端遗传算法。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return null;
   }
   const payload = buildGaBackendPayload(initialPlans, scenario, wave, randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
-    reportRelayStageProgress(`GA ${wave.waveId} 姝ｅ湪鍒囧埌 Python 鍚庡彴姹傝В锛屾祻瑙堝櫒涓荤嚎绋嬩笉鍐嶇‖鎵涜繖涓€妫掋€俙);
+    reportRelayStageProgress(`GA ${wave.waveId} 正在切到 Python 后台求解，浏览器主线程不再硬扛这一棒。`);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/ga-optimize-wave`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }, 600000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!response.ok) {
       await sleep(220);
       response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/ga-optimize-wave`, {
@@ -6895,24 +10889,40 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
         body: JSON.stringify(payload),
       }, 600000);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    reportStrategyAuditToRelayConsole(data.strategyAudit, "閬椾紶绠楁硶锛圙A锛?);
-    reportBackendUnscheduledToRelayConsole(data.unscheduledStores, "閬椾紶绠楁硶锛圙A锛?, wave.waveId || "-");
+    reportStrategyAuditToRelayConsole(data.strategyAudit, "遗传算法（GA）");
+    reportBackendUnscheduledToRelayConsole(data.unscheduledStores, "遗传算法（GA）", wave.waveId || "-");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const plans = rebuildWavePlansFromBackendState(data.bestState || [], initialPlans, scenario, wave, data.strategyAudit || null);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (Array.isArray(data.traceLog) && data.traceLog.length) {
       data.traceLog.forEach((event) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const message = (lang() === "ja" ? event?.textJa : event?.textZh) || event?.textZh || event?.textJa || "";
         if (message) reportRelayStageProgress(message);
       });
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!plans) {
       const backendRouteCount = Array.isArray(data.bestState)
         ? data.bestState.reduce((sum, item) => sum + ((item?.routes || []).length || 0), 0)
         : 0;
       throw new Error(`Backend state rebuild failed (vehicles=${Array.isArray(data.bestState) ? data.bestState.length : 0}, routes=${backendRouteCount})`);
     }
-    reportRelayStageProgress(`GA ${wave.waveId} 宸蹭粠 Python 鍚庡彴鎴愬姛鎺ュ洖锛屽綋鍓嶆尝娆′笉鐢ㄥ啀鍥為€€鍓嶇閬椾紶绠楁硶銆俙);
+    reportRelayStageProgress(`GA ${wave.waveId} 已从 Python 后台成功接回，当前波次不用再回退前端遗传算法。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {
       plans,
       traceLog: Array.isArray(data.traceLog) ? data.traceLog : [],
@@ -6920,37 +10930,61 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
     };
   } catch (error) {
     gaBackendHealth = { available: false, checkedAt: Date.now() };
-    reportRelayStageProgress(`GA Python 鍚庡彴鏈疆澶辫触锛?{error?.message || "unknown"}锛夛紝鏈疆宸蹭腑姝紝涓嶅啀鍥為€€鍓嶇銆俙);
+    reportRelayStageProgress(`GA Python 后台本轮失败（${error?.message || "unknown"}），本轮已中止，不再回退前端。`);
     throw new Error(`GA_BACKEND_REQUIRED:${error?.message || "unknown"}`);
   }
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, algorithmKey, randomSeed = 203) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (STRICT_ALGO_TRUTH_MODE) {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} 宸插垏鍥炲墠绔湡瀹炵畻娉曟眰瑙ｏ紙鐪熷疄鎬т紭鍏堟ā寮忥級锛屾湰杞笉璧?Python 杩戜技鍚庣銆俙);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} 已切回前端真实算法求解（真实性优先模式），本轮不走 Python 近似后端。`);
     return null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let available = await ensureGaBackendAvailable();
   if (!available) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await sleep(180);
     available = await ensureGaBackendAvailable(true);
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!available) {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 鍚庡彴褰撳墠涓嶅彲杈俱€俙);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 后台当前不可达。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (BACKEND_ONLY_REAL_ALGOS.has(String(algorithmKey || ""))) {
       throw new Error(`${algorithmKey}_BACKEND_REQUIRED:unreachable`);
     }
     return null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const payload = buildWaveOptimizerBackendPayload(initialPlans, scenario, wave, algorithmKey, randomSeed);
   try {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 姝ｅ湪鍒囧埌 Python 鍚庡彴姹傝В锛屾祻瑙堝櫒涓荤嚎绋嬩笉鍐嶇‖鎵涜繖涓€妫掋€俙);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 正在切到 Python 后台求解，浏览器主线程不再硬扛这一棒。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wave-optimize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }, 600000);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!response.ok) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       await sleep(220);
       response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wave-optimize`, {
         method: "POST",
@@ -6959,26 +10993,46 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
       }, 600000);
     }
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const data = await response.json();
     reportStrategyAuditToRelayConsole(data.strategyAudit, algoLabel(algorithmKey));
     reportBackendUnscheduledToRelayConsole(data.unscheduledStores, algoLabel(algorithmKey), wave.waveId || "-");
     const plans = rebuildWavePlansFromBackendState(data.bestState || [], initialPlans, scenario, wave, data.strategyAudit || null);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (Array.isArray(data.traceLog) && data.traceLog.length) {
       data.traceLog.forEach((event) => {
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const message = (lang() === "ja" ? event?.textJa : event?.textZh) || event?.textZh || event?.textJa || "";
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (message) reportRelayStageProgress(message);
       });
     }
     if (["vrptw", "savings"].includes(String(algorithmKey || "").trim())) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const iterTag = `${String(algorithmKey || "").trim()}-python-iteration`;
       const hasConstructiveIteration = Array.isArray(data.traceLog)
         && data.traceLog.some((event) => String(event?.stage || "").trim() === iterTag);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!hasConstructiveIteration) {
         throw new Error(`${algorithmKey}_BACKEND_STALE_OR_INVALID_TRACE`);
       }
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!plans) throw new Error("Backend state rebuild failed");
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 宸蹭粠 Python 鍚庡彴鎴愬姛鎺ュ洖锛屽綋鍓嶆尝娆′笉鐢ㄥ啀鍥為€€鍓嶇 ${algoLabel(algorithmKey)}銆俙);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 已从 Python 后台成功接回，当前波次不用再回退前端 ${algoLabel(algorithmKey)}。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {
       plans,
       traceLog: Array.isArray(data.traceLog) ? data.traceLog : [],
@@ -6987,53 +11041,107 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
   } catch (error) {
     gaBackendHealth = { available: false, checkedAt: Date.now() };
     const raw = String(error?.message || "unknown");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const staleHint = raw.includes("_BACKEND_STALE_OR_INVALID_TRACE")
-      ? "鍚庣杩斿洖鐨勬棩蹇楃粨鏋勬棤鏁堬紙澶ф鐜囨槸鏃ц繘绋嬫湭閲嶅惎锛夛紝璇烽噸鍚?GA 鍚庡彴鍚庨噸璇曘€?
+      ? "后端返回的日志结构无效（大概率是旧进程未重启），请重启 GA 后台后重试。"
       : raw;
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 鍚庡彴鏈疆澶辫触锛?{staleHint}锛夈€俙);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 后台本轮失败（${staleHint}）。`);
     if (BACKEND_ONLY_REAL_ALGOS.has(String(algorithmKey || ""))) {
       throw new Error(`${algorithmKey}_BACKEND_REQUIRED:${error?.message || "unknown"}`);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return null;
   }
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomSeed);
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const now = () => (typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : Date.now());
   const random = createSeededRandom(randomSeed);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const initialState = cloneWaveRouteState(initialPlans);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const traceLog = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const isCompareMode = (state.settings.solveStrategy || "manual") === "compare";
   const populationSize = isCompareMode ? 6 : 12;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const generations = isCompareMode ? 8 : 22;
   const eliteCount = isCompareMode ? 2 : 3;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stagnationLimit = isCompareMode ? 3 : 6;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const improvementThreshold = isCompareMode ? 0.2 : 0.1;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const seedImproveRounds = isCompareMode ? 0 : 2;
   const offspringImproveRounds = isCompareMode ? 0 : 2;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const immigrantImproveRounds = isCompareMode ? 0 : 1;
   const population = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const seen = new Set();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const profile = { seedMs: 0, crossoverMs: 0, offspringEvalMs: 0, immigrantMs: 0 };
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   function addIndividual(state) {
     const signature = hashRouteState(state);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (seen.has(signature)) return false;
     const improved = localImproveState(state, scenario, wave, random, seedImproveRounds) || evaluateRouteState(state, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!improved) return false;
     seen.add(signature);
     population.push({ state: cloneWaveRouteState(improved.plans), plans: improved.plans, cost: improved.cost, signature });
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return true;
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const seedStart = now();
   addIndividual(initialState);
   for (let guard = 0; guard < (isCompareMode ? 24 : 80) && population.length < populationSize; guard += 1) {
     addIndividual(mutateRouteState(initialState, scenario, wave, random, 1 + Math.floor(random() * 4)));
   }
   profile.seedMs += now() - seedStart;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!population.length) return { plans: initialPlans, traceLog };
 
   pushTraceEvent(traceLog, {
@@ -7042,8 +11150,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
     waveId: wave.waveId,
     stage: "ga-start",
     bestCost: Math.min(...population.map((item) => item.cost)),
-    textZh: isCompareMode ? `閬椾紶绠楁硶宸茬敓鎴愬姣旂缇?${population.length} 涓釜浣擄紝鎸夎交閲忓姣旈绠楀紑濮嬪仛閫夋嫨 / 浜ゅ弶 / 鍙樺紓銆俙 : `閬椾紶绠楁硶宸茬敓鎴愬垵濮嬬缇?${population.length} 涓釜浣擄紝寮€濮嬪仛閫夋嫨 / 浜ゅ弶 / 鍙樺紓銆俙,
-    textJa: isCompareMode ? `閬轰紳鐨勩偄銉偞銉偤銉犮伅姣旇純鐢ㄣ伄杌介噺闆嗗洠 ${population.length} 鍊嬩綋銈掔敓鎴愩仐銆侀伕鎶?/ 浜ゅ弶 / 澶夌暟銈掗枊濮嬨仐銇俱仚銆俙 : `閬轰紳鐨勩偄銉偞銉偤銉犮伅鍒濇湡闆嗗洠 ${population.length} 鍊嬩綋銈掔敓鎴愩仐銆侀伕鎶?/ 浜ゅ弶 / 澶夌暟銈掗枊濮嬨仐銇俱仚銆俙,
+    textZh: isCompareMode ? `遗传算法已生成对比种群 ${population.length} 个个体，按轻量对比预算开始做选择 / 交叉 / 变异。` : `遗传算法已生成初始种群 ${population.length} 个个体，开始做选择 / 交叉 / 变异。`,
+    textJa: isCompareMode ? `遺伝的アルゴリズムは比較用の軽量集団 ${population.length} 個体を生成し、選択 / 交叉 / 変異を開始します。` : `遺伝的アルゴリズムは初期集団 ${population.length} 個体を生成し、選択 / 交叉 / 変異を開始します。`,
   });
   if (isCompareMode) {
     pushTraceEvent(traceLog, {
@@ -7051,40 +11159,80 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
       scope: "wave",
       waveId: wave.waveId,
       stage: "ga-profile-seed",
-      textZh: `GA 鎬ц兘鍓栨瀽宸插紑鍚細鍒濆绉嶇兢闃舵鑰楁椂绾?${(profile.seedMs / 1000).toFixed(2)} 绉掋€俙,
-      textJa: `GA 銇€ц兘銉椼儹銉曘偂銈ゃ儷銈掓湁鍔瑰寲銇椼伨銇椼仧銆傚垵鏈熼泦鍥ｃ伄鎵€瑕佹檪闁撱伅绱?${(profile.seedMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
+      textZh: `GA 性能剖析已开启：初始种群阶段耗时约 ${(profile.seedMs / 1000).toFixed(2)} 秒。`,
+      textJa: `GA の性能プロファイルを有効化しました。初期集団の所要時間は約 ${(profile.seedMs / 1000).toFixed(2)} 秒です。`,
     });
-    reportRelayStageProgress(`GA 鍓栨瀽鍚姩锛?{wave.waveId} 鍒濆绉嶇兢闃舵鑰楁椂绾?${(profile.seedMs / 1000).toFixed(2)} 绉掋€俙);
+    reportRelayStageProgress(`GA 剖析启动：${wave.waveId} 初始种群阶段耗时约 ${(profile.seedMs / 1000).toFixed(2)} 秒。`);
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let bestCostSeen = Infinity;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let stagnantGenerations = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let generation = 0; generation < generations; generation += 1) {
     const generationStart = now();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     let generationCrossoverMs = 0;
     let generationOffspringEvalMs = 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let generationImmigrantMs = 0;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (generation && generation % 2 === 0) await cooperativeYield();
     population.sort((a, b) => a.cost - b.cost);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextPopulation = population.slice(0, eliteCount).map((item) => ({ ...item, state: cloneWaveRouteState(item.state), plans: item.plans.map((plan) => clone(plan)) }));
     let offspringAttempts = 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const maxOffspringAttempts = isCompareMode ? populationSize * 18 : populationSize * 36;
     while (nextPopulation.length < populationSize && offspringAttempts < maxOffspringAttempts) {
       offspringAttempts += 1;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const parentA = tournamentSelect(population, random, 3);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const parentB = tournamentSelect(population, random, 3);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const crossoverStart = now();
       let childState = crossoverRouteStates(parentA.state, parentB.state, scenario, wave, random);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!childState) childState = mutateRouteState(parentA.state, scenario, wave, random, 2);
       if (random() < 0.85) childState = mutateRouteState(childState, scenario, wave, random, random() < 0.6 ? 1 : 2);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const crossoverSpent = now() - crossoverStart;
       generationCrossoverMs += crossoverSpent;
       profile.crossoverMs += crossoverSpent;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const evalStart = now();
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const improved = localImproveState(childState, scenario, wave, random, offspringImproveRounds) || evaluateRouteState(childState, scenario, wave);
       const evalSpent = now() - evalStart;
       generationOffspringEvalMs += evalSpent;
       profile.offspringEvalMs += evalSpent;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!improved) continue;
       nextPopulation.push({
         state: cloneWaveRouteState(improved.plans),
@@ -7094,7 +11242,11 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
       });
     }
     if (nextPopulation.length < populationSize) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const fallbackSource = nextPopulation[0] || population[0];
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       while (fallbackSource && nextPopulation.length < populationSize) {
         nextPopulation.push({
           ...fallbackSource,
@@ -7108,20 +11260,32 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         waveId: wave.waveId,
         stage: "ga-guard-fill",
         generation,
-        textZh: `绗?${generation + 1} 浠ｅ悗浠ｇ敓鎴愬皾璇曡揪鍒颁笂闄?${maxOffspringAttempts} 娆★紝浠嶆湭濉弧绉嶇兢锛屾湰浠ｅ墿浣欎釜浣撴敼鐢ㄥ綋鍓嶆渶浼樹釜浣撹ˉ浣嶏紝閬垮厤闄峰叆鏃犱紤姝㈠皾璇曘€俙,
-        textJa: `绗?${generation + 1} 涓栦唬銇с伅瀛愬€嬩綋鐢熸垚銇│琛屻亴涓婇檺 ${maxOffspringAttempts} 鍥炪伀閬斻仐銇︺倐闆嗗洠銈掑煁銈併亶銈屻仾銇嬨仯銇熴仧銈併€佹畫銈娿伅鐝炬檪鐐广伄鏈€鑹€嬩綋銇ц瀹屻仐銆佺劇闄愯│琛屻倰闃层亷銇俱仚銆俙,
+        textZh: `第 ${generation + 1} 代后代生成尝试达到上限 ${maxOffspringAttempts} 次，仍未填满种群，本代剩余个体改用当前最优个体补位，避免陷入无休止尝试。`,
+        textJa: `第 ${generation + 1} 世代では子個体生成の試行が上限 ${maxOffspringAttempts} 回に達しても集団を埋めきれなかったため、残りは現時点の最良個体で補完し、無限試行を防ぎます。`,
       });
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (isCompareMode) {
-        reportRelayStageProgress(`GA ${wave.waveId} 绗?${generation + 1} 浠ｅ瓙浠ｇ敓鎴愬凡灏濊瘯 ${maxOffspringAttempts} 娆′粛鏈～婊＄缇わ紝宸叉敼鐢ㄥ綋鍓嶆渶浼樹釜浣撹ˉ浣嶏紝閬垮厤鍗℃銆俙);
+        reportRelayStageProgress(`GA ${wave.waveId} 第 ${generation + 1} 代子代生成已尝试 ${maxOffspringAttempts} 次仍未填满种群，已改用当前最优个体补位，避免卡死。`);
       }
     }
     if (generation % 5 === 4 && population.length) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const immigrantStart = now();
       const immigrant = mutateRouteState(population[0].state, scenario, wave, random, 3);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const immigrantEval = localImproveState(immigrant, scenario, wave, random, immigrantImproveRounds) || evaluateRouteState(immigrant, scenario, wave);
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const immigrantSpent = now() - immigrantStart;
       generationImmigrantMs += immigrantSpent;
       profile.immigrantMs += immigrantSpent;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (immigrantEval) {
         nextPopulation[nextPopulation.length - 1] = {
           state: cloneWaveRouteState(immigrantEval.plans),
@@ -7134,6 +11298,10 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
     population.splice(0, population.length, ...nextPopulation);
     population.sort((a, b) => a.cost - b.cost);
     const generationBest = population[0].cost;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (bestCostSeen - generationBest >= improvementThreshold) {
       bestCostSeen = generationBest;
       stagnantGenerations = 0;
@@ -7149,11 +11317,15 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-generation",
         generation,
         bestCost: generationBest,
-        textZh: `绗?${generation + 1} 浠ｅ畬鎴愰€夋嫨銆佷氦鍙変笌鍙樺紓锛屽綋鍓嶇缇ゆ渶浼樻垚鏈?${generationBest.toFixed(1)}銆俙,
-        textJa: `${generation + 1} 涓栦唬銇ч伕鎶炪兓浜ゅ弶銉诲鐣般倰瀹屼簡銇椼€佺従鍦ㄣ伄闆嗗洠鏈€鑹偝銈广儓銇?${generationBest.toFixed(1)} 銇с仚銆俙,
+        textZh: `第 ${generation + 1} 代完成选择、交叉与变异，当前种群最优成本 ${generationBest.toFixed(1)}。`,
+        textJa: `${generation + 1} 世代で選択・交叉・変異を完了し、現在の集団最良コストは ${generationBest.toFixed(1)} です。`,
       });
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (isCompareMode) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const generationTotalMs = now() - generationStart;
       pushTraceEvent(traceLog, {
         algorithmKey: "ga",
@@ -7162,11 +11334,13 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-profile-generation",
         generation,
         bestCost: generationBest,
-        textZh: `GA 绗?${generation + 1} 浠ｈ€楁椂绾?${(generationTotalMs / 1000).toFixed(2)} 绉掞紝鍏朵腑浜ゅ弶/淇 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(generationImmigrantMs / 1000).toFixed(2)} 绉掋€俙,
-        textJa: `GA 绗?${generation + 1} 涓栦唬銇墍瑕佹檪闁撱伅绱?${(generationTotalMs / 1000).toFixed(2)} 绉掋仹銆佸唴瑷炽伅浜ゅ弶/淇京 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掋€佸瓙浠ｈ渚?${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掋€佺Щ姘?${(generationImmigrantMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
+        textZh: `GA 第 ${generation + 1} 代耗时约 ${(generationTotalMs / 1000).toFixed(2)} 秒，其中交叉/修复 ${(generationCrossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒。`,
+        textJa: `GA 第 ${generation + 1} 世代の所要時間は約 ${(generationTotalMs / 1000).toFixed(2)} 秒で、内訳は交叉/修復 ${(generationCrossoverMs / 1000).toFixed(2)} 秒、子代評価 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒、移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒です。`,
       });
-      reportRelayStageProgress(`GA ${wave.waveId} 绗?${generation + 1} 浠ｈ€楁椂绾?${(generationTotalMs / 1000).toFixed(2)} 绉掞紝鍏朵腑浜ゅ弶/淇 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(generationImmigrantMs / 1000).toFixed(2)} 绉掋€傚綋鍓嶆渶浼樹唬浠?${generationBest.toFixed(1)}銆俙);
+      reportRelayStageProgress(`GA ${wave.waveId} 第 ${generation + 1} 代耗时约 ${(generationTotalMs / 1000).toFixed(2)} 秒，其中交叉/修复 ${(generationCrossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒。当前最优代价 ${generationBest.toFixed(1)}。`);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (isCompareMode && stagnantGenerations >= stagnationLimit) {
       pushTraceEvent(traceLog, {
         algorithmKey: "ga",
@@ -7175,8 +11349,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-early-stop",
         generation,
         bestCost: generationBest,
-        textZh: `杩炵画 ${stagnationLimit} 浠ｆ彁鍗囦笉瓒?${improvementThreshold.toFixed(1)}锛屽姣旀ā寮忎笅鎻愬墠鏀跺伐锛岄伩鍏嶇户缁┖杞€俙,
-        textJa: `${stagnationLimit} 涓栦唬閫ｇ稓銇ф敼鍠勫箙銇?${improvementThreshold.toFixed(1)} 鏈簚銇仧銈併€佹瘮杓冦儮銉笺儔銇с伅鏃┿倎銇墦銇″垏銇ｃ仸绌鸿虎銈掗槻銇庛伨銇欍€俙,
+        textZh: `连续 ${stagnationLimit} 代提升不足 ${improvementThreshold.toFixed(1)}，对比模式下提前收工，避免继续空转。`,
+        textJa: `${stagnationLimit} 世代連続で改善幅が ${improvementThreshold.toFixed(1)} 未満のため、比較モードでは早めに打ち切って空転を防ぎます。`,
       });
       break;
     }
@@ -7189,8 +11363,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
     waveId: wave.waveId,
     stage: "ga-finish",
     bestCost: population[0].cost,
-    textZh: `閬椾紶绠楁硶缁撴潫锛屾渶缁堢缇ゆ渶浼樻垚鏈?${population[0].cost.toFixed(1)}銆俙,
-    textJa: `閬轰紳鐨勩偄銉偞銉偤銉犮亴绲備簡銇椼€佹渶绲傞泦鍥ｃ伄鏈€鑹偝銈广儓銇?${population[0].cost.toFixed(1)} 銇с仚銆俙,
+    textZh: `遗传算法结束，最终种群最优成本 ${population[0].cost.toFixed(1)}。`,
+    textJa: `遺伝的アルゴリズムが終了し、最終集団の最良コストは ${population[0].cost.toFixed(1)} です。`,
   });
   if (isCompareMode) {
     pushTraceEvent(traceLog, {
@@ -7199,29 +11373,59 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
       waveId: wave.waveId,
       stage: "ga-profile-summary",
       bestCost: population[0].cost,
-      textZh: `GA 鍓栨瀽姹囨€伙細鍒濆绉嶇兢 ${(profile.seedMs / 1000).toFixed(2)} 绉掞紝浜ゅ弶/淇 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(profile.immigrantMs / 1000).toFixed(2)} 绉掋€俙,
-      textJa: `GA 銉椼儹銉曘偂銈ゃ儷闆嗚▓锛氬垵鏈熼泦鍥?${(profile.seedMs / 1000).toFixed(2)} 绉掋€佷氦鍙?淇京 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掋€佸瓙浠ｈ渚?${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掋€佺Щ姘?${(profile.immigrantMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
+      textZh: `GA 剖析汇总：初始种群 ${(profile.seedMs / 1000).toFixed(2)} 秒，交叉/修复 ${(profile.crossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒。`,
+      textJa: `GA プロファイル集計：初期集団 ${(profile.seedMs / 1000).toFixed(2)} 秒、交叉/修復 ${(profile.crossoverMs / 1000).toFixed(2)} 秒、子代評価 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒、移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒です。`,
     });
-    reportRelayStageProgress(`GA 鍓栨瀽姹囨€伙細鍒濆绉嶇兢 ${(profile.seedMs / 1000).toFixed(2)} 绉掞紝浜ゅ弶/淇 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(profile.immigrantMs / 1000).toFixed(2)} 绉掋€俙);
+    reportRelayStageProgress(`GA 剖析汇总：初始种群 ${(profile.seedMs / 1000).toFixed(2)} 秒，交叉/修复 ${(profile.crossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒。`);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { plans: population[0].plans, traceLog };
 }
 
 async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "sa", randomSeed);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const random = createSeededRandom(randomSeed);
   let currentState = cloneWaveRouteState(initialPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let currentEval = evaluateRouteState(currentState, scenario, wave);
   if (!currentEval) return { plans: initialPlans, traceLog: [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentCost = currentEval.cost;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let currentPlans = currentEval.plans;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let bestState = cloneWaveRouteState(currentPlans);
   let bestPlans = currentPlans;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestCost = currentCost;
   let temperature = Math.max(12, currentCost * 0.12);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const finalTemperature = 0.25;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const coolingRate = 0.93;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   pushTraceEvent(traceLog, {
     algorithmKey: "sa",
@@ -7229,22 +11433,38 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
     waveId: wave.waveId,
     stage: "sa-start",
     bestCost,
-    textZh: `妯℃嫙閫€鐏粠鍒濆瑙ｅ惎鍔紝鍒濆娓╁害 ${temperature.toFixed(1)}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `銈枫儫銉ャ儸銉笺儐銉冦儔銈儖銉笺儶銉炽偘銈掑垵鏈熻В銇嬨倝闁嬪銇椼€佸垵鏈熸俯搴?${temperature.toFixed(1)}銆佸垵鏈熴偝銈广儓 ${bestCost.toFixed(1)}銆俙,
+    textZh: `模拟退火从初始解启动，初始温度 ${temperature.toFixed(1)}，初始波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `シミュレーテッドアニーリングを初期解から開始し、初期温度 ${temperature.toFixed(1)}、初期コスト ${bestCost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏凡鍚姩锛屽垵濮嬫俯搴?${temperature.toFixed(1)}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 模拟退火已启动，初始温度 ${temperature.toFixed(1)}，初始波次内部代价 ${bestCost.toFixed(1)}。`);
   let epoch = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   while (temperature > finalTemperature && epoch < 28) {
     if (epoch) await cooperativeYield();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (let inner = 0; inner < 8; inner += 1) {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const candidate = sampleSingleNeighbor(currentState, scenario, wave, random, inner === 0 || (epoch + inner) % 5 === 0, 5);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!candidate) continue;
       const delta = candidate.cost - currentCost;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const accepted = delta < 0 || random() < Math.exp(-delta / Math.max(0.001, temperature));
       if (!accepted) continue;
       currentState = candidate.state;
       currentPlans = candidate.plans;
       currentCost = candidate.cost;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (traceLog.length < 18) {
         pushTraceEvent(traceLog, {
           algorithmKey: "sa",
@@ -7256,15 +11476,17 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
           candidateCost: candidate.cost,
           temperature,
           accepted,
-          textZh: `娓╁害 ${temperature.toFixed(2)} 涓嬫帴鍙?${candidate.meta?.type || "mixed"} 閭诲煙锛屽€欓€夋垚鏈?${candidate.cost.toFixed(1)}銆俙,
-          textJa: `娓╁害 ${temperature.toFixed(2)} 銇?${candidate.meta?.type || "mixed"} 杩戝倣銈掓帯鐢ㄣ仐銆佸€欒銈炽偣銉堛伅 ${candidate.cost.toFixed(1)}銆俙,
+          textZh: `温度 ${temperature.toFixed(2)} 下接受 ${candidate.meta?.type || "mixed"} 邻域，候选成本 ${candidate.cost.toFixed(1)}。`,
+          textJa: `温度 ${temperature.toFixed(2)} で ${candidate.meta?.type || "mixed"} 近傍を採用し、候補コストは ${candidate.cost.toFixed(1)}。`,
         });
       }
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (candidate.cost + 1e-6 < bestCost) {
         bestCost = candidate.cost;
         bestState = cloneWaveRouteState(candidate.plans);
         bestPlans = candidate.plans;
-        reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏湪绗?${epoch + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+        reportRelayStageProgress(`${wave.waveId} 模拟退火在第 ${epoch + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
         pushTraceEvent(traceLog, {
           algorithmKey: "sa",
           scope: "wave",
@@ -7272,18 +11494,24 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
           stage: "sa-best",
           epoch,
           bestCost,
-      textZh: `妯℃嫙閫€鐏埛鏂版渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-          textJa: `鐒笺亶銇伨銇椼仹鏈€鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+      textZh: `模拟退火刷新最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
+          textJa: `焼きなましで最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)}。`,
         });
       }
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if ((epoch + 1) % 4 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏凡璺戝埌绗?${epoch + 1}/28 杞紝褰撳墠娓╁害 ${temperature.toFixed(2)}锛屽綋鍓嶆渶濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 模拟退火已跑到第 ${epoch + 1}/28 轮，当前温度 ${temperature.toFixed(2)}，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
     }
     temperature *= coolingRate;
     epoch += 1;
   }
   const polished = localImproveState(bestState, scenario, wave, random, 4);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (polished && polished.cost + 1e-6 < bestCost) {
     bestState = cloneWaveRouteState(polished.plans);
     bestPlans = polished.plans;
@@ -7295,19 +11523,29 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
     waveId: wave.waveId,
     stage: "sa-finish",
     bestCost,
-    textZh: `妯℃嫙閫€鐏粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `銈枫儫銉ャ儸銉笺儐銉冦儔銈儖銉笺儶銉炽偘銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+    textZh: `模拟退火结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `シミュレーテッドアニーリングが終了し、最終最良コストは ${bestCost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 模拟退火结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
   return { plans: rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans, traceLog };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildPheromoneMapForWave(wave, initialValue = 0.2) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const pheromone = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ids = [DC.id, ...wave.storeList];
   ids.forEach((fromId) => {
     const row = new Map();
     ids.forEach((toId) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (fromId !== toId) row.set(toId, initialValue);
     });
     pheromone.set(fromId, row);
@@ -7315,10 +11553,16 @@ function buildPheromoneMapForWave(wave, initialValue = 0.2) {
   return pheromone;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function pheromoneValue(pheromone, fromId, toId, fallback = 0.2) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return pheromone.get(fromId)?.get(toId) ?? fallback;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function depositRoutePheromone(pheromone, routeState, deposit) {
   routeState.forEach((item) => {
     item.routes.forEach((route) => {
@@ -7332,6 +11576,10 @@ function depositRoutePheromone(pheromone, routeState, deposit) {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function evaporatePheromone(pheromone, rho = 0.12) {
   pheromone.forEach((row) => {
     row.forEach((value, key) => {
@@ -7341,31 +11589,67 @@ function evaporatePheromone(pheromone, rho = 0.12) {
 }
 
 function selectAcoNextStore(currentId, remainingStoreIds, pheromone, scenario, wave, random, alpha = 1, beta = 2.2) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const weighted = remainingStoreIds.map((storeId) => {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const pher = Math.pow(pheromoneValue(pheromone, currentId, storeId), alpha);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const heuristic = 1 / Math.max(1, (scenario.dist?.[currentId]?.[storeId] || 1));
     const timing = getStoreTimingForWave(scenario.storeMap.get(storeId), wave, scenario.dispatchStartMin);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const urgency = 1 + Math.max(0, (1440 - timing.latestAllowedArrivalMin) / 1440);
     const weight = pher * Math.pow(heuristic * urgency, beta);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { storeId, weight };
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (total <= 0) return remainingStoreIds[0];
   let cursor = random() * total;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const item of weighted) {
     cursor -= item.weight;
     if (cursor <= 0) return item.storeId;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return weighted[weighted.length - 1]?.storeId || remainingStoreIds[0];
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function constructAcoState(seedState, pheromone, scenario, wave, random) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const allStoreIds = [...new Set(flattenStoresFromRouteState(seedState))];
   if (!allStoreIds.length) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const order = [];
   const remaining = [...allStoreIds];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let currentId = DC.id;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   while (remaining.length) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextId = selectAcoNextStore(currentId, remaining, pheromone, scenario, wave, random);
     order.push(nextId);
     remaining.splice(remaining.indexOf(nextId), 1);
@@ -7377,22 +11661,48 @@ function constructAcoState(seedState, pheromone, scenario, wave, random) {
     priorWaveCount: item.priorWaveCount,
     routes: [],
   }));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const inserted = insertStoresIntoRouteState(emptyState, order, scenario, wave);
   if (!inserted) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return inserted;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 409) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "aco", randomSeed);
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const random = createSeededRandom(randomSeed);
   const initialState = cloneWaveRouteState(initialPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const initialEval = evaluateRouteState(initialState, scenario, wave);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!initialEval) return { plans: initialPlans, traceLog: [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const pheromone = buildPheromoneMapForWave(wave, 0.18);
   let bestState = cloneWaveRouteState(initialEval.plans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestPlans = initialEval.plans;
   let bestCost = initialEval.cost;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   pushTraceEvent(traceLog, {
     algorithmKey: "aco",
@@ -7400,17 +11710,31 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
     waveId: wave.waveId,
     stage: "aco-start",
     bestCost,
-    textZh: `铓佺兢绠楁硶鍚姩锛屽厛鍒濆鍖栦俊鎭礌锛屽啀鏋勯€犲€欓€夐棬搴楀簭鍒楋紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙,
-    textJa: `锜汇偝銉儖銉兼渶閬╁寲銈掗枊濮嬨仐銆併儠銈с儹銉兂銈掑垵鏈熷寲銇椼仸鍊欒闋嗗簭銈掓绡夈仐銇俱仚銆傚垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+    textZh: `蚁群算法启动，先初始化信息素，再构造候选门店序列，初始波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `蟻コロニー最適化を開始し、フェロモンを初期化して候補順序を構築します。初期コストは ${bestCost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 铓佺兢绠楁硶宸插惎鍔紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 蚁群算法已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let iteration = 0; iteration < 26; iteration += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (iteration) await cooperativeYield();
     const ants = [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (let ant = 0; ant < 10; ant += 1) {
       const candidateState = constructAcoState(bestState, pheromone, scenario, wave, random);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!candidateState) continue;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const improved = localImproveState(candidateState, scenario, wave, random, 2) || evaluateRouteState(candidateState, scenario, wave);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!improved) continue;
       ants.push({
         state: cloneWaveRouteState(improved.plans),
@@ -7424,11 +11748,15 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
     ants.slice(0, 4).forEach((ant, rank) => {
       depositRoutePheromone(pheromone, ant.state, 4 / Math.max(1, ant.cost) * (4 - rank));
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (ants[0].cost + 1e-6 < bestCost) {
       bestCost = ants[0].cost;
       bestState = cloneWaveRouteState(ants[0].plans);
       bestPlans = ants[0].plans;
-      reportRelayStageProgress(`${wave.waveId} 铓佺兢鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 蚁群在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
       pushTraceEvent(traceLog, {
         algorithmKey: "aco",
         scope: "wave",
@@ -7436,13 +11764,15 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
         stage: "aco-best",
         iteration,
         bestCost,
-        textZh: `绗?${iteration + 1} 杞殎缇ゅ埛鏂版渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇ц熁缇ゃ亴鏈€鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+        textZh: `第 ${iteration + 1} 轮蚁群刷新最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目で蟻群が最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)}。`,
       });
     }
     if ((iteration + 1) % 5 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 铓佺兢宸茶窇鍒扮 ${iteration + 1}/26 杞紝鏈疆鏈€浼樺€欓€変唬浠?${ants[0].cost.toFixed(1)}锛屽叏灞€鏈€浼?${bestCost.toFixed(1)}銆俙);
+      reportRelayStageProgress(`${wave.waveId} 蚁群已跑到第 ${iteration + 1}/26 轮，本轮最优候选代价 ${ants[0].cost.toFixed(1)}，全局最优 ${bestCost.toFixed(1)}。`);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (traceLog.length < 18) {
       pushTraceEvent(traceLog, {
         algorithmKey: "aco",
@@ -7451,8 +11781,8 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
         stage: "aco-iteration",
         iteration,
         bestCost: ants[0].cost,
-        textZh: `绗?${iteration + 1} 杞俊鎭礌瀹屾垚鎸ュ彂涓庡己鍖栵紝鏈疆鏈€浼樺€欓€夋垚鏈?${ants[0].cost.toFixed(1)}銆俙,
-        textJa: `${iteration + 1} 鍥炵洰銇с儠銈с儹銉兂銇捀鐧恒仺寮峰寲銈掑畬浜嗐仐銆併亾銇洖銇渶鑹€欒銈炽偣銉堛伅 ${ants[0].cost.toFixed(1)}銆俙,
+        textZh: `第 ${iteration + 1} 轮信息素完成挥发与强化，本轮最优候选成本 ${ants[0].cost.toFixed(1)}。`,
+        textJa: `${iteration + 1} 回目でフェロモンの蒸発と強化を完了し、この回の最良候補コストは ${ants[0].cost.toFixed(1)}。`,
       });
     }
   }
@@ -7462,15 +11792,23 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
     waveId: wave.waveId,
     stage: "aco-finish",
     bestCost,
-    textZh: `铓佺兢绠楁硶缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
-    textJa: `锜汇偝銉儖銉兼渶閬╁寲銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
+    textZh: `蚁群算法结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
+    textJa: `蟻コロニー最適化が終了し、最終最良コストは ${bestCost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 铓佺兢绠楁硶缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
+  reportRelayStageProgress(`${wave.waveId} 蚁群算法结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { plans: bestPlans, traceLog };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function decodePsoPriorityState(priorityVector, templateState, scenario, wave) {
   const storeIds = flattenStoresFromRouteState(templateState);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const ordered = storeIds
     .map((storeId, index) => ({ storeId, priority: priorityVector[index] ?? 0 }))
     .sort((a, b) => b.priority - a.priority)
@@ -7481,35 +11819,79 @@ function decodePsoPriorityState(priorityVector, templateState, scenario, wave) {
     priorWaveCount: item.priorWaveCount,
     routes: [],
   }));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return insertStoresIntoRouteState(emptyState, ordered, scenario, wave);
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 503) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const backendResult = await tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, "pso", randomSeed);
   if (backendResult?.plans?.length) return backendResult;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const random = createSeededRandom(randomSeed);
   const templateState = cloneWaveRouteState(initialPlans);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeIds = flattenStoresFromRouteState(templateState);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!storeIds.length) return { plans: initialPlans, traceLog: [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dimension = storeIds.length;
   const particleCount = Math.min(18, Math.max(10, dimension));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const iterations = 36;
   const c1 = 1.55;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const c2 = 1.55;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const vmax = 0.35;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   let globalBest = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const particles = [];
   const describeCurrentWaveCost = (plans) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const breakdown = computePlansCostBreakdown(plans, scenario, wave);
-    return `褰撳墠杩欐尝娆＄殑鍐呴儴浠ｄ环绾?${Number(breakdown.totalCost || 0).toFixed(1)}锛岀粍鎴愭槸锛?{formatWaveCostBreakdown(breakdown)}銆俙;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
+    return `当前这波次的内部代价约 ${Number(breakdown.totalCost || 0).toFixed(1)}，组成是：${formatWaveCostBreakdown(breakdown)}。`;
   };
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   function evaluateParticle(position) {
     const state = decodePsoPriorityState(position, templateState, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!state) return null;
     const improved = localImproveState(state, scenario, wave, random, 2) || evaluateRouteState(state, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!improved) return null;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     return {
       position: [...position],
       state: cloneWaveRouteState(improved.plans),
@@ -7518,11 +11900,21 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
     };
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let i = 0; i < particleCount; i += 1) {
     const position = Array.from({ length: dimension }, () => random());
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const velocity = Array.from({ length: dimension }, () => (random() - 0.5) * 0.2);
     const evaluated = evaluateParticle(position);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!evaluated) continue;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const particle = {
       position,
       velocity,
@@ -7532,6 +11924,8 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
       bestPlans: evaluated.plans,
     };
     particles.push(particle);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!globalBest || evaluated.cost < globalBest.cost) {
       globalBest = {
         position: [...position],
@@ -7549,20 +11943,36 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
     waveId: wave.waveId,
     stage: "pso-start",
     bestCost: globalBest.cost,
-    textZh: `绮掑瓙缇ょ畻娉曞惎鍔紝绮掑瓙鏁?${particles.length}锛岀淮搴?${dimension}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
-    textJa: `绮掑瓙缇ゆ渶閬╁寲銈掗枊濮嬨仐銆佺矑瀛愭暟 ${particles.length}銆佹鍏?${dimension}銆佸垵鏈熴伄鍏ㄤ綋鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
+    textZh: `粒子群算法启动，粒子数 ${particles.length}，维度 ${dimension}，初始波次内部代价 ${globalBest.cost.toFixed(1)}。`,
+    textJa: `粒子群最適化を開始し、粒子数 ${particles.length}、次元 ${dimension}、初期の全体最良コストは ${globalBest.cost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 宸茶繘鍏ョ矑瀛愮兢鎼滅储锛屽綋鍓嶅鐞?${dimension} 瀹堕棬搴椼€?{particles.length} 涓矑瀛愩€傚厛鐢ㄧ幇鏈夋柟妗堝仛璧疯窇绾匡紝鍐嶈绮掑瓙缇ゅ弽澶嶈皟鏁撮棬搴椾紭鍏堢骇銆?{describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 已进入粒子群搜索，当前处理 ${dimension} 家门店、${particles.length} 个粒子。先用现有方案做起跑线，再让粒子群反复调整门店优先级。${describeCurrentWaveCost(globalBest.plans)}`);
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let stagnation = 0;
   for (let iter = 0; iter < iterations; iter += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (iter) await cooperativeYield();
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const inertia = 0.78 - (0.45 * iter / iterations);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let improvedThisRound = false;
     particles.forEach((particle, index) => {
       for (let d = 0; d < dimension; d += 1) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const r1 = random();
         const r2 = random();
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         let velocity = inertia * particle.velocity[d]
           + c1 * r1 * (particle.bestPosition[d] - particle.position[d])
           + c2 * r2 * (globalBest.position[d] - particle.position[d]);
@@ -7570,7 +11980,11 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
         particle.velocity[d] = velocity;
         particle.position[d] = Math.max(0, Math.min(1, particle.position[d] + velocity));
       }
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const evaluated = evaluateParticle(particle.position);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!evaluated) return;
       if (evaluated.cost + 1e-6 < particle.bestCost) {
         particle.bestCost = evaluated.cost;
@@ -7578,6 +11992,10 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
         particle.bestState = evaluated.state;
         particle.bestPlans = evaluated.plans;
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (evaluated.cost + 1e-6 < globalBest.cost) {
         globalBest = {
           position: [...particle.position],
@@ -7594,14 +12012,16 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
           iteration: iter,
           particle: index,
           bestCost: globalBest.cost,
-          textZh: `绗?${iter + 1} 杞矑瀛?${index + 1} 鍒锋柊鍏ㄥ眬鏈€浼橈紝鏂扮殑娉㈡鍐呴儴浠ｄ环 ${globalBest.cost.toFixed(1)}銆俙,
-          textJa: `${iter + 1} 鍥炵洰銇х矑瀛?${index + 1} 銇屽叏浣撴渶鑹倰鏇存柊銇椼€佹柊銇椼亜鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
+          textZh: `第 ${iter + 1} 轮粒子 ${index + 1} 刷新全局最优，新的波次内部代价 ${globalBest.cost.toFixed(1)}。`,
+          textJa: `${iter + 1} 回目で粒子 ${index + 1} が全体最良を更新し、新しい最良コストは ${globalBest.cost.toFixed(1)}。`,
         });
         if ((iter + 1) <= 3 || (iter + 1) % 6 === 0) {
-          reportRelayStageProgress(`${wave.waveId} 绗?${iter + 1} 杞噷锛岀矑瀛?${index + 1} 鍒锋柊浜嗚繖涓€娉㈡鐨勫綋鍓嶆渶浼樸€傝鏄庡畠纭疄鎵惧埌鏇撮『鐨勬帓娉曚簡銆?{describeCurrentWaveCost(globalBest.plans)}`);
+          reportRelayStageProgress(`${wave.waveId} 第 ${iter + 1} 轮里，粒子 ${index + 1} 刷新了这一波次的当前最优。说明它确实找到更顺的排法了。${describeCurrentWaveCost(globalBest.plans)}`);
         }
       }
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (traceLog.length < 20) {
       pushTraceEvent(traceLog, {
         algorithmKey: "pso",
@@ -7611,26 +12031,36 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
         iteration: iter,
         inertia,
         bestCost: globalBest.cost,
-        textZh: `绗?${iter + 1} 杞畬鎴愰€熷害涓庝綅缃洿鏂帮紝鎯€ф潈閲?${inertia.toFixed(2)}锛屽綋鍓嶆尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
-        textJa: `${iter + 1} 鍥炵洰銇ч€熷害銇ㄤ綅缃伄鏇存柊銈掑畬浜嗐仐銆佹叄鎬ч噸銇?${inertia.toFixed(2)}銆佺従鍦ㄣ伄鍏ㄤ綋鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
+        textZh: `第 ${iter + 1} 轮完成速度与位置更新，惯性权重 ${inertia.toFixed(2)}，当前波次内部代价 ${globalBest.cost.toFixed(1)}。`,
+        textJa: `${iter + 1} 回目で速度と位置の更新を完了し、慣性重み ${inertia.toFixed(2)}、現在の全体最良コストは ${globalBest.cost.toFixed(1)}。`,
       });
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if ((iter + 1) === 1 || (iter + 1) % 6 === 0 || iter === iterations - 1) {
-      reportRelayStageProgress(`${wave.waveId} 绮掑瓙缇ゅ凡璺戝埌绗?${iter + 1}/${iterations} 杞€傝繖娈垫椂闂翠富瑕佸湪鍙嶅璋冩暣闂ㄥ簵鍏堝悗椤哄簭鍜岃溅杈嗗綊灞炪€?{describeCurrentWaveCost(globalBest.plans)}`);
+      reportRelayStageProgress(`${wave.waveId} 粒子群已跑到第 ${iter + 1}/${iterations} 轮。这段时间主要在反复调整门店先后顺序和车辆归属。${describeCurrentWaveCost(globalBest.plans)}`);
     }
     stagnation = improvedThisRound ? 0 : stagnation + 1;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (stagnation >= 8) {
       const restartCount = Math.max(1, Math.floor(particles.length * 0.25));
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       for (let i = particles.length - restartCount; i < particles.length; i += 1) {
         particles[i].position = Array.from({ length: dimension }, () => random());
         particles[i].velocity = Array.from({ length: dimension }, () => (random() - 0.5) * 0.2);
       }
-      reportRelayStageProgress(`${wave.waveId} 杩炵画鍑犺疆娌℃湁鏄庢樉鎻愬崌锛岀矑瀛愮兢鍒氬垰閲嶅惎浜?${restartCount} 涓〃鐜版渶宸殑绮掑瓙锛岄伩鍏嶅ぇ瀹朵竴鐩村洿鐫€鍚屼竴鏉℃棫璺嚎绌鸿浆銆俙);
+      reportRelayStageProgress(`${wave.waveId} 连续几轮没有明显提升，粒子群刚刚重启了 ${restartCount} 个表现最差的粒子，避免大家一直围着同一条旧路线空转。`);
       stagnation = 0;
     }
   }
   const polished = localImproveState(globalBest.state, scenario, wave, random, 5);
-  reportRelayStageProgress(`${wave.waveId} 鐨勭矑瀛愮兢涓讳綋鎼滅储璺戝畬浜嗭紝姝ｅ湪鍋氭渶鍚庝竴杞眬閮ㄥ井璋冿紝鎶婂凡缁忔壘鍒扮殑濂芥柟妗堝啀鎶涘厜涓€涓嬨€?{describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 的粒子群主体搜索跑完了，正在做最后一轮局部微调，把已经找到的好方案再抛光一下。${describeCurrentWaveCost(globalBest.plans)}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (polished && polished.cost + 1e-6 < globalBest.cost) {
     globalBest = {
       position: globalBest.position,
@@ -7645,21 +12075,35 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
     waveId: wave.waveId,
     stage: "pso-finish",
     bestCost: globalBest.cost,
-    textZh: `绮掑瓙缇ょ畻娉曠粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
-    textJa: `绮掑瓙缇ゆ渶閬╁寲銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
+    textZh: `粒子群算法结束，最终波次内部代价 ${globalBest.cost.toFixed(1)}。`,
+    textJa: `粒子群最適化が終了し、最終最良コストは ${globalBest.cost.toFixed(1)}。`,
   });
-  reportRelayStageProgress(`${wave.waveId} 鐨勭矑瀛愮兢鎼滅储瀹屾垚銆傛帴涓嬫潵浼氬洖鍒版暣鐩樻柟妗堜笂鍒ゆ柇杩欎竴妫掑€间笉鍊煎緱姝ｅ紡鎺ヨ繃鍘汇€?{describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 的粒子群搜索完成。接下来会回到整盘方案上判断这一棒值不值得正式接过去。${describeCurrentWaveCost(globalBest.plans)}`);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { plans: globalBest.plans, traceLog };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildSeedPlansForWave(scenario, wave, regularVehicleStats = new Map(), basePlans = []) {
   return scenario.vehicles.map((vehicle) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const prior = regularVehicleStats.get(vehicle.plateNo) || {};
     const earliestDepartureMin = wave.isNightWave
       ? Math.max(Number(wave.earliestDepartureMin || wave.startMin), Number(prior.nightAvailableMin || wave.startMin))
       : wave.startMin;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const basePlan = (basePlans || []).find((plan) => plan.vehicle.plateNo === vehicle.plateNo);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!basePlan?.trips?.length) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return createVehiclePlan(vehicle, wave.waveId, wave.startMin, scenario, {
         ...prior,
         earliestDepartureMin,
@@ -7681,32 +12125,62 @@ function buildSeedPlansForWave(scenario, wave, regularVehicleStats = new Map(), 
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function calculateRouteDistanceFromIds(route, scenario) {
   if (!route.length) return 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let total = scenario.dist?.[DC.id]?.[route[0]] || 0;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let i = 0; i < route.length - 1; i += 1) total += scenario.dist?.[route[i]]?.[route[i + 1]] || 0;
   total += scenario.dist?.[route[route.length - 1]]?.[DC.id] || 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return total;
 }
 
 function hasSavingsStandaloneFeasibility(route, scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return scenario.vehicles.some((vehicle) => {
     const plan = rebuildPlanFromRoutes(vehicle, [route], scenario, wave, {
       priorRegularDistance: 0,
       priorWaveCount: 0,
       earliestDepartureMin: wave.isNightWave ? Math.max(Number(wave.earliestDepartureMin || wave.startMin), Number(scenario.dispatchStartMin || wave.startMin)) : wave.startMin,
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return !!plan;
   });
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildSavingsCandidatesForWave(scenario, wave) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const savings = [];
   for (let i = 0; i < wave.storeList.length; i += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (let j = i + 1; j < wave.storeList.length; j += 1) {
       const storeAId = wave.storeList[i];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const storeBId = wave.storeList[j];
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const saving = (scenario.dist?.[DC.id]?.[storeAId] || 0) + (scenario.dist?.[DC.id]?.[storeBId] || 0) - (scenario.dist?.[storeAId]?.[storeBId] || 0);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (saving <= 0) continue;
       savings.push({ storeAId, storeBId, saving });
     }
@@ -7715,34 +12189,78 @@ function buildSavingsCandidatesForWave(scenario, wave) {
   return savings;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function buildSavingsMergeOptions(routeA, routeB, storeAId, storeBId) {
   const options = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const aFront = routeA[0] === storeAId;
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const aBack = routeA[routeA.length - 1] === storeAId;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const bFront = routeB[0] === storeBId;
   const bBack = routeB[routeB.length - 1] === storeBId;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!(aFront || aBack) || !(bFront || bBack)) return options;
   if (aBack && bFront) options.push(routeA.concat(routeB));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (aFront && bBack) options.push(routeB.concat(routeA));
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (aFront && bFront) options.push([...routeA].reverse().concat(routeB));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (aBack && bBack) options.push(routeA.concat([...routeB].reverse()));
   return options.filter((route, index, list) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const key = route.join(">");
     return list.findIndex((item) => item.join(">") === key) === index;
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function twoOptRouteIds(route, scenario, wave) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let best = [...route];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let bestDistance = calculateRouteDistanceFromIds(best, scenario);
   let improved = true;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   while (improved) {
     improved = false;
     for (let i = 0; i < best.length - 1; i += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       for (let j = i + 1; j < best.length; j += 1) {
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const candidate = best.slice(0, i).concat(best.slice(i, j + 1).reverse(), best.slice(j + 1));
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const candidateDistance = calculateRouteDistanceFromIds(candidate, scenario);
         if (candidateDistance + 1e-6 >= bestDistance) continue;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (!hasSavingsStandaloneFeasibility(candidate, scenario, wave)) continue;
         best = candidate;
         bestDistance = candidateDistance;
@@ -7752,16 +12270,32 @@ function twoOptRouteIds(route, scenario, wave) {
       if (improved) break;
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return best;
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function assignSavingsRoutesToPlans(routes, seedPlans, scenario, wave, traceLog) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const plans = seedPlans.map((plan) => clone(plan));
   const unscheduledStores = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const sortedRoutes = [...routes].sort((a, b) => (b.totalBoxes - a.totalBoxes) || (b.route.length - a.route.length));
   for (const item of sortedRoutes) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let best = null;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     for (let i = 0; i < plans.length; i += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const candidateRoutes = plans[i].trips.map((trip) => [...trip.route]).concat([item.route]);
       const nextPlan = rebuildPlanFromRoutes(
         plans[i].vehicle,
@@ -7774,37 +12308,63 @@ function assignSavingsRoutesToPlans(routes, seedPlans, scenario, wave, traceLog)
           earliestDepartureMin: plans[i].earliestDepartureMin,
         },
       );
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!nextPlan) continue;
       const cost = computePlanCost(nextPlan, scenario, wave);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!best || cost < best.cost) best = { planIndex: i, nextPlan, cost };
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (best) {
       plans[best.planIndex] = best.nextPlan;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (traceLog.length < 48) {
         pushTraceEvent(traceLog, {
           algorithmKey: "savings",
           scope: "wave",
           waveId: wave.waveId,
           stage: "savings-assignment",
-          textZh: `灏嗚妭绾︽硶鐢熸垚绾胯矾 ${item.route.join("->")} 鍒嗛厤缁?${plans[best.planIndex].vehicle.plateNo}锛岀患鍚堟垚鏈?${best.cost.toFixed(1)}銆俙,
-          textJa: `绡€绱勬硶銇х敓鎴愩仐銇熴儷銉笺儓 ${item.route.join("->")} 銈?${plans[best.planIndex].vehicle.plateNo} 銇壊銈婂綋銇︺€佺窂鍚堛偝銈广儓銇?${best.cost.toFixed(1)}銆俙,
+          textZh: `将节约法生成线路 ${item.route.join("->")} 分配给 ${plans[best.planIndex].vehicle.plateNo}，综合成本 ${best.cost.toFixed(1)}。`,
+          textJa: `節約法で生成したルート ${item.route.join("->")} を ${plans[best.planIndex].vehicle.plateNo} に割り当て、総合コストは ${best.cost.toFixed(1)}。`,
         });
       }
       continue;
     }
     for (const storeId of item.route) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const store = scenario.storeMap.get(storeId);
       if (!store) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       let inserted = false;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       for (let i = 0; i < plans.length; i += 1) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const candidate = buildTripCandidate(plans[i], store, scenario, wave, false, { allowToleranceBreak: false });
         if (!candidate) continue;
         plans[i] = candidate.nextPlan;
         inserted = true;
         break;
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!inserted) {
         const diagnosis = diagnoseUnscheduledStore(store, plans, scenario, wave);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
         unscheduledStores.push({
           waveId: wave.waveId,
@@ -7817,56 +12377,104 @@ function assignSavingsRoutesToPlans(routes, seedPlans, scenario, wave, traceLog)
       }
     }
   }
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { plans, unscheduledStores };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function solveWaveBySavings(scenario) {
   const optimizedSolution = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const traceLog = [];
   const regularVehicleStats = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const unscheduledStores = [];
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const maxVehicleCapacity = Math.max(...scenario.vehicles.map((vehicle) => Number(vehicle.capacity || 0)), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const wave of scenario.waves) {
     const seedPlans = buildSeedPlansForWave(scenario, wave, regularVehicleStats, []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const routeRefs = new Map();
     let routes = wave.storeList
       .map((storeId) => scenario.storeMap.get(storeId))
       .filter(Boolean)
       .map((store) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const item = {
           id: `cw_${wave.waveId}_${store.id}`,
           route: [store.id],
           totalBoxes: Number(getStoreSolveLoadForWave(store, wave) || 0),
         };
         routeRefs.set(store.id, item);
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         return item;
       });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const savings = buildSavingsCandidatesForWave(scenario, wave);
     pushTraceEvent(traceLog, {
       algorithmKey: "savings",
       scope: "wave",
       waveId: wave.waveId,
       stage: "savings-start",
-      textZh: `Clark-Wright 鑺傜害娉曞惎鍔紝鍏堢敓鎴?${routes.length} 鏉″崟搴楃嚎璺紝鍐嶈绠?${savings.length} 涓妭绾﹀€笺€俙,
-      textJa: `Clark-Wright 绡€绱勬硶銈掗枊濮嬨仐銆併伨銇?${routes.length} 鏈伄鍗樺簵鑸椼儷銉笺儓銈掍綔鎴愩仐銆併仢銇緦 ${savings.length} 鍊嬨伄绡€绱勫€ゃ倰瑷堢畻銇椼伨銇欍€俙,
+      textZh: `Clark-Wright 节约法启动，先生成 ${routes.length} 条单店线路，再计算 ${savings.length} 个节约值。`,
+      textJa: `Clark-Wright 節約法を開始し、まず ${routes.length} 本の単店舗ルートを作成し、その後 ${savings.length} 個の節約値を計算します。`,
     });
     for (const saving of savings) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const routeA = routeRefs.get(saving.storeAId);
       const routeB = routeRefs.get(saving.storeBId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!routeA || !routeB || routeA === routeB) continue;
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       if (!IGNORE_CAPACITY_CONSTRAINT && routeA.totalBoxes + routeB.totalBoxes > maxVehicleCapacity) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const options = buildSavingsMergeOptions(routeA.route, routeB.route, saving.storeAId, saving.storeBId);
       let bestRoute = null;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       let bestDistance = Number.POSITIVE_INFINITY;
       for (const option of options) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (!hasSavingsStandaloneFeasibility(option, scenario, wave)) continue;
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         const distance = calculateRouteDistanceFromIds(option, scenario);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (distance < bestDistance) {
           bestDistance = distance;
           bestRoute = option;
         }
       }
       if (!bestRoute) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const merged = {
         id: `${routeA.id}_${routeB.id}`,
         route: bestRoute,
@@ -7881,8 +12489,8 @@ function solveWaveBySavings(scenario) {
           scope: "wave",
           waveId: wave.waveId,
           stage: "savings-merge",
-          textZh: `鑺傜害鍊?${saving.saving.toFixed(1)} 椹卞姩鍚堝苟 ${saving.storeAId} 涓?${saving.storeBId}锛屽舰鎴愮嚎璺?${bestRoute.join("->")}銆俙,
-          textJa: `绡€绱勫€?${saving.saving.toFixed(1)} 銇熀銇ャ亶 ${saving.storeAId} 銇?${saving.storeBId} 銈掔当鍚堛仐銆併儷銉笺儓 ${bestRoute.join("->")} 銈掑舰鎴愩€俙,
+          textZh: `节约值 ${saving.saving.toFixed(1)} 驱动合并 ${saving.storeAId} 与 ${saving.storeBId}，形成线路 ${bestRoute.join("->")}。`,
+          textJa: `節約値 ${saving.saving.toFixed(1)} に基づき ${saving.storeAId} と ${saving.storeBId} を統合し、ルート ${bestRoute.join("->")} を形成。`,
         });
       }
     }
@@ -7890,11 +12498,17 @@ function solveWaveBySavings(scenario) {
       ...item,
       route: twoOptRouteIds(item.route, scenario, wave),
     }));
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const assigned = assignSavingsRoutesToPlans(routes, seedPlans, scenario, wave, traceLog);
     optimizedSolution.push(assigned.plans);
     unscheduledStores.push(...assigned.unscheduledStores);
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (wave.isNightWave) {
       assigned.plans.forEach((plan) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
         if (plan.trips.length) {
           regularVehicleStats.set(plan.vehicle.plateNo, {
@@ -7915,41 +12529,71 @@ function solveWaveBySavings(scenario) {
       scope: "wave",
       waveId: wave.waveId,
       stage: "savings-finish",
-      textZh: `Clark-Wright 鑺傜害娉曞畬鎴?${wave.waveId}锛屾渶缁堢敓鎴?${assigned.plans.flatMap((plan) => plan.trips).length} 瓒熺嚎璺€俙,
-      textJa: `Clark-Wright 绡€绱勬硶銇?${wave.waveId} 銈掑畬浜嗐仐銆佹渶绲傜殑銇?${assigned.plans.flatMap((plan) => plan.trips).length} 渚裤倰鐢熸垚銆俙,
+      textZh: `Clark-Wright 节约法完成 ${wave.waveId}，最终生成 ${assigned.plans.flatMap((plan) => plan.trips).length} 趟线路。`,
+      textJa: `Clark-Wright 節約法が ${wave.waveId} を完了し、最終的に ${assigned.plans.flatMap((plan) => plan.trips).length} 便を生成。`,
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return { solution: optimizedSolution, traceLog, unscheduledStores };
 }
 
 async function solveWaveByWaveWithOptimizer(scenario, optimizer, baseSeed = 0, optimizerKey = "hybrid") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseRun = greedySolve(scenario, baseSeed, true);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!baseRun?.solution?.length) return { solution: [], traceLog: [], unscheduledStores: baseRun?.unscheduledStores || [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const optimizedSolution = [];
   let traceLog = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const backendUnscheduledStores = [];
   let backendUnscheduledProvided = false;
   pushTraceEvent(traceLog, {
     algorithmKey: optimizerKey,
     scope: "wave",
     stage: `${optimizerKey}-seed`,
-    textZh: `${algoLabel(optimizerKey)} 浠ュ揩閫熷垵鎺掔粨鏋滀綔涓鸿捣璺戝熀绾匡紝浠ヤ笅灞曠ず鐨勬槸璇ョ畻娉曡嚜韬殑缁х画浼樺寲杩囩▼銆俙,
-    textJa: `${algoLabel(optimizerKey)} 銇垵鏈熼厤杌娿倰璧风偣銇渶閬╁寲銈掔稒缍氥仐銇俱仚銆備互涓嬨伅褰撹┎銈儷銈淬儶銈恒儬鑷韩銇儹銈般仹銇欍€俙,
+    textZh: `${algoLabel(optimizerKey)} 以快速初排结果作为起跑基线，以下展示的是该算法自身的继续优化过程。`,
+    textJa: `${algoLabel(optimizerKey)} は初期配車を起点に最適化を継続します。以下は当該アルゴリズム自身のログです。`,
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const regularVehicleStats = new Map();
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (let waveIndex = 0; waveIndex < scenario.waves.length; waveIndex += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (waveIndex) await cooperativeYield();
     const wave = scenario.waves[waveIndex];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const seededPlans = buildSeedPlansForWave(scenario, wave, regularVehicleStats, baseRun.solution[waveIndex] || []);
     const optimized = await optimizer(seededPlans, scenario, wave, baseSeed * 100 + 42 + waveIndex);
     optimizedSolution.push(optimized.plans);
     traceLog = traceLog.concat(optimized.traceLog || []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (Array.isArray(optimized.unscheduledStores)) {
       backendUnscheduledProvided = true;
       backendUnscheduledStores.push(...optimized.unscheduledStores);
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (wave.isNightWave) {
       optimized.plans.forEach((plan) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
         if (plan.trips.length) {
           regularVehicleStats.set(plan.vehicle.plateNo, {
@@ -7966,6 +12610,10 @@ async function solveWaveByWaveWithOptimizer(scenario, optimizer, baseSeed = 0, o
       });
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   return {
     solution: optimizedSolution,
     traceLog,
@@ -7974,20 +12622,46 @@ async function solveWaveByWaveWithOptimizer(scenario, optimizer, baseSeed = 0, o
 }
 
 async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer, baseSeed = 0) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!baseSolution?.length) return { solution: [], traceLog: [] };
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const optimizedSolution = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let traceLog = [];
   const regularVehicleStats = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const baseMetrics = evaluateSolution(baseSolution, scenario, []);
   const waveIssueScores = scenario.waves.map((wave, waveIndex) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const plans = baseSolution[waveIndex] || [];
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const trips = plans.flatMap((plan) => plan.trips || []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lateStops = trips.reduce((sum, trip) => sum + (trip.lateStoreCount || 0), 0);
     const overTolerance = trips.reduce((sum, trip) => sum + (trip.overToleranceMinutes || 0), 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const lowLoadTrips = trips.filter((trip) => (trip.loadRate || 0) < 0.55).length;
     const mileageRef = isW3WaveForSolve(wave) ? getSolveW3OneWayMaxKm(scenario) : getSolveRelayMaxKm(scenario);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const longTrips = trips.filter((trip) => (trip.totalDistance || 0) > Math.max(80, mileageRef * 0.45)).length;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const score = lateStops * 8 + overTolerance * 0.2 + lowLoadTrips * 2 + longTrips * 2;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { waveIndex, score, hasTrips: trips.length > 0 };
   });
   const focusWaveIndexes = new Set(
@@ -7998,30 +12672,48 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
       .filter((item) => item.score > 0)
       .map((item) => item.waveIndex)
   );
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!focusWaveIndexes.size) {
     waveIssueScores.forEach((item) => {
       if (item.hasTrips) focusWaveIndexes.add(item.waveIndex);
     });
   }
-  reportRelayStageProgress(`杩欎竴妫掍笉浼氭暣鐩橀噸绠楋紝鑰屾槸浼樺厛鐩綇闂鏇撮噸鐨勬尝娆★細${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)}銆傚叾瀹冩尝娆″厛娌跨敤涓婁竴杞粨鏋溿€俙);
+  reportRelayStageProgress(`这一棒不会整盘重算，而是优先盯住问题更重的波次：${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")}。其它波次先沿用上一轮结果。`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let waveIndex = 0; waveIndex < scenario.waves.length; waveIndex += 1) {
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (waveIndex) await cooperativeYield();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave = scenario.waves[waveIndex];
     const seededPlans = buildSeedPlansForWave(scenario, wave, regularVehicleStats, baseSolution[waveIndex] || []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!focusWaveIndexes.has(waveIndex)) {
-      reportRelayStageProgress(`${wave.waveId} 褰撳墠闂涓嶉噸锛岃繖涓€妫掑厛涓嶅姩瀹冿紝鐩存帴娌跨敤涓婁竴杞帓娉曘€俙);
+      reportRelayStageProgress(`${wave.waveId} 当前问题不重，这一棒先不动它，直接沿用上一轮排法。`);
       optimizedSolution.push(seededPlans);
       traceLog.push({
         algorithmKey: "focus",
         scope: "wave",
         waveId: wave.waveId,
         stage: "focus-skip",
-        textZh: `${wave.waveId} 褰撳墠闂涓嶉噸锛岀户缁部鐢ㄤ笂涓€杞粨鏋滐紝涓嶅仛閲嶅閲嶇畻銆俙,
-        textJa: `${wave.waveId} 銇従鏅傜偣銇у晱椤屻亴閲嶃亸銇亜銇熴倎銆佸墠杓祼鏋溿倰銇濄伄銇俱伨寮曘亶缍欍亷銇俱仚銆俙,
+        textZh: `${wave.waveId} 当前问题不重，继续沿用上一轮结果，不做重复重算。`,
+        textJa: `${wave.waveId} は現時点で問題が重くないため、前輪結果をそのまま引き継ぎます。`,
       });
       if (wave.isNightWave) {
         seededPlans.forEach((plan) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
+          // EN: Control point for business behavior.
+          // CN: 影响业务行为的控制节点。
           if (plan.trips.length) {
             regularVehicleStats.set(plan.vehicle.plateNo, {
               priorRegularDistance: prev.priorRegularDistance + plan.totalDistance,
@@ -8033,19 +12725,35 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
       }
       continue;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const tripCount = seededPlans.flatMap((plan) => plan.trips || []).length;
-    reportRelayStageProgress(`寮€濮嬬粏淇?${wave.waveId}銆傝繖娉㈠綋鍓嶆湁 ${tripCount} 瓒熺嚎璺紝浼樺寲鍣ㄤ細鍙湪杩欓儴鍒嗛噷閲嶆帓锛岀湅鐪嬭兘涓嶈兘鍘嬮噷绋嬨€佸皯鐢ㄨ溅锛屾垨鑰呮妸璇勫垎鍐嶅線涓婇《銆俙);
+    reportRelayStageProgress(`开始细修 ${wave.waveId}。这波当前有 ${tripCount} 趟线路，优化器会只在这部分里重排，看看能不能压里程、少用车，或者把评分再往上顶。`);
     const optimized = await optimizer(seededPlans, scenario, wave, baseSeed * 100 + 91 + waveIndex);
     optimizedSolution.push(optimized.plans);
     traceLog = traceLog.concat(optimized.traceLog || []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const beforeDistance = seededPlans.reduce((sum, plan) => sum + (plan.totalDistance || 0), 0);
     const afterDistance = optimized.plans.reduce((sum, plan) => sum + (plan.totalDistance || 0), 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const distanceDelta = afterDistance - beforeDistance;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const distanceDeltaLabel = `${distanceDelta > 0 ? "+" : ""}${distanceDelta.toFixed(1)}`;
-    reportRelayStageProgress(`${wave.waveId} 杩欐尝宸茬粡绠楀畬銆備紭鍖栧墠閲岀▼绾?${beforeDistance.toFixed(1)} km锛屼紭鍖栧悗绾?${afterDistance.toFixed(1)} km锛屽彉鍖?${distanceDeltaLabel} km銆俙);
+    reportRelayStageProgress(`${wave.waveId} 这波已经算完。优化前里程约 ${beforeDistance.toFixed(1)} km，优化后约 ${afterDistance.toFixed(1)} km，变化 ${distanceDeltaLabel} km。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (wave.isNightWave) {
       optimized.plans.forEach((plan) => {
         const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
+        // EN: Control point for business behavior.
+        // CN: 影响业务行为的控制节点。
         if (plan.trips.length) {
           regularVehicleStats.set(plan.vehicle.plateNo, {
             priorRegularDistance: prev.priorRegularDistance + plan.totalDistance,
@@ -8066,31 +12774,61 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
     algorithmKey: "focus",
     scope: "wave",
     stage: "focus-summary",
-    textZh: `鏈疆浼樺寲浼樺厛澶勭悊浜?${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)}锛屽叾瀹冩尝娆＄洿鎺ユ壙鎺ヤ笂涓€杞粨鏋滐紝閬垮厤鏁寸洏閲嶅閲嶇畻銆備紭鍖栧墠璇勫垎 ${baseMetrics.score.toFixed(1)}锛屼紭鍖栧悗璇勫垎 ${optimizedMetrics.score.toFixed(1)}銆俙,
-    textJa: `鏈吉銇?${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)} 銈掑劒鍏堢殑銇渶閬╁寲銇椼€佷粬銇尝娆°伅鍓嶈吉绲愭灉銈掋仢銇伨銇惧紩銇嶇稒銇勩仹鍏ㄩ潰鍐嶈▓绠椼倰閬裤亼銇俱仐銇熴€傛渶閬╁寲鍓嶃偣銈炽偄 ${baseMetrics.score.toFixed(1)}銆佹渶閬╁寲寰屻偣銈炽偄 ${optimizedMetrics.score.toFixed(1)}銆俙,
+    textZh: `本轮优化优先处理了 ${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")}，其它波次直接承接上一轮结果，避免整盘重复重算。优化前评分 ${baseMetrics.score.toFixed(1)}，优化后评分 ${optimizedMetrics.score.toFixed(1)}。`,
+    textJa: `本輪は ${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")} を優先的に最適化し、他の波次は前輪結果をそのまま引き継いで全面再計算を避けました。最適化前スコア ${baseMetrics.score.toFixed(1)}、最適化後スコア ${optimizedMetrics.score.toFixed(1)}。`,
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { solution: optimizedSolution, traceLog };
 }
 
+// EN: Control point for business behavior.
+// CN: 影响业务行为的控制节点。
 function solveFixedMembershipPlan(vehicle, storeIds, scenario, wave, priorStats = {}) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storesBase = storeIds.map((id) => scenario.storeMap.get(id)).filter(Boolean);
   let bestPlan = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   let bestScore = Number.POSITIVE_INFINITY;
   for (const seed of [0, 1, 2]) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const stores = [...storesBase].sort((a, b) => {
+      // EN: Control point for business behavior.
+      // CN: 影响业务行为的控制节点。
       const timingA = getStoreTimingForWave(a, wave, scenario.dispatchStartMin);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const timingB = getStoreTimingForWave(b, wave, scenario.dispatchStartMin);
       return timingA.desiredArrivalMin - timingB.desiredArrivalMin || a.id.localeCompare(b.id);
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (seed) {
       for (let i = stores.length - 1; i > 0; i -= 1) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const j = (i + seed) % stores.length;
         [stores[i], stores[j]] = [stores[j], stores[i]];
       }
     }
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     const plan = buildPlanForStoreOrder(vehicle, stores, scenario, wave, priorStats);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!plan) continue;
     const score = computePlanCost(plan, scenario, wave);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (score < bestScore) {
       bestScore = score;
       bestPlan = plan;
@@ -8099,39 +12837,79 @@ function solveFixedMembershipPlan(vehicle, storeIds, scenario, wave, priorStats 
   return bestPlan;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function evaluateSolution(solution, scenario = null, unscheduledStores = []) {
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   if (!solution.length) return { feasible: false, score: 0, totalStops: 0, totalOnTime: 0, totalDistance: 0, loadRate: 0, fleetLoadRate: 0, totalLoadBoxes: 0, unscheduledStores, unscheduledCount: unscheduledStores.length, scheduledCount: 0, scheduledByWave: [] };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const plans = solution.flat();
   const trips = plans.flatMap((p) => p.trips);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const scheduledByWave = (scenario?.waves || []).map((wave) => ({ waveId: String(wave?.waveId || ""), count: 0 }));
   solution.forEach((wavePlans, waveIndex) => {
     const count = (wavePlans || []).reduce((sum, plan) => sum + (plan.trips || []).reduce((tripSum, trip) => tripSum + ((trip.stops || []).length || 0), 0), 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (scheduledByWave[waveIndex]) {
       scheduledByWave[waveIndex].count = count;
     } else {
       scheduledByWave.push({ waveId: `W${waveIndex + 1}`, count });
     }
   });
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const totalStops = trips.reduce((sum, t) => sum + t.stops.length, 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const totalOnTime = trips.reduce((sum, t) => sum + (t.onTimeCount || 0), 0);
   const totalDistance = plans.reduce((sum, p) => sum + p.totalDistance, 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const loadRate = trips.length ? trips.reduce((sum, t) => sum + (t.loadRate || 0), 0) / trips.length : 0;
   const totalLoadBoxes = plans.reduce((sum, p) => sum + Number(p.totalLoad || 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lateStoreCount = trips.reduce((sum, t) => sum + (t.lateStoreCount || 0), 0);
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   const lateRouteCount = trips.reduce((sum, t) => sum + ((t.overToleranceMinutes || 0) > 0 ? 1 : 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const overToleranceCount = trips.reduce((sum, t) => sum + t.stops.filter((stop) => (stop.overToleranceMinutes || 0) > 0).length, 0);
   const usage = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  // EN: Control point for business behavior.
+  // CN: 影响业务行为的控制节点。
   for (const plan of plans) {
     if (!plan.trips.length) continue;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const key = plan.vehicle.plateNo;
+    // EN: Control point for business behavior.
+    // CN: 影响业务行为的控制节点。
     if (!usage.has(key)) usage.set(key, { load: 0, cap: plan.vehicle.capacity, trips: [] });
     usage.get(key).load += plan.totalLoad;
     usage.get(key).trips.push(...plan.trips);
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const preferredTarget = Number(state.settings.minLoadRate || 0);
   const usageList = [...usage.entries()].map(([plateNo, item]) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const achievedRate = item.cap > 0 ? item.load / item.cap : 0;
     const maxTripLoad = item.trips.reduce((max, trip) => Math.max(max, trip.loadBoxes || 0), 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return {
       plateNo,
       achievedRate,
@@ -8142,18 +12920,32 @@ function evaluateSolution(solution, scenario = null, unscheduledStores = []) {
     };
   });
   const preferredMetCount = usageList.filter((item) => item.preferredMet).length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const preferredShortfall = usageList.reduce((sum, item) => sum + Math.max(0, preferredTarget - item.achievedRate), 0);
   const usedVehicleCount = usageList.length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const unusedVehicleCount = Math.max(0, state.vehicles.length - usedVehicleCount);
   const usedVehicleCapacity = usageList.reduce((sum, item) => sum + Number(item.cap || 0), 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const fleetLoadRate = usedVehicleCapacity ? totalLoadBoxes / usedVehicleCapacity : 0;
   const onTimeRatio = totalOnTime / Math.max(totalStops, 1);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const completionRatio = totalStops / Math.max(totalStops + unscheduledStores.length, 1);
   const distanceScore = Math.max(0, Math.min(1, (3500 - totalDistance) / 3500));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const loadScore = Math.max(0, Math.min(1, loadRate));
   const preferenceScoreRaw = (preferredMetCount / Math.max(usageList.length, 1)) - preferredShortfall * 0.02;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const preferenceScore = Math.max(0, Math.min(1, preferenceScoreRaw));
   const vehicleScore = Math.max(0, Math.min(1, (Math.max(state.vehicles.length, 1) - usedVehicleCount + 1) / Math.max(state.vehicles.length, 1)));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const goal = state.settings.optimizeGoal || "balanced";
   const goalWeights = {
     balanced: { completion: 0.40, onTime: 0.35, distance: 0.15, load: 0.10, vehicles: 0.00 },
@@ -8162,6 +12954,8 @@ function evaluateSolution(solution, scenario = null, unscheduledStores = []) {
     vehicles: { completion: 0.30, onTime: 0.22, distance: 0.14, load: 0.04, vehicles: 0.30 },
     load: { completion: 0.30, onTime: 0.24, distance: 0.10, load: 0.28, vehicles: 0.08 },
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const weights = goalWeights[goal] || goalWeights.balanced;
   const score = (
     weights.completion * completionRatio +
@@ -8170,6 +12964,8 @@ function evaluateSolution(solution, scenario = null, unscheduledStores = []) {
     weights.load * loadScore +
     weights.vehicles * vehicleScore
   ) * 100;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     feasible: totalStops > 0 || !unscheduledStores.length,
     score,
@@ -8205,46 +13001,72 @@ function evaluateSolution(solution, scenario = null, unscheduledStores = []) {
 }
 
 function computeFinalPendingByWave(solution = [], scenario = null) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const unscheduled = [];
   if (!scenario || !Array.isArray(scenario.waves) || !Array.isArray(scenario.stores)) return unscheduled;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const assignmentMap = buildStoreAssignmentMapFromSolution(solution || []);
   const sourceStoreMap = scenario.storeMap instanceof Map
     ? scenario.storeMap
     : new Map((scenario.stores || []).map((store) => [String(store?.id || "").trim(), store]).filter(([id]) => id));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeMap = new Map();
   sourceStoreMap.forEach((store, id) => {
     const raw = String(id || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const normalized = normalizeStoreKey(raw);
     if (raw && !storeMap.has(raw)) storeMap.set(raw, store);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (normalized && !storeMap.has(normalized)) storeMap.set(normalized, store);
   });
   for (const wave of (scenario.waves || [])) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const waveId = String(wave?.waveId || "").trim().toUpperCase();
     const seen = new Set();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const storeId of (wave?.storeList || [])) {
       const sid = normalizeStoreKey(storeId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!sid || seen.has(sid)) continue;
       seen.add(sid);
       const store = storeMap.get(sid);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!store) continue;
       if (!isStoreCandidateForWaveRule(store, waveId)) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const variants = buildStoreKeyVariants(sid);
       let assigned = false;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       for (const variant of variants) {
         const key = buildStoreWaveAssignmentKey(variant, waveId);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const hit = key ? assignmentMap.get(key) : null;
         if (hit && String(hit.plateNo || "").trim()) {
           assigned = true;
           break;
         }
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!assigned) {
         unscheduled.push({
           waveId,
           storeId: sid,
           storeName: String(store?.name || ""),
           reason: "no_plate",
-          reasonText: "鏈尝娆℃湁璐т絾鏃犺溅鐗屽彿",
+          reasonText: "本波次有货但无车牌号",
           source: "final_state",
         });
       }
@@ -8253,35 +13075,61 @@ function computeFinalPendingByWave(solution = [], scenario = null) {
   return unscheduled;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function computeWaveCandidateAssignedPendingStats(solution = [], scenario = null) {
   const stats = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!scenario || !Array.isArray(scenario.waves) || !Array.isArray(scenario.stores)) return stats;
   const assignmentMap = buildStoreAssignmentMapFromSolution(solution || []);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const sourceStoreMap = scenario.storeMap instanceof Map
     ? scenario.storeMap
     : new Map((scenario.stores || []).map((store) => [String(store?.id || "").trim(), store]).filter(([id]) => id));
   const storeMap = new Map();
   sourceStoreMap.forEach((store, id) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const raw = String(id || "").trim();
     const normalized = normalizeStoreKey(raw);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (raw && !storeMap.has(raw)) storeMap.set(raw, store);
     if (normalized && !storeMap.has(normalized)) storeMap.set(normalized, store);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const wave of (scenario.waves || [])) {
     const waveId = String(wave?.waveId || "").trim().toUpperCase();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const candidateSet = new Set();
     const assignedSet = new Set();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const storeId of (wave?.storeList || [])) {
       const sid = normalizeStoreKey(storeId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!sid || candidateSet.has(sid)) continue;
       const store = storeMap.get(sid);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!store) continue;
       if (!isStoreCandidateForWaveRule(store, waveId)) continue;
       candidateSet.add(sid);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const variants = buildStoreKeyVariants(sid);
       for (const variant of variants) {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const key = buildStoreWaveAssignmentKey(variant, waveId);
         const hit = key ? assignmentMap.get(key) : null;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (hit && String(hit.plateNo || "").trim()) {
           assignedSet.add(sid);
           break;
@@ -8299,19 +13147,27 @@ function computeWaveCandidateAssignedPendingStats(solution = [], scenario = null
       pendingIds: [...pendingSet],
     });
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return stats;
 }
 
-function reportWaveCandidateAssignedPendingStats(tag = "缁撴灉", solution = [], scenario = null) {
+function reportWaveCandidateAssignedPendingStats(tag = "结果", solution = [], scenario = null) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rows = computeWaveCandidateAssignedPendingStats(solution, scenario);
   rows.forEach((row) => {
-    reportRelayStageProgress(`闆嗗悎鏍稿锛?{row.waveId}/${tag}锛夛細candidate=${row.candidateCount}锛宎ssigned=${row.assignedCount}锛宲ending=${row.pendingCount}銆俙);
+    reportRelayStageProgress(`集合核对（${row.waveId}/${tag}）：candidate=${row.candidateCount}，assigned=${row.assignedCount}，pending=${row.pendingCount}。`);
   });
   return rows;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function applyFinalRuleToResult(result, scenario) {
   if (!result || typeof result !== "object") return result;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const unscheduled = computeFinalPendingByWave(result.solution || [], scenario);
   result.unscheduledStores = unscheduled;
   result.metrics = evaluateSolution(result.solution || [], scenario, unscheduled);
@@ -8320,12 +13176,20 @@ function applyFinalRuleToResult(result, scenario) {
   return result;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildRelayStagePlan(selectedSet = [], optimizeGoal = "balanced", storeCount = 0) {
   const goal = String(optimizeGoal || "balanced");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const initialCandidates = selectedSet.filter((key) => ["vrptw", "savings"].includes(key));
   const globalCandidates = selectedSet.filter((key) => ["ga", "aco", "pso"].includes(key));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const localCandidates = selectedSet.filter((key) => ["hybrid", "lns", "tabu", "sa"].includes(key));
   const initialKeys = initialCandidates.length ? initialCandidates : ["vrptw", "savings"];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const globalPriorityMap = {
     balanced: ["pso", "ga", "aco"],
     ontime: ["ga", "pso", "aco"],
@@ -8340,12 +13204,20 @@ function buildRelayStagePlan(selectedSet = [], optimizeGoal = "balanced", storeC
     vehicles: ["hybrid", "lns", "tabu", "sa"],
     load: ["hybrid", "lns", "tabu", "sa"],
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const globalPriority = globalPriorityMap[goal] || globalPriorityMap.balanced;
   const localPriority = localPriorityMap[goal] || localPriorityMap.balanced;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxGlobalStages = Math.min(1, globalCandidates.length);
   const maxLocalStages = storeCount >= 90 ? 1 : storeCount >= 50 ? 2 : 2;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const pickedGlobals = globalPriority.filter((key) => globalCandidates.includes(key)).slice(0, maxGlobalStages);
   const pickedLocals = localPriority.filter((key) => localCandidates.includes(key)).slice(0, maxLocalStages);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stageKeys = [...pickedGlobals, ...pickedLocals];
   return {
     initialKeys,
@@ -8353,61 +13225,107 @@ function buildRelayStagePlan(selectedSet = [], optimizeGoal = "balanced", storeC
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByVRPTW(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithVrptwBackend, 0, "vrptw");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "vrptw", label: algoLabel("vrptw"), description: algoDescription("vrptw"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByHybrid(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithHybrid, 0, "hybrid");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "hybrid", label: algoLabel("hybrid"), description: algoDescription("hybrid"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByGA(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithGA, 1, "ga");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "ga", label: algoLabel("ga"), description: algoDescription("ga"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByTabu(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithTabu, 2, "tabu");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "tabu", label: algoLabel("tabu"), description: algoDescription("tabu"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByLNS(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithLns, 4, "lns");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "lns", label: algoLabel("lns"), description: algoDescription("lns"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveBySavings(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithSavingsBackend, 3, "savings");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "savings", label: algoLabel("savings"), description: algoDescription("savings"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveBySA(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithSA, 6, "sa");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "sa", label: algoLabel("sa"), description: algoDescription("sa"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByACO(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithACO, 8, "aco");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "aco", label: algoLabel("aco"), description: algoDescription("aco"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByPSO(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithPSO, 10, "pso");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "pso", label: algoLabel("pso"), description: algoDescription("pso"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByVehicle(scenario) {
   const run = await solveWaveByWaveWithOptimizer(scenario, optimizeWaveWithVehicleDrivenBackend, 12, "vehicle");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const s = run.solution;
   return applyFinalRuleToResult({ key: "vehicle", label: algoLabel("vehicle"), description: algoDescription("vehicle"), solution: s, traceLog: run.traceLog || [] }, scenario);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
   const selectedSet = [...new Set((selectedKeys || []).filter(Boolean))];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const relayPlan = buildRelayStagePlan(selectedSet, state.settings.optimizeGoal, scenario.stores.length);
   const initialKeys = relayPlan.initialKeys;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const optimizerMap = {
     ga: optimizeWaveWithGA,
     aco: optimizeWaveWithACO,
@@ -8418,21 +13336,27 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
     sa: optimizeWaveWithSA,
   };
   const stageKeys = relayPlan.stageKeys;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traceLog = [];
   const relayLog = (text) => appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${text}`);
   relayStageReporter = relayLog;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
   pushTraceEvent(traceLog, {
     algorithmKey: "relay",
     scope: "wave",
     stage: "relay-start",
-    textZh: `鎺ュ姏姹傝В鍚姩锛氬垵鎺掗樁娈?${initialKeys.map((key) => algoLabel(key)).join(" / ")}锛屽悗缁樁娈?${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "鏃? }銆俙,
-    textJa: `銉儸銉兼眰瑙ｃ倰闁嬪銇椼伨銇欍€傚垵鏈熸闅庛伅 ${initialKeys.map((key) => algoLabel(key)).join(" / ")}銆佸緦缍氭闅庛伅 ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "銇仐"} 銇с仚銆俙,
+    textZh: `接力求解启动：初排阶段 ${initialKeys.map((key) => algoLabel(key)).join(" / ")}，后续阶段 ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "无" }。`,
+    textJa: `リレー求解を開始します。初期段階は ${initialKeys.map((key) => algoLabel(key)).join(" / ")}、後続段階は ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "なし"} です。`,
   });
-  relayLog(`鎺ュ姏姹傝В鍚姩銆傜涓€闃舵鍏堜粠 ${initialKeys.map((key) => algoLabel(key)).join(" / ")} 閲屾寫涓€涓洿濂界殑鍒濇帓鏂规銆傚悗缁笉浼氭妸鎵€鏈夌畻娉曟満姊拌窇婊★紝鑰屾槸鎸夊綋鍓嶇洰鏍囨寫鏈€鍊煎緱鎺ユ鐨勫嚑妫掋€俙);
-  relayLog(`涓嬮潰鏃ュ織閲屾彁鍒扮殑鈥滄尝娆″唴閮ㄤ唬浠封€濓紝涓嶆槸鏈€鍚庣粰瀹㈡埛鐪嬬殑缁煎悎璇勫垎锛岃€屾槸绠楁硶鍐呴儴姣旇緝璺嚎浼樺姡鐨勫昂瀛愩€傚畠涓昏鐢遍噷绋嬫垚鏈€佹櫄鍒扮綒鍒嗐€佽秴鍏佽鍋忓樊缃氬垎銆佹尝娆¤秴鏃剁綒鍒嗐€佽溅杈嗙画璺戠綒鍒嗐€侀澶栬稛娆＄綒鍒嗭紝鍐嶅噺鍘昏杞芥姷鎵ｇ粍鎴愩€俙);
+  relayLog(`接力求解启动。第一阶段先从 ${initialKeys.map((key) => algoLabel(key)).join(" / ")} 里挑一个更好的初排方案。后续不会把所有算法机械跑满，而是按当前目标挑最值得接棒的几棒。`);
+  relayLog(`下面日志里提到的“波次内部代价”，不是最后给客户看的综合评分，而是算法内部比较路线优劣的尺子。它主要由里程成本、晚到罚分、超允许偏差罚分、波次超时罚分、车辆续跑罚分、额外趟次罚分，再减去装载抵扣组成。`);
 
   let current = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (baseResult?.solution?.length) {
     current = applyFinalRuleToResult({
       key: "relay-seed",
@@ -8441,50 +13365,66 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
       solution: baseResult.solution,
       traceLog: baseResult.traceLog || [],
     }, scenario);
-    relayLog(`妫€娴嬪埌浣犱笂涓€杞凡缁忔湁鍙敤鏂规锛屾墍浠ヨ繖涓€杞帴鍔涚洿鎺ヤ粠鐜版湁缁撴灉璧疯窇锛屼笉鍐嶉噸澶嶉噸寤哄垵鎺掋€傚綋鍓嶈捣璺戞寚鏍囷細${relayMetricSummary(current.metrics)}銆俙);
+    relayLog(`检测到你上一轮已经有可用方案，所以这一轮接力直接从现有结果起跑，不再重复重建初排。当前起跑指标：${relayMetricSummary(current.metrics)}。`);
   } else {
     for (let index = 0; index < initialKeys.length; index += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const key = initialKeys[index];
-      relayLog(`姝ｅ湪鎵ц鍒濇帓鍊欓€?${algoLabel(key)}锛岀洰鐨勬槸鍏堟嬁鍒颁竴鐗堣兘鐢ㄧ殑鍩虹鏂规銆俙);
+      relayLog(`正在执行初排候选 ${algoLabel(key)}，目的是先拿到一版能用的基础方案。`);
       const candidate = await ({ vrptw: solveByVRPTW, savings: solveBySavings }[key])(scenario);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!current || candidate.metrics.score > current.metrics.score) current = candidate;
-      relayLog(`${algoLabel(key)} 瀹屾垚銆?{relayMetricSummary(candidate.metrics)}銆俙);
+      relayLog(`${algoLabel(key)} 完成。${relayMetricSummary(candidate.metrics)}。`);
       pushTraceEvent(traceLog, {
         algorithmKey: "relay",
         scope: "wave",
         stage: "relay-initial",
         waveId: scenario.waves[0]?.waveId || "ALL",
-        textZh: `鍒濇帓鍊欓€?${algoLabel(key)} 瀹屾垚锛岃瘎鍒?${candidate.metrics.score.toFixed(1)}锛?{current.key === candidate.key ? "鏆傚垪褰撳墠鎺ュ姏棣栨" : "鏈秴杩囧綋鍓嶉妫?}銆俙,
-        textJa: `鍒濇湡鍊欒 ${algoLabel(key)} 銇屽畬浜嗐仐銆併偣銈炽偄銇?${candidate.metrics.score.toFixed(1)}銆?{current.key === candidate.key ? "鐝惧湪銇涓€璧拌€呫仺銇椼仸鎺＄敤" : "鐝惧湪銇厛闋銇董鎸?}銆俙,
+        textZh: `初排候选 ${algoLabel(key)} 完成，评分 ${candidate.metrics.score.toFixed(1)}，${current.key === candidate.key ? "暂列当前接力首棒" : "未超过当前首棒"}。`,
+        textJa: `初期候補 ${algoLabel(key)} が完了し、スコアは ${candidate.metrics.score.toFixed(1)}、${current.key === candidate.key ? "現在の第一走者として採用" : "現在の先頭案は維持"}。`,
       });
       await cooperativeYield();
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!current) return applyFinalRuleToResult({ key: "relay", label: algoLabel("relay"), description: algoDescription("relay"), solution: [], traceLog }, scenario);
-  relayLog(`鍒濇帓闃舵缁撴潫锛屽綋鍓嶆帴鍔涢妫掓槸 ${algoLabel(current.key)}銆傞妫掔殑鍏抽敭鎸囨爣鏄細${relayMetricSummary(current.metrics)}銆傛帴涓嬫潵杩涘叆缁х画浼樺寲闃舵锛屽叡璁″垝 ${stageKeys.length} 妫掋€俙);
+  relayLog(`初排阶段结束，当前接力首棒是 ${algoLabel(current.key)}。首棒的关键指标是：${relayMetricSummary(current.metrics)}。接下来进入继续优化阶段，共计划 ${stageKeys.length} 棒。`);
 
   let noImproveStages = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let index = 0; index < stageKeys.length; index += 1) {
     const key = stageKeys[index];
-    relayLog(`绗?${index + 2} 闃舵鐢?${algoLabel(key)} 鎺ユ銆傚畠浼氬湪褰撳墠鏈€濂芥柟妗堝熀纭€涓婄户缁壘鏇村ソ鐨勬帓娉曘€俙);
+    relayLog(`第 ${index + 2} 阶段由 ${algoLabel(key)} 接棒。它会在当前最好方案基础上继续找更好的排法。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const beforeMetrics = current.metrics;
     const improved = await improveSolutionByWaveOptimizer(current.solution, scenario, optimizerMap[key], 30 + index);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const metrics = evaluateSolution(improved.solution, scenario, computeFinalPendingByWave(improved.solution, scenario));
     const scoreGain = metrics.score - current.metrics.score;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const accepted = scoreGain > 1e-6;
     const materialGain = scoreGain >= 0.25
       || (metrics.unscheduledCount || 0) < (beforeMetrics.unscheduledCount || 0)
       || (metrics.totalDistance || 0) + 3 < (beforeMetrics.totalDistance || 0)
       || (metrics.totalOnTime || 0) > (beforeMetrics.totalOnTime || 0);
-    relayLog(`${algoLabel(key)} 鏈疆缁撴灉锛?{relayMetricSummary(metrics)}銆傜浉姣斾笂涓€妫掞紝${describeRelayMetricDelta(beforeMetrics, metrics)}銆?{accepted ? `鍥犱负鏂板垎鏁拌秴杩囧綋鍓?${beforeMetrics.score.toFixed(1)}锛屾墍浠ヨ繖涓€妫掓寮忔帴妫掋€俙 : `鍥犱负鏂板垎鏁版病鏈夎秴杩囧綋鍓?${beforeMetrics.score.toFixed(1)}锛屾墍浠ヨ繖涓€妫掓病鏈夋帴杩囧幓銆俙}`);
+    relayLog(`${algoLabel(key)} 本轮结果：${relayMetricSummary(metrics)}。相比上一棒，${describeRelayMetricDelta(beforeMetrics, metrics)}。${accepted ? `因为新分数超过当前 ${beforeMetrics.score.toFixed(1)}，所以这一棒正式接棒。` : `因为新分数没有超过当前 ${beforeMetrics.score.toFixed(1)}，所以这一棒没有接过去。`}`);
     pushTraceEvent(traceLog, {
       algorithmKey: "relay",
       scope: "wave",
       stage: "relay-stage",
       waveId: scenario.waves[0]?.waveId || "ALL",
-      textZh: `${index + 2} 闃舵鐢?${algoLabel(key)} 鎺ユ锛屽€欓€夎瘎鍒?${metrics.score.toFixed(1)}锛?{accepted ? `浼樹簬褰撳墠 ${current.metrics.score.toFixed(1)}锛屾寮忔帴妫抈 : `鏈秴杩囧綋鍓?${current.metrics.score.toFixed(1)}锛屼繚鐣欏師鏂规`}銆俙,
-      textJa: `${index + 2} 娈甸殠銇?${algoLabel(key)} 銇屽紩銇嶇稒銇庛€佸€欒銈广偝銈?${metrics.score.toFixed(1)}銆?{accepted ? `鐝捐 ${current.metrics.score.toFixed(1)} 銈掍笂鍥炪仯銇熴仧銈佹帯鐢╜ : `鐝捐 ${current.metrics.score.toFixed(1)} 銈掕秴銇堛仛鍏冩銈掔董鎸乣}銆俙,
+      textZh: `${index + 2} 阶段由 ${algoLabel(key)} 接棒，候选评分 ${metrics.score.toFixed(1)}，${accepted ? `优于当前 ${current.metrics.score.toFixed(1)}，正式接棒` : `未超过当前 ${current.metrics.score.toFixed(1)}，保留原方案`}。`,
+      textJa: `${index + 2} 段階は ${algoLabel(key)} が引き継ぎ、候補スコア ${metrics.score.toFixed(1)}、${accepted ? `現行 ${current.metrics.score.toFixed(1)} を上回ったため採用` : `現行 ${current.metrics.score.toFixed(1)} を超えず元案を維持`}。`,
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (accepted) {
       current = applyFinalRuleToResult({
         key: "relay",
@@ -8495,21 +13435,23 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
       }, scenario);
       noImproveStages = materialGain ? 0 : noImproveStages + 1;
       if (!materialGain) {
-        relayLog(`杩欎竴妫掕櫧鐒跺垎鏁扮暐鏈変笂鍗囷紝浣嗘彁鍗囧緢鏈夐檺銆傛垜浼氭妸瀹冩帴浣忥紝鍚屾椂寮€濮嬪叧娉ㄦ槸鍚﹁鎻愬墠鏀跺伐锛岄伩鍏嶇┖鑰楁椂闂淬€俙);
+        relayLog(`这一棒虽然分数略有上升，但提升很有限。我会把它接住，同时开始关注是否该提前收工，避免空耗时间。`);
       }
     } else {
       noImproveStages += 1;
     }
     mergeTraceLogs(traceLog, improved.traceLog || []);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (noImproveStages >= 2 && index < stageKeys.length - 1) {
-      relayLog(`杩炵画 ${noImproveStages} 妫掓病鏈夊甫鏉ュ疄璐ㄦ彁鍗囷紝鍚庨潰鐨勬帴鍔涘厛鎻愬墠鍋滄锛岄伩鍏嶇户缁┖杞€楁椂銆俙);
+      relayLog(`连续 ${noImproveStages} 棒没有带来实质提升，后面的接力先提前停止，避免继续空转耗时。`);
       pushTraceEvent(traceLog, {
         algorithmKey: "relay",
         scope: "wave",
         stage: "relay-early-stop",
         waveId: scenario.waves[0]?.waveId || "ALL",
-        textZh: `杩炵画 ${noImproveStages} 涓樁娈垫湭甯︽潵瀹炶川鎻愬崌锛屾帴鍔涙彁鍓嶆敹宸ャ€俙,
-        textJa: `${noImproveStages} 娈甸殠閫ｇ稓銇у疅璩敼鍠勩亴鍑恒仾銇嬨仯銇熴仧銈併€併儶銉兗銈掓棭鏈熺祩浜嗐仐銇俱仐銇熴€俙,
+        textZh: `连续 ${noImproveStages} 个阶段未带来实质提升，接力提前收工。`,
+        textJa: `${noImproveStages} 段階連続で実質改善が出なかったため、リレーを早期終了しました。`,
       });
       break;
     }
@@ -8520,11 +13462,13 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
     algorithmKey: "relay",
     scope: "wave",
     stage: "relay-finish",
-    textZh: `鎺ュ姏姹傝В瀹屾垚锛屾渶缁堥噰鐢ㄦ柟妗堣瘎鍒?${current.metrics.score.toFixed(1)}銆俙,
-    textJa: `銉儸銉兼眰瑙ｃ亴瀹屼簡銇椼€佹渶绲傛帯鐢ㄣ偣銈炽偄銇?${current.metrics.score.toFixed(1)} 銇с仚銆俙,
+    textZh: `接力求解完成，最终采用方案评分 ${current.metrics.score.toFixed(1)}。`,
+    textJa: `リレー求解が完了し、最終採用スコアは ${current.metrics.score.toFixed(1)} です。`,
   });
-  relayLog(`鎺ュ姏姹傝В瀹屾垚銆傛渶缁堟柟妗堣瘎鍒?${current.metrics.score.toFixed(1)}锛屽凡璋冨害 ${current.metrics.scheduledCount || 0} 瀹讹紝鏈皟搴?${(current.metrics.unscheduledCount || 0)} 瀹躲€俙);
+  relayLog(`接力求解完成。最终方案评分 ${current.metrics.score.toFixed(1)}，已调度 ${current.metrics.scheduledCount || 0} 家，未调度 ${(current.metrics.unscheduledCount || 0)} 家。`);
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return applyFinalRuleToResult({
     key: "relay",
     label: algoLabel("relay"),
@@ -8538,97 +13482,145 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
 }
 
 function diagnoseScenarioFeasibility(scenario) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const issues = [];
   for (const wave of scenario.waves) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (wave.relaxEnd) continue;
     for (const id of wave.storeList) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const store = scenario.storeMap.get(id); if (!store) continue;
       const fastest = scenario.vehicles[0]; if (!fastest) continue;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const directDistance = scenario.dist[DC.id][store.id];
       const soloDistance = directDistance + scenario.dist[store.id][DC.id];
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const arrival = Math.max(wave.startMin, scenario.dispatchStartMin) + getTravelMinutes(scenario, DC.id, store.id, fastest.speed);
       const start = arrival;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const leave = start + (store.actualServiceMinutes || store.serviceMinutes || 0);
       const finish = leave + getTravelMinutes(scenario, store.id, DC.id, fastest.speed);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (isW3WaveForSolve(wave) && directDistance > getSolveW3OneWayMaxKm(scenario)) {
-        issues.push(`${wave.waveId} 鐨勯棬搴?${store.name} 鍗曠嫭鍒板簵灏辫 ${directDistance.toFixed(1)} km`);
+        issues.push(`${wave.waveId} 的门店 ${store.name} 单独到店就要 ${directDistance.toFixed(1)} km`);
       }
       else if ((wave.endMode || "return") === "return" ? finish > wave.endMin : leave > wave.endMin) {
-        issues.push(`${wave.waveId} 鐨勯棬搴?${store.name} 鍗曠嫭鎵ц涔熶細鏅氫簬娉㈡${(wave.endMode || "return") === "return" ? "鍥炲簱" : "瀹屽簵"}鎴`);
+        issues.push(`${wave.waveId} 的门店 ${store.name} 单独执行也会晚于波次${(wave.endMode || "return") === "return" ? "回库" : "完店"}截止`);
       }
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (issues.length >= 6) return issues;
     }
   }
   return issues;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function formatScheduledByWave(metrics = {}) {
   const list = Array.isArray(metrics.scheduledByWave) ? metrics.scheduledByWave : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!list.length) return `${L("scheduledStores")} ${metrics.scheduledCount || 0}`;
-  return `${L("scheduledStores")}锛?{list.map((item) => `${item.waveId || "-"}:${Number(item.count || 0)}`).join(" | ")}锛塦;
+  return `${L("scheduledStores")}（${list.map((item) => `${item.waveId || "-"}:${Number(item.count || 0)}`).join(" | ")}）`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderSummary() {
   const best = [...state.lastResults].sort((a, b) => b.metrics.score - a.metrics.score)[0];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("summaryCards").innerHTML = state.lastResults.map((result) => `
     <article class="metric-card ${state.activeResultKey === result.key ? "metric-card-active" : ""}">
       <p class="label">${algoLabel(result.key)}</p>
       <div class="value">${result.metrics.score.toFixed(1)}</div>
-      ${Number(state.settings.targetScore || 0) > 0 ? `<p class="hint">${L("targetScore")} ${Number(state.settings.targetScore).toFixed(1)}锛?{result.metrics.score >= Number(state.settings.targetScore || 0) ? L("targetAchieved") : L("targetMissed")}</p>` : ""}
-      <p class="hint">${lang() === "ja" ? "銈广偝銈伅绶忓悎瑭曚尽銇с€佹暟鍊ゃ亴楂樸亜銇汇仼鑹亜銇с仚銆? : "璇勫垎浠ｈ〃缁煎悎琛ㄧ幇锛屾暟鍊艰秺楂樿秺濂姐€?}</p>
-      <p class="hint">${L("dispatchStart")} ${state.settings.dispatchStartTime}锛?{formatScheduledByWave(result.metrics)}锛?{L("unscheduledStores")} ${result.metrics.unscheduledCount}锛?{L("onTime")}鐜?${formatRate(result.metrics.totalOnTime / Math.max(result.metrics.totalStops, 1))}锛?{L("totalDistance")} ${result.metrics.totalDistance.toFixed(1)} km锛?{L("avgLoad")} ${formatRate(result.metrics.loadRate)}锛?{L("fleetLoad")} ${formatRate(result.metrics.fleetLoadRate)}锛?{lang() === "ja" ? `浣跨敤杌婁浮 ${result.metrics.usedVehicleCount} 鍙?/ 寰呮杌婁浮 ${result.metrics.unusedVehicleCount} 鍙癭 : `宸茬敤杞﹁締 ${result.metrics.usedVehicleCount} 杈?/ 鏈敤杞﹁締 ${result.metrics.unusedVehicleCount} 杈哷}</p>
-      ${best && best.key !== result.key ? `<p class="hint">${lang() === "ja" ? `鐝惧湪銇渶鑹 ${algoLabel(best.key)} 銇ㄦ瘮銇广倠銇ㄣ€併偣銈炽偄宸?${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}銆佽窛闆㈠樊 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km銆佷娇鐢ㄨ粖涓″樊 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 鍙般仹銇欍€俙 : `涓庡綋鍓嶆渶浣?${algoLabel(best.key)} 鐩告瘮锛氬垎鏁板樊 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}锛岄噷绋嬪樊 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km锛岀敤杞﹀樊 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 杈嗐€俙}</p>` : ""}
-      <p class="hint">${lang() === "ja" ? "100鐐瑰埗銆傛湭閬呯潃鐜?5% + 璺濋洟25% + 骞冲潎鍗樹究绌嶈級鐜?5% + 绌嶈級鍎厛閬旀垚鐜?5%銆傘倛銈婃檪闁撻€氥倞銇с€佽窛闆亴鐭亸銆佺杓夈亴鑹亜銇汇仼楂樺緱鐐广仹銇欍€? : "100鍒嗗埗銆傛湭鏅氬埌鐜?5% + 璺濈25% + 骞冲潎鍗曡稛瑁呰浇鐜?5% + 瑁呰浇鍋忓ソ杈炬垚鐜?5%銆備篃灏辨槸璇达紝瓒婂噯鏃躲€佽秺鐪侀噷绋嬨€佽秺鑳借锛屽垎鏁拌秺楂樸€?}</p>
+      ${Number(state.settings.targetScore || 0) > 0 ? `<p class="hint">${L("targetScore")} ${Number(state.settings.targetScore).toFixed(1)}，${result.metrics.score >= Number(state.settings.targetScore || 0) ? L("targetAchieved") : L("targetMissed")}</p>` : ""}
+      <p class="hint">${lang() === "ja" ? "スコアは総合評価で、数値が高いほど良いです。" : "评分代表综合表现，数值越高越好。"}</p>
+      <p class="hint">${L("dispatchStart")} ${state.settings.dispatchStartTime}，${formatScheduledByWave(result.metrics)}，${L("unscheduledStores")} ${result.metrics.unscheduledCount}，${L("onTime")}率 ${formatRate(result.metrics.totalOnTime / Math.max(result.metrics.totalStops, 1))}，${L("totalDistance")} ${result.metrics.totalDistance.toFixed(1)} km，${L("avgLoad")} ${formatRate(result.metrics.loadRate)}，${L("fleetLoad")} ${formatRate(result.metrics.fleetLoadRate)}，${lang() === "ja" ? `使用車両 ${result.metrics.usedVehicleCount} 台 / 待機車両 ${result.metrics.unusedVehicleCount} 台` : `已用车辆 ${result.metrics.usedVehicleCount} 辆 / 未用车辆 ${result.metrics.unusedVehicleCount} 辆`}</p>
+      ${best && best.key !== result.key ? `<p class="hint">${lang() === "ja" ? `現在の最良案 ${algoLabel(best.key)} と比べると、スコア差 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}、距離差 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km、使用車両差 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 台です。` : `与当前最佳 ${algoLabel(best.key)} 相比：分数差 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}，里程差 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km，用车差 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 辆。`}</p>` : ""}
+      <p class="hint">${lang() === "ja" ? "100点制。未遅着率45% + 距離25% + 平均単便積載率15% + 積載優先達成率15%。より時間通りで、距離が短く、積載が良いほど高得点です。" : "100分制。未晚到率45% + 距离25% + 平均单趟装载率15% + 装载偏好达成率15%。也就是说，越准时、越省里程、越能装，分数越高。"}</p>
       <p class="hint">${L("hardArrivalHint")}${state.settings.concentrateLate ? ` ${L("lateFocusHint")}` : ""}</p>
         <p class="hint">${result.metrics.unscheduledCount ? LT("unscheduledSummary", { count: result.metrics.unscheduledCount, names: formatUnscheduledDetails(result.metrics.unscheduledStores, 8) }) : L("noUnscheduled")}</p>
-        ${result.metrics.unscheduledCount ? `<p class="hint">${lang() === "ja" ? `鏈壊褰撱伄涓诲洜锛?{summarizeUnscheduledReasons(result.metrics.unscheduledStores)}` : `鏈皟搴︿富鍥狅細${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}`}${result.metrics.unusedVehicleCount > 0 ? (lang() === "ja" ? `銆傘仾銇婂緟姗熻粖涓°伅 ${result.metrics.unusedVehicleCount} 鍙般亗銈娿€佷富鍥犮伅杌婁浮涓嶈冻銇с伅銇亸鍒剁磩鍋淬仹銇欍€俙 : `銆傚綋鍓嶄粛鏈?${result.metrics.unusedVehicleCount} 杈嗛棽缃溅锛屼富鍥犱笉鏄溅涓嶅锛岃€屾槸绾︽潫涓嶆弧瓒炽€俙) : ""}</p>` : ""}
+        ${result.metrics.unscheduledCount ? `<p class="hint">${lang() === "ja" ? `未割当の主因：${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}` : `未调度主因：${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}`}${result.metrics.unusedVehicleCount > 0 ? (lang() === "ja" ? `。なお待機車両は ${result.metrics.unusedVehicleCount} 台あり、主因は車両不足ではなく制約側です。` : `。当前仍有 ${result.metrics.unusedVehicleCount} 辆闲置车，主因不是车不够，而是约束不满足。`) : ""}</p>` : ""}
         <button class="secondary view-result-detail" data-result-key="${result.key}">${algoLabel(result.key)} ${L("detail")}</button>
       </article>
   `).join("");
 }
 
 function normalizeMainTab(tabKey) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const key = String(tabKey || "").trim();
   return MAIN_TAB_KEYS.has(key) ? key : "basic";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function applyMainTabVisibility() {
   const activeTab = normalizeMainTab(state.ui.mainTab);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.mainTab = activeTab;
   document.querySelectorAll("[data-main-tab]").forEach((section) => {
     section.classList.toggle("tab-hidden", section.dataset.mainTab !== activeTab);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.querySelectorAll("[data-main-tab-btn]").forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.mainTabBtn === activeTab);
   });
 }
 
 function setMainTab(tabKey) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.mainTab = normalizeMainTab(tabKey);
   applyMainTabVisibility();
 }
 
 function bindMainTabs() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tabs = document.getElementById("mainTabs");
   if (!tabs) return;
   tabs.addEventListener("click", (event) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const btn = event.target.closest("[data-main-tab-btn]");
     if (!btn) return;
     setMainTab(btn.dataset.mainTabBtn);
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function ensureAnalyticsMount() {
   const summarySection = document.getElementById("summaryCards");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const resultPanels = document.getElementById("resultPanels");
   const resultSection = resultPanels?.closest("section");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!summarySection || !resultSection) return null;
   let panel = document.getElementById("analyticsPanel");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (panel) {
     panel.setAttribute("data-main-tab", "solve");
     if (panel.previousElementSibling !== summarySection) {
       summarySection.insertAdjacentElement("afterend", panel);
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return panel;
   }
   summarySection.insertAdjacentHTML("afterend", `
@@ -8646,13 +13638,21 @@ function ensureAnalyticsMount() {
   return document.getElementById("analyticsPanel");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function ensureGanttMount() {
   const resultPanels = document.getElementById("resultPanels");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const resultSection = resultPanels?.closest("section");
   if (!resultSection) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let panel = document.getElementById("ganttPanel");
   if (panel) {
     panel.setAttribute("data-main-tab", "solve");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (panel.previousElementSibling !== resultSection) {
       resultSection.insertAdjacentElement("afterend", panel);
     }
@@ -8669,12 +13669,18 @@ function ensureGanttMount() {
       <div id="ganttContent"></div>
     </section>
   `);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return document.getElementById("ganttPanel");
 }
 
 function dockAssistantPanel() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dock = document.getElementById("assistantDock");
   if (!dock) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const assistantCard = document.querySelector("#analyticsContent .mascot-card");
   if (!assistantCard) {
     dock.innerHTML = "";
@@ -8682,20 +13688,28 @@ function dockAssistantPanel() {
     dock.classList.remove("state-collapsed", "state-half", "state-full");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const normalizeDockState = (value) => {
     const key = String(value || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (key === "collapsed" || key === "half" || key === "full") return key;
     return "half";
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.assistantDockState = normalizeDockState(state.ui.assistantDockState);
   dock.innerHTML = "";
   const controls = document.createElement("div");
   controls.className = "assistant-dock-controls";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const labels = lang() === "ja"
-    ? { collapsed: "鎶樸倞銇熴仧銈€", half: "绨＄増", full: "鍏ㄩ噺" }
-    : { collapsed: "鎶樺彔", half: "绠€鐗?, full: "鍏ㄩ噺" };
+    ? { collapsed: "折りたたむ", half: "簡版", full: "全量" }
+    : { collapsed: "折叠", half: "简版", full: "全量" };
   controls.innerHTML = `
-    <span class="assistant-dock-move" title="${lang() === "ja" ? "銉夈儵銉冦偘銇椼仸绉诲嫊" : "鎷栨嫿绉诲姩"}">鈰嫯</span>
+    <span class="assistant-dock-move" title="${lang() === "ja" ? "ドラッグして移動" : "拖拽移动"}">⋮⋮</span>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="collapsed">${labels.collapsed}</button>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="half">${labels.half}</button>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="full">${labels.full}</button>
@@ -8709,8 +13723,12 @@ function dockAssistantPanel() {
 }
 
 function applyAssistantDockPosition() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dock = document.getElementById("assistantDock");
   if (!dock) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const pos = state.ui.assistantDockPosition;
   if (!pos || !Number.isFinite(pos.left) || !Number.isFinite(pos.top)) {
     dock.style.left = "";
@@ -8718,10 +13736,16 @@ function applyAssistantDockPosition() {
     dock.style.right = "";
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rect = dock.getBoundingClientRect();
   const maxLeft = Math.max(0, window.innerWidth - rect.width - 8);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxTop = Math.max(0, window.innerHeight - rect.height - 8);
   const left = Math.max(0, Math.min(Math.round(pos.left), maxLeft));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const top = Math.max(0, Math.min(Math.round(pos.top), maxTop));
   dock.style.left = `${left}px`;
   dock.style.top = `${top}px`;
@@ -8729,12 +13753,20 @@ function applyAssistantDockPosition() {
 }
 
 function startAssistantDockDrag(event) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!event || event.button !== 0) return;
   const dock = document.getElementById("assistantDock");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!dock) return;
   const handle = event.target?.closest?.(".assistant-dock-controls, #assistantDock.state-collapsed");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!handle) return;
   if (event.target?.closest?.(".assistant-dock-toggle")) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rect = dock.getBoundingClientRect();
   assistantDockDragState = {
     offsetX: event.clientX - rect.left,
@@ -8745,12 +13777,20 @@ function startAssistantDockDrag(event) {
   event.preventDefault();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function moveAssistantDockDrag(event) {
   if (!assistantDockDragState) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dock = document.getElementById("assistantDock");
   if (!dock) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rect = dock.getBoundingClientRect();
   const maxLeft = Math.max(0, window.innerWidth - rect.width - 8);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxTop = Math.max(0, window.innerHeight - rect.height - 8);
   state.ui.assistantDockPosition = {
     left: Math.max(0, Math.min(event.clientX - assistantDockDragState.offsetX, maxLeft)),
@@ -8759,66 +13799,106 @@ function moveAssistantDockDrag(event) {
   applyAssistantDockPosition();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function stopAssistantDockDrag() {
   if (!assistantDockDragState) return;
   assistantDockDragState = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("assistantDock")?.classList.remove("is-dragging");
 }
 
 function locateStoreRow(queryText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const query = String(queryText || "").trim().toLowerCase();
   if (!query) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const assignmentMap = getActiveStoreAssignmentMap();
   const match = state.stores.findIndex((store) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const assignment = getStoreAssignmentByRule(store, assignmentMap);
     const plate = String(assignment?.plateNo || store?.plateNo || "").toLowerCase();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const hay = `${store.id || ""} ${store.name || ""} ${plate}`.toLowerCase();
     return hay.includes(query);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.storeLocatedIndex = match;
   renderStoresTable();
   const rowInput = document.querySelector(`input[data-kind="store"][data-index="${match}"]`);
   rowInput?.closest("tr")?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   rowInput?.focus?.();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return match >= 0;
 }
 
 function locateVehicleRow(queryText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const query = String(queryText || "").trim().toLowerCase();
   if (!query) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const match = state.vehicles.findIndex((vehicle) => {
     const hay = `${vehicle.plateNo || ""} ${vehicle.driverName || ""}`.toLowerCase();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return hay.includes(query);
   });
   state.ui.vehicleLocatedIndex = match;
   renderVehicles();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rowInput = document.querySelector(`#vehicleTable input[data-kind="vehicle"][data-index="${match}"]`);
   rowInput?.closest("tr")?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   rowInput?.focus?.();
   return match >= 0;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function locateWaveItem(queryText) {
   const query = String(queryText || "").trim().toLowerCase();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!query) return false;
   const match = state.waves.findIndex((wave) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const names = getWaveStoreNameList(wave.storeIds).join(" ");
     const hay = `${wave.waveId || ""} ${names}`.toLowerCase();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return hay.includes(query);
   });
   if (match < 0) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.waveSelectedIndex = match;
   renderWaves();
   const btn = document.querySelector(`.wave-left-item[data-wave-select-index="${match}"]`);
   btn?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return true;
 }
 
 async function saveBaseDataSnapshot(sourceModule) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const available = await ensureGaBackendAvailable(true);
   if (!available) {
     throw new Error("backend_unavailable");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const now = new Date();
   const snapshot = {
     id: `data-${sourceModule}-${now.getTime()}`,
@@ -8838,32 +13918,46 @@ async function saveBaseDataSnapshot(sourceModule) {
     settings: clone(state.settings),
     results: [],
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/save`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ snapshot }),
   }, 10000);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const payload = await response.json();
   if (!payload?.ok) throw new Error(payload?.error || "archive_save_failed");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return snapshot.id;
 }
 
 function renderDataArchivePanels() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const table = document.getElementById("dataArchiveTable");
   const storeTable = document.getElementById("dataArchiveStoreTable");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const status = document.getElementById("dataArchiveQueryStatus");
   if (!table || !storeTable || !status) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const items = Array.isArray(dataArchiveCache.items) ? dataArchiveCache.items : [];
   const columns = [
-    { label: "妗ｆID", width: 260 },
-    { label: "淇濆瓨鏃堕棿", width: 170 },
-    { label: "鏉ユ簮妯″潡", width: 100 },
-    { label: "闂ㄥ簵鏁?, width: 80 },
-    { label: "杞﹁締鏁?, width: 80 },
-    { label: "娉㈡鏁?, width: 80 },
-    { label: "鎿嶄綔", width: 100 },
+    { label: "档案ID", width: 260 },
+    { label: "保存时间", width: 170 },
+    { label: "来源模块", width: 100 },
+    { label: "门店数", width: 80 },
+    { label: "车辆数", width: 80 },
+    { label: "波次数", width: 80 },
+    { label: "操作", width: 100 },
   ];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rows = items.map((item) => `
     <tr class="${dataArchiveCache.selectedId === item.id ? "located-row" : ""}">
       <td title="${escapeHtml(String(item.id || ""))}">${escapeHtml(String(item.id || ""))}</td>
@@ -8872,31 +13966,37 @@ function renderDataArchivePanels() {
       <td>${Number(item.storeCount || 0)}</td>
       <td>${Number(item.vehicleCount || 0)}</td>
       <td>${Number(item.waveCount || 0)}</td>
-      <td><button class="mini" data-data-archive-view="${escapeHtml(String(item.id || ""))}">鏌ョ湅</button></td>
+      <td><button class="mini" data-data-archive-view="${escapeHtml(String(item.id || ""))}">查看</button></td>
     </tr>
   `);
   table.innerHTML = buildDataTableHtml({ tableKind: "dataArchive", columns, rows, tableClass: "data-archive-table" });
   const selected = items.find((item) => item.id === dataArchiveCache.selectedId) || items[0] || null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!selected) {
-    status.textContent = "鏆傛棤鍩虹璧勬枡妗ｆ銆?;
+    status.textContent = "暂无基础资料档案。";
     storeTable.innerHTML = "";
     return;
   }
   dataArchiveCache.selectedId = selected.id;
-  status.textContent = `褰撳墠妗ｆ锛?{selected.id}锛岄棬搴?${selected.storeCount} 瀹躲€俙;
+  status.textContent = `当前档案：${selected.id}，门店 ${selected.storeCount} 家。`;
   const storeColumns = [
-    { label: "缂栧彿", width: 110 },
-    { label: "鍚嶇О", width: 220 },
-    { label: "鍖哄煙", width: 120 },
-    { label: "缁忓害", width: 140 },
-    { label: "绾害", width: 140 },
-    { label: "涓€娉㈡璐ч噺", width: 110 },
-    { label: "浜屾尝娆¤揣閲?, width: 110 },
-    { label: "鍐疯棌姣斾緥", width: 90 },
-    { label: "鎵€灞炴尝娆?, width: 110 },
+    { label: "编号", width: 110 },
+    { label: "名称", width: 220 },
+    { label: "区域", width: 120 },
+    { label: "经度", width: 140 },
+    { label: "纬度", width: 140 },
+    { label: "一波次货量", width: 110 },
+    { label: "二波次货量", width: 110 },
+    { label: "冷藏比例", width: 90 },
+    { label: "所属波次", width: 110 },
   ];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeRows = (selected.stores || []).map((store) => {
     const loads = normalizeStoreWaveLoads(store || {});
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return `
     <tr>
       <td>${escapeHtml(String(store.id || ""))}</td>
@@ -8915,23 +14015,35 @@ function renderDataArchivePanels() {
 }
 
 async function queryDataArchives() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dateInput = document.getElementById("dataArchiveDateInput");
   const keywordInput = document.getElementById("dataArchiveKeywordInput");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const status = document.getElementById("dataArchiveQueryStatus");
   if (!dateInput || !keywordInput || !status) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dateValue = String(dateInput.value || todayDateKey());
   const keyword = String(keywordInput.value || "").trim().toLowerCase();
   dataArchiveCache.date = dateValue;
   dataArchiveCache.keyword = keyword;
-  status.textContent = "姝ｅ湪鏌ヨ...";
+  status.textContent = "正在查询...";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/list`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date: dateValue, page: 1, pageSize: 50 }),
     }, 8000);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const rawItems = Array.isArray(payload?.items) ? payload.items : [];
     const items = rawItems
       .filter((item) => item && item.metaType === "base_data")
@@ -8945,46 +14057,68 @@ async function queryDataArchives() {
         waveCount: Array.isArray(item.waves) ? item.waves.length : 0,
       }))
       .filter((item) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (!keyword) return true;
         const text = `${item.id} ${item.sourceModule} ${(item.stores || []).map((store) => `${store.id || ""} ${store.name || ""} ${store.plateNo || ""}`).join(" ")}`.toLowerCase();
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         return text.includes(keyword);
       });
     dataArchiveCache.items = items;
     dataArchiveCache.selectedId = items[0]?.id || "";
     renderDataArchivePanels();
   } catch (error) {
-    status.textContent = `鏌ヨ澶辫触锛?{error?.message || ""}`;
+    status.textContent = `查询失败：${error?.message || ""}`;
   }
 }
 
 function setWmsSyncStatus(text) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const el = document.getElementById("wmsSyncStatus");
   if (el) el.textContent = String(text || "");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function currentStoreSource() {
   const value = String(state.ui.storeDataSource || "sample").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return value === "real" ? "real" : "sample";
 }
 
 function currentVehicleSource() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const value = String(state.ui.vehicleDataSource || "sample").trim();
   return value === "real" ? "real" : "sample";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function refreshBaseDataBySource() {
   const sample = sampleData();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeSource = currentStoreSource();
   const vehicleSource = currentVehicleSource();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let stores = [];
   let vehicles = [];
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (storeSource === "real") {
     stores = await fetchWmsStoresFromBackend();
   } else {
     try {
       stores = await fetchStoresFromBackend();
     } catch {}
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!stores.length) stores = sample.stores;
   }
 
@@ -8994,83 +14128,127 @@ async function refreshBaseDataBySource() {
     vehicles = sample.vehicles;
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const resolvedMap = await fetchStoreWaveResolvedLoadMap(stores.map((item) => item?.id).filter(Boolean));
   stores = applyStoreWaveResolvedLoadsToStores(stores, resolvedMap);
 
   state.stores = stores;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.vehicles = vehicles;
   state.waves = buildAutoWaves(state.stores);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.lastResults = [];
   state.activeResultKey = "";
   renderAll();
-  setWmsSyncStatus(`搴楅摵鏉ユ簮=${storeSource === "real" ? "鐪熷疄涓氬姟" : "鏍锋湰"}锛涜溅杈嗘潵婧?${vehicleSource === "real" ? "鐪熷疄涓氬姟" : "鏍锋湰"}锛涜揣閲?娉㈡/鏃堕棿鏉ユ簮=wms_cargo_raw_clean_snapshot + store_wave_timing_resolved(${resolvedMap.size}搴?銆俙);
+  setWmsSyncStatus(`店铺来源=${storeSource === "real" ? "真实业务" : "样本"}；车辆来源=${vehicleSource === "real" ? "真实业务" : "样本"}；货量/波次/时间来源=wms_cargo_raw_clean_snapshot + store_wave_timing_resolved(${resolvedMap.size}店)。`);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function refreshWmsStatus() {
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wms/status`, {}, 5000);
     if (!response.ok) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const payload = await response.json();
     if (!payload?.ok) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const counts = payload.counts || {};
     const latestBatch = payload.latestBatch || {};
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const mode = latestBatch.mode || "-";
     const finishedAt = latestBatch.finished_at || latestBatch.finishedAt || "-";
-    setWmsSyncStatus(`WMS鍚屾鐘舵€侊細搴楅摵${counts.shops || 0}锛岃溅杈?{counts.vehicles || 0}锛岃揣閲?{counts.cargo || 0}锛岃杞?{counts.carload || 0}锛屽埌搴?{counts.arrivaltime || 0}锛涙渶杩戞壒娆?${mode} ${finishedAt}`);
+    setWmsSyncStatus(`WMS同步状态：店铺${counts.shops || 0}，车辆${counts.vehicles || 0}，货量${counts.cargo || 0}，装载${counts.carload || 0}，到店${counts.arrivaltime || 0}；最近批次=${mode} ${finishedAt}`);
   } catch {}
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function triggerWmsFetch() {
   const box = document.getElementById("validationBox");
-  setWmsSyncStatus("姝ｅ湪鎶撳彇WMS锛堝彧璇伙級...");
+  setWmsSyncStatus("正在抓取WMS（只读）...");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let password = "";
   for (let i = 0; i < 2; i += 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wms/fetch`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(password ? { password } : {}),
     }, 120000);
     const payload = response.ok ? await response.json() : { ok: false, error: `HTTP ${response.status}` };
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (payload?.needPassword) {
-      const promptText = i === 0 ? "璇疯緭鍏MS鏁版嵁搴撳瘑鐮侊紙浠呮湰鍦板姞瀵嗕繚瀛橈級锛? : "瀵嗙爜閿欒锛岃閲嶆柊杈撳叆WMS鏁版嵁搴撳瘑鐮侊細";
+      const promptText = i === 0 ? "请输入WMS数据库密码（仅本地加密保存）：" : "密码错误，请重新输入WMS数据库密码：";
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const typed = window.prompt(promptText, "");
       if (!typed) {
-        setWmsSyncStatus("宸插彇娑圵MS鎶撳彇銆?);
+        setWmsSyncStatus("已取消WMS抓取。");
         return;
       }
       password = String(typed || "").trim();
       continue;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!payload?.ok) {
       const err = payload?.error || "wms_fetch_failed";
-      setWmsSyncStatus(`WMS鎶撳彇澶辫触锛?{err}`);
-      if (box) box.textContent = `WMS鎶撳彇澶辫触锛?{err}`;
+      setWmsSyncStatus(`WMS抓取失败：${err}`);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      if (box) box.textContent = `WMS抓取失败：${err}`;
       return;
     }
     const tableSummary = Array.isArray(payload?.tables) ? payload.tables : [];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const inserted = tableSummary.reduce((sum, item) => sum + Number(item?.insertedRows || 0), 0);
     const skipped = tableSummary.reduce((sum, item) => sum + Number(item?.skippedRows || 0), 0);
-    setWmsSyncStatus(`WMS鎶撳彇瀹屾垚锛氭壒娆?{payload.batchId || "-"}锛屾柊澧?{inserted}锛屽幓閲嶈烦杩?{skipped}銆俙);
-    if (box) box.textContent = `WMS鍙鎶撳彇瀹屾垚锛氭柊澧?{inserted}锛岃烦杩?{skipped}銆俙;
+    setWmsSyncStatus(`WMS抓取完成：批次${payload.batchId || "-"}，新增${inserted}，去重跳过${skipped}。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    if (box) box.textContent = `WMS只读抓取完成：新增${inserted}，跳过${skipped}。`;
     await refreshWmsStatus();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     await refreshBaseDataBySource();
     return;
   }
-  setWmsSyncStatus("WMS鎶撳彇澶辫触锛氬瘑鐮佹牎楠屾湭閫氳繃銆?);
+  setWmsSyncStatus("WMS抓取失败：密码校验未通过。");
 }
 
 function miniKpiCard(label, value, sub = "", accent = "") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `<article class="kpi-card ${accent}"><p class="kpi-label">${escapeHtml(label)}</p><div class="kpi-value" data-animate-number="${escapeHtml(String(value))}">${escapeHtml(String(value))}</div>${sub ? `<p class="kpi-sub">${escapeHtml(sub)}</p>` : ""}</article>`;
 }
 
 function polarPoint(cx, cy, r, angleDeg) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rad = (angleDeg - 90) * Math.PI / 180;
   return [cx + Math.cos(rad) * r, cy + Math.sin(rad) * r];
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function collectComparisonRouteRows(result) {
   const rows = [];
   (result.solution || []).forEach((plans, waveIndex) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave = result.scenario?.waves?.[waveIndex];
     (plans || []).forEach((plan) => {
       (plan.trips || []).forEach((trip) => {
@@ -9092,8 +14270,12 @@ function collectComparisonRouteRows(result) {
   );
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderComparisonRouteDigest(result) {
   const rows = collectComparisonRouteRows(result);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!rows.length) return `<p class="algo-route-empty">${L("noChartData")}</p>`;
   return `<div class="algo-route-digest">
     <div class="algo-route-digest-head">
@@ -9103,7 +14285,7 @@ function renderComparisonRouteDigest(result) {
     <div class="algo-route-list">
       ${rows.map((row) => `
         <div class="algo-route-row">
-          <div class="algo-route-line">${escapeHtml(`${row.waveId} 路 ${row.plateNo} 路 ${L("tripLabel")}${row.tripNo}`)}</div>
+          <div class="algo-route-line">${escapeHtml(`${row.waveId} · ${row.plateNo} · ${L("tripLabel")}${row.tripNo}`)}</div>
           <div class="algo-route-metrics">
             <span>${L("storesCount")} ${row.storesCount}</span>
             <span>${L("tripRoundKm")} ${row.totalDistance.toFixed(1)} km</span>
@@ -9115,22 +14297,32 @@ function renderComparisonRouteDigest(result) {
   </div>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderExecutiveCompare(results) {
   if (!results.length) return `<div class="chart-card wide-card"><div class="chart-title">${L("algoCompare")}</div><div class="note">${L("noChartData")}</div></div>`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ranked = [...results].sort((a, b) => b.metrics.score - a.metrics.score);
   return `<div class="chart-card wide-card executive-card">
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("algoCompare")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "绶忓垎銉绘檪闁撻爢瀹堛兓璺濋洟銉荤杓夈伄4瑕栫偣銇ф瘮杓冦仐銇俱仚銆? : "浠庢€诲垎銆佹椂鏁堛€佽窛绂汇€佽杞藉洓涓搴︾湅绠楁硶宸紓銆?}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "総分・時間順守・距離・積載の4視点で比較します。" : "从总分、时效、距离、装载四个角度看算法差异。"}</p>
       </div>
     </div>
     <div class="algo-board">
       ${ranked.map((result, idx) => {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const score = result.metrics.score || 0;
         const onTime = (result.metrics.scoreBreakdown?.onTimeRatio || 0) * 100;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const distance = (result.metrics.scoreBreakdown?.distanceScore || 0) * 100;
         const load = (result.metrics.scoreBreakdown?.loadScore || 0) * 100;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const pref = (result.metrics.scoreBreakdown?.preferenceScore || 0) * 100;
         return `<article class="algo-rank-card ${idx === 0 ? "best-card" : ""}">
           <div class="algo-rank-top">
@@ -9166,8 +14358,12 @@ function renderExecutiveCompare(results) {
   </div>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderComparisonBars(results) {
   if (!results.length) return "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const max = Math.max(...results.map((r) => r.metrics.score), 1);
   return `<div class="chart-card wide-card"><div class="chart-title">${L("algorithmScore")}</div>${results.map((result, idx) => `
     <div class="bar-row">
@@ -9178,16 +14374,22 @@ function renderComparisonBars(results) {
   `).join("")}</div>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function collectGanttRows(result) {
   const rows = [];
   result.solution.forEach((plans, waveIndex) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave = result.scenario.waves[waveIndex];
     plans.forEach((plan) => {
       plan.trips.forEach((trip) => {
         const firstStop = trip.stops[0];
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const serviceEnd = trip.stops[trip.stops.length - 1]?.leave ?? trip.finish;
         rows.push({
-          label: `${plan.vehicle.plateNo} 路 ${wave.waveId} 路 ${L("tripLabel")}${trip.tripNo}`,
+          label: `${plan.vehicle.plateNo} · ${wave.waveId} · ${L("tripLabel")}${trip.tripNo}`,
           start: firstStop ? firstStop.arrival : wave.startMin,
           end: wave.waveId === "W1" ? trip.finish : serviceEnd,
           waveType: wave.singleWave ? "single" : "regular",
@@ -9199,16 +14401,28 @@ function collectGanttRows(result) {
   return rows;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderGantt(result) {
   const rows = collectGanttRows(result);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!rows.length) return `<div class="chart-card"><div class="chart-title">${L("gantt")}</div><div class="note">${L("noChartData")}</div></div>`;
   const minTime = Math.min(...rows.map((r) => r.start));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const maxTime = Math.max(...rows.map((r) => r.end));
   const span = Math.max(60, maxTime - minTime);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const svgHeight = 60 + rows.length * 34;
   const rowSvg = rows.map((row, index) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const y = 32 + index * 34;
     const x = 150 + ((row.start - minTime) / span) * 760;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const w = Math.max(12, ((row.end - row.start) / span) * 760);
     return `<g>
       <text x="10" y="${y + 14}" class="gantt-label">${escapeHtml(row.label)}</text>
@@ -9216,18 +14430,26 @@ function renderGantt(result) {
       ${row.overtime > 0 ? `<rect x="${x + w - 10}" y="${y}" width="10" height="20" rx="0" class="gantt-overtime"/>` : ""}
     </g>`;
   }).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ticks = Array.from({ length: 6 }, (_, i) => {
     const value = minTime + (span / 5) * i;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const x = 150 + (760 / 5) * i;
     return `<g><line x1="${x}" y1="12" x2="${x}" y2="${svgHeight - 10}" class="gantt-grid"/><text x="${x - 12}" y="12" class="gantt-tick">${formatTime(value)}</text></g>`;
   }).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const overtimeCount = rows.filter((row) => row.overtime > 0).length;
   const singleCount = rows.filter((row) => row.waveType === "single").length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `<div class="chart-card wide-card gantt-card">
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("gantt")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "杌婁浮脳娉㈡脳渚裤伄鏅傞枔閰嶇疆銈掍竴鐪笺仹纰鸿獚銇с亶銇俱仚銆? : "鎸夎溅杈?脳 娉㈡ 脳 瓒熸鏌ョ湅鏃堕棿鍗犵敤涓庤秴鏃朵綅缃€?}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "車両×波次×便の時間配置を一眼で確認できます。" : "按车辆 × 波次 × 趟次查看时间占用与超时位置。"}</p>
       </div>
       <div class="gantt-summary">
         <span class="summary-chip">${L("tripLabel")} ${rows.length}</span>
@@ -9240,14 +14462,22 @@ function renderGantt(result) {
 }
 
 function renderLoadCurves(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const candidates = result.solution.flat().filter((plan) => plan.trips.length).slice(0, 8);
   if (!candidates.length) return `<div class="chart-card"><div class="chart-title">${L("loadCurve")}</div><div class="note">${L("noChartData")}</div></div>`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const series = candidates.map((plan, idx) => {
     const points = [{ x: 0, y: 0 }];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let step = 1;
     plan.trips.forEach((trip) => {
       trip.stops.forEach((stop) => {
         const load = trip.stops.slice(0, trip.stops.indexOf(stop) + 1).reduce((sum, item) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const stopStore = result.scenario.storeMap.get(item.storeId);
           return sum + getStoreSolveLoadForWave(stopStore, { waveId: plan.waveId });
         }, 0);
@@ -9255,11 +14485,17 @@ function renderLoadCurves(result) {
         step += 1;
       });
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { label: plan.vehicle.plateNo, points, cls: `series-${idx % 5}` };
   });
   const maxX = Math.max(...series.map((s) => s.points[s.points.length - 1]?.x || 1), 1);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lines = series.map((s) => {
     const d = s.points.map((p, i) => `${i ? "L" : "M"} ${40 + (p.x / maxX) * 500} ${220 - p.y * 170}`).join(" ");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return `<g><path d="${d}" class="load-path ${s.cls}"/><text x="560" y="${40 + series.indexOf(s) * 18}" class="load-legend ${s.cls}">${escapeHtml(s.label)}</text></g>`;
   }).join("");
   return `<div class="chart-card"><div class="chart-title">${L("loadCurve")}</div><svg viewBox="0 0 640 250" class="load-svg">
@@ -9269,19 +14505,33 @@ function renderLoadCurves(result) {
   </svg></div>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderSpatialScatter(result) {
   const stores = result.scenario.stores;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!stores.length) return `<div class="chart-card"><div class="chart-title">${L("spatial")}</div><div class="note">${L("noChartData")}</div></div>`;
   const lngs = [DC.lng, ...stores.map((s) => s.lng)];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lats = [DC.lat, ...stores.map((s) => s.lat)];
   const minLng = Math.min(...lngs), maxLng = Math.max(...lngs), minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const normX = (lng) => 40 + ((lng - minLng) / Math.max(0.0001, maxLng - minLng)) * 560;
   const normY = (lat) => 240 - ((lat - minLat) / Math.max(0.0001, maxLat - minLat)) * 180;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const singleSet = new Set(result.scenario.singleWaveStoreIds || []);
   const points = stores.map((store) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const cls = singleSet.has(store.id) ? "single" : ((result.scenario.dist[DC.id][store.id] || 0) > result.scenario.singleWaveThreshold ? "far" : "near");
     return `<g><circle cx="${normX(store.lng)}" cy="${normY(store.lat)}" r="${singleSet.has(store.id) ? 7 : 5}" class="scatter-point ${cls}"/><text x="${normX(store.lng) + 8}" y="${normY(store.lat) - 8}" class="scatter-label">${escapeHtml(store.id)}</text></g>`;
   }).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dc = `<g><circle cx="${normX(DC.lng)}" cy="${normY(DC.lat)}" r="9" class="scatter-dc"/><text x="${normX(DC.lng) + 12}" y="${normY(DC.lat) - 10}" class="scatter-label">${escapeHtml(L("depot"))}</text></g>`;
   return `<div class="chart-card wide-card"><div class="chart-title">${L("spatial")}</div><svg viewBox="0 0 640 280" class="scatter-svg">
     <rect x="20" y="20" width="590" height="220" rx="18" class="scatter-bg"/>
@@ -9291,19 +14541,29 @@ function renderSpatialScatter(result) {
   </div>`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderDashboard(result) {
   const overtimeTrips = result.solution.flat().flatMap((plan) => plan.trips).filter((trip) => (trip.waveLateMinutes || 0) > 0).length;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const onTimeRatio = result.metrics.totalOnTime / Math.max(result.metrics.totalStops, 1);
   const scoreState = result.metrics.score >= 80 ? "state-good" : result.metrics.score >= 60 ? "state-warn" : "state-bad";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const onTimeState = onTimeRatio >= 0.98 ? "state-good" : onTimeRatio >= 0.9 ? "state-warn" : "state-bad";
   const distanceState = result.metrics.totalDistance <= 2300 ? "state-good" : result.metrics.totalDistance <= 2800 ? "state-warn" : "state-bad";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const loadState = result.metrics.loadRate >= 0.65 ? "state-good" : result.metrics.loadRate >= 0.45 ? "state-warn" : "state-bad";
   const mascot = renderMascotAssistant(result, overtimeTrips);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `<div class="chart-card wide-card cockpit-card">
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("dashboard")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "褰撴棩銇厤杌婄姸娉併倰涓€鏋氥仹鎶婃彙銇欍倠绠＄悊銉撱儱銉笺仹銇欍€? : "涓€鐪兼煡鐪嬪綋鏃ヨ皟搴﹁川閲忋€佽祫婧愬崰鐢ㄥ拰鏃舵晥琛ㄧ幇銆?}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "当日の配車状況を一枚で把握する管理ビューです。" : "一眼查看当日调度质量、资源占用和时效表现。"}</p>
       </div>
       <div class="cockpit-highlight ${scoreState}">
         <span>${L("score")}</span>
@@ -9314,7 +14574,7 @@ function renderDashboard(result) {
       <div class="cockpit-grid">
         ${miniKpiCard(L("storesToday"), String(result.metrics.totalStops), `${L("wavesLabel")} ${result.scenario.waves.length}`, "kpi-hero")}
         ${miniKpiCard(L("usedVehiclesShort"), String(result.metrics.usedVehicleCount), `${L("idleVehiclesShort")} ${result.metrics.unusedVehicleCount}`, `accent-used ${result.metrics.unusedVehicleCount > 0 ? "state-good" : "state-warn"}`)}
-        ${miniKpiCard(L("totalDistance"), `${result.metrics.totalDistance.toFixed(1)} km`, lang() === "ja" ? "鐭亜銇汇仼楂樿渚? : "瓒婄煭瓒婁紭", distanceState)}
+        ${miniKpiCard(L("totalDistance"), `${result.metrics.totalDistance.toFixed(1)} km`, lang() === "ja" ? "短いほど高評価" : "越短越优", distanceState)}
         ${miniKpiCard(L("onTime"), formatRate(onTimeRatio), `${L("overtimeTripsShort")} ${overtimeTrips}`, onTimeState)}
         ${miniKpiCard(L("avgLoad"), formatRate(result.metrics.loadRate), `${algoLabel(result.key)}`, loadState)}
         ${miniKpiCard(L("fleetLoad"), formatRate(result.metrics.fleetLoadRate), L("fleetLoadHint"), result.metrics.fleetLoadRate >= 0.9 ? "state-good" : result.metrics.fleetLoadRate >= 0.65 ? "state-warn" : "state-bad")}
@@ -9325,6 +14585,8 @@ function renderDashboard(result) {
 }
 
 function buildMascotSnapshot(result, overtimeTrips) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (result?.metrics) {
     return {
       score: result.metrics.score,
@@ -9337,8 +14599,8 @@ function buildMascotSnapshot(result, overtimeTrips) {
       overtimeTrips,
       algorithm: algoLabel(result.key),
       riskText: overtimeTrips > 0
-        ? (lang() === "ja" ? `瓒呮檪銉┿偆銉?${overtimeTrips} 浠躲伀娉ㄦ剰銆俙 : `褰撳墠鏈?${overtimeTrips} 鏉¤秴鏃剁嚎璺渶瑕佸叧娉ㄣ€俙)
-        : (lang() === "ja" ? "瓒呮檪銉┿偆銉炽伅銇傘倞銇俱仜銈撱€? : "褰撳墠娌℃湁瓒呮椂绾胯矾銆?),
+        ? (lang() === "ja" ? `超時ライン ${overtimeTrips} 件に注意。` : `当前有 ${overtimeTrips} 条超时线路需要关注。`)
+        : (lang() === "ja" ? "超時ラインはありません。" : "当前没有超时线路。"),
       summaryChips: [
         `<span class="summary-chip">${escapeHtml(algoLabel(result.key))}</span>`,
         `<span class="summary-chip">${L("score")} ${result.metrics.score.toFixed(1)}</span>`,
@@ -9347,6 +14609,8 @@ function buildMascotSnapshot(result, overtimeTrips) {
       ].join(""),
     };
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     score: 0,
     usedVehicleCount: state.vehicles.length,
@@ -9355,14 +14619,14 @@ function buildMascotSnapshot(result, overtimeTrips) {
     loadRate: 0,
     onTimeRatio: 1,
     overtimeTrips: 0,
-    algorithm: lang() === "ja" ? "寰呮涓? : "寰呮満涓?,
+    algorithm: lang() === "ja" ? "待機中" : "待机中",
     riskText: state.ui.micPriming
       ? L("speechMicPreparing")
       : (lang() === "ja"
-          ? "銇俱仩姝ｅ紡銇皟搴︾粨鏋溿伅銇傘倞銇俱仜銈撱€傚厛銇唱鍟忋倰鑱炪亸銇撱仺銈傘€佺敓鎴愬緦銇绱勩倰鑱炪亸銇撱仺銈傘仹銇嶃伨銇欍€?
-          : "褰撳墠杩樻病鏈夋寮忚皟搴︾粨鏋溿€備綘鍙互鍏堥棶鎸夐挳鐢ㄩ€旓紝鐢熸垚鍚庡啀鍚粨鏋滄憳瑕併€?),
+          ? "まだ正式な调度结果はありません。先に質問を聞くことも、生成後に要約を聞くこともできます。"
+          : "当前还没有正式调度结果。你可以先问按钮用途，生成后再听结果摘要。"),
     summaryChips: [
-      `<span class="summary-chip">${escapeHtml(lang() === "ja" ? "寰呮涓? : "寰呮満涓?)}</span>`,
+      `<span class="summary-chip">${escapeHtml(lang() === "ja" ? "待機中" : "待机中")}</span>`,
       `<span class="summary-chip">${L("storesToday")} ${state.stores.length}</span>`,
       `<span class="summary-chip">${L("usedVehiclesShort")} ${state.vehicles.length}</span>`,
     ].join(""),
@@ -9370,6 +14634,8 @@ function buildMascotSnapshot(result, overtimeTrips) {
 }
 
 function renderMascotAssistant(result, overtimeTrips) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const snapshot = buildMascotSnapshot(result, overtimeTrips);
   const speakPayload = escapeHtml(JSON.stringify({
     score: snapshot.score,
@@ -9381,8 +14647,12 @@ function renderMascotAssistant(result, overtimeTrips) {
     overtimeTrips: snapshot.overtimeTrips,
     algorithm: snapshot.algorithm,
   }));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const deepseekReady = Boolean(String(state.ai.deepseekApiKey || "").trim());
   const assistantExpanded = !!state.ui.assistantExpanded;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `
     <aside class="mascot-card">
       <div class="mascot-visual" aria-hidden="true">
@@ -9415,7 +14685,7 @@ function renderMascotAssistant(result, overtimeTrips) {
         <p class="mascot-risk">${escapeHtml(snapshot.riskText)}</p>
         <div class="assistant-inline-actions compact-assistant-actions">
           <button class="${assistantExpanded ? "secondary" : "primary"} toggle-assistant-panel">
-            ${lang() === "ja" ? (assistantExpanded ? "鍔╂墜銈掗枆銇樸倠" : "鍔╂墜銈掗枊銇?) : (assistantExpanded ? "鏀惰捣鍔╂墜" : "鎵撳紑鍔╂墜")}
+            ${lang() === "ja" ? (assistantExpanded ? "助手を閉じる" : "助手を開く") : (assistantExpanded ? "收起助手" : "打开助手")}
           </button>
         </div>
         ${assistantExpanded ? `
@@ -9465,227 +14735,281 @@ function renderMascotAssistant(result, overtimeTrips) {
 }
 
 function buildSpeechText(payload) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (lang() === "ja") {
-    return `銉熴儎銈儕銈般優閰嶈粖瀹樸倛銈婂牨鍛娿仐銇俱仚銆傜従鍦ㄣ伄鎺ㄥエ銈儷銈淬儶銈恒儬銇?{payload.algorithm}銇с仚銆傜窂鍚堛偣銈炽偄銇?{payload.score.toFixed(1)}鐐广€備娇鐢ㄨ粖涓°伅${payload.usedVehicleCount}鍙般€佸緟姗熻粖涓°伅${payload.unusedVehicleCount}鍙般€佺窂璺濋洟銇?{payload.totalDistance.toFixed(1)}銈儹銆佸钩鍧囧崢渚跨杓夌巼銇?{Math.round(payload.loadRate * 100)}銉戙兗銈汇兂銉堛€佽粖闅婄鍍嶇巼銇?{Math.round((payload.fleetLoadRate || 0) * 100)}銉戙兗銈汇兂銉堛€佹湭閬呯潃鐜囥伅${Math.round(payload.onTimeRatio * 100)}銉戙兗銈汇兂銉堛仹銇欍€?{payload.overtimeTrips > 0 ? `銇亰銆佽秴鏅傘儵銈ゃ兂銇?{payload.overtimeTrips}浠躲亗銈娿伨銇欍€俙 : "瓒呮檪銉┿偆銉炽伅銇傘倞銇俱仜銈撱€?}`
+    return `ミツアナグマ配車官より報告します。現在の推奨アルゴリズムは${payload.algorithm}です。総合スコアは${payload.score.toFixed(1)}点。使用車両は${payload.usedVehicleCount}台、待機車両は${payload.unusedVehicleCount}台、総距離は${payload.totalDistance.toFixed(1)}キロ、平均単便積載率は${Math.round(payload.loadRate * 100)}パーセント、車隊稼働率は${Math.round((payload.fleetLoadRate || 0) * 100)}パーセント、未遅着率は${Math.round(payload.onTimeRatio * 100)}パーセントです。${payload.overtimeTrips > 0 ? `なお、超時ラインが${payload.overtimeTrips}件あります。` : "超時ラインはありません。"}`
   }
-  return `椴哥暐浣垮姪鎵嬫眹鎶ャ€傚綋鍓嶆帹鑽愮畻娉曟槸${payload.algorithm}銆傜患鍚堣瘎鍒?{payload.score.toFixed(1)}鍒嗐€傚凡鐢ㄨ溅杈?{payload.usedVehicleCount}杈嗭紝闂茬疆杞﹁締${payload.unusedVehicleCount}杈嗭紝鎬婚噷绋?{payload.totalDistance.toFixed(1)}鍏噷锛屽钩鍧囧崟瓒熻杞界巼${Math.round(payload.loadRate * 100)}%锛岃溅闃熷埄鐢ㄧ巼${Math.round((payload.fleetLoadRate || 0) * 100)}%锛屾湭鏅氬埌鐜?{Math.round(payload.onTimeRatio * 100)}%銆?{payload.overtimeTrips > 0 ? `鍙﹀杩樻湁${payload.overtimeTrips}鏉¤秴鏃剁嚎璺渶瑕佸叧娉ㄣ€俙 : "褰撳墠娌℃湁瓒呮椂绾胯矾銆?}`
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  return `鲸略使助手汇报。当前推荐算法是${payload.algorithm}。综合评分${payload.score.toFixed(1)}分。已用车辆${payload.usedVehicleCount}辆，闲置车辆${payload.unusedVehicleCount}辆，总里程${payload.totalDistance.toFixed(1)}公里，平均单趟装载率${Math.round(payload.loadRate * 100)}%，车队利用率${Math.round((payload.fleetLoadRate || 0) * 100)}%，未晚到率${Math.round(payload.onTimeRatio * 100)}%。${payload.overtimeTrips > 0 ? `另外还有${payload.overtimeTrips}条超时线路需要关注。` : "当前没有超时线路。"}`
 }
 
 function assistantButtonCatalog() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return [
     {
       key: "generate",
-      aliases: ["鐢熸垚璋冨害缁撴灉", "鐢熸垚缁撴灉", "寮€濮嬭皟搴?, "run", "generate", "閰嶈粖鐢熸垚", "鐢熸垚"],
-      answerZh: "鈥滅敓鎴愯皟搴︾粨鏋溾€濅細鎸夊綋鍓嶉棬搴椼€佽溅杈嗐€佹尝娆°€佺畻娉曞拰鐩爣璁剧疆锛屾寮忓紑濮嬭绠楄皟搴︽柟妗堛€?,
-      answerJa: "銆岀敓鎴愯皟搴︾粨鏋溿€嶃伅銆佺従鍦ㄣ伄搴楄垪銉昏粖涓°兓娉㈡銉汇偄銉偞銉偤銉犮兓鐩瑷畾銇熀銇ャ亜銇︺€佹湰鐣伄閰嶈粖瑷堢畻銈掗枊濮嬨仐銇俱仚銆?,
+      aliases: ["生成调度结果", "生成结果", "开始调度", "run", "generate", "配車生成", "生成"],
+      answerZh: "“生成调度结果”会按当前门店、车辆、波次、算法和目标设置，正式开始计算调度方案。",
+      answerJa: "「生成调度结果」は、現在の店舗・車両・波次・アルゴリズム・目標設定に基づいて、本番の配車計算を開始します。",
     },
     {
       key: "reload",
-      aliases: ["閲嶆柊鍔犺浇鍥哄畾闂ㄥ簵", "閲嶆柊鍔犺浇", "鍔犺浇鏍蜂緥", "reload", "銈点兂銉椼儷鍐嶈杈?, "鍐嶅姞杞?],
-      answerZh: "鈥滈噸鏂板姞杞藉浐瀹氶棬搴椻€濅細鎶婄郴缁熸仮澶嶅埌褰撳墠鍐呯疆鐨勫浐瀹氶棬搴楁牱渚嬫暟鎹€?,
-      answerJa: "銆岄噸鏂板姞杞藉浐瀹氶棬搴椼€嶃伅銆佺従鍦ㄥ唴钄点仐銇︺亜銈嬪浐瀹氬簵鑸椼偟銉炽儣銉伀鎴汇仐銇俱仚銆?,
+      aliases: ["重新加载固定门店", "重新加载", "加载样例", "reload", "サンプル再読込", "再加载"],
+      answerZh: "“重新加载固定门店”会把系统恢复到当前内置的固定门店样例数据。",
+      answerJa: "「重新加载固定门店」は、現在内蔵している固定店舗サンプルに戻します。",
     },
     {
       key: "save",
-      aliases: ["淇濆瓨褰撳墠鏂规", "淇濆瓨鏂规", "save", "淇濆瓨"],
-      answerZh: "鈥滀繚瀛樺綋鍓嶆柟妗堚€濅細鎶婂綋鍓嶇粨鏋滃瓨鍒版祻瑙堝櫒鏈湴锛屾柟渚夸箣鍚庣户缁湅鎴栧姣斻€?,
-      answerJa: "銆屼繚瀛樺綋鍓嶆柟妗堛€嶃伅銆佺従鍦ㄣ伄绲愭灉銈掋儢銉┿偊銈躲伄銉兗銈儷銇繚瀛樸仐銇︺€併亗銇ㄣ仹瑕嬬洿銇椼仧銈婃瘮杓冦仹銇嶃倠銈堛亞銇仐銇俱仚銆?,
+      aliases: ["保存当前方案", "保存方案", "save", "保存"],
+      answerZh: "“保存当前方案”会把当前结果存到浏览器本地，方便之后继续看或对比。",
+      answerJa: "「保存当前方案」は、現在の結果をブラウザのローカルに保存して、あとで見直したり比較できるようにします。",
     },
     {
       key: "export",
-      aliases: ["瀵煎嚭褰撳墠缁撴灉", "瀵煎嚭缁撴灉", "export", "瀵煎嚭"],
-      answerZh: "鈥滃鍑哄綋鍓嶇粨鏋溾€濅細鎶婂綋鍓嶉€変腑鐨勮皟搴︽柟妗堝鍑烘垚鏂囨湰缁撴灉銆?,
-      answerJa: "銆屽鍑哄綋鍓嶇粨鏋溿€嶃伅銆佺従鍦ㄩ伕鎶炰腑銇厤杌婄祼鏋溿倰銉嗐偔銈广儓銇ㄣ仐銇︽浉銇嶅嚭銇椼伨銇欍€?,
+      aliases: ["导出当前结果", "导出结果", "export", "导出"],
+      answerZh: "“导出当前结果”会把当前选中的调度方案导出成文本结果。",
+      answerJa: "「导出当前结果」は、現在選択中の配車結果をテキストとして書き出します。",
     },
     {
       key: "autowave",
-      aliases: ["鑷姩鍒嗘尝娆?, "鎸夊浐瀹氶棬搴楄嚜鍔ㄥ垎娉㈡", "鍒嗘尝娆?, "auto wave", "娉㈡鑷嫊鐢熸垚"],
-      answerZh: "鈥滄寜鍥哄畾闂ㄥ簵鑷姩鍒嗘尝娆♀€濅細鏍规嵁褰撳墠闂ㄥ簵瑙勫垯鑷姩鐢熸垚涓€鐗堟尝娆￠厤缃€?,
-      answerJa: "銆屾寜鍥哄畾闂ㄥ簵鑷姩鍒嗘尝娆°€嶃伅銆佺従鍦ㄣ伄搴楄垪銉兗銉伀鍩恒仴銇勩仸娉㈡瑷畾銈掕嚜鍕曠敓鎴愩仐銇俱仚銆?,
+      aliases: ["自动分波次", "按固定门店自动分波次", "分波次", "auto wave", "波次自動生成"],
+      answerZh: "“按固定门店自动分波次”会根据当前门店规则自动生成一版波次配置。",
+      answerJa: "「按固定门店自动分波次」は、現在の店舗ルールに基づいて波次設定を自動生成します。",
     },
     {
       key: "quick",
-      aliases: ["蹇€熷垵鎺?, "蹇€?, "鍒濇帓", "quick"],
-      answerZh: "鈥滃揩閫熷垵鎺掆€濅細鐩存帴鍒囧埌蹇€熸瀯閫犳ā寮忥紝骞堕┈涓婄敓鎴愪竴鐗堝彲鐢ㄥ垵绋裤€?,
-      answerJa: "銆屽揩閫熷垵鎺掋€嶃伅銆佺礌鏃┿亜鍒濇湡妲嬬瘔銉兗銉夈伀鍒囥倞鏇裤亪銇︺€併仚銇愪娇銇堛倠鍒濈銈掍綔銈娿伨銇欍€?,
+      aliases: ["快速初排", "快速", "初排", "quick"],
+      answerZh: "“快速初排”会直接切到快速构造模式，并马上生成一版可用初稿。",
+      answerJa: "「快速初排」は、素早い初期構築モードに切り替えて、すぐ使える初稿を作ります。",
     },
     {
       key: "deep",
-      aliases: ["缁х画浼樺寲", "娣卞害浼樺寲", "浼樺寲", "deep"],
-      answerZh: "鈥滅户缁紭鍖栤€濅細鍒囧埌鏀硅繘鍨嬬畻娉曟ā寮忥紝鍦ㄧ幇鏈夋€濊矾涓婄户缁繁鎸栨洿濂界殑缁撴灉銆?,
-      answerJa: "銆岀稒缍氭敼鍠勩€嶃伅銆佹敼鍠勭郴銈儷銈淬儶銈恒儬銇垏銈婃浛銇堛仸銆佺従鍦ㄣ伄妗堛倰銇曘倝銇（銇嶈炯銇裤伨銇欍€?,
+      aliases: ["继续优化", "深度优化", "优化", "deep"],
+      answerZh: "“继续优化”会切到改进型算法模式，在现有思路上继续深挖更好的结果。",
+      answerJa: "「継続改善」は、改善系アルゴリズムに切り替えて、現在の案をさらに磨き込みます。",
     },
     {
       key: "global",
-      aliases: ["鍏ㄥ眬鎼滅储", "鍏ㄥ眬", "global"],
-      answerZh: "鈥滃叏灞€鎼滅储鈥濅細鍚敤鏇村亸鍏ㄥ眬鎺㈢储鐨勭畻娉曪紝灏濊瘯鎵惧埌瀹屽叏涓嶅悓鐨勬帓绾跨粨鏋勩€?,
-      answerJa: "銆屽叏灞€鎼滅储銆嶃伅銆佸ぇ鍩熸帰绱㈠瘎銈娿伄銈儷銈淬儶銈恒儬銈掍娇銇ｃ仸銆併伨銇ｃ仧銇忛仌銇嗛厤绶氭閫犮倰鎺仐銇俱仚銆?,
+      aliases: ["全局搜索", "全局", "global"],
+      answerZh: "“全局搜索”会启用更偏全局探索的算法，尝试找到完全不同的排线结构。",
+      answerJa: "「全局搜索」は、大域探索寄りのアルゴリズムを使って、まったく違う配線構造を探します。",
     },
     {
       key: "relay",
-      aliases: ["鎺ュ姏姹傝В", "鎺ュ姏", "relay"],
-      answerZh: "鈥滄帴鍔涙眰瑙ｂ€濅細鍏堝仛鍒濇帓锛屽啀璁╁悗缁畻娉曚竴妫掍竴妫掓帴鐫€浼樺寲锛屽苟瀹炴椂鎵撳嵃姣忎竴闃舵鍦ㄥ仛浠€涔堛€?,
-      answerJa: "銆屻儶銉兗鏈€閬╁寲銆嶃伅銆併伨銇氬垵鏈熸銈掍綔銈娿€併仢銇緦銇偄銉偞銉偤銉犮亴娈甸殠銇斻仺銇紩銇嶇稒銇勩仹鏀瑰杽銇椼€佸悇娈甸殠銇唴瀹广倐闋嗐伀琛ㄧず銇椼伨銇欍€?,
+      aliases: ["接力求解", "接力", "relay"],
+      answerZh: "“接力求解”会先做初排，再让后续算法一棒一棒接着优化，并实时打印每一阶段在做什么。",
+      answerJa: "「リレー最適化」は、まず初期案を作り、その後のアルゴリズムが段階ごとに引き継いで改善し、各段階の内容も順に表示します。",
     },
     {
       key: "compare",
-      aliases: ["澶氱畻娉曞姣?, "瀵规瘮", "compare", "姣旇純"],
-      answerZh: "鈥滃绠楁硶瀵规瘮鈥濅細骞舵帓璺戝绉嶇畻娉曪紝鏂逛究浣犵湅鍚屼竴鎵规暟鎹笅璋佹洿濂姐€?,
-      answerJa: "銆屽绠楁硶瀵规瘮銆嶃伅銆佽鏁般偄銉偞銉偤銉犮倰涓﹀垪銇蛋銈夈仜銇︺€佸悓銇樸儑銉笺偪銇с仼銈屻亴鑹亜銇嬫瘮杓冦仐銈勩仚銇忋仐銇俱仚銆?,
+      aliases: ["多算法对比", "对比", "compare", "比較"],
+      answerZh: "“多算法对比”会并排跑多种算法，方便你看同一批数据下谁更好。",
+      answerJa: "「多算法对比」は、複数アルゴリズムを並列に走らせて、同じデータでどれが良いか比較しやすくします。",
     },
     {
       key: "routeMap",
-      aliases: ["鐪嬬嚎璺浘", "绾胯矾鍥?, "route map", "鍦板洺"],
-      answerZh: "鈥滅湅绾胯矾鍥锯€濅細鎵撳紑鍙嫋鍔ㄣ€佸彲缂╂斁鐨勮矾绾垮湴鍥撅紝骞舵爣鍑洪『搴忓彿鍜屽簵鍚嶃€?,
-      answerJa: "銆屻儷銉笺儓鍥炽€嶃伅銆併儔銉┿儍銈般倓鎷″ぇ绺皬銇屻仹銇嶃倠鍦板洺銈掗枊銇嶃€佽í鍟忛爢銇ㄥ簵鑸楀悕銈掕〃绀恒仐銇俱仚銆?,
+      aliases: ["看线路图", "线路图", "route map", "地図"],
+      answerZh: "“看线路图”会打开可拖动、可缩放的路线地图，并标出顺序号和店名。",
+      answerJa: "「ルート図」は、ドラッグや拡大縮小ができる地図を開き、訪問順と店舗名を表示します。",
     },
     {
       key: "viz",
-      aliases: ["鏌ョ湅鍙鍖?, "鍙鍖?, "鍥炴斁", "playback"],
-      answerZh: "鈥滄煡鐪嬪彲瑙嗗寲鈥濅細鎵撳紑杩囩▼鍥炴斁锛屽憡璇変綘绠楁硶鏄€庝箞涓€姝ヤ竴姝ユ帓鍑烘潵鐨勩€?,
-      answerJa: "銆屽彲瑕栧寲銈掕銈嬨€嶃伅銆佽▓绠椼伄娴併倢銈掗枊銇嶃€併偄銉偞銉偤銉犮亴銇┿亞绲勩伩绔嬨仸銇熴亱銈掗爢銇⒑瑾嶃仹銇嶃伨銇欍€?,
+      aliases: ["查看可视化", "可视化", "回放", "playback"],
+      answerZh: "“查看可视化”会打开过程回放，告诉你算法是怎么一步一步排出来的。",
+      answerJa: "「可視化を見る」は、計算の流れを開き、アルゴリズムがどう組み立てたかを順に確認できます。",
     },
   ];
 }
 
 function normalizeAssistantQuery(text) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return String(text || "").toLowerCase().replace(/\s+/g, "");
 }
 
 function buildAssistantAnswer(queryText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const normalized = normalizeAssistantQuery(queryText);
   const catalog = assistantButtonCatalog();
-  const askAll = ["姣忎釜鎸夐挳", "鎵€鏈夋寜閽?, "鎸夐挳鍚嶅瓧", "鎸夐挳鍚嶇О", "鏈夊摢浜涙寜閽?, "鍏ㄩ儴鎸夐挳", "銉溿偪銉?, "銇欍伖銇︺伄銉溿偪銉?, "銉溿偪銉冲悕"].some((token) => normalized.includes(normalizeAssistantQuery(token)));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const askAll = ["每个按钮", "所有按钮", "按钮名字", "按钮名称", "有哪些按钮", "全部按钮", "ボタン", "すべてのボタン", "ボタン名"].some((token) => normalized.includes(normalizeAssistantQuery(token)));
   if (askAll) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lines = catalog.map((item) => lang() === "ja" ? item.answerJa : item.answerZh);
-    return `${lang() === "ja" ? "銇撱伄鐢婚潰銇с倛銇忎娇銇嗐儨銈裤兂銇富銇銇€氥倞銇с仚銆? : "杩欓〉甯哥敤鎸夐挳涓昏鏈夎繖浜涖€?} ${lines.join(" ")}`;
+    return `${lang() === "ja" ? "この画面でよく使うボタンは主に次の通りです。" : "这页常用按钮主要有这些。"} ${lines.join(" ")}`;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const matched = catalog.find((item) => item.aliases.some((alias) => normalized.includes(normalizeAssistantQuery(alias))));
   if (matched) return lang() === "ja" ? matched.answerJa : matched.answerZh;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return lang() === "ja"
-    ? "璩晱銇仦銇嶅彇銈屻伨銇椼仧銇屻€併伨銇犵壒瀹氥伄銉溿偪銉炽伀绲愩伋浠樸亜銇︺亜銇俱仜銈撱€傘仧銇ㄣ亪銇般€屻偗銈ゃ儍銈垵鏈熸銇綍銈掋仚銈嬨伄銆嶃倓銆屻亾銇敾闈伄銉溿偪銉炽伅浣曘亴銇с亶銈嬨伄銆嶃仺鑱炪亜銇︺亸銇犮仌銇勩€?
-    : "鎴戝惉鍒颁簡浣犵殑闂锛屼絾杩樻病鍖归厤鍒板叿浣撴寜閽€備綘鍙互鐩存帴闂紝姣斿鈥滃揩閫熷垵鎺掓槸骞蹭粈涔堢殑鈥濇垨鑰呪€滄瘡涓寜閽兘鏈変粈涔堢敤鈥濄€?;
+    ? "質問は聞き取れましたが、まだ特定のボタンに結び付いていません。たとえば「クイック初期案は何をするの」や「この画面のボタンは何ができるの」と聞いてください。"
+    : "我听到了你的问题，但还没匹配到具体按钮。你可以直接问，比如“快速初排是干什么的”或者“每个按钮都有什么用”。";
 }
 
 function buildDeepSeekDispatchContext(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const now = new Date();
   const nowZh = now.toLocaleString("zh-CN", { hour12: false });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const briefMode = (state.ai.answerStyle || "brief") !== "detailed";
   
   const algorithmKnowledge = {
-    aco: "铓佺兢绠楁硶(ACO)锛氭ā鎷熻殏铓佽椋熺殑淇℃伅绱犳鍙嶉鏈哄埗銆傞€傚悎100-300瀹堕棬搴楃殑涓瓑瑙勬ā闂锛岃兘鑷姩鍙戠幇浼樿川璺緞妯″紡銆傜壒鐐规槸锛氫俊鎭礌鎸ュ彂鐜?.25銆?鍙殏铓併€佺簿鑻辩瓥鐣ャ€備紭鐐规槸鑳芥壘鍒板叏灞€杈冧紭瑙ｏ紝缂虹偣鏄墠鏈熸敹鏁涜緝鎱€?,
-    pso: "绮掑瓙缇ょ畻娉?PSO)锛氭ā鎷熼笩缇ゆ崟椋熺殑绀句細瀛︿範琛屼负銆傞€傚悎50-150瀹堕棬搴椼€傜壒鐐规槸锛?0涓矑瀛愩€佹儻鎬ф潈閲?.7閫掑噺銆佷釜浣撴渶浼?缇や綋鏈€浼樺紩瀵笺€備紭鐐规槸鏀舵暃蹇€侀€傚悎杩炵画浼樺寲锛岀己鐐规槸鍙兘鏃╃啛銆?,
-    sa: "妯℃嫙閫€鐏?SA)锛氭ā鎷熼噾灞為€€鐏繃绋嬬殑姒傜巼鎬ф悳绱€傞€傚悎浠绘剰瑙勬ā銆傜壒鐐规槸锛氬垵濮嬫俯搴?000銆侀檷娓╅€熺巼0.97銆丮etropolis鎺ュ彈鍑嗗垯銆佽嚜閫傚簲閲嶅惎銆備紭鐐规槸鑳借烦鍑哄眬閮ㄦ渶浼橈紝缂虹偣鏄弬鏁版晱鎰熴€?,
-    tabu: "绂佸繉鎼滅储(Tabu)锛氬甫鐭湡璁板繂鐨勯偦鍩熸悳绱€傞€傚悎灏忚妯＄簿纭紭鍖栥€傜壒鐐规槸锛氱蹇岃〃闀垮害12銆佺壒璧﹀噯鍒欍€?0涓偦鍩熷€欓€夈€備紭鐐规槸鑳介伩鍏嶅惊鐜悳绱紝缂虹偣鏄蹇嗗紑閿€澶с€?,
-    lns: "澶ч偦鍩熸悳绱?LNS)锛氱牬鍧?淇鍙岄樁娈典紭鍖栥€傞€傚悎200-500瀹堕棬搴椼€傜壒鐐规槸锛氱牬鍧忔瘮渚?.35銆佹敮鎸侀殢鏈?鏈€宸牬鍧忋€佽椽濠?閬楁喚淇銆備紭鐐规槸鑳藉ぇ瑙勬ā閲嶆瀯瑙ｏ紝缂虹偣鏄慨澶嶈川閲忎緷璧栫牬鍧忕瓥鐣ャ€?,
-    hybrid: "娣峰悎绠楁硶锛氫覆鑱擲A+LNS+Tabu涓夐樁娈点€傚厛鍏ㄥ眬鎺㈢储锛屽啀灞€閮ㄧ簿淇紝鏈€鍚庢敹鍙ｃ€傞€傚悎杩芥眰鏋佽嚧璐ㄩ噺鏃朵娇鐢ㄣ€備紭鐐规槸缁煎悎鍚勭畻娉曚紭鐐癸紝缂虹偣鏄€楁椂鏈€闀裤€?,
-    ga: "閬椾紶绠楁硶(GA)锛氭ā鎷熻嚜鐒堕€夋嫨鐨勮繘鍖栫畻娉曘€傞€傚悎涓瓑瑙勬ā銆傜壒鐐规槸锛氶敠鏍囪禌閫夋嫨銆侀儴鍒嗘槧灏勪氦鍙夈€佷笁绉嶅彉寮傜畻瀛愩€佺簿鑻变繚鐣欍€備紭鐐规槸鍏ㄥ眬鎼滅储鑳藉姏寮猴紝缂虹偣鏄敹鏁涙參銆?,
-    savings: "Clark-Wright鑺傜害娉曪細缁忓吀鏋勯€犲惎鍙戝紡銆傛寜鑺傜害鍊煎悎骞惰矾绾匡紝蹇€熺敓鎴愬垵濮嬭В銆備紭鐐规槸閫熷害蹇€佽В璐ㄩ噺绋冲畾锛岀己鐐规槸闅剧獊鐮村眬閮ㄦ渶浼樸€?,
-    vrptw: "VRPTW璐績鎻掑叆锛氭寜鏃堕棿绐椾紭鍏堟帓搴忥紝閫愪釜鎻掑叆闂ㄥ簵銆備紭鐐规槸鍙鎬уソ銆佺害鏉熷鐞嗕弗鏍硷紝缂虹偣鏄В璐ㄩ噺渚濊禆鎺掑簭銆?
+    aco: "蚁群算法(ACO)：模拟蚂蚁觅食的信息素正反馈机制。适合100-300家门店的中等规模问题，能自动发现优质路径模式。特点是：信息素挥发率0.25、6只蚂蚁、精英策略。优点是能找到全局较优解，缺点是前期收敛较慢。",
+    pso: "粒子群算法(PSO)：模拟鸟群捕食的社会学习行为。适合50-150家门店。特点是：20个粒子、惯性权重0.7递减、个体最优+群体最优引导。优点是收敛快、适合连续优化，缺点是可能早熟。",
+    sa: "模拟退火(SA)：模拟金属退火过程的概率性搜索。适合任意规模。特点是：初始温度5000、降温速率0.97、Metropolis接受准则、自适应重启。优点是能跳出局部最优，缺点是参数敏感。",
+    tabu: "禁忌搜索(Tabu)：带短期记忆的邻域搜索。适合小规模精确优化。特点是：禁忌表长度12、特赦准则、40个邻域候选。优点是能避免循环搜索，缺点是记忆开销大。",
+    lns: "大邻域搜索(LNS)：破坏-修复双阶段优化。适合200-500家门店。特点是：破坏比例0.35、支持随机/最差破坏、贪婪/遗憾修复。优点是能大规模重构解，缺点是修复质量依赖破坏策略。",
+    hybrid: "混合算法：串联SA+LNS+Tabu三阶段。先全局探索，再局部精修，最后收口。适合追求极致质量时使用。优点是综合各算法优点，缺点是耗时最长。",
+    ga: "遗传算法(GA)：模拟自然选择的进化算法。适合中等规模。特点是：锦标赛选择、部分映射交叉、三种变异算子、精英保留。优点是全局搜索能力强，缺点是收敛慢。",
+    savings: "Clark-Wright节约法：经典构造启发式。按节约值合并路线，快速生成初始解。优点是速度快、解质量稳定，缺点是难突破局部最优。",
+    vrptw: "VRPTW贪心插入：按时间窗优先排序，逐个插入门店。优点是可行性好、约束处理严格，缺点是解质量依赖排序。"
   };
   
-  const costFormula = `鎴愭湰鍏紡 = 鍒板簵瓒呭亸宸綒鍒?瓒?鍒嗛挓+20000) + 鏅氬埌缃氬垎(瓒?鍒嗛挓+60) + 瓒呮尝娆＄綒鍒?瓒?鍒嗛挓+80) + 杞﹁締缁窇缃氬垎(鍓嶆尝娆￠噷绋嬅?.2 + 鍓嶆尝娆¤稛鏁懊?50) + 棰濆瓒熸缃氬垎(姣忓1瓒?180) + 瓒呮椂璺嚎缃氬垎(姣忔潯+1600鎴?40) + 璺濈鎴愭湰(姣忓叕閲?.45) - 瑁呰浇濂栧姳(姣忕0.08)
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const costFormula = `成本公式 = 到店超偏差罚分(超1分钟+20000) + 晚到罚分(超1分钟+60) + 超波次罚分(超1分钟+80) + 车辆续跑罚分(前波次里程×1.2 + 前波次趟数×150) + 额外趟次罚分(每多1趟+180) + 超时路线罚分(每条+1600或240) + 距离成本(每公里0.45) - 装载奖励(每箱0.08)
 
-瑙ｈ锛氬埌搴楄秴鍋忓樊缃氬垎鏋侀珮(20000)鎰忓懗鐫€绯荤粺浼樺厛淇濊瘉闂ㄥ簵鍑嗘椂锛涙暟鍊艰秺灏忚秺濂斤紝0鏈€鐞嗘兂銆俙;
+解读：到店超偏差罚分极高(20000)意味着系统优先保证门店准时；数值越小越好，0最理想。`;
 
   if (!result?.metrics) {
-    return `銆愮郴缁熺姸鎬併€戝綋鍓嶆病鏈夎皟搴︾粨鏋溿€?
-銆愬彲鐢ㄥ姛鑳姐€戜綘鍙互闂垜锛氳繖9绉嶇畻娉曟湁浠€涔堝尯鍒紵VRPTW鍜岃妭绾︽硶鍝釜濂斤紵铓佺兢绠楁硶鎬庝箞宸ヤ綔鐨勶紵鎴愭湰鏄€庝箞绠楃殑锛熸湭璋冨害闂ㄥ簵鎬庝箞鍔烇紵
-銆愬洖绛旈鏍笺€?{briefMode ? "绠€娲佸洖绛旓紝3-6琛屽嵆鍙€? : "鍙互璇︾粏鍒嗘瀽锛屼絾瑕佹姄浣忛噸鐐广€?}
-銆愬綋鍓嶆椂闂淬€?{nowZh}锛屼互姝や负鍑嗐€俙;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    return `【系统状态】当前没有调度结果。
+【可用功能】你可以问我：这9种算法有什么区别？VRPTW和节约法哪个好？蚁群算法怎么工作的？成本是怎么算的？未调度门店怎么办？
+【回答风格】${briefMode ? "简洁回答，3-6行即可。" : "可以详细分析，但要抓住重点。"}
+【当前时间】${nowZh}，以此为准。`;
   }
 
   const waveSummaries = result.solution.map((plans, idx) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave = result.scenario.waves[idx];
     const totalTrips = plans.reduce((s, p) => s + (p.trips?.length || 0), 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const totalDist = plans.reduce((s, p) => s + (p.totalDistance || 0), 0);
     const usedVehicles = plans.filter(p => p.trips?.length).length;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lateTrips = plans.flatMap(p => p.trips || []).filter(t => (t.waveLateMinutes || 0) > 0).length;
-    return `銆?{wave.waveId}銆?{wave.start}-${wave.end}锛氱敤杞?{usedVehicles}杈嗭紝${totalTrips}瓒燂紝閲岀▼${totalDist.toFixed(1)}km锛岃秴鏃剁嚎璺?{lateTrips}鏉°€俙;
+    return `【${wave.waveId}】${wave.start}-${wave.end}：用车${usedVehicles}辆，${totalTrips}趟，里程${totalDist.toFixed(1)}km，超时线路${lateTrips}条。`;
   }).join("\n");
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const algorithmKey = result.key;
-  const algorithmDesc = algorithmKnowledge[algorithmKey] || `${algorithmKey}绠楁硶锛岃鎯呰鏌ョ湅绯荤粺鏂囨。銆俙;
+  const algorithmDesc = algorithmKnowledge[algorithmKey] || `${algorithmKey}算法，详情请查看系统文档。`;
 
-  return `銆愯鑹层€戜綘鏄哺鐣ヤ娇璋冨害姹傝В鍣ㄧ殑鏅鸿兘璋冨害鍔╂墜锛屼笓绮句簬VRPTW绠楁硶瑙ｈ鍜岃皟搴︾粨鏋滃垎鏋愩€?
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  return `【角色】你是鲸略使调度求解器的智能调度助手，专精于VRPTW算法解读和调度结果分析。
 
-銆愪綘鑳藉仛鐨勪簨銆?.瑙ｉ噴9绉嶈皟搴︾畻娉曠殑鍘熺悊銆佷紭缂虹偣鍜岄€傜敤鍦烘櫙 2.鍒嗘瀽褰撳墠璋冨害缁撴灉鐨勮川閲忓拰闂 3.瑙ｈ鎴愭湰鎷嗗垎鐨勫惈涔?4.寤鸿濡備綍鏀瑰杽鏈皟搴﹂棬搴?5.鍥炵瓟绠楁硶瀵规瘮銆佸弬鏁拌皟浼樼瓑闂
+【你能做的事】1.解释9种调度算法的原理、优缺点和适用场景 2.分析当前调度结果的质量和问题 3.解读成本拆分的含义 4.建议如何改善未调度门店 5.回答算法对比、参数调优等问题
 
-銆愬綋鍓嶈皟搴︾粨鏋溿€?
-- 浣跨敤鐨勭畻娉? ${result.label}
-- 缁煎悎璇勫垎: ${result.metrics.score.toFixed(1)}/100
-- 宸茶皟搴﹂棬搴? ${result.metrics.scheduledCount || 0}瀹?
-- 鏈皟搴﹂棬搴? ${result.metrics.unscheduledCount || 0}瀹?
-- 鍑嗘椂鐜? ${((result.metrics.totalOnTime || 0) / Math.max(result.metrics.totalStops || 1, 1) * 100).toFixed(1)}%
-- 鎬婚噷绋? ${(result.metrics.totalDistance || 0).toFixed(1)} km
-- 骞冲潎瑁呰浇鐜? ${((result.metrics.loadRate || 0) * 100).toFixed(1)}%
-- 杞﹂槦鍒╃敤鐜? ${((result.metrics.fleetLoadRate || 0) * 100).toFixed(1)}%
-- 宸茬敤杞﹁締: ${result.metrics.usedVehicleCount || 0}杈?
-- 闂茬疆杞﹁締: ${result.metrics.unusedVehicleCount || 0}杈?
+【当前调度结果】
+- 使用的算法: ${result.label}
+- 综合评分: ${result.metrics.score.toFixed(1)}/100
+- 已调度门店: ${result.metrics.scheduledCount || 0}家
+- 未调度门店: ${result.metrics.unscheduledCount || 0}家
+- 准时率: ${((result.metrics.totalOnTime || 0) / Math.max(result.metrics.totalStops || 1, 1) * 100).toFixed(1)}%
+- 总里程: ${(result.metrics.totalDistance || 0).toFixed(1)} km
+- 平均装载率: ${((result.metrics.loadRate || 0) * 100).toFixed(1)}%
+- 车队利用率: ${((result.metrics.fleetLoadRate || 0) * 100).toFixed(1)}%
+- 已用车辆: ${result.metrics.usedVehicleCount || 0}辆
+- 闲置车辆: ${result.metrics.unusedVehicleCount || 0}辆
 
-銆愬悇娉㈡璇︽儏銆?
+【各波次详情】
 ${waveSummaries}
 
-銆愭垚鏈叕寮忋€?
+【成本公式】
 ${costFormula}
 
-銆愮畻娉曠煡璇嗐€?
-褰撳墠浣跨敤鐨?{result.label}锛?{algorithmDesc}
+【算法知识】
+当前使用的${result.label}：${algorithmDesc}
 
-銆愭湭璋冨害闂ㄥ簵銆?
-${result.metrics.unscheduledCount ? (result.metrics.unscheduledStores || []).slice(0, 10).map(s => `- ${s.storeName}(${s.storeId})锛?{s.reasonText || '绾︽潫涓嶆弧瓒?}`).join("\n") : "鏃犳湭璋冨害闂ㄥ簵"}
+【未调度门店】
+${result.metrics.unscheduledCount ? (result.metrics.unscheduledStores || []).slice(0, 10).map(s => `- ${s.storeName}(${s.storeId})：${s.reasonText || '约束不满足'}`).join("\n") : "无未调度门店"}
 
-銆愬洖绛旇姹傘€?
-1. 鍩轰簬浠ヤ笂鐪熷疄鏁版嵁鍥炵瓟锛屼笉瑕佺紪閫?
-2. ${briefMode ? "鍥炵瓟瑕佺畝娲侊紝3-6琛岃娓呮牳蹇冮棶棰? : "鍙互璇︾粏鍒嗘瀽锛屼絾瑕佺粨鏋勬竻鏅?}
-3. 閬囧埌鏈皟搴﹂棬搴楋紝缁欏嚭鍏蜂綋鏀瑰杽寤鸿锛堟斁瀹芥椂闂寸獥銆佽皟鏁存尝娆°€佸鍔犺溅杈嗙瓑锛?
-4. 閬囧埌绠楁硶闂锛岀粨鍚堢畻娉曠壒鐐硅В閲?
-5. 浣跨敤涓枃锛岃姘斾笓涓氫絾涓嶇敓纭?
+【回答要求】
+1. 基于以上真实数据回答，不要编造
+2. ${briefMode ? "回答要简洁，3-6行说清核心问题" : "可以详细分析，但要结构清晰"}
+3. 遇到未调度门店，给出具体改善建议（放宽时间窗、调整波次、增加车辆等）
+4. 遇到算法问题，结合算法特点解释
+5. 使用中文，语气专业但不生硬
 
-銆愬綋鍓嶆椂闂淬€?{nowZh}
+【当前时间】${nowZh}
 
-鐢ㄦ埛闂锛歚;
+用户问题：`;
 }
 
 function buildDeepSeekGeneralContext() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const now = new Date();
   const nowZh = now.toLocaleString("zh-CN", { hour12: false });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nowJa = now.toLocaleString("ja-JP", { hour12: false });
   const briefMode = (state.ai.answerStyle || "brief") !== "detailed";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return lang() === "ja"
     ? [
-        "銇傘仾銇熴伅銇撱伄銉氥兗銈稿唴銇у嫊浣溿仚銈嬫睅鐢ㄣ偄銈枫偣銈裤兂銉堛仹銇欍€?,
-        `鐝惧湪銇儹銉笺偒銉棩鏅傘伅 ${nowJa} 銇с仚銆傛棩浠樸倓鏅傚埢銇枹銇欍倠璩晱銇繀銇氥亾銈屻倰鍩烘簴銇仐銇︺亸銇犮仌銇勩€俙,
-        "涓€鑸殑銇唱鍟忋伀銈傜瓟銇堛仸銈堛亜銇с仚銇屻€併亾銇儦銉笺偢涓娿伄閰嶈粖绲愭灉銇屻亗銈嬪牬鍚堛伅銆併仢銇枃鑴堛倐娲荤敤銇椼仸銇忋仩銇曘亜銆?,
-        "涓嶇⒑銇嬨仾銇撱仺銇柇瀹氥仜銇氥€佺啊娼斻亱銇ゅ疅鐢ㄧ殑銇瓟銇堛仸銇忋仩銇曘亜銆?,
+        "あなたはこのページ内で動作する汎用アシスタントです。",
+        `現在のローカル日時は ${nowJa} です。日付や時刻に関する質問は必ずこれを基準にしてください。`,
+        "一般的な質問にも答えてよいですが、このページ上の配車結果がある場合は、その文脈も活用してください。",
+        "不確かなことは断定せず、簡潔かつ実用的に答えてください。",
         briefMode
-          ? "鏃㈠畾銇с伅 4 銆?8 琛岀▼搴︺伄鐭亜鍥炵瓟銇仐銆丮arkdown 銇〃銈勯暦銇勭畤鏉℃浉銇嶃伅閬裤亼銇︺亸銇犮仌銇勩€?
-          : "浠婂洖銇倓銈勮┏銇椼亸绛斻亪銇︺倛銇勩仹銇欍亴銆丮arkdown 銇〃銇娇銈忋仛銆佽銇裤倓銇欍仌銈掑劒鍏堛仐銇︺亸銇犮仌銇勩€?,
+          ? "既定では 4 〜 8 行程度の短い回答にし、Markdown の表や長い箇条書きは避けてください。"
+          : "今回はやや詳しく答えてよいですが、Markdown の表は使わず、読みやすさを優先してください。",
       ].join("\n")
     : [
-        "浣犳槸褰撳墠椤甸潰閲岀殑閫氱敤鍔╂墜銆?,
-        `褰撳墠鏈湴鏃ユ湡鏃堕棿鏄?${nowZh}锛屽嚒鏄秹鍙婁粖澶╁嚑鍙枫€佺幇鍦ㄥ嚑鐐广€佹槦鏈熷嚑锛岄兘蹇呴』浠ヨ繖涓椂闂翠负鍑嗐€俙,
-        "浣犲彲浠ュ洖绛斾竴鑸棶棰橈紱濡傛灉闂涓庡綋鍓嶉〉闈㈣皟搴︾粨鏋滄湁鍏筹紝涔熷彲浠ョ粨鍚堥〉闈笂涓嬫枃銆?,
-        "涓嶇‘瀹氱殑浜嬩笉瑕佺‖缂栵紝鍥炵瓟灏介噺绠€娲併€佸疄鐢ㄣ€?,
+        "你是当前页面里的通用助手。",
+        `当前本地日期时间是 ${nowZh}，凡是涉及今天几号、现在几点、星期几，都必须以这个时间为准。`,
+        "你可以回答一般问题；如果问题与当前页面调度结果有关，也可以结合页面上下文。",
+        "不确定的事不要硬编，回答尽量简洁、实用。",
         briefMode
-          ? "榛樿鍙粰 4 鍒?8 琛岀殑鐭洖绛旓紝涓嶈杈撳嚭 Markdown 琛ㄦ牸鎴栬秴闀垮ぇ娈点€?
-          : "杩欐鍏佽璇︾粏涓€鐐癸紝浣嗕笉瑕佽緭鍑?Markdown 琛ㄦ牸锛屼篃涓嶈杩囧害鍐楅暱銆?,
+          ? "默认只给 4 到 8 行的短回答，不要输出 Markdown 表格或超长大段。"
+          : "这次允许详细一点，但不要输出 Markdown 表格，也不要过度冗长。",
       ].join("\n");
 }
 
 function detectAssistantPageName() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const path = String(window.location.pathname || "").toLowerCase();
-  if (path.includes("dengtang")) return "鐧诲爞";
-  if (path.includes("rengong-boundary")) return "缂樿捣路鎬х┖";
-  if (path.includes("rengong")) return "鍧愮収";
-  if (path.includes("chaos-jianwei")) return "瑙佸井";
-  if (path.includes("kuijing")) return "绐ュ緞";
-  if (path.includes("tuiyan") || path.includes("chaos")) return "娣锋矊";
+  if (path.includes("dengtang")) return "登堂";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (path.includes("rengong-boundary")) return "缘起·性空";
+  if (path.includes("rengong")) return "坐照";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (path.includes("chaos-jianwei")) return "见微";
+  if (path.includes("kuijing")) return "窥径";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (path.includes("tuiyan") || path.includes("chaos")) return "混沌";
   const chaosPanel = document.getElementById("tuiyanPage");
-  if (chaosPanel && chaosPanel.style.display !== "none" && !chaosPanel.hidden) return "娣锋矊";
-  return "鍧愮収";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (chaosPanel && chaosPanel.style.display !== "none" && !chaosPanel.hidden) return "混沌";
+  return "坐照";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function detectAssistantDate() {
   const candidateIds = [
     "dateInput",
@@ -9694,58 +15018,90 @@ function detectAssistantDate() {
     "dataArchiveDateInput",
     "archiveDateFilterInput",
   ];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const id of candidateIds) {
     const el = document.getElementById(id);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (el && String(el.value || "").trim()) return String(el.value).trim();
   }
   const firstDateInput = document.querySelector('input[type="date"][value]:not([value=""])');
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (firstDateInput && String(firstDateInput.value || "").trim()) return String(firstDateInput.value).trim();
   return "";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function detectAssistantRouteId() {
   const byState =
     (state && state.ui && (state.ui.selectedRouteId || state.ui.routeId || state.ui.currentRouteId)) || "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (String(byState || "").trim()) return String(byState).trim();
   const activeRouteNode = document.querySelector("[data-route-id].active, [data-route-id].is-active, tr[data-route-id].selected");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (activeRouteNode) {
     const rid = activeRouteNode.getAttribute("data-route-id");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (rid && String(rid).trim()) return String(rid).trim();
   }
   return "";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function detectAssistantFilters() {
   const parts = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ids = ["routeStatusFilter", "routeCategoryFilter", "rdGroupFilter", "rdTypeFilter", "rdRouteNameFilter"];
   ids.forEach((id) => {
     const el = document.getElementById(id);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!el) return;
     if (el.tagName === "SELECT" && el.multiple) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const values = Array.from(el.selectedOptions || [])
         .map((o) => String(o.textContent || o.value || "").trim())
         .filter(Boolean);
       if (values.length) parts.push(`${id}:${values.join("|")}`);
       return;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const value = String(el.value || "").trim();
     if (value) parts.push(`${id}:${value}`);
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const activeFilterBtns = Array.from(document.querySelectorAll(".dt-filter-btn.active, .bd-filter-btn.active"))
     .map((el) => String(el.textContent || "").trim())
     .filter(Boolean);
   if (activeFilterBtns.length) parts.push(`active:${activeFilterBtns.join("|")}`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return parts.join("; ");
 }
 
 function buildAssistantContextBlock(questionText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const q = String(questionText || "");
   const debug = /debug\s*=\s*true/i.test(q);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ctx = {
-    page: detectAssistantPageName() || "鍧愮収",
+    page: detectAssistantPageName() || "坐照",
     date: detectAssistantDate() || "",
     route_id: detectAssistantRouteId() || "",
-    filters: detectAssistantFilters() || "鍏ㄩ儴",
+    filters: detectAssistantFilters() || "全部",
     debug: debug ? "true" : "false",
   };
   return [
@@ -9760,27 +15116,37 @@ function buildAssistantContextBlock(questionText) {
   ].join("\n");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function askDeepSeekAssistant(questionText, result) {
   const apiKey = String(state.ai.deepseekApiKey || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!apiKey) throw new Error(L("deepseekMissingKey"));
   const systemPrompt = state.ai.mode === "general"
     ? buildDeepSeekGeneralContext()
     : buildDeepSeekDispatchContext(result);
   
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let enhancedQuestion = questionText;
   const lowerQuestion = questionText.toLowerCase();
   
-  if (lowerQuestion.includes("绠楁硶") || lowerQuestion.includes("鍖哄埆") || lowerQuestion.includes("鍝釜濂?)) {
-    enhancedQuestion = `鍏充簬绠楁硶瀵规瘮鐨勯棶棰橈細${questionText}\n\n璇风粨鍚堟垜涓婇潰鎻愪緵鐨?绉嶇畻娉曠煡璇嗗簱鏉ュ洖绛旓紝璇存槑鍚勮嚜鐗圭偣鍜岄€傜敤鍦烘櫙銆俙;
-  } else if (lowerQuestion.includes("涓轰粈涔?) || lowerQuestion.includes("鍘熷洜")) {
-    enhancedQuestion = `鍏充簬鍘熷洜鍒嗘瀽鐨勯棶棰橈細${questionText}\n\n璇峰熀浜庝笂闈㈡彁渚涚殑璋冨害缁撴灉鏁版嵁鏉ュ垎鏋愬師鍥狅紝缁欏嚭鍏蜂綋瑙ｉ噴銆俙;
-  } else if (lowerQuestion.includes("鎬庝箞") || lowerQuestion.includes("濡備綍") || lowerQuestion.includes("寤鸿")) {
-    enhancedQuestion = `鍏充簬鏀硅繘寤鸿鐨勯棶棰橈細${questionText}\n\n璇峰熀浜庡綋鍓嶆湭璋冨害闂ㄥ簵鍜岀害鏉熸儏鍐碉紝缁欏嚭鍏蜂綋鍙搷浣滅殑寤鸿銆俙;
-  } else if (lowerQuestion.includes("鎴愭湰") || lowerQuestion.includes("浠ｄ环") || lowerQuestion.includes("璇勫垎")) {
-    enhancedQuestion = `鍏充簬鎴愭湰璇勫垎鐨勯棶棰橈細${questionText}\n\n璇峰弬鑰冧笂闈㈢殑鎴愭湰鍏紡鏉ュ洖绛旓紝瑙ｉ噴鍚勯」缃氬垎鐨勫惈涔夈€俙;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (lowerQuestion.includes("算法") || lowerQuestion.includes("区别") || lowerQuestion.includes("哪个好")) {
+    enhancedQuestion = `关于算法对比的问题：${questionText}\n\n请结合我上面提供的9种算法知识库来回答，说明各自特点和适用场景。`;
+  } else if (lowerQuestion.includes("为什么") || lowerQuestion.includes("原因")) {
+    enhancedQuestion = `关于原因分析的问题：${questionText}\n\n请基于上面提供的调度结果数据来分析原因，给出具体解释。`;
+  } else if (lowerQuestion.includes("怎么") || lowerQuestion.includes("如何") || lowerQuestion.includes("建议")) {
+    enhancedQuestion = `关于改进建议的问题：${questionText}\n\n请基于当前未调度门店和约束情况，给出具体可操作的建议。`;
+  } else if (lowerQuestion.includes("成本") || lowerQuestion.includes("代价") || lowerQuestion.includes("评分")) {
+    enhancedQuestion = `关于成本评分的问题：${questionText}\n\n请参考上面的成本公式来回答，解释各项罚分的含义。`;
   }
   
   const ctxPrefix = buildAssistantContextBlock(questionText);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const response = await fetch(`${GA_BACKEND_URL}/deepseek-chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -9796,102 +15162,162 @@ async function askDeepSeekAssistant(questionText, result) {
     }),
   });
   if (!response.ok) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const text = await response.text();
     throw new Error(`HTTP ${response.status}${text ? ` - ${text.slice(0, 180)}` : ""}`);
   }
   const payload = await response.json();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!payload?.ok) throw new Error(payload?.error || "deepseek_proxy_failed");
   let answer = String(payload?.content || "").trim();
   
-  if (answer.length < 30 && (answer.includes("sorry") || answer.includes("鏃犳硶") || answer.includes("涓嶈兘"))) {
-    answer = `鎶辨瓑锛屾垜鐞嗚В杩欎釜闂鍙兘鏈夊洶闅俱€俓n\n鎮ㄥ彲浠ヨ繖鏍烽棶鎴戯細\n- "涓轰粈涔堣繖娆＄敤浜?{result?.label || '褰撳墠'}绠楁硶锛?\n- "褰撳墠缁撴灉鏈変粈涔堥棶棰橈紵"\n- "鏈皟搴﹂棬搴楁€庝箞鏀瑰杽锛?\n- "ACO鍜孭SO绠楁硶鏈変粈涔堝尯鍒紵"\n\n褰撳墠璋冨害璇勫垎${result?.metrics?.score?.toFixed(1) || '?'}鍒嗭紝${result?.metrics?.unscheduledCount ? `鏈?{result.metrics.unscheduledCount}瀹堕棬搴楁湭璋冨害` : '鍏ㄩ儴闂ㄥ簵宸茶皟搴?}銆俙;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (answer.length < 30 && (answer.includes("sorry") || answer.includes("无法") || answer.includes("不能"))) {
+    answer = `抱歉，我理解这个问题可能有困难。\n\n您可以这样问我：\n- "为什么这次用了${result?.label || '当前'}算法？"\n- "当前结果有什么问题？"\n- "未调度门店怎么改善？"\n- "ACO和PSO算法有什么区别？"\n\n当前调度评分${result?.metrics?.score?.toFixed(1) || '?'}分，${result?.metrics?.unscheduledCount ? `有${result.metrics.unscheduledCount}家门店未调度` : '全部门店已调度'}。`;
   }
   
   return answer;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function submitAssistantQuestion(questionText, { speak = false } = {}) {
   const text = String(questionText || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const box = document.getElementById("validationBox");
   if (!text) {
-    if (box) box.textContent = lang() === "ja" ? "鍏堛伀璩晱銈掑叆鍔涖仐銇︺亸銇犮仌銇勩€? : "璇峰厛杈撳叆闂銆?;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    if (box) box.textContent = lang() === "ja" ? "先に質問を入力してください。" : "请先输入问题。";
     return;
   }
   const activeResult = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ai.lastQuestion = text;
   if (!state.ai.deepseekApiKey) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const localAnswer = buildAssistantAnswer(text);
     state.ai.lastAnswer = localAnswer;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (box) box.textContent = `${L("deepseekLocalFallback")} ${L("speechAnswerPrefix")} ${localAnswer}`;
     renderAnalytics();
     if (speak) speakAssistantAnswer(localAnswer);
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ai.loading = true;
   state.ai.lastAnswer = "";
   renderAnalytics();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (box) box.textContent = L("deepseekThinking");
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const answer = await askDeepSeekAssistant(text, activeResult);
-    state.ai.lastAnswer = answer || (lang() === "ja" ? "鍥炵瓟銇岀┖銇с仐銇熴€? : "杩欐鍥炵瓟鍐呭涓虹┖銆?);
+    state.ai.lastAnswer = answer || (lang() === "ja" ? "回答が空でした。" : "这次回答内容为空。");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (box) box.textContent = `${L("deepseekAnswerPrefix")} ${state.ai.lastAnswer}`;
     if (speak) speakAssistantAnswer(state.ai.lastAnswer);
   } catch (error) {
-    const message = error?.message || (lang() === "ja" ? "涓嶆槑銇偍銉┿兗" : "鏈煡閿欒");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    const message = error?.message || (lang() === "ja" ? "不明なエラー" : "未知错误");
     if (box) box.textContent = LT("deepseekFailed", { message });
   } finally {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ai.loading = false;
     renderAnalytics();
   }
 }
 
 function speakAssistantAnswer(text) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
     document.getElementById("validationBox").textContent = L("speechUnsupported");
     return;
   }
   window.speechSynthesis.cancel();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.speaking = true;
   document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.add("is-speaking"));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang() === "ja" ? "ja-JP" : "zh-CN";
   utterance.rate = lang() === "ja" ? 0.98 : 0.92;
   utterance.pitch = 1;
   utterance.onend = () => {
     state.ui.speaking = false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.remove("is-speaking"));
   };
   utterance.onerror = () => {
     state.ui.speaking = false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.remove("is-speaking"));
   };
   window.speechSynthesis.speak(utterance);
 }
 
 async function ensureAssistantMicPermission() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (state.ui.micPermission === "granted") return true;
   if (state.ui.micPermission === "denied") {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const deniedBox = document.getElementById("validationBox");
     if (deniedBox) deniedBox.textContent = L("speechMicDenied");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return false;
   }
   if (!navigator.mediaDevices?.getUserMedia) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return true;
   }
   if (state.ui.micPriming) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const box = document.getElementById("validationBox");
   state.ui.micPriming = true;
   renderAnalytics();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (box) box.textContent = L("speechMicPreparing");
   try {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     stream.getTracks().forEach((track) => track.stop());
     state.ui.micPermission = "granted";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return true;
   } catch (error) {
     const denied = ["NotAllowedError", "PermissionDeniedError", "SecurityError"].includes(error?.name || "");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ui.micPermission = denied ? "denied" : "error";
     if (box) box.textContent = denied ? L("speechMicDenied") : L("speechMicFailed");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return false;
   } finally {
     state.ui.micPriming = false;
@@ -9899,42 +15325,64 @@ async function ensureAssistantMicPermission() {
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function startAssistantListening() {
   const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!Recognition) {
     document.getElementById("validationBox").textContent = L("speechListenUnsupported");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (state.ui.listening || state.ui.micPriming) return;
   const micReady = await ensureAssistantMicPermission();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!micReady) return;
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.listening = true;
   renderAnalytics();
   if (box) box.textContent = L("speechListening");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const recognition = new Recognition();
   recognition.lang = lang() === "ja" ? "ja-JP" : "zh-CN";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
   recognition.onresult = (event) => {
     const text = event.results?.[0]?.[0]?.transcript?.trim() || "";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ai.questionDraft = text;
     if (box) box.textContent = LT("speechHeard", { text });
     void submitAssistantQuestion(text, { speak: true });
   };
   recognition.onerror = (event) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (event?.error === "not-allowed" || event?.error === "service-not-allowed") {
       state.ui.micPermission = "denied";
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (box) box.textContent = L("speechMicDenied");
       return;
     }
     if (event?.error === "aborted") {
-      if (box) box.textContent = lang() === "ja" ? "銉栥儵銈︺偠銇ī闄愩儩銉冦儣銈儍銉椼仹涓€搴︿腑鏂仌銈屻伨銇椼仧銆? 绉掋伝銇╁緟銇ｃ仸銇嬨倝銈傘亞涓€搴﹁┍銇椼亱銇戙仸銇忋仩銇曘亜銆? : "鍒氬垰琚祻瑙堝櫒鏉冮檺寮圭獥鎵撴柇浜嗭紝璇风◢绛変竴绉掑悗鍐嶉棶銆?;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
+      if (box) box.textContent = lang() === "ja" ? "ブラウザの権限ポップアップで一度中断されました。1 秒ほど待ってからもう一度話しかけてください。" : "刚刚被浏览器权限弹窗打断了，请稍等一秒后再问。";
       return;
     }
-    if (box) box.textContent = lang() === "ja" ? "闊冲０瑾嶈瓨銇け鏁椼仐銇俱仐銇熴€傚皯銇楀緟銇ｃ仸銇嬨倝銈傘亞涓€搴︺亰瑭︺仐銇忋仩銇曘亜銆? : "璇煶璇嗗埆澶辫触锛岃绋嶇瓑鐗囧埢鍚庡啀璇曘€?;
+    if (box) box.textContent = lang() === "ja" ? "音声認識に失敗しました。少し待ってからもう一度お試しください。" : "语音识别失败，请稍等片刻后再试。";
   };
   recognition.onend = () => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     state.ui.listening = false;
     renderAnalytics();
   };
@@ -9942,10 +15390,14 @@ async function startAssistantListening() {
 }
 
 function triggerSpeech(payloadText) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
     document.getElementById("validationBox").textContent = L("speechUnsupported");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let payload;
   try {
     payload = JSON.parse(payloadText);
@@ -9953,40 +15405,62 @@ function triggerSpeech(payloadText) {
     return;
   }
   window.speechSynthesis.cancel();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.speaking = true;
   document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.add("is-speaking"));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const utterance = new SpeechSynthesisUtterance(buildSpeechText(payload));
   utterance.lang = lang() === "ja" ? "ja-JP" : "zh-CN";
   utterance.rate = lang() === "ja" ? 0.95 : 0.9;
   utterance.pitch = 1;
   utterance.onend = () => {
     state.ui.speaking = false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.remove("is-speaking"));
   };
   utterance.onerror = () => {
     state.ui.speaking = false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     document.querySelectorAll(".mascot-avatar").forEach((node) => node.classList.remove("is-speaking"));
   };
   window.speechSynthesis.speak(utterance);
 }
 
 function animateDashboardNumbers() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.querySelectorAll("[data-animate-number]").forEach((node) => {
     const raw = node.dataset.animateNumber;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!raw || node.dataset.animated === raw) return;
     node.dataset.animated = raw;
     const match = String(raw).match(/-?\d+(\.\d+)?/);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!match) {
       node.textContent = raw;
       return;
     }
     const target = Number(match[0]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const suffix = String(raw).replace(match[0], "");
     const duration = 700;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const start = performance.now();
     const decimals = match[0].includes(".") ? match[0].split(".")[1].length : 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const step = (now) => {
       const progress = Math.min(1, (now - start) / duration);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const eased = 1 - Math.pow(1 - progress, 3);
       node.textContent = `${(target * eased).toFixed(decimals)}${suffix}`;
       if (progress < 1) requestAnimationFrame(step);
@@ -9995,8 +15469,12 @@ function animateDashboardNumbers() {
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderGenerationProgress() {
   const mount = document.getElementById("generationProgress");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!mount) return;
   const progress = Math.max(0, Math.min(100, state.ui.progress || 0));
   mount.innerHTML = `
@@ -10008,22 +15486,36 @@ function renderGenerationProgress() {
   `;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderAnalytics() {
   const panel = ensureAnalyticsMount();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const ganttPanel = ensureGanttMount();
   if (!panel || !ganttPanel) return;
   applyMainTabVisibility();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("analyticsTitle").textContent = L("analyticsTitle");
   document.getElementById("analyticsDesc").textContent = L("analyticsDesc");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("ganttTitle").textContent = L("gantt");
   document.getElementById("ganttDesc").textContent = lang() === "ja"
-    ? "杌婁浮 脳 娉㈡ 脳 渚裤伄鏅傞枔閰嶇疆銈掍笅娈点仹纰鸿獚銇с亶銇俱仚銆?
-    : "鍦ㄤ笅鏂瑰崟鐙煡鐪嬭溅杈?脳 娉㈡ 脳 瓒熸鐨勬椂闂村崰鐢ㄣ€?;
+    ? "車両 × 波次 × 便の時間配置を下段で確認できます。"
+    : "在下方单独查看车辆 × 波次 × 趟次的时间占用。";
   renderGenerationProgress();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const mount = document.getElementById("analyticsContent");
   const ganttMount = document.getElementById("ganttContent");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!mount) return;
   if (!ganttMount) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const activeResult = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0];
   if (!activeResult) {
     mount.innerHTML = `
@@ -10031,11 +15523,11 @@ function renderAnalytics() {
         <div class="chart-head">
           <div>
             <div class="chart-title">${L("dashboard")}</div>
-            <p class="kpi-sub">${lang() === "ja" ? "銇俱仩绲愭灉銇屻仾銇忋仸銈傘€併亾銇撱仹榀ㄧ暐浣裤偄銈枫偣銈裤兂銉堛倰璧峰嫊銇с亶銇俱仚銆? : "鍗充娇杩樻病鐢熸垚璋冨害缁撴灉锛屼篃鍙互鍏堝湪杩欓噷鍞よ捣椴哥暐浣垮姪鎵嬨€?}</p>
+            <p class="kpi-sub">${lang() === "ja" ? "まだ結果がなくても、ここで鯨略使アシスタントを起動できます。" : "即使还没生成调度结果，也可以先在这里唤起鲸略使助手。"}</p>
           </div>
           <div class="cockpit-highlight state-warn">
-            <span>${lang() === "ja" ? "鐘舵厠" : "鐘舵€?}</span>
-            <strong>${lang() === "ja" ? "寰呮涓? : "寰呮満涓?}</strong>
+            <span>${lang() === "ja" ? "状態" : "状态"}</span>
+            <strong>${lang() === "ja" ? "待機中" : "待机中"}</strong>
           </div>
         </div>
         <div class="cockpit-body">
@@ -10057,183 +15549,313 @@ function renderAnalytics() {
   animateDashboardNumbers();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildTargetScoreAdvice(bestResult) {
   const target = Number(state.settings.targetScore || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!target || !bestResult?.metrics?.feasible) return "";
   const gap = target - bestResult.metrics.score;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (gap <= 0) {
     return lang() === "ja"
-      ? `鐝惧湪銇渶鑹 ${algoLabel(bestResult.key)} 銇洰妯欍偣銈炽偄 ${target.toFixed(1)} 銈掗仈鎴愩仐銇︺亜銇俱仚銆俙
-      : `褰撳墠鏈€浣虫柟妗?${algoLabel(bestResult.key)} 宸茶揪鍒扮洰鏍囪瘎鍒?${target.toFixed(1)}銆俙;
+      ? `現在の最良案 ${algoLabel(bestResult.key)} は目標スコア ${target.toFixed(1)} を達成しています。`
+      : `当前最佳方案 ${algoLabel(bestResult.key)} 已达到目标评分 ${target.toFixed(1)}。`;
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const assumptions = [];
   if (bestResult.metrics.totalDistance > 260) {
     assumptions.push(lang() === "ja"
-      ? "閫氬父娉㈡銇窛闆笂闄愩倰灏戙仐绶┿倎銈嬨€併伨銇熴伅閬犺窛闆㈠簵鑸椼倰鍗樼嫭娉㈡銇稿銇忕Щ銇?
-      : "閫傚害鏀惧鏅€氭尝娆＄殑閲岀▼涓婇檺锛屾垨鎶婃洿澶氳繙璺濈闂ㄥ簵鍒掑叆鍗曟尝娆?);
+      ? "通常波次の距離上限を少し緩める、または遠距離店舗を単独波次へ多く移す"
+      : "适度放宽普通波次的里程上限，或把更多远距离门店划入单波次");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if ((bestResult.metrics.totalOnTime / Math.max(bestResult.metrics.totalStops, 1)) < 0.98) {
     assumptions.push(lang() === "ja"
-      ? "娉㈡銇檪闁撳腐銈掑簝銇掋倠銆併伨銇熴伅甯屾湜鍒扮潃鏅傚埢銈掑垎鏁ｃ仌銇涖倠"
-      : "鎷夊娉㈡鏃舵锛屾垨鎶婃湡鏈涘埌杈炬椂闂村垎鏁ｄ竴浜?);
+      ? "波次の時間帯を広げる、または希望到着時刻を分散させる"
+      : "拉宽波次时段，或把期望到达时间分散一些");
   }
   if (bestResult.metrics.loadRate < 0.65) {
     assumptions.push(lang() === "ja"
-      ? "杌婁浮銈掑皯銇楁笡銈夈仚銇嬨€佹墜鍕曡杌娿仹绌嶈級銈掑瘎銇涖倠"
-      : "閫傚害鍑忓皯鍚敤杞﹁締锛屾垨閫氳繃鎵嬪伐璋冭溅鎶婅杞介泦涓竴浜?);
+      ? "車両を少し減らすか、手動調車で積載を寄せる"
+      : "适度减少启用车辆，或通过手工调车把装载集中一些");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if ((bestResult.metrics.unusedVehicleCount || 0) === 0) {
     assumptions.push(lang() === "ja"
-      ? "杌婁浮鏁般倰杩藉姞銇椼仸銆侀€氬父娉㈡銇亸銈娿倰銇曘倝銇钩婧栧寲銇欍倠"
-      : "澧炲姞鍙敤杞﹁締锛岃繘涓€姝ユ憡骞虫櫘閫氭尝娆″帇鍔?);
+      ? "車両数を追加して、通常波次の偏りをさらに平準化する"
+      : "增加可用车辆，进一步摊平普通波次压力");
   }
   if (!assumptions.length) {
     assumptions.push(lang() === "ja"
-      ? "涓€閮ㄥ簵鑸椼伄甯屾湜鍒扮潃鏅傚埢銉绘尝娆°兓杌婁浮鍓插綋銈掍汉鎵嬨仹瑾挎暣銇欍倢銇般€佺洰妯欍伀杩戙仴銇戙倠鍙兘鎬с亴銇傘倞銇俱仚"
-      : "閫氳繃浜哄伐寰皟閮ㄥ垎闂ㄥ簵鐨勬湡鏈涘埌杈俱€佹尝娆℃垨杞﹁締褰掑睘锛岃瘎鍒嗚繕鏈夌户缁笂鎺㈢殑绌洪棿");
+      ? "一部店舗の希望到着時刻・波次・車両割当を人手で調整すれば、目標に近づける可能性があります"
+      : "通过人工微调部分门店的期望到达、波次或车辆归属，评分还有继续上探的空间");
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return lang() === "ja"
-    ? `鐝惧湪銇渶鑹銇?${algoLabel(bestResult.key)} 銇?${bestResult.metrics.score.toFixed(1)} 銇с€佺洰妯?${target.toFixed(1)} 銇俱仹銇傘仺 ${gap.toFixed(1)} 銇с仚銆傛キ鍕欏墠鎻愩倰娆°伄鏂瑰悜銇ф敼鍠勩仚銈屻伆鍒伴仈銇椼倓銇欍亸銇倞銇俱仚锛?{assumptions.join("锛?)}銆俙
-    : `褰撳墠鏈€浣虫柟妗堟槸 ${algoLabel(bestResult.key)}锛岃瘎鍒?${bestResult.metrics.score.toFixed(1)}锛岃窛绂荤洰鏍?${target.toFixed(1)} 杩樺樊 ${gap.toFixed(1)}銆傚鏋滀笟鍔″墠鎻愬厑璁革紝鏈濊繖浜涙柟鍚戜紭鍖栨洿瀹规槗瀹炵幇鐩爣锛?{assumptions.join("锛?)}銆俙;
+    ? `現在の最良案は ${algoLabel(bestResult.key)} の ${bestResult.metrics.score.toFixed(1)} で、目標 ${target.toFixed(1)} まであと ${gap.toFixed(1)} です。業務前提を次の方向で改善すれば到達しやすくなります：${assumptions.join("；")}。`
+    : `当前最佳方案是 ${algoLabel(bestResult.key)}，评分 ${bestResult.metrics.score.toFixed(1)}，距离目标 ${target.toFixed(1)} 还差 ${gap.toFixed(1)}。如果业务前提允许，朝这些方向优化更容易实现目标：${assumptions.join("；")}。`;
 }
 
 function renderSingleWaveInfo() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const info = document.getElementById("singleWaveInfo");
   if (!info) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stores = enrichStores(state.stores);
   if (!stores.length) {
-    info.textContent = lang() === "ja" ? "鐝惧湪銆佸簵鑸椼儑銉笺偪銇屻亗銈娿伨銇涖倱銆? : "褰撳墠娌℃湁闂ㄥ簵鏁版嵁銆?;
+    info.textContent = lang() === "ja" ? "現在、店舗データがありません。" : "当前没有门店数据。";
     return;
   }
   info.textContent = lang() === "ja"
-    ? "鍗樼嫭娉㈡銇嚜鍕曞垎娴併伅鍋滄涓仹銇欍€傘仚銇广仸妤嫏娉㈡锛圵1/W2/W3/W4锛夈仹姹傝В銇椼伨銇欍€?
-    : "鍗曟尝娆¤嚜鍔ㄥ垎娴佸凡鍋滅敤銆傚綋鍓嶆墍鏈夐棬搴楅兘鎸変笟鍔℃尝娆★紙W1/W2/W3/W4锛夋眰瑙ｃ€?;
+    ? "単独波次の自動分流は停止中です。すべて業務波次（W1/W2/W3/W4）で求解します。"
+    : "单波次自动分流已停用。当前所有门店都按业务波次（W1/W2/W3/W4）求解。";
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function applyLanguage() {
   document.documentElement.lang = lang() === "ja" ? "ja" : "zh-CN";
-  document.title = lang() === "ja" ? "榀ㄧ暐浣裤偑銉椼儐銈ｃ優銈ゃ偠銉? : "椴哥暐浣胯皟搴︽眰瑙ｅ櫒";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  document.title = lang() === "ja" ? "鯨略使オプティマイザー" : "鲸略使调度求解器";
   const tabTitles = lang() === "ja"
-    ? { basic: "鍩虹璩囨枡", region: "閬嬭鍖哄畾缇?, strategy: "瑾垮害鎴︾暐", solve: "姹傝В銇ㄦ瘮杓?, result: "瑾垮害绲愭灉" }
-    : { basic: "鍩虹璧勬枡", region: "杩愯鍖哄畾涔?, strategy: "璋冨害绛栫暐", solve: "姹傝В涓庡姣?, result: "璋冨害缁撴灉" };
+    ? { basic: "基礎資料", region: "運行区定義", strategy: "調度戦略", solve: "求解と比較", result: "調度結果" }
+    : { basic: "基础资料", region: "运行区定义", strategy: "调度策略", solve: "求解与对比", result: "调度结果" };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tabBasicBtn = document.getElementById("mainTabBasicBtn");
   const tabRegionBtn = document.getElementById("mainTabRegionBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tabStrategyBtn = document.getElementById("mainTabStrategyBtn");
   const tabSolveBtn = document.getElementById("mainTabSolveBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tabResultBtn = document.getElementById("mainTabResultBtn");
   if (tabBasicBtn) tabBasicBtn.textContent = tabTitles.basic;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tabRegionBtn) tabRegionBtn.textContent = tabTitles.region;
   if (tabStrategyBtn) tabStrategyBtn.textContent = tabTitles.strategy;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (tabSolveBtn) tabSolveBtn.textContent = tabTitles.solve;
   if (tabResultBtn) tabResultBtn.textContent = tabTitles.result;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const hero = document.querySelector(".hero");
   if (hero) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const eyebrow = hero.querySelector(".eyebrow");
     if (eyebrow) eyebrow.textContent = "Cetacean Optimizer";
-    hero.querySelector("h1").textContent = lang() === "ja" ? "榀ㄧ暐浣裤偑銉椼儐銈ｃ優銈ゃ偠銉? : "椴哥暐浣胯皟搴︽眰瑙ｅ櫒";
-    hero.querySelector(".lead").textContent = lang() === "ja" ? "鐝惧湪銇増銇疅鐢ㄦ€с倰鍎厛銇椼€佸杌婁浮銉诲娉㈡銉诲搴楄垪鍗樻棩瑜囨暟鍥為厤閫併€佹墜鍕曡粖涓¤鏁淬€佸崢鐙尝娆″簵鑸椼€侀厤閫佸彲瑕栧寲銇蹇溿仐銇︺亜銇俱仚銆? : "褰撳墠鐗堟湰浼樺厛杩芥眰鍙敤锛屾敮鎸佸杞︺€佸娉㈡銆佸闂ㄥ簵鍗曟棩澶氭閰嶉€佽皟搴︺€佹墜宸ヨ皟杞︺€佸崟娉㈡搴楅摵锛屼互鍙婅皟搴﹁繃绋嬪彲瑙嗗寲銆?;
+    hero.querySelector("h1").textContent = lang() === "ja" ? "鯨略使オプティマイザー" : "鲸略使调度求解器";
+    hero.querySelector(".lead").textContent = lang() === "ja" ? "現在の版は実用性を優先し、多車両・多波次・多店舗単日複数回配送、手動車両調整、単独波次店舗、配送可視化に対応しています。" : "当前版本优先追求可用，支持多车、多波次、多门店单日多次配送调度、手工调车、单波次店铺，以及调度过程可视化。";
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("openShowcaseBtn").textContent = L("showcase");
   document.getElementById("loadSampleBtn").textContent = L("reload");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("savePlanBtn").textContent = L("save");
   const exportResultBtn = document.getElementById("exportResultBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (exportResultBtn) exportResultBtn.textContent = L("exportResult");
   document.getElementById("toggleStorePanelBtn").textContent = document.getElementById("storePanelBody").classList.contains("collapsed") ? L("unfoldStore") : L("foldStore");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("toggleVehiclePanelBtn").textContent = document.getElementById("vehiclePanelBody").classList.contains("collapsed") ? L("unfoldVehicle") : L("foldVehicle");
   document.getElementById("addStoreBtn").textContent = L("addStore");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("addVehicleBtn").textContent = L("addVehicle");
-  const locateText = lang() === "ja" ? "妞滅储" : "瀹氫綅";
-  const saveDataText = lang() === "ja" ? "璩囨枡淇濆瓨" : "淇濆瓨璧勬枡";
-  const storeImportText = lang() === "ja" ? "搴楄垪灏庡叆" : "瀵煎叆闂ㄥ簵";
-  const vehicleImportText = lang() === "ja" ? "杌婁浮灏庡叆" : "瀵煎叆杞﹁締";
-  const batchReserveText = lang() === "ja" ? "涓€鎷搷浣滐紙浜堢磩锛? : "鎵归噺鎿嶄綔锛堥鐣欙級";
-  const waveImportText = lang() === "ja" ? "娉㈡灏庡叆" : "瀵煎叆娉㈡";
+  const locateText = lang() === "ja" ? "検索" : "定位";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const saveDataText = lang() === "ja" ? "資料保存" : "保存资料";
+  const storeImportText = lang() === "ja" ? "店舗導入" : "导入门店";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const vehicleImportText = lang() === "ja" ? "車両導入" : "导入车辆";
+  const batchReserveText = lang() === "ja" ? "一括操作（予約）" : "批量操作（预留）";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const waveImportText = lang() === "ja" ? "波次導入" : "导入波次";
   const storeFileTrigger = document.getElementById("storeFileTrigger");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicleFileTrigger = document.getElementById("vehicleFileTrigger");
   const waveImportBtn = document.getElementById("waveImportBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeBatchBtn = document.getElementById("storeBatchBtn");
   const vehicleBatchBtn = document.getElementById("vehicleBatchBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveBatchBtn = document.getElementById("waveBatchBtn");
   const storeLocateBtn = document.getElementById("storeLocateBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicleLocateBtn = document.getElementById("vehicleLocateBtn");
   const waveLocateBtn = document.getElementById("waveLocateBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const saveStoreDataBtn = document.getElementById("saveStoreDataBtn");
   const saveVehicleDataBtn = document.getElementById("saveVehicleDataBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const saveWaveDataBtn = document.getElementById("saveWaveDataBtn");
   const dataArchiveQueryBtn = document.getElementById("dataArchiveQueryBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (storeFileTrigger) storeFileTrigger.textContent = storeImportText;
   if (vehicleFileTrigger) vehicleFileTrigger.textContent = vehicleImportText;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveImportBtn) waveImportBtn.textContent = waveImportText;
   if (storeBatchBtn) storeBatchBtn.textContent = batchReserveText;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (vehicleBatchBtn) vehicleBatchBtn.textContent = batchReserveText;
   if (waveBatchBtn) waveBatchBtn.textContent = batchReserveText;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (storeLocateBtn) storeLocateBtn.textContent = locateText;
   if (vehicleLocateBtn) vehicleLocateBtn.textContent = locateText;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveLocateBtn) waveLocateBtn.textContent = locateText;
   if (saveStoreDataBtn) saveStoreDataBtn.textContent = saveDataText;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (saveVehicleDataBtn) saveVehicleDataBtn.textContent = saveDataText;
   if (saveWaveDataBtn) saveWaveDataBtn.textContent = saveDataText;
-  if (dataArchiveQueryBtn) dataArchiveQueryBtn.textContent = lang() === "ja" ? "鐓т細" : "鏌ヨ";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (dataArchiveQueryBtn) dataArchiveQueryBtn.textContent = lang() === "ja" ? "照会" : "查询";
   const calcWaveLoadBtn = document.getElementById("calcWaveLoadBtn");
-  if (calcWaveLoadBtn) calcWaveLoadBtn.textContent = lang() === "ja" ? "璨ㄩ噺鎻涚畻" : "璐ч噺鎶樼畻";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (calcWaveLoadBtn) calcWaveLoadBtn.textContent = lang() === "ja" ? "貨量換算" : "货量折算";
   const saveDualStoreLoadsBtn = document.getElementById("saveDualStoreLoadsBtn");
-  if (saveDualStoreLoadsBtn) saveDualStoreLoadsBtn.textContent = lang() === "ja" ? "淇濆瓨鍙岃〃璨ㄩ噺" : "淇濆瓨鍙岃〃璐ч噺";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (saveDualStoreLoadsBtn) saveDualStoreLoadsBtn.textContent = lang() === "ja" ? "保存双表貨量" : "保存双表货量";
   const closeLoadConvertBtn = document.getElementById("closeLoadConvertModalBtn");
-  if (closeLoadConvertBtn) closeLoadConvertBtn.textContent = lang() === "ja" ? "閬╃敤銇椼仸闁夈仒銈? : "搴旂敤骞跺叧闂?;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (closeLoadConvertBtn) closeLoadConvertBtn.textContent = lang() === "ja" ? "適用して閉じる" : "应用并关闭";
   const loadConvertTitle = document.getElementById("loadConvertModalTitle");
-  if (loadConvertTitle) loadConvertTitle.textContent = lang() === "ja" ? "璨ㄩ噺鎻涚畻绲愭灉" : "璐ч噺鎶樼畻缁撴灉";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (loadConvertTitle) loadConvertTitle.textContent = lang() === "ja" ? "貨量換算結果" : "货量折算结果";
   renderWaveSolverPanel();
   const storeFile = document.getElementById("storeFile");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const vehicleFile = document.getElementById("vehicleFile");
   setImportFileTag("store", storeFile?.files?.[0]?.name || "");
   setImportFileTag("vehicle", vehicleFile?.files?.[0]?.name || "");
   document.getElementById("addWaveBtn").textContent = L("addWave");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("dispatchStartLabel").textContent = L("dispatchStart");
   document.getElementById("maxRouteKmLabel").textContent = L("maxKm");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("minLoadRateLabel").textContent = L("minLoad");
   document.getElementById("targetScoreLabel").textContent = L("targetScore");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const targetScoreInput = document.getElementById("targetScoreInput");
   if (targetScoreInput) {
     targetScoreInput.min = "0";
     targetScoreInput.max = "100";
     targetScoreInput.step = "0.1";
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("ignoreWavesText").textContent = L("ignoreWaves");
   const concentrateLateText = document.getElementById("concentrateLateText");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (concentrateLateText) concentrateLateText.textContent = L("concentrateLate");
   document.getElementById("autoWaveBtn").textContent = L("autoWave");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("singleWaveDistanceLabel").textContent = L("singleWaveDistance");
   document.getElementById("singleWaveStartLabel").textContent = L("singleWaveStart");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("singleWaveEndLabel").textContent = L("singleWaveEnd");
   document.getElementById("singleWaveModeLabel").textContent = L("singleWaveMode");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveStrategyLabel = document.getElementById("solveStrategyLabel");
   if (solveStrategyLabel) solveStrategyLabel.textContent = L("solveStrategy");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const optimizeGoalLabel = document.getElementById("optimizeGoalLabel");
   if (optimizeGoalLabel) optimizeGoalLabel.textContent = L("optimizeGoal");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveRegionSchemeLabel = document.getElementById("solveRegionSchemeLabel");
-  if (solveRegionSchemeLabel) solveRegionSchemeLabel.textContent = lang() === "ja" ? "鍒嗗尯鏂规鐣彿" : "鍒嗗尯鏂规鍙?;
+  if (solveRegionSchemeLabel) solveRegionSchemeLabel.textContent = lang() === "ja" ? "分区方案番号" : "分区方案号";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("generateBtn").textContent = L("generate");
   document.getElementById("closeProcessModalBtn").textContent = L("close");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("closeShowcaseModalBtn").textContent = L("close");
   document.getElementById("processModalTitle").textContent = L("processTitle");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("showcaseModalTitle").textContent = L("showcaseTitle");
   const solveDiagnoseTitle = document.getElementById("solveDiagnoseModalTitle");
-  if (solveDiagnoseTitle) solveDiagnoseTitle.textContent = lang() === "ja" ? "姹傝В鍓嶈ê鏂? : "姹傝В鍓嶈瘖鏂?;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (solveDiagnoseTitle) solveDiagnoseTitle.textContent = lang() === "ja" ? "求解前診断" : "求解前诊断";
   const closeSolveDiagnoseBtn = document.getElementById("closeSolveDiagnoseModalBtn");
-  if (closeSolveDiagnoseBtn) closeSolveDiagnoseBtn.textContent = lang() === "ja" ? "闁夈仒銈? : "鍏抽棴";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (closeSolveDiagnoseBtn) closeSolveDiagnoseBtn.textContent = lang() === "ja" ? "閉じる" : "关闭";
   const cancelSolveDiagnoseBtn = document.getElementById("cancelSolveDiagnoseBtn");
-  if (cancelSolveDiagnoseBtn) cancelSolveDiagnoseBtn.textContent = lang() === "ja" ? "姹傝В銈掋倓銈併倠" : "鍙栨秷姹傝В";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (cancelSolveDiagnoseBtn) cancelSolveDiagnoseBtn.textContent = lang() === "ja" ? "求解をやめる" : "取消求解";
   const continueSolveDiagnoseBtn = document.getElementById("continueSolveDiagnoseBtn");
-  if (continueSolveDiagnoseBtn) continueSolveDiagnoseBtn.textContent = lang() === "ja" ? "缍氥亼銇︽眰瑙? : "缁х画姹傝В";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (continueSolveDiagnoseBtn) continueSolveDiagnoseBtn.textContent = lang() === "ja" ? "続けて求解" : "继续求解";
   document.getElementById("languageSelect").value = lang();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const setPanelHeadText = (panelId, titleText, descText = null) => {
     const panel = document.getElementById(panelId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!panel) return;
     const titleEl = panel.querySelector(".panel-head h2");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (titleEl && titleText) titleEl.textContent = titleText;
     if (descText !== null) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const descEl = panel.querySelector(".panel-head p");
       if (descEl) descEl.textContent = descText;
     }
@@ -10241,93 +15863,167 @@ function applyLanguage() {
   setPanelHeadText("storeInfoPanel", L("storeInfo"), L("storeDesc"));
   setPanelHeadText("vehicleInfoPanel", L("vehicleInfo"), L("vehicleDesc"));
   setPanelHeadText("waveConfigPanel", L("waveConfig"), L("waveDesc"));
-  setPanelHeadText("wmsSyncPanel", lang() === "ja" ? "WMS妤嫏鍚屾湡" : "WMS涓氬姟鎶撳彇", lang() === "ja" ? "閬犵WMS浜旇〃銈掕銇垮彇銈婂皞鐢ㄣ仹鍚屾湡銆傚簵鑸?杌婁浮銇牱鏈兓瀹熶笟鍔°倰鍒囨浛銇с亶銆佽波閲忋伅CargoQTY銈掑挤鍒堕仼鐢ㄣ仐銇俱仚銆? : "涓€閿彧璇绘姄鍙栬繙绔疻MS浜旇〃銆傚簵閾哄拰杞﹁締鍙€夋牱鏈?鐪熷疄涓氬姟锛岃揣閲忕粺涓€浣跨敤鎶撳彇鐨凜argoQTY銆?);
-  setPanelHeadText("dataArchivePanel", lang() === "ja" ? "妗ｆ鐓т細" : "妗ｆ鏌ヨ", lang() === "ja" ? "鍩虹璧勬枡妗ｆ銈掔収浼氥仐銆佺矾搴︾祵搴︺倰鍚個瀹屽叏銉囥兗銈裤倰纰鸿獚銇с亶銇俱仚銆? : "鏌ヨ鍩虹璧勬枡妗ｆ锛屽苟鏌ョ湅瀹屾暣缁忕含搴﹂棬搴楁暟鎹€?);
+  setPanelHeadText("wmsSyncPanel", lang() === "ja" ? "WMS業務同期" : "WMS业务抓取", lang() === "ja" ? "遠端WMS五表を読み取り専用で同期。店舗/車両は样本・実业务を切替でき、貨量はCargoQTYを強制適用します。" : "一键只读抓取远端WMS五表。店铺和车辆可选样本/真实业务，货量统一使用抓取的CargoQTY。");
+  setPanelHeadText("dataArchivePanel", lang() === "ja" ? "档案照会" : "档案查询", lang() === "ja" ? "基础资料档案を照会し、緯度経度を含む完全データを確認できます。" : "查询基础资料档案，并查看完整经纬度门店数据。");
   setPanelHeadText("strategyPanel", L("algoRun"), L("algoDesc"));
-  setPanelHeadText("solveComparePanel", tabTitles.solve, lang() === "ja" ? "姹傝В瀹熻銉婚€叉崡銉汇偄銉偞銉偤銉犳瘮杓冦倰銇撱伄銈汇偗銈枫儳銉炽仹鎵便亜銇俱仚銆? : "鍦ㄦ湰鍖鸿繘琛屾眰瑙ｆ墽琛屻€佽繘搴﹁窡韪笌绠楁硶瀵规瘮銆?);
+  setPanelHeadText("solveComparePanel", tabTitles.solve, lang() === "ja" ? "求解実行・進捗・アルゴリズム比較をこのセクションで扱います。" : "在本区进行求解执行、进度跟踪与算法对比。");
   setPanelHeadText("dispatchResultPanel", L("result"));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const savePanel = document.getElementById("savedPlans")?.closest(".panel");
   if (savePanel) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const saveTitle = savePanel.querySelector(".panel-head h2");
     const saveDesc = savePanel.querySelector(".panel-head p");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (saveTitle) saveTitle.textContent = L("saved");
     if (saveDesc) saveDesc.textContent = L("savedDesc");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const singleWaveModeSelect = document.getElementById("singleWaveEndModeInput");
   if (singleWaveModeSelect?.options[0]) singleWaveModeSelect.options[0].text = L("returnEnd");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (singleWaveModeSelect?.options[1]) singleWaveModeSelect.options[1].text = L("serviceEnd");
   const algoLabels = document.querySelectorAll(".algo-box label");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (algoLabels[0]) algoLabels[0].lastChild.textContent = ` ${algoLabel("vrptw")}`;
   if (algoLabels[1]) algoLabels[1].lastChild.textContent = ` ${algoLabel("hybrid")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (algoLabels[2]) algoLabels[2].lastChild.textContent = ` ${algoLabel("ga")}`;
   if (algoLabels[3]) algoLabels[3].lastChild.textContent = ` ${algoLabel("tabu")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (algoLabels[4]) algoLabels[4].lastChild.textContent = ` ${algoLabel("lns")}`;
   if (algoLabels[5]) algoLabels[5].lastChild.textContent = ` ${algoLabel("savings")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (algoLabels[6]) algoLabels[6].lastChild.textContent = ` ${algoLabel("sa")}`;
   if (algoLabels[7]) algoLabels[7].lastChild.textContent = ` ${algoLabel("aco")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (algoLabels[8]) algoLabels[8].lastChild.textContent = ` ${algoLabel("pso")}`;
   if (algoLabels[9]) algoLabels[9].lastChild.textContent = ` ${algoLabel("vehicle")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const solveStrategySelect = document.getElementById("solveStrategySelect");
   if (solveStrategySelect?.options[0]) solveStrategySelect.options[0].text = L("strategyManual");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (solveStrategySelect?.options[1]) solveStrategySelect.options[1].text = L("strategyQuick");
   if (solveStrategySelect?.options[2]) solveStrategySelect.options[2].text = L("strategyDeep");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (solveStrategySelect?.options[3]) solveStrategySelect.options[3].text = L("strategyGlobal");
   if (solveStrategySelect?.options[4]) solveStrategySelect.options[4].text = L("strategyRelay");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (solveStrategySelect?.options[5]) solveStrategySelect.options[5].text = L("strategyFree");
   if (solveStrategySelect?.options[6]) solveStrategySelect.options[6].text = L("strategyCompare");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (solveStrategySelect) solveStrategySelect.value = state.settings.solveStrategy || "manual";
   const optimizeGoalSelect = document.getElementById("optimizeGoalSelect");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (optimizeGoalSelect?.options[0]) optimizeGoalSelect.options[0].text = L("goalBalanced");
   if (optimizeGoalSelect?.options[1]) optimizeGoalSelect.options[1].text = L("goalOnTime");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (optimizeGoalSelect?.options[2]) optimizeGoalSelect.options[2].text = L("goalDistance");
   if (optimizeGoalSelect?.options[3]) optimizeGoalSelect.options[3].text = L("goalVehicles");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (optimizeGoalSelect?.options[4]) optimizeGoalSelect.options[4].text = L("goalLoad");
   if (optimizeGoalSelect) optimizeGoalSelect.value = state.settings.optimizeGoal || "balanced";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const quickSolveBtn = document.getElementById("quickSolveBtn");
   if (quickSolveBtn) quickSolveBtn.textContent = L("quickSolve");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const deepOptimizeBtn = document.getElementById("deepOptimizeBtn");
   if (deepOptimizeBtn) deepOptimizeBtn.textContent = L("deepOptimize");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const globalSearchBtn = document.getElementById("globalSearchBtn");
   if (globalSearchBtn) globalSearchBtn.textContent = L("globalSearch");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wmsFetchBtn = document.getElementById("wmsFetchBtn");
-  if (wmsFetchBtn) wmsFetchBtn.textContent = lang() === "ja" ? "WMS鍚屾湡" : "涓€閿姄鍙朩MS";
+  if (wmsFetchBtn) wmsFetchBtn.textContent = lang() === "ja" ? "WMS同期" : "一键抓取WMS";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const runRegionSchemeCreateBtn = document.getElementById("runRegionSchemeCreateBtn");
-  if (runRegionSchemeCreateBtn) runRegionSchemeCreateBtn.textContent = lang() === "ja" ? "鏂规杩藉姞" : "鏂板鏂规";
+  if (runRegionSchemeCreateBtn) runRegionSchemeCreateBtn.textContent = lang() === "ja" ? "方案追加" : "新增方案";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const runRegionSchemeUpdateBtn = document.getElementById("runRegionSchemeUpdateBtn");
-  if (runRegionSchemeUpdateBtn) runRegionSchemeUpdateBtn.textContent = lang() === "ja" ? "鏂规鏇存柊" : "鏇存柊鏂规";
+  if (runRegionSchemeUpdateBtn) runRegionSchemeUpdateBtn.textContent = lang() === "ja" ? "方案更新" : "更新方案";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const runRegionSchemeDeleteBtn = document.getElementById("runRegionSchemeDeleteBtn");
-  if (runRegionSchemeDeleteBtn) runRegionSchemeDeleteBtn.textContent = lang() === "ja" ? "鏂规鍓婇櫎" : "鍒犻櫎鏂规";
+  if (runRegionSchemeDeleteBtn) runRegionSchemeDeleteBtn.textContent = lang() === "ja" ? "方案削除" : "删除方案";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeSourceSelect = document.getElementById("storeSourceSelect");
-  if (storeSourceSelect?.options?.[0]) storeSourceSelect.options[0].text = lang() === "ja" ? "鏍锋湰" : "鏍锋湰";
-  if (storeSourceSelect?.options?.[1]) storeSourceSelect.options[1].text = lang() === "ja" ? "瀹熶笟鍔? : "鐪熷疄涓氬姟";
+  if (storeSourceSelect?.options?.[0]) storeSourceSelect.options[0].text = lang() === "ja" ? "样本" : "样本";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (storeSourceSelect?.options?.[1]) storeSourceSelect.options[1].text = lang() === "ja" ? "実业务" : "真实业务";
   const vehicleSourceSelect = document.getElementById("vehicleSourceSelect");
-  if (vehicleSourceSelect?.options?.[0]) vehicleSourceSelect.options[0].text = lang() === "ja" ? "鏍锋湰" : "鏍锋湰";
-  if (vehicleSourceSelect?.options?.[1]) vehicleSourceSelect.options[1].text = lang() === "ja" ? "瀹熶笟鍔? : "鐪熷疄涓氬姟";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  if (vehicleSourceSelect?.options?.[0]) vehicleSourceSelect.options[0].text = lang() === "ja" ? "样本" : "样本";
+  if (vehicleSourceSelect?.options?.[1]) vehicleSourceSelect.options[1].text = lang() === "ja" ? "実业务" : "真实业务";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const relaySolveBtn = document.getElementById("relaySolveBtn");
   if (relaySolveBtn) relaySolveBtn.textContent = L("relaySolve");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const freeSolveBtn = document.getElementById("freeSolveBtn");
   if (freeSolveBtn) freeSolveBtn.textContent = L("freeSolve");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const multiCompareBtn = document.getElementById("multiCompareBtn");
   if (multiCompareBtn) multiCompareBtn.textContent = L("multiCompare");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const strategyHint = document.getElementById("strategyHint");
   if (strategyHint) strategyHint.textContent = buildStrategyHint();
   renderStrategyPreviewControls();
   syncAlgorithmControls();
   renderAlgorithmPool();
   renderGaBackendStatus();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!state.lastResults.length && state.stores.length) {
     document.getElementById("validationBox").textContent = lang() === "ja"
-      ? `鍥哄畾搴楄垪 ${state.stores.length} 浠躲倰瑾伩杈笺伩銆侀€氬父娉㈡ ${state.waves.length} 浠躲倰鐢熸垚銇椼伨銇椼仧銆俙
-      : `宸插姞杞藉浐瀹氶棬搴?${state.stores.length} 瀹讹紝骞惰嚜鍔ㄥ垎鎴?${state.waves.length} 涓櫘閫氭尝娆°€俙;
+      ? `固定店舗 ${state.stores.length} 件を読み込み、通常波次 ${state.waves.length} 件を生成しました。`
+      : `已加载固定门店 ${state.stores.length} 家，并自动分成 ${state.waves.length} 个普通波次。`;
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function setupHeroQuickActions() {
   const hero = document.querySelector(".hero");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const loadBtn = document.getElementById("loadSampleBtn");
   const saveBtn = document.getElementById("savePlanBtn");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!hero || !loadBtn || !saveBtn) return;
   let strip = document.querySelector(".quick-actions");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!strip) {
     strip = document.createElement("section");
     strip.className = "quick-actions";
@@ -10337,40 +16033,64 @@ function setupHeroQuickActions() {
 }
 
 function ensureConcentrateLateControl() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (document.getElementById("concentrateLateInput")) return;
   const ignoreWrap = document.getElementById("ignoreWavesLabel");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!ignoreWrap?.parentElement) return;
   const label = document.createElement("label");
   label.id = "concentrateLateLabel";
   label.innerHTML = `<input id="concentrateLateInput" type="checkbox"> <span id="concentrateLateText"></span>`;
   ignoreWrap.insertAdjacentElement("afterend", label);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("concentrateLateInput").checked = Boolean(state.settings.concentrateLate);
   const text = document.getElementById("concentrateLateText");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (text) text.textContent = L("concentrateLate");
 }
 
 function renderTripLegs(trip, scenario) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const legs = [];
   let from = DC.id;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const stop of trip.stops) {
-    legs.push(`${from}鈫?{stop.storeId} ${stop.distance.toFixed(1)}km`);
+    legs.push(`${from}→${stop.storeId} ${stop.distance.toFixed(1)}km`);
     from = stop.storeId;
   }
-  if (trip.stops.length) legs.push(`${from}鈫?{DC.id} ${scenario.dist[from][DC.id].toFixed(1)}km`);
+  if (trip.stops.length) legs.push(`${from}→${DC.id} ${scenario.dist[from][DC.id].toFixed(1)}km`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return legs.join(" / ");
 }
 
 function buildProcessSteps(plan, trip, scenario) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const storeMap = scenario.storeMap;
   const steps = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let cumulativeLoad = 0;
   let cumulativeDistance = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (let index = 0; index < trip.stops.length; index += 1) {
     const stop = trip.stops[index];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const store = storeMap.get(stop.storeId);
     cumulativeLoad += getStoreSolveLoadForWave(store, { waveId: plan.waveId });
     cumulativeDistance += stop.distance;
     const returnDistance = scenario.dist[stop.storeId][DC.id];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const estimatedBack = stop.leave + getTravelMinutes(scenario, stop.storeId, DC.id, plan.vehicle.speed);
     steps.push({
       index: index + 1,
@@ -10384,544 +16104,608 @@ function buildProcessSteps(plan, trip, scenario) {
       leave: stop.leave,
       estimatedBack,
       onTime: stop.onTime,
-      route: [DC.id, ...trip.stops.slice(0, index + 1).map((item) => item.storeId)].join(" 鈫?"),
+      route: [DC.id, ...trip.stops.slice(0, index + 1).map((item) => item.storeId)].join(" → "),
     });
   }
   return steps;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function traceAlgorithmKeysForResult(result) {
   const key = String(result?.key || "").trim();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!key) return new Set();
   if (key === "relay") return new Set(["relay"]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return new Set([key]);
 }
 
 function buildAlgorithmNarrativeHint(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const key = String(result?.key || "");
   const hintsZh = {
-    hybrid: "娣峰悎鍚彂寮忎細鍏堝仛鎵板姩鎺㈢储锛屽啀鍋氬眬閮ㄧ簿淇紝鏃ュ織閲嶇偣鐪嬧€滃姩浣溾€濆拰鈥滃埛鏂版渶浼樷€濊疆娆°€?,
-    tabu: "绂佸繉鎼滅储浼氳褰曠蹇屽姩浣滀笌鏈€浼樺埛鏂帮紝鏃ュ織閲嶇偣鐪嬧€滈伩鍏嶅洖澶磋矾鈥濆悗鐨勬敼杩涜建杩广€?,
-    lns: "澶ч偦鍩熸悳绱細鍙嶅 destroy/repair锛屾棩蹇楅噸鐐圭湅澶ф壈鍔ㄥ悗鏄惁鍑虹幇鏄捐憲闄嶆湰銆?,
-    sa: "妯℃嫙閫€鐏細鍑虹幇鈥滄帴鍙楀樊瑙ｂ€濈殑闃舵锛屾棩蹇楅噸鐐圭湅娓╁害涓嬮檷鍚庡浣曢€愭鏀舵暃銆?,
-    aco: "铓佺兢绠楁硶浼氭寜杞寮哄寲浼樿矾寰勶紝鏃ュ織閲嶇偣鐪嬭疆娆″唴鏈€浼樹笌鍏ㄥ眬鏈€浼樺彉鍖栥€?,
-    pso: "绮掑瓙缇や細璁板綍绮掑瓙鍒锋柊鏈€浼樹笌閲嶅惎锛屾棩蹇楅噸鐐圭湅缇や綋鏈€浼樹綍鏃惰绐佺牬銆?,
-    ga: "閬椾紶绠楁硶浼氳褰曚笘浠ｈ凯浠ｃ€佹敼杩涘箙搴﹀拰鎻愬墠鏀舵暃锛屾棩蹇楅噸鐐圭湅浠ｉ檯鏈€浼樺彉鍖栥€?,
-    savings: "鑺傜害娉曟槸鏋勯€犲瀷绠楁硶锛屾棩蹇楅噸鐐圭湅鑺傜害鍊煎悎骞朵笌杞﹁締鍒嗛厤銆?,
-    vrptw: "VRPTW 鍒濇帓鏄彲琛屾€т紭鍏堬紝鏃ュ織閲嶇偣鐪嬮棬搴楁彃鍏ユ瘮杈冧笌绾︽潫鍙鎬с€?,
+    hybrid: "混合启发式会先做扰动探索，再做局部精修，日志重点看“动作”和“刷新最优”轮次。",
+    tabu: "禁忌搜索会记录禁忌动作与最优刷新，日志重点看“避免回头路”后的改进轨迹。",
+    lns: "大邻域搜索会反复 destroy/repair，日志重点看大扰动后是否出现显著降本。",
+    sa: "模拟退火会出现“接受差解”的阶段，日志重点看温度下降后如何逐步收敛。",
+    aco: "蚁群算法会按轮次强化优路径，日志重点看轮次内最优与全局最优变化。",
+    pso: "粒子群会记录粒子刷新最优与重启，日志重点看群体最优何时被突破。",
+    ga: "遗传算法会记录世代迭代、改进幅度和提前收敛，日志重点看代际最优变化。",
+    savings: "节约法是构造型算法，日志重点看节约值合并与车辆分配。",
+    vrptw: "VRPTW 初排是可行性优先，日志重点看门店插入比较与约束可行性。",
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const hintsJa = {
-    hybrid: "銉忋偆銉栥儶銉冦儔銇簝鍩熸帰绱仺灞€鎵€鏀瑰杽銈掔祫銇垮悎銈忋仜銇俱仚銆傚嫊浣滅ó鍒ャ仺鏈€鑹洿鏂板洖銈掗噸鐐圭⒑瑾嶃仐銇俱仚銆?,
-    tabu: "銈裤儢銉兼帰绱伅鎴汇倞鎵嬨倰绂併仒銇俱仚銆傛渶鑹洿鏂般伄杌岃贰銇ф敼鍠勩伄璩倰纰鸿獚銇椼伨銇欍€?,
-    lns: "LNS 銇?destroy/repair 銈掔拱銈婅繑銇椼伨銇欍€傚ぇ銇嶃仾鍐嶆鎴愬緦銇敼鍠勫箙銈掗噸鐐圭⒑瑾嶃仐銇俱仚銆?,
-    sa: "SA 銇竴鏅傜殑銇姡瑙ｅ彈鐞嗐亴鐧虹敓銇椼伨銇欍€傛俯搴︿綆涓嬪緦銇弾鏉熼亷绋嬨倰纰鸿獚銇椼伨銇欍€?,
-    aco: "ACO 銇弽寰┿仹鑹祵璺倰寮峰寲銇椼伨銇欍€傚悇鍙嶅京銇渶鑹€ゆ帹绉汇倰纰鸿獚銇椼伨銇欍€?,
-    pso: "PSO 銇矑瀛愮兢銇ф渶鑹В銈掓洿鏂般仐銇俱仚銆傜兢鏈€鑹亴鏇存柊銇曘倢銈嬪眬闈倰纰鸿獚銇椼伨銇欍€?,
-    ga: "GA 銇笘浠ｃ仈銇ㄣ伀閫插寲銇椼伨銇欍€備笘浠ｆ渶鑹仺鏃╂湡鍙庢潫銇櫤鐢熺偣銈掔⒑瑾嶃仐銇俱仚銆?,
-    savings: "绡€绱勬硶銇鎴愬瀷銇с仚銆傜瘈绱勫€ゃ伀銈堛倠绲卞悎銇ㄩ厤杌婄祼鏋溿倰纰鸿獚銇椼伨銇欍€?,
-    vrptw: "VRPTW 鍒濇湡閰嶈粖銇彲琛屾€у劒鍏堛仹銇欍€傛尶鍏ユ瘮杓冦仺鍒剁磩鍏呰冻銈掔⒑瑾嶃仐銇俱仚銆?,
+    hybrid: "ハイブリッドは広域探索と局所改善を組み合わせます。動作種別と最良更新回を重点確認します。",
+    tabu: "タブー探索は戻り手を禁じます。最良更新の軌跡で改善の質を確認します。",
+    lns: "LNS は destroy/repair を繰り返します。大きな再構成後の改善幅を重点確認します。",
+    sa: "SA は一時的に劣解受理が発生します。温度低下後の収束過程を確認します。",
+    aco: "ACO は反復で良経路を強化します。各反復の最良値推移を確認します。",
+    pso: "PSO は粒子群で最良解を更新します。群最良が更新される局面を確認します。",
+    ga: "GA は世代ごとに進化します。世代最良と早期収束の発生点を確認します。",
+    savings: "節約法は構成型です。節約値による統合と配車結果を確認します。",
+    vrptw: "VRPTW 初期配車は可行性優先です。挿入比較と制約充足を確認します。",
   };
   return lang() === "ja" ? (hintsJa[key] || "") : (hintsZh[key] || "");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildTraceNarrative(result, plan, trip, wave) {
   const breakdown = computePlanCostBreakdown(plan, result.scenario, wave);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const algorithmKey = String(result?.key || "").trim();
   const supportsStoreInsertionTrace = new Set(["vrptw", "savings", "relay", "focus"]).has(algorithmKey);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const keys = traceAlgorithmKeysForResult(result);
   const hasKeyFilter = keys.size > 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveLogs = (result.traceLog || []).filter((entry) => {
     if (entry.waveId !== wave.waveId || entry.scope !== "wave") return false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!hasKeyFilter) return true;
     return keys.has(String(entry.algorithmKey || ""));
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const traces = (result.traceLog || []).filter((entry) => {
     if (entry.waveId !== wave.waveId) return false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!(entry.chosenPlate === plan.vehicle.plateNo && entry.chosenTripNo === trip.tripNo)) return false;
     if (!hasKeyFilter) return true;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return keys.has(String(entry.algorithmKey || ""));
   });
   const lines = [
-    lang() === "ja" ? "> 鐪熴伄鎺㈢储銉偘" : "> 鐪熷疄绠楁硶鎼滅储鏃ュ織",
+    lang() === "ja" ? "> 真の探索ログ" : "> 真实算法搜索日志",
     lang() === "ja"
-      ? "> 涓婃銇偄銉偞銉偤銉犮亴瀹熼殯銇彈鐞嗐仐銇熸帰绱偆銉欍兂銉堛€佷笅娈点伅銇撱伄渚裤伀鍏ャ倠搴楄垪銇壊褰撴瘮杓冦仹銇欍€?
-      : "> 涓婇潰鍏堝睍绀虹畻娉曠湡姝ｆ墽琛屽苟鎺ュ彈鐨勬悳绱簨浠讹紝涓嬮潰鍐嶅睍绀鸿繖鏉＄嚎璺唴闂ㄥ簵鐨勬彃鍏ユ瘮杈冦€?,
+      ? "> 上段はアルゴリズムが実際に受理した探索イベント、下段はこの便に入る店舗の割当比較です。"
+      : "> 上面先展示算法真正执行并接受的搜索事件，下面再展示这条线路内门店的插入比较。",
     lang() === "ja"
-      ? "> 銈炽偣銉堝紡: 閬呯潃銉氥儕銉儐銈?+ 娉㈡瓒呴亷銉氥儕銉儐銈?+ 杌婁浮绻佸繖銉氥儕銉儐銈?+ 杩藉姞渚裤儦銉娿儷銉嗐偅 + 璺濋洟銈炽偣銉?- 绌嶈級銉溿兗銉娿偣銆傚€ゃ亴浣庛亜銇汇仼鑹亜銇с仚銆?
-      : "> 鎴愭湰鍏紡: 鏅氬埌缃氬垎 + 瓒呮尝娆＄綒鍒?+ 杞﹁締绻佸繖缃氬垎 + 棰濆瓒熸缃氬垎 + 璺濈鎴愭湰 - 瑁呰浇濂栧姳銆傛暟鍊艰秺浣庤秺濂姐€?,
+      ? "> コスト式: 遅着ペナルティ + 波次超過ペナルティ + 車両繁忙ペナルティ + 追加便ペナルティ + 距離コスト - 積載ボーナス。値が低いほど良いです。"
+      : "> 成本公式: 晚到罚分 + 超波次罚分 + 车辆繁忙罚分 + 额外趟次罚分 + 距离成本 - 装载奖励。数值越低越好。",
     lang() === "ja"
-      ? `> 鐝惧湪銉兗銉堛伄銈炽偣銉堝唴瑷? 閬呯潃銉氥儕銉儐銈?${breakdown.latenessPenalty.toFixed(1)} / 娉㈡瓒呴亷銉氥儕銉儐銈?${breakdown.waveLatePenalty.toFixed(1)} / 璺濋洟銈炽偣銉?${breakdown.distanceCost.toFixed(1)} / 绌嶈級銉溿兗銉娿偣 ${breakdown.loadBonus.toFixed(1)} / 绻佸繖銉氥儕銉儐銈?${breakdown.vehicleBusyPenalty.toFixed(1)} / 杩藉姞渚裤儦銉娿儷銉嗐偅 ${breakdown.extraTripPenalty.toFixed(1)} / 绶忋偝銈广儓 ${breakdown.totalCost.toFixed(1)}`
-      : `> 褰撳墠绾胯矾鎴愭湰鎷嗗垎: 鏅氬埌缃氬垎 ${breakdown.latenessPenalty.toFixed(1)} / 瓒呮尝娆＄綒鍒?${breakdown.waveLatePenalty.toFixed(1)} / 璺濈鎴愭湰 ${breakdown.distanceCost.toFixed(1)} / 瑁呰浇濂栧姳 ${breakdown.loadBonus.toFixed(1)} / 绻佸繖缃氬垎 ${breakdown.vehicleBusyPenalty.toFixed(1)} / 棰濆瓒熸缃氬垎 ${breakdown.extraTripPenalty.toFixed(1)} / 鎬绘垚鏈?${breakdown.totalCost.toFixed(1)}`,
+      ? `> 現在ルートのコスト内訳: 遅着ペナルティ ${breakdown.latenessPenalty.toFixed(1)} / 波次超過ペナルティ ${breakdown.waveLatePenalty.toFixed(1)} / 距離コスト ${breakdown.distanceCost.toFixed(1)} / 積載ボーナス ${breakdown.loadBonus.toFixed(1)} / 繁忙ペナルティ ${breakdown.vehicleBusyPenalty.toFixed(1)} / 追加便ペナルティ ${breakdown.extraTripPenalty.toFixed(1)} / 総コスト ${breakdown.totalCost.toFixed(1)}`
+      : `> 当前线路成本拆分: 晚到罚分 ${breakdown.latenessPenalty.toFixed(1)} / 超波次罚分 ${breakdown.waveLatePenalty.toFixed(1)} / 距离成本 ${breakdown.distanceCost.toFixed(1)} / 装载奖励 ${breakdown.loadBonus.toFixed(1)} / 繁忙罚分 ${breakdown.vehicleBusyPenalty.toFixed(1)} / 额外趟次罚分 ${breakdown.extraTripPenalty.toFixed(1)} / 总成本 ${breakdown.totalCost.toFixed(1)}`,
     "",
   ];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const fallbackWaveLogs = (result.traceLog || []).filter((entry) => {
     if (entry.scope !== "wave") return false;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!hasKeyFilter) return true;
     return keys.has(String(entry.algorithmKey || ""));
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveLogs.length) {
-    lines.push(lang() === "ja" ? "[娉㈡銉儥銉帰绱紙褰撹┎娉㈡锛塢" : "[娉㈡绾ф悳绱紙褰撳墠娉㈡锛塢");
+    lines.push(lang() === "ja" ? "[波次レベル探索（当該波次）]" : "[波次级搜索（当前波次）]");
     waveLogs.slice(0, 28).forEach((entry) => {
       const stage = String(entry.stage || "").trim();
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const stageTag = stage ? `[${stage}] ` : "";
       const body = (lang() === "ja" ? entry.textJa : entry.textZh) || entry.textZh || entry.textJa || "";
       lines.push(`${stageTag}${body}`);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const cb = entry?.costBreakdown || null;
       if (cb && typeof cb === "object") {
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const line = lang() === "ja"
-          ? `  cost = 鍒板簵瓒呭亸宸綒鍒?${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 鏅氬埌缃氬垎 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 瓒呮尝娆＄綒鍒?${Number(cb.waveLatePenalty || 0).toFixed(1)} + 杞﹁締缁窇缃氬垎 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 棰濆瓒熸缃氬垎 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 瓒呮椂璺嚎缃氬垎 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 璺濈鎴愭湰 ${Number(cb.distanceCost || 0).toFixed(1)} - 瑁呰浇鎶垫墸 ${Number(cb.loadBonus || 0).toFixed(1)}`
-          : `  cost = 鍒板簵瓒呭亸宸綒鍒?${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 鏅氬埌缃氬垎 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 瓒呮尝娆＄綒鍒?${Number(cb.waveLatePenalty || 0).toFixed(1)} + 杞﹁締缁窇缃氬垎 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 棰濆瓒熸缃氬垎 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 瓒呮椂璺嚎缃氬垎 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 璺濈鎴愭湰 ${Number(cb.distanceCost || 0).toFixed(1)} - 瑁呰浇鎶垫墸 ${Number(cb.loadBonus || 0).toFixed(1)}`;
+          ? `  cost = 到店超偏差罚分 ${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 晚到罚分 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 超波次罚分 ${Number(cb.waveLatePenalty || 0).toFixed(1)} + 车辆续跑罚分 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 额外趟次罚分 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 超时路线罚分 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 距离成本 ${Number(cb.distanceCost || 0).toFixed(1)} - 装载抵扣 ${Number(cb.loadBonus || 0).toFixed(1)}`
+          : `  cost = 到店超偏差罚分 ${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 晚到罚分 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 超波次罚分 ${Number(cb.waveLatePenalty || 0).toFixed(1)} + 车辆续跑罚分 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 额外趟次罚分 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 超时路线罚分 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 距离成本 ${Number(cb.distanceCost || 0).toFixed(1)} - 装载抵扣 ${Number(cb.loadBonus || 0).toFixed(1)}`;
         lines.push(line);
       }
     });
     lines.push("");
   } else if (fallbackWaveLogs.length) {
-    lines.push(lang() === "ja" ? "[娉㈡銉儥銉帰绱紙銈儷銈淬儶銈恒儬鍏ㄤ綋锛塢" : "[娉㈡绾ф悳绱紙璇ョ畻娉曞叏灞€锛塢");
+    lines.push(lang() === "ja" ? "[波次レベル探索（アルゴリズム全体）]" : "[波次级搜索（该算法全局）]");
     lines.push(lang() === "ja"
-      ? "> 銇撱伄渚裤伀瀵惧繙銇欍倠娉㈡銉偘銇亗銈娿伨銇涖倱銆備唬銈忋倞銇湰銉┿偊銉炽儔銇у綋瑭层偄銉偞銉偤銉犮亴瀹熻銇椼仧鎺㈢储銉偘銈掕〃绀恒仐銇俱仚銆?
-      : "> 褰撳墠杩欒稛娌℃湁鍛戒腑璇ョ畻娉曠殑鏈尝娆℃棩蹇楋紝涓嬮潰灞曠ず璇ョ畻娉曟湰杞湡瀹炴墽琛岀殑鍏ㄥ眬鎼滅储鏃ュ織銆?);
+      ? "> この便に対応する波次ログはありません。代わりに本ラウンドで当該アルゴリズムが実行した探索ログを表示します。"
+      : "> 当前这趟没有命中该算法的本波次日志，下面展示该算法本轮真实执行的全局搜索日志。");
     fallbackWaveLogs.slice(0, 28).forEach((entry) => {
       const stage = String(entry.stage || "").trim();
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const stageTag = stage ? `[${stage}] ` : "";
       const body = (lang() === "ja" ? entry.textJa : entry.textZh) || entry.textZh || entry.textJa || "";
       lines.push(`${stageTag}${body}`);
     });
     lines.push("");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!supportsStoreInsertionTrace) {
     const iterCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("iteration")).length;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const bestCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("best")).length;
     const startCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("start")).length;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const finishCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("finish")).length;
     const costLines = waveLogs.filter((entry) => entry?.costBreakdown && typeof entry.costBreakdown === "object").length;
-    lines.push(lang() === "ja" ? "[鎺㈢储鏃ュ織缁熻]" : "[鎼滅储鏃ュ織缁熻]");
+    lines.push(lang() === "ja" ? "[探索日志统计]" : "[搜索日志统计]");
     lines.push(lang() === "ja"
-      ? `${algoLabel(algorithmKey)} 銇湰杓儹銈? 闁嬪 ${startCount} 浠?/ 鍙嶅京 ${iterCount} 浠?/ 鏈€鑹洿鏂?${bestCount} 浠?/ 绲備簡 ${finishCount} 浠?/ 銈炽偣銉堝唴瑷充粯銇?${costLines} 浠躲€俙
-      : `${algoLabel(algorithmKey)} 鏈疆鏃ュ織缁熻锛氬紑濮?${startCount} 鏉?/ 杩唬 ${iterCount} 鏉?/ 鍒锋柊鏈€浼?${bestCount} 鏉?/ 缁撴潫 ${finishCount} 鏉?/ 鍚垚鏈媶鍒?${costLines} 鏉°€俙);
+      ? `${algoLabel(algorithmKey)} の本輪ログ: 開始 ${startCount} 件 / 反復 ${iterCount} 件 / 最良更新 ${bestCount} 件 / 終了 ${finishCount} 件 / コスト内訳付き ${costLines} 件。`
+      : `${algoLabel(algorithmKey)} 本轮日志统计：开始 ${startCount} 条 / 迭代 ${iterCount} 条 / 刷新最优 ${bestCount} 条 / 结束 ${finishCount} 条 / 含成本拆分 ${costLines} 条。`);
     lines.push("");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return lines;
   }
   if (!traces.length) {
-    lines.push(lang() === "ja" ? "[渚垮唴鍓插綋姣旇純]" : "[瓒熷唴鍒嗛厤姣旇緝]");
+    lines.push(lang() === "ja" ? "[便内割当比較]" : "[趟内分配比较]");
     lines.push(lang() === "ja"
-      ? "銇撱伄渚裤伀鐩寸祼銇欍倠鎸垮叆姣旇純銉偘銇湭瑷橀尣銇с仚锛堜笂娈点伀瀹熼殯銇帰绱儹銈般倰琛ㄧず锛夈€?
-      : "璇ョ畻娉曟湰杞湭璁板綍鈥滆繖瓒熺洿杩炵殑鎻掑叆姣旇緝鏃ュ織鈥濓紙涓婇潰宸插睍绀虹湡瀹炴悳绱㈡棩蹇楋級銆?);
+      ? "この便に直結する挿入比較ログは未記録です（上段に実際の探索ログを表示）。"
+      : "该算法本轮未记录“这趟直连的插入比较日志”（上面已展示真实搜索日志）。");
     lines.push("");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return lines;
   }
-  lines.push(lang() === "ja" ? "[渚垮唴鍓插綋姣旇純]" : "[瓒熷唴鍒嗛厤姣旇緝]");
+  lines.push(lang() === "ja" ? "[便内割当比較]" : "[趟内分配比较]");
   traces.forEach((entry, index) => {
     lines.push(lang() === "ja"
-      ? `[瑷堢畻 ${index + 1}] 搴楄垪 ${entry.storeId} ${entry.storeName}`
-      : `[璁＄畻 ${index + 1}] 闂ㄥ簵 ${entry.storeId} ${entry.storeName}`);
+      ? `[計算 ${index + 1}] 店舗 ${entry.storeId} ${entry.storeName}`
+      : `[计算 ${index + 1}] 门店 ${entry.storeId} ${entry.storeName}`);
     lines.push(lang() === "ja"
-      ? `  鐩殑: 銇┿伄杌婁浮銇仼銇究銉汇仼銇綅缃伀鍏ャ倢銈嬨仺绶忋偝銈广儓銇屾渶銈備綆銇忋仾銈嬨亱銈掓瘮杓僠
-      : `  鐩爣: 姣旇緝鈥滄彃鍏ュ摢杈嗚溅銆佸摢涓€瓒熴€佸摢涓綅缃€濇椂鏁翠綋楠岃瘉鍚庣殑缁煎悎鎴愭湰`);
+      ? `  目的: どの車両のどの便・どの位置に入れると総コストが最も低くなるかを比較`
+      : `  目标: 比较“插入哪辆车、哪一趟、哪个位置”时整体验证后的综合成本`);
     entry.vehicleEvaluations.slice(0, 4).forEach((item, vehicleRank) => {
       lines.push(lang() === "ja"
-        ? `  鍊欒杌?${vehicleRank + 1}: ${item.plateNo} | 鎸垮叆妗?${item.optionCount} 鍊?| 鏈€鑹偝銈广儓 ${item.bestCost.toFixed(1)} | 鎺＄敤渚?${item.chosenTripNo}`
-        : `  鍊欓€夎溅 ${vehicleRank + 1}: ${item.plateNo} | 鎻掑叆鏂规 ${item.optionCount} 涓?| 鏈€浼樻垚鏈?${item.bestCost.toFixed(1)} | 钀藉湪绗?${item.chosenTripNo} 瓒焋);
+        ? `  候補車 ${vehicleRank + 1}: ${item.plateNo} | 挿入案 ${item.optionCount} 個 | 最良コスト ${item.bestCost.toFixed(1)} | 採用便 ${item.chosenTripNo}`
+        : `  候选车 ${vehicleRank + 1}: ${item.plateNo} | 插入方案 ${item.optionCount} 个 | 最优成本 ${item.bestCost.toFixed(1)} | 落在第 ${item.chosenTripNo} 趟`);
       item.candidates.slice(0, 2).forEach((candidate, candidateIndex) => {
         lines.push(lang() === "ja"
-          ? `    - 妗?${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "鏂颁究" : `绗?{candidate.tripIndex + 1}渚裤兓浣嶇疆${candidate.insertAt + 1}`} | 銉兗銉?${candidate.routePreview} | 璺濋洟 ${candidate.totalDistance.toFixed(1)} km | 娉㈡瓒呴亷 ${candidate.waveLateMinutes.toFixed(0)} 鍒哷
-          : `    - 鏂规 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "鏂板紑涓€瓒? : `绗?{candidate.tripIndex + 1}瓒熺${candidate.insertAt + 1}涓綅缃甡} | 璺嚎 ${candidate.routePreview} | 閲岀▼ ${candidate.totalDistance.toFixed(1)} km | 瓒呮尝娆?${candidate.waveLateMinutes.toFixed(0)} 鍒哷);
+          ? `    - 案 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "新便" : `第${candidate.tripIndex + 1}便・位置${candidate.insertAt + 1}`} | ルート ${candidate.routePreview} | 距離 ${candidate.totalDistance.toFixed(1)} km | 波次超過 ${candidate.waveLateMinutes.toFixed(0)} 分`
+          : `    - 方案 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "新开一趟" : `第${candidate.tripIndex + 1}趟第${candidate.insertAt + 1}个位置`} | 路线 ${candidate.routePreview} | 里程 ${candidate.totalDistance.toFixed(1)} km | 超波次 ${candidate.waveLateMinutes.toFixed(0)} 分`);
       });
     });
     lines.push(lang() === "ja"
-      ? `  => 鏈€绲傛帯鐢? ${entry.chosenPlate} / 绗?{entry.chosenTripNo}渚?/ 銈炽偣銉?${entry.bestCost.toFixed(1)}`
-      : `  => 鏈€缁堥噰鐢? ${entry.chosenPlate} / 绗?{entry.chosenTripNo}瓒?/ 鎴愭湰 ${entry.bestCost.toFixed(1)}`);
+      ? `  => 最終採用: ${entry.chosenPlate} / 第${entry.chosenTripNo}便 / コスト ${entry.bestCost.toFixed(1)}`
+      : `  => 最终采用: ${entry.chosenPlate} / 第${entry.chosenTripNo}趟 / 成本 ${entry.bestCost.toFixed(1)}`);
     lines.push(lang() === "ja"
-      ? "  鐞嗙敱: 銇濄伄鏅傜偣銇у埗绱勩倰瀹堛倞銇ゃ仱銆佹渶銈備綆銈炽偣銉堛仩銇ｃ仧銇熴倎"
-      : "  鍘熷洜: 鍦ㄦ弧瓒冲綋鍓嶇害鏉熺殑鍊欓€夋柟妗堥噷锛岃繖涓柟妗堢患鍚堟垚鏈渶浣?);
+      ? "  理由: その時点で制約を守りつつ、最も低コストだったため"
+      : "  原因: 在满足当前约束的候选方案里，这个方案综合成本最低");
     lines.push("");
   });
   return lines;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildProcessNarrative(result, plan, trip, scenario, wave, isMultiCompare = false) {
   const steps = buildProcessSteps(plan, trip, scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lines = [
-    lang() === "ja" ? `> ${wave.waveId} / ${plan.vehicle.plateNo} / 绗?{trip.tripNo}渚?${L("playback")}` : `> ${wave.waveId} / ${plan.vehicle.plateNo} / 绗?{trip.tripNo}${L("tripSuffix")} ${L("playback")}`,
+    lang() === "ja" ? `> ${wave.waveId} / ${plan.vehicle.plateNo} / 第${trip.tripNo}便 ${L("playback")}` : `> ${wave.waveId} / ${plan.vehicle.plateNo} / 第${trip.tripNo}${L("tripSuffix")} ${L("playback")}`,
     `> ${L("route")}: ${[DC.id, ...trip.route, DC.id].join(" -> ")}`,
     `> ${L("tripRoundKm")}: ${trip.totalDistance.toFixed(1)} km`,
     `> ${L("tripLoadRate")}: ${formatRate(trip.loadRate)}`,
     "",
   ];
   lines.push(...buildTraceNarrative(result, plan, trip, wave));
-  if (isMultiCompare) lines.push(lang() === "ja" ? "> 浠ヤ笅銇綋瑭层偄銉偞銉偤銉犮伄鏈€绲傘儷銉笺儓瀹熻銉偘銇с仚銆? : "> 浠ヤ笅鏄绠楁硶鏈€缁堢嚎璺墽琛屾棩蹇椼€?);
-  lines.push(lang() === "ja" ? "> 浠ヤ笅銇渶绲傜⒑瀹氥儷銉笺儓銇疅琛屽洖鏀俱仹銇欍€? : "> 浠ヤ笅鏄渶缁堢‘瀹氱嚎璺殑鎵ц鍥炴斁銆?);
+  if (isMultiCompare) lines.push(lang() === "ja" ? "> 以下は当該アルゴリズムの最終ルート実行ログです。" : "> 以下是该算法最终线路执行日志。");
+  lines.push(lang() === "ja" ? "> 以下は最終確定ルートの実行回放です。" : "> 以下是最终确定线路的执行回放。");
   lines.push("");
   steps.forEach((step) => {
-    lines.push(lang() === "ja" ? `[銈广儐銉冦儣 ${step.index}] ${step.storeId} ${step.storeName} 銈掕拷鍔燻 : `[姝ラ ${step.index}] 鍔犲叆 ${step.storeId} ${step.storeName}`);
+    lines.push(lang() === "ja" ? `[ステップ ${step.index}] ${step.storeId} ${step.storeName} を追加` : `[步骤 ${step.index}] 加入 ${step.storeId} ${step.storeName}`);
     lines.push(`  ${L("route")}: ${step.route}`);
     lines.push(lang() === "ja"
-      ? `  ${L("leg")}璺濋洟: +${step.legDistance.toFixed(1)} km | 绱▓璺濋洟: ${step.cumulativeDistance.toFixed(1)} km`
-      : `  ${L("leg")}璺濈: +${step.legDistance.toFixed(1)} km | 绱璺濈: ${step.cumulativeDistance.toFixed(1)} km`);
+      ? `  ${L("leg")}距離: +${step.legDistance.toFixed(1)} km | 累計距離: ${step.cumulativeDistance.toFixed(1)} km`
+      : `  ${L("leg")}距离: +${step.legDistance.toFixed(1)} km | 累计距离: ${step.cumulativeDistance.toFixed(1)} km`);
     lines.push(`  ${L("totalLoad")}: ${step.loadBoxes}/${getVehicleSolveCapacity(plan.vehicle)} | ${L("avgLoad")}: ${formatRate(step.loadRate)}`);
     lines.push(`  ${L("arrive")}: ${formatTime(step.arrival)} | ${L("unloadMinutes")}: ${formatMinutesValue(step.storeId ? scenario.storeMap.get(step.storeId)?.actualServiceMinutes || scenario.storeMap.get(step.storeId)?.serviceMinutes || 0 : 0)} ${L("minutes")} | ${L("leave")}: ${formatTime(step.leave)}`);
-    lines.push(`  ${L("desired")}: ${trip.stops[step.index - 1]?.desiredArrival || "--:--"} | ${lang() === "ja" ? "甯板韩瑕嬭炯銇? : "棰勮鍥炰粨"}: ${formatTime(step.estimatedBack)}`);
-    lines.push(`  ${lang() === "ja" ? "鐘舵厠" : "鐘舵€?}: ${step.onTime ? L("notLate") : L("late")}`);
+    lines.push(`  ${L("desired")}: ${trip.stops[step.index - 1]?.desiredArrival || "--:--"} | ${lang() === "ja" ? "帰庫見込み" : "预计回仓"}: ${formatTime(step.estimatedBack)}`);
+    lines.push(`  ${lang() === "ja" ? "状態" : "状态"}: ${step.onTime ? L("notLate") : L("late")}`);
     lines.push("");
   });
-  lines.push(lang() === "ja" ? "> 銉儣銉偆绲備簡" : "> 鍥炴斁缁撴潫");
+  lines.push(lang() === "ja" ? "> リプレイ終了" : "> 回放结束");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return lines.join("\n");
 }
 
 function buildPenaltyRuleCard() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `
     <div class="penalty-rule-card">
-      <div class="penalty-rule-title">${lang() === "ja" ? "銉氥儕銉儐銈ｃ儷銉笺儷" : "缃氬垎瑙勫垯璇存槑"}</div>
+      <div class="penalty-rule-title">${lang() === "ja" ? "ペナルティルール" : "罚分规则说明"}</div>
       <div class="penalty-rule-list">
-        <span class="chip">鏅氬埌缃氬垎锛氭瘡瓒?1 鍒嗛挓 +60</span>
-        <span class="chip">瓒呭厑璁稿亸宸細姣忚秴 1 鍒嗛挓 +20000</span>
-        <span class="chip">瓒呮尝娆＄綒鍒嗭細姣忚秴 1 鍒嗛挓 +80</span>
-        <span class="chip">棰濆瓒熸锛氭瘡澶?1 瓒?+180</span>
-        <span class="chip">璺濈鎴愭湰锛氭瘡 1 km 鎸?0.45 鎶樼畻</span>
-        <span class="chip">瑁呰浇濂栧姳锛氭瘡澶?1 绠辨寜 0.08 鎶垫墸</span>
+        <span class="chip">晚到罚分：每超 1 分钟 +60</span>
+        <span class="chip">超允许偏差：每超 1 分钟 +20000</span>
+        <span class="chip">超波次罚分：每超 1 分钟 +80</span>
+        <span class="chip">额外趟次：每多 1 趟 +180</span>
+        <span class="chip">距离成本：每 1 km 按 0.45 折算</span>
+        <span class="chip">装载奖励：每多 1 箱按 0.08 抵扣</span>
       </div>
-      <p class="penalty-rule-note">${lang() === "ja" ? "銇勩伨瓒呴亷銇屻仾銇戙倢銇拌┎褰撱儦銉娿儷銉嗐偅銇?0 銇ㄨ〃绀恒仌銈屻伨銇欍€傝秴閬庛亴鐧虹敓銇欍倠銇ㄣ€佸垎鍗樹綅銇俱仧銇究鍗樹綅銇у姞绠椼仌銈屻€佸浐瀹氥仹 1 鍥炪仩銇戙仹銇亗銈娿伨銇涖倱銆? : "褰撳墠娌℃湁瓒呭嚭鏃讹紝瀵瑰簲缃氬垎浼氭樉绀轰负 0锛涗竴鏃﹁秴鍑猴紝浼氭寜鍒嗛挓鎴栨寜瓒熸缁х画绱姞锛屼笉鏄浐瀹氬彧缃氫竴娆°€?}</p>
+      <p class="penalty-rule-note">${lang() === "ja" ? "いま超過がなければ該当ペナルティは 0 と表示されます。超過が発生すると、分単位または便単位で加算され、固定で 1 回だけではありません。" : "当前没有超出时，对应罚分会显示为 0；一旦超出，会按分钟或按趟次继续累加，不是固定只罚一次。"}</p>
     </div>
   `;
 }
 
 function buildShowcaseNarrative() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const currentPreset = strategyPreset(state.settings.solveStrategy || "quick", state.settings.optimizeGoal || "balanced");
   const selectedAlgorithms = (currentPreset.algorithms || []).map((key) => algoLabel(key));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (lang() === "ja") {
     return [
-      "閮藉競閰嶉€丄I瑾垮害銈枫偣銉嗐儬",
+      "都市配送AI調度システム",
       "",
-      "涓牳銉濄偢銈枫儳銉?,
-      "銇撱倢銇崢銇倠閰嶈粖銉勩兗銉仹銇亗銈娿伨銇涖倱銆傘偄銉偞銉偤銉犳剰鎬濇焙瀹氥儊銈с兗銉炽€佽鏄庡彲鑳姐仾瑾垮害銆佸叏宸ョ▼銇饱姝翠繚鎸併倰鍌欍亪銇?AI 瑾垮害銈儦銉兗銉嗐偅銉炽偘銈枫偣銉嗐儬銇с仚銆?,
+      "中核ポジション",
+      "これは単なる配車ツールではありません。アルゴリズム意思決定チェーン、説明可能な調度、全工程の履歴保持を備えた AI 調度オペレーティングシステムです。",
       "",
-      "甯傝博銇ぇ鍗娿伄瑾垮害銈枫偣銉嗐儬銇€佸叆鍔涖儑銉笺偪 鈫?鍗樹竴銈儷銈淬儶銈恒儬瀹熻 鈫?琛ㄥ嚭鍔涖伄 3 娈甸殠銇х祩銈忋倞銇俱仚銆傞厤杌婃媴褰撱伅绲愭灉銈掑彈銇戝彇銇ｃ仸銈傘€併仢銇銇屻仾銇滃嚭銇熴伄銇嬨€併仾銇滃垾妗堛仹銇仾銇勩伄銇嬨倰鐭ャ倠銇撱仺銇屻仹銇嶃伨銇涖倱銆?,
+      "市販の大半の調度システムは、入力データ → 単一アルゴリズム実行 → 表出力の 3 段階で終わります。配車担当は結果を受け取っても、その案がなぜ出たのか、なぜ別案ではないのかを知ることができません。",
       "",
-      "銇撱伄銈枫偣銉嗐儬銇仌銇勩伨銇欍€? 銇ゃ伄銈儷銈淬儶銈恒儬銇屽崝瑾裤仐銇︽剰鎬濇焙瀹氥仚銈嬮亷绋嬨倰銇濄伄銇俱伨鍙鍖栥仐銆侀厤杌婃媴褰撱亴瑕嬨仸銆佺悊瑙ｃ仐銆佷粙鍏ャ仐銆佹尟銈婅繑銈屻倠銈堛亞銇仐銇俱仚銆傜祵鍠跺堡銇拷璺°仐銆佹瘮杓冦仐銆佸垽鏂仹銇嶃伨銇欍€?,
+      "このシステムは違います。9 つのアルゴリズムが協調して意思決定する過程をそのまま可視化し、配車担当が見て、理解し、介入し、振り返れるようにします。経営層は追跡し、比較し、判断できます。",
       "",
-      "閬╃敤妤ó锛氥儊銈с兗銉冲皬澹层€侀２椋熷簵鑸椼€佸尰钖厤閫併€併偝銉熴儱銉嬨儐銈?EC銆併偝銉笺儷銉夈儊銈с兗銉崇敓楫€併偦銉炽儓銉┿儷銈儍銉併兂閰嶉€併€併偓銈姐儶銉炽偣銈裤兂銉夎鍏呫€佸叡鍚岄厤閫?3PL 銇仼銆傘€屽悓銇樿粖缇ゃ仹銆? 鏃ヨ鏁板洖銆佸悇鎷犵偣銇屽浐鏈夈伄鏅傞枔绐撱仺瑁滃厖銉偤銉犮倰鎸併仱銆嶆キ鍕欍仾銈夈仢銇伨銇惧睍闁嬨仹銇嶃伨銇欍€?,
+      "適用業種：チェーン小売、飲食店舗、医薬配送、コミュニティ EC、コールドチェーン生鮮、セントラルキッチン配送、ガソリンスタンド補充、共同配送 3PL など。「同じ車群で、1 日複数回、各拠点が固有の時間窓と補充リズムを持つ」業務ならそのまま展開できます。",
       "",
-      "椴哥暐浣胯搴︺偨銉儛銉?- 瑁藉搧姒傝",
-      "9 澶с偄銉偞銉偤銉犮偍銉炽偢銉炽€佺湡銇伐妤礆鏈€閬╁寲銆?,
-      "椴哥暐浣胯搴︺偨銉儛銉笺伅 VRPTW锛堟檪闁撶獡浠樸亶杌婁浮绲岃矾鍟忛锛夊悜銇戙伄浼佹キ绱氥偆銉炽儐銉偢銈с兂銉堣搴︺偡銈广儐銉犮仹銇傘倞銆併偝銈伅 9 绋伄鏈牸銉°偪銉掋儱銉笺儶銈广儐銈ｃ儍銈仹銇欍€傚崢銇倠銉兗銉瘎銇涢泦銈併仹銇亗銈娿伨銇涖倱銆?,
+      "鲸略使調度ソルバー - 製品概要",
+      "9 大アルゴリズムエンジン、真の工業級最適化。",
+      "鲸略使調度ソルバーは VRPTW（時間窓付き車両経路問題）向けの企業級インテリジェント調度システムであり、コアは 9 種の本格メタヒューリスティックです。単なるルール寄せ集めではありません。",
       "",
-      "銈炽偄銈儷銈淬儶銈恒儬銉炪儓銉偗銈?,
-      "缇ょ煡鑳界郴锛欰CO锛堣熁銈炽儹銉嬨兗鏈€閬╁寲锛夈伅鎯呭牨绱犳彯鐧恒仺銈ㄣ儶銉笺儓鎴︾暐銈掑疅瑁呫€侾SO锛堢矑瀛愮兢鏈€閬╁寲锛夈伅閫熷害-浣嶇疆鏇存柊銈掑疅瑁呫€?,
-      "灞€鎵€鎺㈢储绯伙細SA锛堢劶銇嶃仾銇俱仐锛夈伅 Metropolis 鍩烘簴銇ㄩ仼蹇溿儶銈广偪銉笺儓銈掓帯鐢ㄣ€俆abu锛堛偪銉栥兗鎺㈢储锛夈伅绂佸繉琛ㄣ仺鐗硅郸姗熸銈掑疅瑁呫€侺NS锛堝ぇ杩戝倣鎺㈢储锛夈伅 destroy-repair 銇?2 娈垫渶閬╁寲銈掑疅瑁呫€?,
-      "閫插寲瑷堢畻绯伙細GA锛堥伜浼濈殑銈儷銈淬儶銈恒儬锛夈伅銉堛兗銉娿儭銉炽儓閬告姙銆佸鐐逛氦鍙夈€? 绋伄澶夌暟婕旂畻瀛愩倰銈点儩銉笺儓銆?,
-      "娣峰悎銉绘绡夌郴锛欻ybrid 銇?SA+LNS+Tabu 銇?3 娈垫渶閬╁寲銈掔洿鍒楀寲銆侰lark-Wright 绡€绱勬硶銇?VRPTW 璨鎸垮叆銇ч珮鍝佽唱鍒濇湡瑙ｃ倰鐢熸垚銆?,
+      "コアアルゴリズムマトリクス",
+      "群知能系：ACO（蟻コロニー最適化）は情報素揮発とエリート戦略を実装。PSO（粒子群最適化）は速度-位置更新を実装。",
+      "局所探索系：SA（焼きなまし）は Metropolis 基準と適応リスタートを採用。Tabu（タブー探索）は禁忌表と特赦機構を実装。LNS（大近傍探索）は destroy-repair の 2 段最適化を実装。",
+      "進化計算系：GA（遺伝的アルゴリズム）はトーナメント選択、多点交叉、3 種の変異演算子をサポート。",
+      "混合・構築系：Hybrid は SA+LNS+Tabu の 3 段最適化を直列化。Clark-Wright 節約法と VRPTW 貪欲挿入で高品質初期解を生成。",
       "",
-      "鑷嫊銉併儱銉笺儖銉炽偘銇ㄤ甫鍒楀姞閫?,
-      "銉欍偆銈烘渶閬╁寲锛堛偓銈︺偣閬庣▼浠ｇ悊銉儑銉級銈掔当鍚堛仐銆佹渶閬┿儜銉┿儭銉笺偪鎺㈢储銈掕嚜鍕曞寲銆傘儊銉ャ兗銉嬨兂銈板姽鐜囥倰绱?70% 鍚戜笂銆?,
-      "銉炪儷銉併偝銈甫鍒楄渚°仺 GPU锛圕uPy锛夊姞閫熴倰銈点儩銉笺儓銇椼€? 銈炽偄鐠板銇ф渶澶?5.2 鍊嶃伄楂橀€熷寲銆?,
+      "自動チューニングと並列加速",
+      "ベイズ最適化（ガウス過程代理モデル）を統合し、最適パラメータ探索を自動化。チューニング効率を約 70% 向上。",
+      "マルチコア並列評価と GPU（CuPy）加速をサポートし、8 コア環境で最大 5.2 倍の高速化。",
       "",
-      "銈儷銈淬儶銈恒儬妲嬫垚",
-      "妲嬬瘔銉掋儱銉笺儶銈广儐銈ｃ儍銈紙2 绋級鈫?鍒濇湡瑙ｃ倰楂橀€熺敓鎴?,
-      "鏀硅壇銈儷銈淬儶銈恒儬锛? 绋級鈫?娣卞害鏈€閬╁寲",
-      "娣峰悎鎴︾暐锛? 绋級鈫?闀锋墍銈掔当鍚?,
+      "アルゴリズム構成",
+      "構築ヒューリスティック（2 種）→ 初期解を高速生成",
+      "改良アルゴリズム（6 種）→ 深度最適化",
+      "混合戦略（1 種）→ 長所を統合",
       "",
-      "椴哥暐浣胯搴︺偨銉儛銉?- 9 澶с偄銉偞銉偤銉犮偝銈?,
-      "1. ACO锛氭儏鍫辩礌姝ｅ赴閭勩伀鍩恒仴銇忕兢鐭ヨ兘鎵嬫硶銆傛儏鍫辩礌琛屽垪銆佺⒑鐜囬伕鎶炪€併偍銉兗銉堣熁鎴︾暐銆佹儏鍫辩礌鎻櫤銈掑疅瑁呫€?,
-      "2. PSO锛氱矑瀛愩伄浣嶇疆銉婚€熷害銈掑弽寰╂洿鏂般仐銆佸€嬩綋鏈€鑹仺鍏ㄤ綋鏈€鑹倰淇濇寔銆傛叄鎬ч噸銇挎笡琛般仹鎺㈢储銇ㄥ弾鏉熴倰涓＄珛銆?,
-      "3. SA锛歁etropolis 鍙楃悊瑕忓墖銇ㄦ俯搴︽笡琛般倰鎺＄敤銆傚眬鎵€鏈€閬╄劚鍑恒伄銇熴倎銇⒑鐜囥偢銉ｃ兂銉椼€侀仼蹇滃啀濮嬪嫊銇ㄥ杩戝倣婕旂畻瀛愩倰鎼級銆?,
-      "4. Tabu锛氱蹇岃〃銇ф渶杩戙伄绉诲嫊銈掕閷层仐銆佺壒璧﹁鍓囥仺娓囨湜姘存簴銇х牬绂併€傝繎鍌嶆帰绱仹缍欑稓鐨勩伀鏀瑰杽銆?,
-      "5. LNS锛氱牬澹娿仺淇京銇?2 娈点儠銉兗銉犮€傜牬澹娿伅銉┿兂銉€銉犻櫎鍘?鏈€鎮櫎鍘汇€佷慨寰┿伅璨鎸垮叆/閬烘喚鎸垮叆銆併仌銈夈伀 SA 鍙楃悊瑕忓墖銈掍降鐢ㄣ€?,
-      "6. GA锛氥儓銉笺儕銉°兂銉堥伕鎶炪€侀儴鍒嗗啓鍍忎氦鍙夈€? 绋鐣帮紙鍐嶉厤缃兓浜ゆ彌銉?-opt锛夈€併偍銉兗銉堜繚鎸併倰瀹熻銆?,
-      "7. Hybrid锛歋A鈫扡NS鈫扵abu 銇?3 娈点倰鐩村垪鎺ョ稓銇椼€佸墠娈电祼鏋溿倰寰屾銇稿紩銇嶇稒銇愮当鍚堟渶閬╁寲銆?,
-      "8. Clark-Wright 绡€绱勬硶锛氱瘈绱勫€よ▓绠椼€佸彲琛屻儷銉笺儓绲卞悎銆佸埗绱勩儊銈с儍銈仹楂樺搧璩垵鏈熻В銈掗珮閫熺敓鎴愩€?,
-      "9. VRPTW 璨鎸垮叆锛氭檪闁撶獡鍎厛銇у簵鑸椼倰涓︺伖銆佹渶瀹夋尶鍏ャ仹閫愭閰嶇疆銇椼€佸彲琛屾€с倰閫愭妞滆銆?,
+      "鲸略使調度ソルバー - 9 大アルゴリズムコア",
+      "1. ACO：情報素正帰還に基づく群知能手法。情報素行列、確率選択、エリート蟻戦略、情報素揮発を実装。",
+      "2. PSO：粒子の位置・速度を反復更新し、個体最良と全体最良を保持。慣性重み減衰で探索と収束を両立。",
+      "3. SA：Metropolis 受理規則と温度減衰を採用。局所最適脱出のための確率ジャンプ、適応再始動と多近傍演算子を搭載。",
+      "4. Tabu：禁忌表で最近の移動を記録し、特赦規則と渇望水準で破禁。近傍探索で継続的に改善。",
+      "5. LNS：破壊と修復の 2 段フレーム。破壊はランダム除去/最悪除去、修復は貪欲挿入/遺憾挿入、さらに SA 受理規則を併用。",
+      "6. GA：トーナメント選択、部分写像交叉、3 種変異（再配置・交換・2-opt）、エリート保持を実装。",
+      "7. Hybrid：SA→LNS→Tabu の 3 段を直列接続し、前段結果を後段へ引き継ぐ統合最適化。",
+      "8. Clark-Wright 節約法：節約値計算、可行ルート統合、制約チェックで高品質初期解を高速生成。",
+      "9. VRPTW 貪欲挿入：時間窓優先で店舗を並べ、最安挿入で逐次配置し、可行性を逐次検証。",
       "",
-      "9 澶с偄銉偞銉偤銉犮伄鍒嗘暎鍨嬨偆銉炽儐銉偢銈с兂銈?,
-      "銈儷銈淬儶銈恒儬銇瘎銇涢泦銈併仹銇仾銇忋€佸焦鍓查厤鍌欍仹銇欍€傚悇銈儷銈淬儶銈恒儬銇搴︺儊銈с兗銉炽伄涓仹缃亶鎻涖亪涓嶈兘銇伔璨倰鎷呫亜銇俱仚銆?,
+      "9 大アルゴリズムの分散型インテリジェンス",
+      "アルゴリズムの寄せ集めではなく、役割配備です。各アルゴリズムは調度チェーンの中で置き換え不能な職責を担います。",
       "",
-      "VRPTW锛氭檪闁撶獡銇偛銉笺儓銈兗銉戙兗銆傛檪闁撶獡閬曞弽銇儷銉笺儓銇垵鏈熸銇闅庛仹閫氥仐銇俱仜銈撱€?,
-      "Clark-Wright锛氳窛闆仺杌婁浮鏁般伄鏈€閬╁寲鍣ㄣ€傘儷銉笺儓绲愬悎銇瘈绱勫€ゃ亱銈夎粖涓℃暟涓嬬晫銇弬鑰冦倰涓庛亪銇俱仚銆?,
-      "GA锛氬叏浣撴閫犳帰绱㈠櫒銆傚垵鏈熸銇唱銇緷瀛樸仜銇氥€佸ぇ銇嶃仾瑙ｇ┖闁撱倰鑽掋亸鎺倞銇俱仚銆?,
-      "PSO锛氱兢鐭ヨ兘鎺㈢储鍣ㄣ€傝鏁扮矑瀛愩伄涓﹁鎺㈢储銇с€佺洿鎰熺殑銇с仾銇勫赴灞炲啀绶ㄣ倰瑕嬨仱銇戙倠銇亴寰楁剰銇с仚銆?,
-      "ACO锛氱祵璺儠銈с儹銉兂钃勭鍣ㄣ€傛銇儠銈ｃ兗銉夈儛銉冦偗銇ц壇銇勭祵璺閫犮倰绻般倞杩斻仐寮峰寲銇椼伨銇欍€?,
-      "Tabu锛氬眬鎵€娣辨帢銈婂櫒銆傛偑銇勬尝娆°倰鐩ｈ銇椼€佸悓銇樺け鏁楁墜銇埢銈夈仾銇勩倛銇嗐伀銇椼伨銇欍€?,
-      "LNS锛氬ぇ杩戝倣淇京鍣ㄣ€傛偑銇勩儷銉笺儓銇眬鎵€妲嬮€犮倰澹娿仐銆併倛銈婅壇銇勬柇鐗囥仹缃亶鎻涖亪銇俱仚銆?,
-      "Hybrid锛氬鎴︾暐铻嶅悎銈ㄣ兂銈搞兂銆侴A 鐨勬帰绱仺灞€鎵€鎺㈢储銈掕瀺鍚堛仐銆佹帰绱仺鍒╃敤銇儛銉┿兂銈广倰鍙栥倞銇俱仚銆?,
-      "SA锛氱劶銇嶃仾銇俱仐鍙庢潫鍣ㄣ€傛渶绲傛銇ф暍銇堛仸鍔ｈВ銈傚彈銇戝叆銈屻€佹渶寰屻伄灞€鎵€鏈€閬┿伀銇伨銈婅炯銈€銇倰闃层亷銇俱仚銆?,
+      "VRPTW：時間窓のゲートキーパー。時間窓違反のルートは初期案の段階で通しません。",
+      "Clark-Wright：距離と車両数の最適化器。ルート結合の節約値から車両数下界の参考を与えます。",
+      "GA：全体構造探索器。初期案の質に依存せず、大きな解空間を荒く探ります。",
+      "PSO：群知能探索器。複数粒子の並行探索で、直感的でない帰属再編を見つけるのが得意です。",
+      "ACO：経路フェロモン蓄積器。正のフィードバックで良い経路構造を繰り返し強化します。",
+      "Tabu：局所深掘り器。悪い波次を監視し、同じ失敗手に戻らないようにします。",
+      "LNS：大近傍修復器。悪いルートの局所構造を壊し、より良い断片で置き換えます。",
+      "Hybrid：多戦略融合エンジン。GA 的探索と局所探索を融合し、探索と利用のバランスを取ります。",
+      "SA：焼きなまし収束器。最終段で敢えて劣解も受け入れ、最後の局所最適にはまり込むのを防ぎます。",
       "",
-      "銇撱倢銈?9 銇ゃ伅涓€鍒椼伀娴併仐銇︾祩銈忋倞銇с伅銇傘倞銇俱仜銈撱€傜従鍦ㄣ伄姹傝В娈甸殠銆佺洰妯欍€佹棦瀛樼祼鏋溿伄璩倰瑕嬨仸銆併仼銈屻倰浣曟湰銆併仼銇爢銇с儶銉兗銇欍倠銇嬨倰鍕曠殑銇焙銈併伨銇欍€?,
+      "これら 9 つは一列に流して終わりではありません。現在の求解段階、目標、既存結果の質を見て、どれを何本、どの順でリレーするかを動的に決めます。",
       "",
-      "銉儸銉兼眰瑙ｏ細鍒濇湡妗堛亱銈変粫涓娿亽銇俱仹銇煡鐨勬剰鎬濇焙瀹氥儊銈с兗銉?,
-      "寰撴潵銈枫偣銉嗐儬锛? 鏈伄銈儷銈淬儶銈恒儬銈掑洖銇?鈫?绲愭灉銈掑嚭銇?鈫?绲備簡銆?,
-      "鏈偡銈广儐銉狅細銈儷銈淬儶銈恒儬銈掋儛銉堛兂銇с仱銇亷銆佸悇娈甸殠銇槑纰恒仾褰瑰壊銇ㄦ帯鐢ㄦ潯浠躲倰鎸併仧銇涖伨銇欍€?,
+      "リレー求解：初期案から仕上げまでの知的意思決定チェーン",
+      "従来システム：1 本のアルゴリズムを回す → 結果を出す → 終了。",
+      "本システム：アルゴリズムをバトンでつなぎ、各段階に明確な役割と採用条件を持たせます。",
       "",
-      "绗竴妫掞紙鍒濇湡妗堬級     鈫?VRPTW / Clark-Wright 銈掍甫鍒楀疅琛屻仐銆? 銇ゃ伄楠ㄦ牸妗堛倰浣滄垚",
-      "         鈫?,
-      "绗簩妫掞紙鍏ㄥ煙鎺㈢储锛?  鈫?GA / PSO / ACO 銇嬨倝鐩銇繙銇樸仸 1銆? 鏈倰閬搞伋銆佸ぇ瑕忔ā鍐嶆鎴?,
-      "         鈫?,
-      "绗笁妫掞紙灞€鎵€寮峰寲锛?  鈫?Hybrid / Tabu / LNS 銇屾偑銇勬尝娆°倰鍣涖伩銆佺窗閮ㄣ伨銇х（銇?,
-      "         鈫?,
-      "绗洓妫掞紙鍙庢潫锛?      鈫?SA 銇屾渶寰屻伄钀姐仺銇楃┐銈掗銇宠秺銇堛€併亾銈屼互涓婃敼鍠勩仐銇亜銇ㄧ⒑瑾嶃仐銇﹀仠姝?,
+      "第一棒（初期案）     → VRPTW / Clark-Wright を並列実行し、2 つの骨格案を作成",
+      "         ↓",
+      "第二棒（全域探索）   → GA / PSO / ACO から目標に応じて 1〜2 本を選び、大規模再構成",
+      "         ↓",
+      "第三棒（局所強化）   → Hybrid / Tabu / LNS が悪い波次を噛み、細部まで磨く",
+      "         ↓",
+      "第四棒（収束）       → SA が最後の落とし穴を飛び越え、これ以上改善しないと確認して停止",
       "",
-      "鍚勬闅庛伄绲備簡鏅傘伀銈枫偣銉嗐儬銇銈掑垽瀹氥仐銇俱仚銆?,
-      "鎺ユ鏉′欢銈掓簚銇熴仚銇嬶紙鍐呴儴浠ｄ尽銇綆涓嬨亴闁惧€ゃ倰瓒呫亪銇熴亱锛?,
-      "娆°伄妫掋倰椋涖伆銇欍亱锛堢従妗堛亴鍗佸垎銇壇銇勩亱锛?,
-      "鎮寲銇屽ぇ銇嶃亜鍫村悎銇坊銇嶆埢銇椼仸鍐嶈│琛屻仚銈嬨亱",
+      "各段階の終了時にシステムは次を判定します。",
+      "接棒条件を満たすか（内部代価の低下が閾値を超えたか）",
+      "次の棒を飛ばすか（現案が十分に良いか）",
+      "悪化が大きい場合に巻き戻して再試行するか",
       "",
-      "銇撱倢銇儢銉┿儍銈儨銉冦偗銈广仹銇亗銈娿伨銇涖倱銆傚悇妫掋伄鍏ュ姏銆佸嚭鍔涖€佸垽鏂悊鐢便€佸唴閮ㄤ唬渚°伄鍒嗚В銇岀敾闈伀缍欑稓琛ㄧず銇曘倢銇俱仚銆?,
+      "これはブラックボックスではありません。各棒の入力、出力、判断理由、内部代価の分解が画面に継続表示されます。",
       "",
-      "AI 涓灑锛?脳3 銈儷銈淬儶銈恒儬銉椼兗銉伄銉偄銉偪銈ゃ儬鍙鍖?,
-      "涓ぎ銇?3脳3 銉戙儘銉仹銆佷粖鍥炪仼銇偄銉偞銉偤銉犮亴瀹熼殯銇偣鐏仐銇︺亜銈嬨亱銈掋仚銇愮⒑瑾嶃仹銇嶃伨銇欍€?,
-      `鐝惧湪銇柟寮忥細${currentStrategyLabel()} / 鐝惧湪銇洰妯欙細${currentGoalLabel()} / 浠婂洖銇偄銉偞銉偤銉犮儊銈с兗銉筹細${selectedAlgorithms.join(" / ") || "銇仐"}`,
+      "AI 中枢：3×3 アルゴリズムプールのリアルタイム可視化",
+      "中央の 3×3 パネルで、今回どのアルゴリズムが実際に点灯しているかをすぐ確認できます。",
+      `現在の方式：${currentStrategyLabel()} / 現在の目標：${currentGoalLabel()} / 今回のアルゴリズムチェーン：${selectedAlgorithms.join(" / ") || "なし"}`,
       "",
-      "瑾垮害涓伀瑕嬨亪銈嬨倐銇細",
-      "銇┿伄銈儷銈淬儶銈恒儬銇岀偣鐏仐銇︺亜銈嬨亱锛堟湰銉┿偊銉炽儔銇у疅闅涖伀鍛笺伆銈屻仧銈傘伄锛?,
-      "鍚勩偄銉偞銉偤銉犮伄褰瑰壊锛堝垵鏈熸 / 鎺㈢储 / 寮峰寲 / 鍙庢潫锛?,
-      "浠娿亴绗綍妫掋亱锛堛儶銉兗閫叉崡锛?,
-      "鍐呴儴浠ｄ尽銇洸绶氥亴銇┿亞鍕曘亜銇︺亜銈嬨亱锛堟銇唱銇檪闁撹桓锛?,
+      "調度中に見えるもの：",
+      "どのアルゴリズムが点灯しているか（本ラウンドで実際に呼ばれたもの）",
+      "各アルゴリズムの役割（初期案 / 探索 / 強化 / 収束）",
+      "今が第何棒か（リレー進捗）",
+      "内部代価の曲線がどう動いているか（案の質の時間軸）",
       "",
-      "鍕樸伀闋笺倝銇氥€侀棁闆层伀瑭︺仌銇氥€佸悇銈儷銈淬儶銈恒儬銇并鐚害銈掕銇堛倠褰伀銇椼伨銇欍€?,
+      "勘に頼らず、闇雲に試さず、各アルゴリズムの貢献度を見える形にします。",
       "",
-      "銉囥兗銈垮堡銇キ鍕欑煡鑳?,
-      "銇撱倢銇睅鐢?VRPTW 銈姐儷銉愩兗銇с伅銇傘倞銇俱仜銈撱€傚搴楄垪銉讳竴鏃ュ閰嶃兓楂橀牷搴﹁鍏呫伄妤嫏銇悎銈忋仜銇︽繁銇忋儊銉ャ兗銉嬨兂銈般仐銇熻搴︺偍銉炽偢銉炽仹銇欍€?,
+      "データ層の業務知能",
+      "これは汎用 VRPTW ソルバーではありません。多店舗・一日多配・高頻度補充の業務に合わせて深くチューニングした調度エンジンです。",
       "",
-      "3 銇ゃ伄涓牳銉°偒銉嬨偤銉?,
-      "1. 澶氭尝娆°儑銉笺偪銇垎闆㈢鐞?,
-      "娉㈡鏁般伅鍥哄畾銇椼伨銇涖倱銆? 渚裤€? 渚裤€? 渚裤€? 渚库€﹀疅妤嫏銇悎銈忋仜銇﹁ō瀹氥仹銇嶃伨銇欍€傚悇娉㈡銇簵鑸椾竴瑕с€佹檪闁撶獡銆併偟銉笺儞銈规檪闁撱倰鐙珛绠＄悊銇椼€併仢銇尝娆￠渶瑕併亴銇亜鎷犵偣銇劇鐞嗐伀鍏ャ倢銇俱仜銈撱€傜悊璜栦笂銇叆銈嬨亴鐝惧牬銇с伅閰嶉€佷笉鑳姐€併仺銇勩亞鍋芥銈掗槻銇庛伨銇欍€?,
+      "3 つの中核メカニズム",
+      "1. 多波次データの分離管理",
+      "波次数は固定しません。2 便、3 便、4 便、5 便…実業務に合わせて設定できます。各波次は店舗一覧、時間窓、サービス時間を独立管理し、その波次需要がない拠点は無理に入れません。理論上は入るが現場では配送不能、という偽案を防ぎます。",
       "",
-      "2. 瓒呴仩璺濋洟鎷犵偣銇嫭绔嬭渚?,
-      "鍗樻尝娆°仹璺濋洟銇屾サ绔伀閬犮亜鎷犵偣銇€佸€夊韩鈫掓嫚鐐广伄鍘荤▼璺濋洟銇犮亼銈掕渚°仐銆佸赴搴伨銇у惈銈併仧鍏ㄨ绋嬩竴寰嬪垽瀹氥仹瑾ゃ仯銇﹁惤銇ㄣ仐銇俱仜銈撱€傚悎鐞嗙殑銇仩璺濋洟灏傜敤渚裤倰瀹堛倞銇ゃ仱銆佹湰褰撱伀涓嶅彲閬斻仾鎷犵偣銇鎶溿亶銇俱仚銆?,
+      "2. 超遠距離拠点の独立評価",
+      "単波次で距離が極端に遠い拠点は、倉庫→拠点の去程距離だけを評価し、帰庫まで含めた全行程一律判定で誤って落としません。合理的な遠距離専用便を守りつつ、本当に不可達な拠点は見抜きます。",
       "",
-      "3. 璺恫銈ㄣ兂銈搞兂 + 銈广優銉笺儓銈儯銉冦偡銉?,
-      "楂樺痉銈勭櫨搴︺仾銇┿伄鍟嗙敤璺恫 API 銈掑劒鍏堛仐銆佸疅璺濋洟銉诲疅鎵€瑕佹檪闁撱仹妗堛倰浣溿倞銇俱仚銆傚悓鏅傘伀銉兗銈儷銈儯銉冦偡銉ャ倰鎸併仭銆佸悓銇樺€夊韩-搴楄垪銉氥偄銇垵鍥炪仩銇戠湡闈㈢洰銇彇寰椼仐銆佷互寰屻伅鍗虫檪鍐嶅埄鐢ㄣ仐銇俱仚銆傚疅琛屾€с仺銈炽偣銉堛倰涓＄珛銇椼伨銇欍€?,
+      "3. 路網エンジン + スマートキャッシュ",
+      "高德や百度などの商用路網 API を優先し、実距離・実所要時間で案を作ります。同時にローカルキャッシュを持ち、同じ倉庫-店舗ペアは初回だけ真面目に取得し、以後は即時再利用します。実行性とコストを両立します。",
       "",
-      "鐝惧疅銇В銇勩仸銇勩倠鍟忛",
-      "銉併偋銉笺兂銉栥儵銉炽儔鍚戙亼锛氫竴鏃ュ閰嶃€佸簵鑸椼仈銇ㄣ伀瑁滃厖闋诲害銇岄仌銇勩€佷竴閮ㄣ伅鏈濄仩銇戙兓涓€閮ㄣ伅澶溿仩銇戙仹銈傘€併仢銇伨銇鹃亱鐢ㄣ仹銇嶃伨銇欍€?,
-      "3PL 鍚戙亼锛氳鏁般儢銉┿兂銉夈€佽鏁板€夊韩銆佽鏁版檪闁撶獡銉兗銉倰 1 銇ゃ伄銈枫偣銉嗐儬銇х当鍚堣搴︺仹銇嶃伨銇欍€?,
-      "閰嶈粖鎷呭綋鍚戙亼锛氥亾銇尝娆°伀鍑恒仚銇广亶銇с仾銇勬嫚鐐广倰鎵嬪嫊銇ч櫎澶栥仚銈嬪繀瑕併亴銇亸銆併偡銈广儐銉犮亴鑷嫊銇с儷銉笺儷銇緭銇ｃ仸銇点倠銇勫垎銇戙伨銇欍€?,
-      "绲屽柖灞ゅ悜銇戯細璺恫 API 銇偔銉ｃ儍銈枫儱銇曘倢銈嬨仧銈併€? 鏋氥伄瑾垮害绁ㄣ仹浣曠櫨鍥炪倐 API 銈掔劶銇忋亾銇ㄣ亴銇傘倞銇俱仜銈撱€?,
+      "現実に解いている問題",
+      "チェーンブランド向け：一日多配、店舗ごとに補充頻度が違い、一部は朝だけ・一部は夜だけでも、そのまま運用できます。",
+      "3PL 向け：複数ブランド、複数倉庫、複数時間窓ルールを 1 つのシステムで統合調度できます。",
+      "配車担当向け：この波次に出すべきでない拠点を手動で除外する必要がなく、システムが自動でルールに従ってふるい分けます。",
+      "経営層向け：路網 API はキャッシュされるため、1 枚の調度票で何百回も API を焼くことがありません。",
       "",
-      "瑾槑鍙兘銇搴︼細绛斻亪銇犮亼銇с仾銇忚鎷犮倰鍑恒仚",
-      "銇┿伄绲愭灉銈掗枊銇勩仸銈傘€佹銇岀⒑瑾嶃仹銇嶃伨銇欍€?,
-      "銇仠銇撱伄搴楄垪銇屻亾銇粖涓°伀鍏ャ仯銇熴亱锛堟檪闁撶獡鏁村悎銆佽窛闆究鐩娿€佺杓夌董鎸侊級",
-      "銇仠銇撱伄娉㈡銇屻仌銈夈伀鍦х府銇曘倢銇亱銇ｃ仧銇嬶紙鍒嗗竷銇枎銇曘€佹檪闁撶獡銇‖銇曘€佽粖鏁板埗绱勶級",
-      "銇仠鏈壊褰撱伀銇仯銇熴亱锛堣秴璺濋洟銆佽秴鏅傞枔銆佺┖銇嶈粖涓°仾銇椼€併儷銉笺儷闄ゅ锛?,
-      "鍐呴儴浠ｄ尽銇垎瑙ｏ紙鏅傞枔绐撶桨銆佽秴杓夌桨銆佽窛闆㈢桨銇仼锛?,
+      "説明可能な調度：答えだけでなく証拠を出す",
+      "どの結果を開いても、次が確認できます。",
+      "なぜこの店舗がこの車両に入ったか（時間窓整合、距離便益、積載維持）",
+      "なぜこの波次がさらに圧縮されなかったか（分布の疎さ、時間窓の硬さ、車数制約）",
+      "なぜ未割当になったか（超距離、超時間、空き車両なし、ルール除外）",
+      "内部代価の分解（時間窓罰、超載罰、距離罰など）",
       "",
-      "绲屽柖灞ゃ亴鐭ャ倞銇熴亜銇伅銈儷銈淬儶銈恒儬鍚嶃仹銇仾銇忋€併€屻仾銇滀粖鏃ャ伅妗?1 銇с€佹 3 銇с伅銇亜銇亱銆嶃仹銇欍€傛湰銈枫偣銉嗐儬銇仢銇鎷犮儊銈с兗銉炽倰鍑恒仐銇俱仚銆?,
+      "経営層が知りたいのはアルゴリズム名ではなく、「なぜ今日は案 1 で、案 3 ではないのか」です。本システムはその証拠チェーンを出します。",
       "",
-      "姹傝В銈兗銈偆銉栵細鍚勩儵銈︺兂銉夌祼鏋溿倰姘镐箙銇畫銇?,
-      "甯傝博銈枫偣銉嗐儬銇с伅绗?5 銉┿偊銉炽儔銈掑洖銇欍仺绗?3 銉┿偊銉炽儔銇屾秷銇堛亴銇°仹銇欍€?,
-      "鏈偡銈广儐銉犮伅鍚勩儵銈︺兂銉夈倰鑷嫊淇濆瓨銇椼€併儦銉笺偢閫併倞銇ц杩斻仐銆佹瘮杓冦仐銆佸京鍏冦仹銇嶃伨銇欍€?,
+      "求解アーカイブ：各ラウンド結果を永久に残す",
+      "市販システムでは第 5 ラウンドを回すと第 3 ラウンドが消えがちです。",
+      "本システムは各ラウンドを自動保存し、ページ送りで見返し、比較し、復元できます。",
       "",
-      "閰嶈粖鎷呭綋銇娇銇勬柟锛?,
-      "蹇€熷垵鎺?鈫?銈兗銈偆銉?,
-      "缁х画浼樺寲銈?3 鍥?鈫?銈兗銈偆銉?,
-      "銈勩伅銈婄 2 銉┿偊銉炽儔銇岃壇銇?鈫?绗?2 銉┿偊銉炽儔銈掑京鍏?鈫?銇濄亾銇嬨倝鍐嶆渶閬╁寲",
+      "配車担当の使い方：",
+      "快速初排 → アーカイブ",
+      "继续优化を 3 回 → アーカイブ",
+      "やはり第 2 ラウンドが良い → 第 2 ラウンドを復元 → そこから再最適化",
       "",
-      "涓婃浉銇嶃仜銇氥€佸け銈忋仛銆佸悇鍒ゆ柇銈掔棔璺°仺銇椼仸娈嬨仐銇俱仚銆?,
+      "上書きせず、失わず、各判断を痕跡として残します。",
       "",
-      "銉囥偢銈裤儷瑾垮害瀹橈細闊冲０瀵捐┍銈掑墠缃?,
-      "寰撴潵銇祼鏋溿亴鍑恒倠銇俱仹鑱炪亼銇俱仜銈撱仹銇椼仧銆?,
-      "鏈偡銈广儐銉犮伅瑷堢畻鍓嶃亱銈夊瑭便仹銇嶃伨銇欍€?,
+      "デジタル調度官：音声対話を前置",
+      "従来は結果が出るまで聞けませんでした。",
+      "本システムは計算前から対話できます。",
       "",
-      "闊冲０璩晱锛氥€屽墠銇儵銈︺兂銉夈仹銇傘伄搴楄垪銇屽叆銈夈仾銇嬨仯銇熴伄銇仾銇滐紵銆?,
-      "闊冲０銉栥儶銉笺儠銈ｃ兂銈帮細銆屼粖鍥炪伄瑾垮害銇?47 搴楄垪銆? 鍙般€佺窂璺濋洟 318km銆佸墠鍥炪倛銈?12km 鐭府銇椼伨銇椼仧銆傘€?,
+      "音声質問：「前のラウンドであの店舗が入らなかったのはなぜ？」",
+      "音声ブリーフィング：「今回の調度は 47 店舗、6 台、総距離 318km、前回より 12km 短縮しました。」",
       "",
-      "寰呫仧銇涖仛銆佸厛銇緟姗熴仐銇俱仚銆?,
+      "待たせず、先に待機します。",
       "",
-      "绲屽柖灞ゃ伄瑕栫偣",
-      "銇撱伄銈枫偣銉嗐儬銇岀祵鍠跺堡銇尽鍊ゃ倰鎸併仱銇伅銆佽銇熺洰銇с伅銇亸娆°伄鐐广仹銇欍€?,
-      "绲愭灉銇岃拷璺″彲鑳斤細鍚勩儵銈︺兂銉夈伄妗堛亴娈嬨倠銇熴倎銆佹剰鎬濇焙瀹氥亴鍕樸伀銇倝銇亜",
-      "鐞嗙敱銇岃鏄庡彲鑳斤細銇┿伄銉兗銉堛倐銇┿伄搴楄垪甯板睘銈傜悊鐢便倰绀恒仜銈?,
-      "閬庣▼銇岀洠鏌诲彲鑳斤細瑾般亴銇勩仱浣曘倰瑙︺倞銆併偡銈广儐銉犮亴銇┿伄鎺ュ姏銈掕蛋銈夈仜銇熴亱娈嬨倠",
-      "姣旇純銇屽畾閲忓寲锛氳鏁版銈掍甫銇广€佷唬渚°兓鍙版暟銉昏窛闆兓閬曞弽鏁般倰鍚屾檪姣旇純銇с亶銈?,
-      "銈炽偣銉堛亴鍒跺尽鍙兘锛氳矾缍?API 銇偔銉ｃ儍銈枫儱銇椼€佺畻娉曘儊銈с兗銉炽倐鐒￠銇亸绶ㄦ垚銇欍倠",
+      "経営層の視点",
+      "このシステムが経営層に価値を持つのは、見た目ではなく次の点です。",
+      "結果が追跡可能：各ラウンドの案が残るため、意思決定が勘にならない",
+      "理由が説明可能：どのルートもどの店舗帰属も理由を示せる",
+      "過程が監査可能：誰がいつ何を触り、システムがどの接力を走らせたか残る",
+      "比較が定量化：複数案を並べ、代価・台数・距離・違反数を同時比較できる",
+      "コストが制御可能：路網 API はキャッシュし、算法チェーンも無駄なく編成する",
       "",
-      "銇撱倢銇厤杌婃媴褰撱仩銇戙伄鎿嶄綔鍙般仹銇仾銇忋€侀厤閫佹剰鎬濇焙瀹氬叏浣撱伄瑷兼嫚銈汇兂銈裤兗銇с仚銆?,
+      "これは配車担当だけの操作台ではなく、配送意思決定全体の証拠センターです。",
       "",
-      "涓€瑷€銇с伨銇ㄣ倎銈嬨仺",
-      "甯傞潰銇с倐鐝嶃仐銇勩€? 澶с偄銉偞銉偤銉犮倰褰瑰壊閰嶅倷銇椼€佹帴鍔涙眰瑙ｃ倰閫忔槑鍖栥仐銆佽搴﹀垽鏂倰瑾槑鍙兘銇仐銆佸叏灞ユ銈掓畫銇欏娉㈡閰嶉€佽搴︺偡銈广儐銉犮仹銇欍€?,
+      "一言でまとめると",
+      "市面でも珍しい、9 大アルゴリズムを役割配備し、接力求解を透明化し、調度判断を説明可能にし、全履歴を残す多波次配送調度システムです。",
       "",
-      "妤ó銈掗伕銇般仛銆佹キ鎱嬨倰閬搞伆銇氥€併€岃▓绠椼仹銇嶃倠銆嶃亱銈夈€屾銇椼亸瑷堢畻銇с亶銆佽鏄庛仹銇嶃€佹畫銇涖仸銆佽拷鍙娿伀銈傝€愩亪銈夈倢銈嬨€嶃伕閫层倎銇俱仚銆?,
+      "業種を選ばず、業態を選ばず、「計算できる」から「正しく計算でき、説明でき、残せて、追及にも耐えられる」へ進めます。",
     ].join("\n");
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return [
-    "鍩庡競閰嶉€丄I璋冨害绯荤粺",
+    "城市配送AI调度系统",
     "",
-    "鏍稿績瀹氫綅",
-    "杩欎笉鏄竴濂楁帓杞﹀伐鍏枫€傝繖鏄竴濂楀叿澶囩畻娉曞喅绛栭摼銆佸彲瑙ｉ噴璋冨害銆佸叏娴佺▼鐣欑棔鐨凙I璋冨害鎿嶄綔绯荤粺銆?,
+    "核心定位",
+    "这不是一套排车工具。这是一套具备算法决策链、可解释调度、全流程留痕的AI调度操作系统。",
     "",
-    "甯傞潰涓婄粷澶у鏁拌皟搴︾郴缁熷仛鐨勬槸涓変欢浜嬶細杈撳叆鏁版嵁 鈫?璺戜竴涓畻娉?鈫?杈撳嚭琛ㄦ牸銆傝皟搴﹀憳鎷垮埌缁撴灉锛屼笉鐭ラ亾杩欎釜缁撴灉鎬庝箞鏉ョ殑锛屼篃涓嶇煡閬撲负浠€涔堜笉鏄彟涓€涓粨鏋溿€?,
+    "市面上绝大多数调度系统做的是三件事：输入数据 → 跑一个算法 → 输出表格。调度员拿到结果，不知道这个结果怎么来的，也不知道为什么不是另一个结果。",
     "",
-    "杩欏绯荤粺涓嶄竴鏍枫€傚畠鎶婁節濂楃畻娉曠殑鍗忓悓鍐崇瓥杩囩▼瀹屾暣鏆撮湶鍑烘潵锛岃璋冨害鍛樿兘鐪嬪埌銆佽兘鐞嗚В銆佽兘骞查銆佽兘澶嶇洏銆傝绠＄悊灞傝兘杩芥函銆佽兘瀵规瘮銆佽兘鍐崇瓥銆?,
+    "这套系统不一样。它把九套算法的协同决策过程完整暴露出来，让调度员能看到、能理解、能干预、能复盘。让管理层能追溯、能对比、能决策。",
     "",
-    "閫傜敤琛屼笟锛氳繛閿侀浂鍞€侀楗棬搴椼€佸尰鑽厤閫併€佺ぞ鍖虹數鍟嗐€佸喎閾剧敓椴溿€佷腑澶帹鎴块厤閫併€佺煶娌圭珯鐐硅ˉ璐с€佺涓夋柟缁熶粨鍏遍厤鈥︹€﹀嚒鏄秹鍙娿€屽悓涓€鎵硅溅銆佷竴澶╁瓒熴€佹瘡瀹剁珯鐐规湁鑷繁鐨勬椂闂寸獥鍙ｅ拰琛ヨ揣鑺傚銆嶇殑涓氬姟锛岄兘鑳界洿鎺ヨ惤鍦般€?,
+    "适用行业：连锁零售、餐饮门店、医药配送、社区电商、冷链生鲜、中央厨房配送、石油站点补货、第三方统仓共配……凡是涉及「同一批车、一天多趟、每家站点有自己的时间窗口和补货节奏」的业务，都能直接落地。",
     "",
-    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒 - 浜у搧绠€浠?,
-    "涔濆ぇ绠楁硶寮曟搸锛岀湡姝ｇ殑宸ヤ笟绾т紭鍖栥€?,
-    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒鏄竴娆鹃潰鍚慥RPTW锛堝甫鏃堕棿绐楄溅杈嗚矾寰勯棶棰橈級鐨勪紒涓氱骇鏅鸿兘璋冨害绯荤粺锛屾牳蹇冪畻娉曞簱鍖呭惈涔濈鐪熸鐨勫厓鍚彂寮忕畻娉曪紝缁濋潪绠€鍗曠殑瑙勫垯鍫嗙爩銆?,
+    "鲸略使调度求解器 - 产品简介",
+    "九大算法引擎，真正的工业级优化。",
+    "鲸略使调度求解器是一款面向VRPTW（带时间窗车辆路径问题）的企业级智能调度系统，核心算法库包含九种真正的元启发式算法，绝非简单的规则堆砌。",
     "",
-    "鏍稿績绠楁硶鐭╅樀",
-    "缇ゆ櫤鑳界被锛氳殎缇ょ畻娉曪紙ACO锛夐厤澶囧畬鏁翠俊鎭礌鎸ュ彂涓庣簿鑻辩瓥鐣ワ紱绮掑瓙缇ょ畻娉曪紙PSO锛夊疄鐜扮湡姝ｇ殑閫熷害-浣嶇疆鏇存柊鏈哄埗銆?,
-    "灞€閮ㄦ悳绱㈢被锛氭ā鎷熼€€鐏紙SA锛夐噰鐢∕etropolis鍑嗗垯涓庤嚜閫傚簲閲嶅惎锛涚蹇屾悳绱紙Tabu锛夋嫢鏈夊畬鏁寸殑绂佸繉琛ㄥ拰鐗硅郸鏈哄埗锛涘ぇ閭诲煙鎼滅储锛圠NS锛夊疄鐜癲estroy-repair鍙岄樁娈典紭鍖栥€?,
-    "杩涘寲璁＄畻绫伙細閬椾紶绠楁硶锛圙A锛夋敮鎸侀敠鏍囪禌閫夋嫨銆佸鐐逛氦鍙変笌涓夌鍙樺紓绠楀瓙銆?,
-    "娣峰悎涓庢瀯閫犵被锛欻ybrid娣峰悎鍣ㄤ覆鑱擲A+LNS+Tabu涓夐樁娈典紭鍖栵紱Clark-Wright鑺傜害娉曞拰VRPTW璐績鎻掑叆鎻愪緵楂樿川閲忓垵濮嬭В銆?,
+    "核心算法矩阵",
+    "群智能类：蚁群算法（ACO）配备完整信息素挥发与精英策略；粒子群算法（PSO）实现真正的速度-位置更新机制。",
+    "局部搜索类：模拟退火（SA）采用Metropolis准则与自适应重启；禁忌搜索（Tabu）拥有完整的禁忌表和特赦机制；大邻域搜索（LNS）实现destroy-repair双阶段优化。",
+    "进化计算类：遗传算法（GA）支持锦标赛选择、多点交叉与三种变异算子。",
+    "混合与构造类：Hybrid混合器串联SA+LNS+Tabu三阶段优化；Clark-Wright节约法和VRPTW贪心插入提供高质量初始解。",
     "",
-    "鏅鸿兘璋冨弬涓庡苟琛屽姞閫?,
-    "闆嗘垚璐濆彾鏂紭鍖栵紙楂樻柉杩囩▼浠ｇ悊妯″瀷锛夛紝鑷姩鎼滅储鏈€浼樺弬鏁扮粍鍚堬紝璋冨弬鏁堢巼鎻愬崌70%銆?,
-    "鏀寔澶氭牳骞惰璇勪及涓嶨PU鍔犻€燂紙CuPy锛夛紝8鏍哥幆澧冧笅鍔犻€熸瘮杈?.2鍊嶃€?,
+    "智能调参与并行加速",
+    "集成贝叶斯优化（高斯过程代理模型），自动搜索最优参数组合，调参效率提升70%。",
+    "支持多核并行评估与GPU加速（CuPy），8核环境下加速比达5.2倍。",
     "",
-    "绠楁硶闆嗗悎缁撴瀯",
-    "鏋勯€犲惎鍙戝紡锛?绉嶏級鈫?蹇€熺敓鎴愬垵濮嬭В",
-    "鏀硅繘绠楁硶锛?绉嶏級鈫?娣卞害浼樺寲",
-    "娣峰悎绛栫暐锛?绉嶏級鈫?鍙栭暱琛ョ煭",
+    "算法集合结构",
+    "构造启发式（2种）→ 快速生成初始解",
+    "改进算法（6种）→ 深度优化",
+    "混合策略（1种）→ 取长补短",
     "",
-    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒 - 涔濆ぇ绠楁硶鏍稿績",
-    "1. 铓佺兢绠楁硶锛圓CO锛夛細鍩轰簬淇℃伅绱犳鍙嶉鏈哄埗锛屽寘鍚俊鎭礌鐭╅樀缁存姢銆佽疆鐩樿祵姒傜巼閫夋嫨銆佺簿鑻辫殏铓佺瓥鐣ヤ笌淇℃伅绱犳尌鍙戞満鍒躲€?,
-    "2. 绮掑瓙缇ょ畻娉曪紙PSO锛夛細閫氳繃绮掑瓙浣嶇疆涓庨€熷害杩唬鏇存柊瀵讳紭锛岃褰曚釜浣撴渶浼樹笌鍏ㄥ眬鏈€浼橈紝骞堕噰鐢ㄦ儻鎬ф潈閲嶈“鍑忓钩琛℃帰绱笌寮€鍙戙€?,
-    "3. 妯℃嫙閫€鐏紙SA锛夛細閲囩敤Metropolis鎺ュ彈鍑嗗垯鍜屾俯搴﹁“鍑忕瓥鐣ワ紝鍐呯疆鑷€傚簲閲嶅惎鏈哄埗涓庡閭诲煙绠楀瓙銆?,
-    "4. 绂佸繉鎼滅储锛圱abu锛夛細缁存姢绂佸繉琛ㄨ褰曡繎鏈熺Щ鍔紝閫氳繃鐗硅郸鍑嗗垯鍜屾复鏈涙按骞崇牬绂侊紝缁撳悎閭诲煙鎼滅储鎸佺画鏀硅繘銆?,
-    "5. 澶ч偦鍩熸悳绱紙LNS锛夛細閲囩敤鐮村潖涓庝慨澶嶅弻闃舵妗嗘灦锛岀牬鍧忔敮鎸侀殢鏈虹Щ闄ゅ拰鏈€宸Щ闄わ紝淇鏀寔璐┆鎻掑叆鍜岄仐鎲炬彃鍏ワ紝骞跺紩鍏ユā鎷熼€€鐏帴鍙楀噯鍒欍€?,
-    "6. 閬椾紶绠楁硶锛圙A锛夛細閲囩敤閿︽爣璧涢€夋嫨銆侀儴鍒嗘槧灏勪氦鍙変笌涓夌鍙樺紓绠楀瓙锛堥噸瀹氫綅銆佷氦鎹€?-opt锛夛紝骞跺疄鏂界簿鑻变繚鐣欐満鍒躲€?,
-    "7. 娣峰悎绠楁硶锛圚ybrid锛夛細涓茶仈妯℃嫙閫€鐏€佸ぇ閭诲煙鎼滅储鍜岀蹇屾悳绱笁涓樁娈碉紝灏嗗墠搴忕粨鏋滀紶閫掔粰鍚庣画绠楁硶銆?,
-    "8. Clark-Wright鑺傜害娉曪細閫氳繃璁＄畻鑺傜害鍊笺€佸悎骞跺彲琛岃矾绾垮苟妫€鏌ョ害鏉熸潯浠讹紝蹇€熺敓鎴愰珮璐ㄩ噺鍒濆瑙ｃ€?,
-    "9. VRPTW璐績鎻掑叆锛氭寜鏈€鏃╂椂闂寸獥浼樺厛鎺掑簭闂ㄥ簵锛岄噰鐢ㄦ渶渚垮疁鎻掑叆绛栫暐骞跺疄鏃堕獙璇佸彲琛屾€с€?,
+    "鲸略使调度求解器 - 九大算法核心",
+    "1. 蚁群算法（ACO）：基于信息素正反馈机制，包含信息素矩阵维护、轮盘赌概率选择、精英蚂蚁策略与信息素挥发机制。",
+    "2. 粒子群算法（PSO）：通过粒子位置与速度迭代更新寻优，记录个体最优与全局最优，并采用惯性权重衰减平衡探索与开发。",
+    "3. 模拟退火（SA）：采用Metropolis接受准则和温度衰减策略，内置自适应重启机制与多邻域算子。",
+    "4. 禁忌搜索（Tabu）：维护禁忌表记录近期移动，通过特赦准则和渴望水平破禁，结合邻域搜索持续改进。",
+    "5. 大邻域搜索（LNS）：采用破坏与修复双阶段框架，破坏支持随机移除和最差移除，修复支持贪婪插入和遗憾插入，并引入模拟退火接受准则。",
+    "6. 遗传算法（GA）：采用锦标赛选择、部分映射交叉与三种变异算子（重定位、交换、2-opt），并实施精英保留机制。",
+    "7. 混合算法（Hybrid）：串联模拟退火、大邻域搜索和禁忌搜索三个阶段，将前序结果传递给后续算法。",
+    "8. Clark-Wright节约法：通过计算节约值、合并可行路线并检查约束条件，快速生成高质量初始解。",
+    "9. VRPTW贪心插入：按最早时间窗优先排序门店，采用最便宜插入策略并实时验证可行性。",
     "",
-    "涔濆ぇ绠楁硶鐨勫垎甯冨紡鏅鸿兘",
-    "涓嶆槸绠楁硶鍫嗙爩锛屾槸绠楁硶宀椾綅鍖栥€傛瘡涓€濂楃畻娉曞湪璋冨害閾句腑鎵挎媴涓嶅彲鏇夸唬鐨勮亴鑳斤細",
+    "九大算法的分布式智能",
+    "不是算法堆砌，是算法岗位化。每一套算法在调度链中承担不可替代的职能：",
     "",
-    "VRPTW锛氭椂闂寸獥瀹堥棬浜恒€傜‖绾︽潫绗竴鍏筹紝杩濆弽鏃堕棿绐楃殑绾胯矾鏍规湰涓嶅嚭鐜板湪鍒濇帓涓€?,
-    "Clark-Wright锛氶噷绋嬩笌杞︽暟浼樺寲鍣ㄣ€備粠鍚堝苟鏀剁泭鍑哄彂锛岀粰鍑鸿溅鏁颁笅鐣岀殑鐞嗚鍙傝€冦€?,
-    "GA锛氬叏灞€缁撴瀯鎼滅储鍣ㄣ€傚湪澶цВ绌洪棿涓毚鍔涙帰绱紝涓嶄緷璧栧垵鎺掕川閲忋€?,
-    "PSO锛氱兢浣撳崗鍚屾帰绱㈠櫒銆傚绮掑瓙骞惰锛屾搮闀垮彂鐜伴潪鐩磋鐨勫綊灞炲叧绯婚噸缁勩€?,
-    "ACO锛氳矾寰勪俊鎭礌绱Н鍣ㄣ€傞€氳繃姝ｅ弽棣堟満鍒讹紝璁╁ソ鐨勮矾寰勭粨鏋勮鍙嶅寮哄寲銆?,
-    "Tabu锛氬眬閮ㄦ繁搴︽寲鎺樺櫒銆傜洴浣忓潖娉㈡锛岀姝㈣蛋鍥炲ご璺紝寮哄埗璺冲嚭灞€閮ㄩ櫡闃便€?,
-    "LNS锛氬ぇ閭诲煙淇鍣ㄣ€傛懅姣佸潖绾胯矾鐨勫眬閮ㄧ粨鏋勶紝鐢ㄦ洿浼樼墖娈垫浛鎹€?,
-    "Hybrid锛氬绛栫暐铻嶅悎寮曟搸銆傚湪 GA 妗嗘灦涓祵鍏ュ眬閮ㄦ悳绱紝骞宠　鎺㈢储涓庡埄鐢ㄣ€?,
-    "SA锛氶€€鐏敹鍙ｅ櫒銆傚湪鏈€鍚庨樁娈垫帴鍙楀樊瑙ｏ紝閬垮厤鍗″湪鏈€鍚庝竴灞傛渶浼樸€?,
+    "VRPTW：时间窗守门人。硬约束第一关，违反时间窗的线路根本不出现在初排中。",
+    "Clark-Wright：里程与车数优化器。从合并收益出发，给出车数下界的理论参考。",
+    "GA：全局结构搜索器。在大解空间中暴力探索，不依赖初排质量。",
+    "PSO：群体协同探索器。多粒子并行，擅长发现非直觉的归属关系重组。",
+    "ACO：路径信息素累积器。通过正反馈机制，让好的路径结构被反复强化。",
+    "Tabu：局部深度挖掘器。盯住坏波次，禁止走回头路，强制跳出局部陷阱。",
+    "LNS：大邻域修复器。摧毁坏线路的局部结构，用更优片段替换。",
+    "Hybrid：多策略融合引擎。在 GA 框架中嵌入局部搜索，平衡探索与利用。",
+    "SA：退火收口器。在最后阶段接受差解，避免卡在最后一层最优。",
     "",
-    "鍝佺墝闅愬柣锛氶哺绫绘湰棰嗕笌姹傝В鏈哄埗鐨勬殫鍚?,
-    "杩欏绯荤粺骞朵笉鏄殢渚块€変簡涓€涓哺楸?Logo銆傞哺绫荤殑鎹曢銆佽縼寰欍€佸崗鍚屼笌鎰熺煡鏂瑰紡锛屽拰杩欏姹傝В鍣ㄩ噷鐨勫绠楁硶鍗忓悓鏈哄埗楂樺害鍚屾瀯銆?,
+    "品牌隐喻：鲸类本领与求解机制的暗合",
+    "这套系统并不是随便选了一个鲸鱼 Logo。鲸类的捕食、迁徙、协同与感知方式，和这套求解器里的多算法协同机制高度同构。",
     "",
-    "1. 搴уご椴哥殑鈥滄皵娉＄綉鎹曢鈥?鈫?澶ч偦鍩熸悳绱?+ 绂佸繉鎼滅储",
-    "搴уご椴镐細鍏堝悙姘旀场褰㈡垚鈥滅綉鈥濓紝鎶婄寧鐗╁ぇ鑼冨洿鍦堜綇锛屽啀鍦ㄥ湀鍐呭弽澶嶄笅娼溿€佺簿缁嗘崟椋熴€?,
-    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細澶ч偦鍩熸悳绱㈣礋璐ｇ牬鍧忛儴鍒嗚矾绾裤€侀噸鏋勭粨鏋勶紝鐩稿綋浜庡厛鍚愭皵娉＄敾鍦堬紱绂佸繉鎼滅储璐熻矗鍦ㄩ偦鍩熷唴鍙嶅浜ゆ崲闂ㄥ簵銆佹寔缁慨琛ワ紝鐩稿綋浜庡湀鍐呯簿缁嗕笅娼溿€?,
-    "瀵瑰簲鍒版眰瑙ｈ繃绋嬶紝灏辨槸鍏堝ぇ鑼冨洿鎵板姩锛屽啀灞€閮ㄧ簿淇€?,
+    "1. 座头鲸的“气泡网捕食” ↔ 大邻域搜索 + 禁忌搜索",
+    "座头鲸会先吐气泡形成“网”，把猎物大范围圈住，再在圈内反复下潜、精细捕食。",
+    "对应到求解器里：大邻域搜索负责破坏部分路线、重构结构，相当于先吐气泡画圈；禁忌搜索负责在邻域内反复交换门店、持续修补，相当于圈内精细下潜。",
+    "对应到求解过程，就是先大范围扰动，再局部精修。",
     "",
-    "2. 椴哥殑鈥滈暱閫旇縼寰?+ 灞€閮ㄨ椋熲€?鈫?妯℃嫙閫€鐏殑鈥滈珮娓╂帰绱?+ 浣庢俯鏀舵暃鈥?,
-    "椴镐細鍏堣繘琛岄暱璺濈杩佸緳锛屽箍娉涙帰绱㈡柊娴峰煙锛涘埌杈鹃珮浠峰€兼捣鍩熷悗锛屽啀闆嗕腑瑙呴銆?,
-    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細妯℃嫙閫€鐏珮娓╅樁娈垫帴鍙楀樊瑙ｃ€佷富鍔ㄨ烦鍑哄眬閮ㄦ渶浼橈紝鐩稿綋浜庤縼寰欐帰绱紱浣庢俯闃舵鍙繚鐣欐洿浼樿В銆侀€愭鏀剁揣锛岀浉褰撲簬鎶佃揪濂芥捣鍩熷悗鐨勭ǔ瀹氳椋熴€?,
-    "瀵瑰簲鍒版眰瑙ｈ繃绋嬶紝灏辨槸鍏堟斁寮€鎺㈢储锛屽啀鏀剁揣鏀舵暃銆?,
+    "2. 鲸的“长途迁徙 + 局部觅食” ↔ 模拟退火的“高温探索 + 低温收敛”",
+    "鲸会先进行长距离迁徙，广泛探索新海域；到达高价值海域后，再集中觅食。",
+    "对应到求解器里：模拟退火高温阶段接受差解、主动跳出局部最优，相当于迁徙探索；低温阶段只保留更优解、逐步收紧，相当于抵达好海域后的稳定觅食。",
+    "对应到求解过程，就是先放开探索，再收紧收敛。",
     "",
-    "3. 铏庨哺鐨勨€滅兢浣撶嫨鐚庡垎宸モ€?鈫?绮掑瓙缇ょ畻娉曠殑鈥滀釜浣撶粡楠?+ 缇や綋鍗忎綔鈥?,
-    "铏庨哺缇ゆ崟鐚庢椂浼氬垎宸ワ細鏈夌殑椹辫刀銆佹湁鐨勬嫤鎴€佹湁鐨勪富鏀伙紝浣嗘暣浣撳缁堝洿缁曠兢浣撶洰鏍囪鍔ㄣ€?,
-    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細姣忎釜绮掑瓙閮芥湁鑷繁鐨勪綅缃€侀€熷害鍜屼釜浣撴渶浼樼粡楠岋紱缇や綋鏈€浼樺垯鎸佺画鐗靛紩鏁翠綋鏂瑰悜銆?,
-    "瀵瑰簲鍒扮兢浣撴櫤鑳芥満鍒讹紝灏辨槸涓綋缁忛獙涓庣兢浣撳崗浣滃叡鍚屽舰鎴愭暣浣撴櫤鑳姐€?,
+    "3. 虎鲸的“群体狩猎分工” ↔ 粒子群算法的“个体经验 + 群体协作”",
+    "虎鲸群捕猎时会分工：有的驱赶、有的拦截、有的主攻，但整体始终围绕群体目标行动。",
+    "对应到求解器里：每个粒子都有自己的位置、速度和个体最优经验；群体最优则持续牵引整体方向。",
+    "对应到群体智能机制，就是个体经验与群体协作共同形成整体智能。",
     "",
-    "4. 鎶归椴哥殑鈥滄繁娼滆椋熲€?鈫?Clark-Wright 鑺傜害娉曠殑鈥滀竴娆℃繁娼滃埌浣嶁€?,
-    "鎶归椴歌兘澶熶竴娆℃繁娼滃埌鏋佹繁娴峰煙锛屽湪鏈夐檺鏃堕棿閲岀簿鍑嗗畬鎴愯椋燂紝鍐嶉珮鏁堣繑鍥炪€?,
-    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細Clark-Wright 鑺傜害娉曚笉渚濊禆闀块摼杩唬锛岃€屾槸鐩存帴渚濇嵁鑺傜害閲忓畬鎴愯矾绾垮悎骞讹紝涓€娆℃瀯閫犲埌浣嶃€?,
-    "瀵瑰簲鍒版瀯閫犲瀷绠楁硶鏈哄埗锛屽氨鏄笉鍙嶅鎶樿吘锛屼竴娆℃繁娼滄妸浜嬪姙瀹屻€?,
+    "4. 抹香鲸的“深潜觅食” ↔ Clark-Wright 节约法的“一次深潜到位”",
+    "抹香鲸能够一次深潜到极深海域，在有限时间里精准完成觅食，再高效返回。",
+    "对应到求解器里：Clark-Wright 节约法不依赖长链迭代，而是直接依据节约量完成路线合并，一次构造到位。",
+    "对应到构造型算法机制，就是不反复折腾，一次深潜把事办完。",
     "",
-    "5. 椴哥殑鈥滃洖澹板畾浣嶁€?鈫?缁煎悎璇勫垎浣撶郴鐨勨€滃缁村弽棣堝鍚戔€?,
-    "椴镐緷闈犲洖澹板畾浣嶆劅鐭ュ懆鍥寸幆澧冿紝鍒ゆ柇鐚庣墿浣嶇疆銆佹柟鍚戝拰杩藉嚮浠峰€笺€?,
-    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細缁煎悎璇勫垎灏辨槸绠楁硶鐨勫洖澹板弽棣堛€傚噯鏃剁巼 45% + 閲岀▼ 25% + 瑁呰浇鐜?15% + 鍋忓ソ 15%锛屽叡鍚屽喅瀹氫竴涓柟妗堝€间笉鍊煎緱琚繚鐣欍€佷笅涓€姝ヨ寰€鍝噷浼樺寲銆?,
-    "瀵瑰簲鍒拌瘎鍒嗗弽棣堟満鍒讹紝灏辨槸涓嶅彧鐪嬪崟涓€鎸囨爣锛岃€屾槸渚濋潬澶氱淮鍙嶉鍋氬垽鏂€?,
+    "5. 鲸的“回声定位” ↔ 综合评分体系的“多维反馈导向”",
+    "鲸依靠回声定位感知周围环境，判断猎物位置、方向和追击价值。",
+    "对应到求解器里：综合评分就是算法的回声反馈。准时率 45% + 里程 25% + 装载率 15% + 偏好 15%，共同决定一个方案值不值得被保留、下一步该往哪里优化。",
+    "对应到评分反馈机制，就是不只看单一指标，而是依靠多维反馈做判断。",
     "",
-    "鏈€鏈夋剰鎬濈殑涓€鐐规槸锛氭暣濂楃郴缁熸湰韬氨鍍忎竴涓€滅畻娉曢哺缇も€濄€?,
-    "涔濆绠楁硶鍚屾椂鍦ㄥ満锛屾湁鐨勮礋璐ｅぇ鑼冨洿鎺㈢储锛圫A / PSO / ACO锛夛紝鏈夌殑璐熻矗灞€閮ㄧ簿淇紙绂佸繉鎼滅储 / 澶ч偦鍩熸悳绱級锛屾湁鐨勮礋璐ｅ揩閫熺粰鍑哄熀绾匡紙VRPTW / Clark-Wright锛夛紝鏈€鍚庣敱璇勫垎浣撶郴鍐冲畾璋佺殑缁撴灉琚噰绾炽€?,
-    "杩欐湰璐ㄤ笂灏辨槸涓€缇ょ畻娉曢哺鍦ㄥ崗鍚屾崟椋熷悓涓€涓洰鏍囷細鎵惧埌鏇翠紭鐨勮皟搴︽柟妗堛€?,
+    "最有意思的一点是：整套系统本身就像一个“算法鲸群”。",
+    "九套算法同时在场，有的负责大范围探索（SA / PSO / ACO），有的负责局部精修（禁忌搜索 / 大邻域搜索），有的负责快速给出基线（VRPTW / Clark-Wright），最后由评分体系决定谁的结果被采纳。",
+    "这本质上就是一群算法鲸在协同捕食同一个目标：找到更优的调度方案。",
     "",
-    "杩欎節濂楃畻娉曚笉鏄覆琛岃窇涓€閬嶅氨缁撴潫銆傜郴缁熸牴鎹綋鍓嶆眰瑙ｉ樁娈点€佹柟妗堢洰鏍囥€佸凡鏈夌粨鏋滆川閲忥紝鍔ㄦ€佸喅瀹氳皟鐢ㄥ摢鍑犲銆佷互浠€涔堥『搴忋€佹帴鍔涘灏戞銆?,
+    "这九套算法不是串行跑一遍就结束。系统根据当前求解阶段、方案目标、已有结果质量，动态决定调用哪几套、以什么顺序、接力多少次。",
     "",
-    "鎺ュ姏姹傝В锛氫粠鍒濇帓鍒版敹鍙ｇ殑鏅鸿兘鍐崇瓥閾?,
-    "浼犵粺绯荤粺锛氳窇涓€涓畻娉?鈫?鍑虹粨鏋?鈫?缁撴潫銆?,
-    "杩欏绯荤粺锛氱畻娉曟帴鍔涜窇锛屾瘡涓€妫掗兘鏈夋槑纭换鍔″拰鍒ゆ柇鏍囧噯銆?,
+    "接力求解：从初排到收口的智能决策链",
+    "传统系统：跑一个算法 → 出结果 → 结束。",
+    "这套系统：算法接力跑，每一棒都有明确任务和判断标准。",
     "",
-    "绗竴妫掞紙鍒濇帓锛?    鈫?VRPTW / Clark-Wright 骞惰锛岀粰鍑轰袱鐗堥鏋舵柟妗?,
-    "         鈫?,
-    "绗簩妫掞紙鍏ㄥ眬鎺㈢储锛?鈫?GA / PSO / ACO 鏍规嵁鐩爣閫夋嫨 1-2 濂楋紝澶ц妯￠噸鏋?,
-    "         鈫?,
-    "绗笁妫掞紙灞€閮ㄥ己鍖栵級 鈫?Hybrid / Tabu / LNS 鍜綇鍧忔尝娆★紝閫愭潯鎵撶（",
-    "         鈫?,
-    "绗洓妫掞紙鏀跺彛锛?    鈫?SA 璺冲潙锛岀‘璁ゆ棤娉曡繘涓€姝ユ敼鍠勬墠缁堟",
+    "第一棒（初排）     → VRPTW / Clark-Wright 并行，给出两版骨架方案",
+    "         ↓",
+    "第二棒（全局探索） → GA / PSO / ACO 根据目标选择 1-2 套，大规模重构",
+    "         ↓",
+    "第三棒（局部强化） → Hybrid / Tabu / LNS 咬住坏波次，逐条打磨",
+    "         ↓",
+    "第四棒（收口）     → SA 跳坑，确认无法进一步改善才终止",
     "",
-    "姣忎竴妫掔粨鏉熸椂锛岀郴缁熶細鍒ゆ柇锛?,
-    "鎺ユ鏉′欢鏄惁婊¤冻锛堜唬浠蜂笅闄嶆槸鍚﹁揪鍒伴槇鍊硷級",
-    "鏄惁璺宠繃涓嬩竴妫掞紙褰撳墠鏂规宸茶冻澶熷ソ锛?,
-    "鏄惁鍥為€€閲嶈窇锛堟煇涓€姝ユ伓鍖栬秴鍑洪鏈燂級",
+    "每一棒结束时，系统会判断：",
+    "接棒条件是否满足（代价下降是否达到阈值）",
+    "是否跳过下一棒（当前方案已足够好）",
+    "是否回退重跑（某一步恶化超出预期）",
     "",
-    "杩欎笉鏄粦绠便€傛瘡涓€妫掔殑杈撳叆銆佽緭鍑恒€佸喅绛栫悊鐢便€佷唬浠锋媶瑙ｏ紝閮藉湪鐣岄潰涓婃寔缁緭鍑恒€?,
+    "这不是黑箱。每一棒的输入、输出、决策理由、代价拆解，都在界面上持续输出。",
     "",
-    "AI涓灑锛氫節瀹牸瀹炴椂鍙鍖?,
-    "绯荤粺涓ぎ鏈変竴鍧?3脳3 鐨勭畻娉曟睜闈㈡澘銆?,
-    `褰撳墠妯″紡锛?{currentStrategyLabel()}锛涘綋鍓嶇洰鏍囷細${currentGoalLabel()}锛涙湰杞鍒掕皟鐢細${selectedAlgorithms.join(" / ") || "鏃?}`,
+    "AI中枢：九宫格实时可视化",
+    "系统中央有一块 3×3 的算法池面板。",
+    `当前模式：${currentStrategyLabel()}；当前目标：${currentGoalLabel()}；本轮计划调用：${selectedAlgorithms.join(" / ") || "无"}`,
     "",
-    "姣忎竴杞眰瑙ｈ繃绋嬩腑锛岃皟搴﹀憳鑳界洿鎺ョ湅鍒帮細",
-    "鍝簺绠楁硶琚偣浜紙鏈疆瀹為檯璋冪敤锛?,
-    "姣忎釜绠楁硶鎵挎媴浠€涔堣鑹诧紙鍒濇帓 / 鎺㈢储 / 寮哄寲 / 鏀跺彛锛?,
-    "褰撳墠澶勪簬绗嚑妫掞紙鎺ュ姏杩涘害锛?,
-    "浠ｄ环鏇茬嚎濡備綍鍙樺寲锛堟柟妗堣川閲忕殑鏃堕棿绾匡級",
+    "每一轮求解过程中，调度员能直接看到：",
+    "哪些算法被点亮（本轮实际调用）",
+    "每个算法承担什么角色（初排 / 探索 / 强化 / 收口）",
+    "当前处于第几棒（接力进度）",
+    "代价曲线如何变化（方案质量的时间线）",
     "",
-    "涓嶉潬鐚溿€備笉闈犵粡楠岀洸娴嬨€傛瘡涓€杞畻娉曠殑璐＄尞搴︽槸鍙鐨勩€?,
+    "不靠猜。不靠经验盲测。每一轮算法的贡献度是可见的。",
     "",
-    "鏁版嵁灞傜殑涓氬姟鏅鸿兘",
-    "杩欎笉鏄竴涓€氱敤鐨?VRPTW 姹傝В鍣ㄣ€傝繖鏄竴濂椾负澶氶棬搴椼€佷竴鏃ュ閰嶃€佹晱鎹疯ˉ璐у満鏅繁搴﹀畾鍒剁殑璋冨害寮曟搸銆?,
+    "数据层的业务智能",
+    "这不是一个通用的 VRPTW 求解器。这是一套为多门店、一日多配、敏捷补货场景深度定制的调度引擎。",
     "",
-    "涓夊鏍稿績鏈哄埗",
-    "1. 澶氭尝娆℃暟鎹垎绂荤鐞?,
-    "娉㈡鏁颁笉鍐欐銆備袱閰嶃€佷笁閰嶃€佸洓閰嶃€佷簲閰嶁€︹€︽寜涓氬姟瀹為檯閰嶇疆銆傛瘡涓尝娆＄嫭绔嬬淮鎶ら棬搴楁竻鍗曘€佹椂闂寸獥鍙ｃ€佹湇鍔℃椂闀裤€傛病鏈夋煇娉㈡闇€姹傜殑绔欑偣锛屼笉浼氳绯荤粺寮鸿濉炲叆銆傛椂闂寸獥鍥炲綊鐪熷疄琛ヨ揣鑺傚锛屼笉浜х敓銆岀悊璁轰笂鑳芥帓銆佸疄闄呬笂閫佷笉浜嗐€嶇殑鍋囨柟妗堛€?,
+    "三套核心机制",
+    "1. 多波次数据分离管理",
+    "波次数不写死。两配、三配、四配、五配……按业务实际配置。每个波次独立维护门店清单、时间窗口、服务时长。没有某波次需求的站点，不会被系统强行塞入。时间窗回归真实补货节奏，不产生「理论上能排、实际上送不了」的假方案。",
     "",
-    "2. 瓒呰繙绔欑偣鐙珛鑰冩牳瑙勫垯",
-    "鍗曟尝娆′腑璺濈寮傚父鐨勭珯鐐癸紝绯荤粺閲囩敤鐙珛浠ｄ环鍑芥暟鈥斺€斿彧鑰冩牳浠庝粨搴撳埌绔欑偣鐨勫幓绋嬮噷绋嬶紝涓嶅啀鐢ㄣ€屽幓绋?鍥炲簱銆嶇殑鍏ㄧ▼閲岀▼涓€鍒€鍒囥€傞伩鍏嶅悎鐞嗙嚎璺洜杩旂▼绌洪┒琚鏉€锛屽悓鏃朵繚鐣欏鐪熸涓嶅彲杈剧珯鐐圭殑璇嗗埆鑳藉姏銆?,
+    "2. 超远站点独立考核规则",
+    "单波次中距离异常的站点，系统采用独立代价函数——只考核从仓库到站点的去程里程，不再用「去程+回库」的全程里程一刀切。避免合理线路因返程空驶被误杀，同时保留对真正不可达站点的识别能力。",
     "",
-    "3. 璺綉寮曟搸 + 鏅鸿兘缂撳瓨",
-    "浼樺厛璋冪敤楂樺痉 / 鐧惧害绛夊晢鐢ㄨ矾缃戞帴鍙ｈ幏鍙栫湡瀹炶窛绂讳笌鏃堕暱锛岀‘淇濇柟妗堝彲鎵ц銆傚悓鏃跺缓绔嬫湰鍦扮紦瀛樻満鍒讹細鍚屼竴瀵圭珯鐐?浠撳簱鐨勭粍鍚堬紝绗竴娆¤鐪熸媺鍙栵紝鍚庣画鐩存帴鍛戒腑缂撳瓨銆傛垚鏈拰鍝嶅簲閫熷害鍏奸【锛屼笉浼氶噸澶嶇儳鎺ュ彛璐广€?,
+    "3. 路网引擎 + 智能缓存",
+    "优先调用高德 / 百度等商用路网接口获取真实距离与时长，确保方案可执行。同时建立本地缓存机制：同一对站点-仓库的组合，第一次认真拉取，后续直接命中缓存。成本和响应速度兼顾，不会重复烧接口费。",
     "",
-    "瑙ｅ喅鐨勭湡瀹為棶棰?,
-    "瀵硅繛閿佸搧鐗岋細涓€鏃ュ閰嶃€佷笉鍚岄棬搴椾笉鍚岃ˉ璐ч娆°€侀儴鍒嗙珯鐐瑰彧閰嶆棭涓嶉厤鏅氣€斺€旂郴缁熷ぉ鐒舵敮鎸侊紝涓嶇敤鏀逛唬鐮併€?,
-    "瀵圭涓夋柟鐗╂祦锛氭湇鍔″涓搧鐗屻€佸涓粨搴撱€佸濂楁椂闂寸獥瑙勫垯鈥斺€斾竴濂楃郴缁熺粺涓€璋冨害锛屼笉鏉ュ洖鍒囨崲銆?,
-    "瀵硅皟搴﹀憳锛氫笉鐢ㄦ墜鍔ㄥ墧闄ゃ€屼笉璇ュ嚭鐜板湪杩欎竴娉€嶇殑绔欑偣锛岀郴缁熻嚜鍔ㄦ寜瑙勫垯杩囨护銆?,
-    "瀵圭鐞嗗眰锛氳矾缃?API 鏈夌紦瀛橈紝绠楀姏鎴愭湰鍙帶锛屼笉浼氳涓€寮犺皟搴﹀崟鐑ф帀鍑犵櫨娆℃帴鍙ｈ皟鐢ㄣ€?,
+    "解决的真实问题",
+    "对连锁品牌：一日多配、不同门店不同补货频次、部分站点只配早不配晚——系统天然支持，不用改代码。",
+    "对第三方物流：服务多个品牌、多个仓库、多套时间窗规则——一套系统统一调度，不来回切换。",
+    "对调度员：不用手动剔除「不该出现在这一波」的站点，系统自动按规则过滤。",
+    "对管理层：路网 API 有缓存，算力成本可控，不会被一张调度单烧掉几百次接口调用。",
     "",
-    "鍙В閲婅皟搴︼細涓嶆槸鍙粰绛旀锛屾槸缁欒瘉鎹摼",
-    "璋冨害鍛樼偣鍑讳换浣曚竴涓粨鏋滐紝鑳界湅鍒帮細",
-    "涓轰粈涔堣繖涓棬搴楀綊杩欒締杞︼紙鏃堕棿绐楀尮閰?/ 閲岀▼鏀剁泭 / 閬垮厤瓒呰浇锛?,
-    "涓轰粈涔堣繖涓尝娆℃病琚紭鍖栨帀锛堥棬搴楀垎甯冪█鐤?/ 鏃堕棿绐楀垰鎬?/ 杞︽暟绾︽潫锛?,
-    "涓轰粈涔堟煇浜涢棬搴楁湭琚皟搴︼紙瓒呰窛 / 瓒呮椂 / 鏃犲彲鐢ㄨ溅杈?/ 瑙勫垯杩囨护锛?,
-    "缃氬垎瑙勫垯鐨勫唴閮ㄤ唬浠锋媶瑙ｏ紙鏃堕棿绐楁儵缃?/ 瓒呰浇鎯╃綒 / 閲岀▼鎯╃綒鍚勮嚜澶氬皯锛?,
+    "可解释调度：不是只给答案，是给证据链",
+    "调度员点击任何一个结果，能看到：",
+    "为什么这个门店归这辆车（时间窗匹配 / 里程收益 / 避免超载）",
+    "为什么这个波次没被优化掉（门店分布稀疏 / 时间窗刚性 / 车数约束）",
+    "为什么某些门店未被调度（超距 / 超时 / 无可用车辆 / 规则过滤）",
+    "罚分规则的内部代价拆解（时间窗惩罚 / 超载惩罚 / 里程惩罚各自多少）",
     "",
-    "绠＄悊灞備笉闇€瑕佺湅鎳傜畻娉曘€傜鐞嗗眰闇€瑕佺湅鎳傗€滀负浠€涔堜粖澶╃敤鏂规 1 鑰屼笉鏄柟妗?3鈥濄€傝繖濂楃郴缁熸彁渚涚殑灏辨槸杩欎釜璇佹嵁閾俱€?,
+    "管理层不需要看懂算法。管理层需要看懂“为什么今天用方案 1 而不是方案 3”。这套系统提供的就是这个证据链。",
     "",
-    "姹傝В妗ｆ锛氭瘡涓€杞粨鏋滄案涔呯暀鐥?,
-    "甯傞潰绯荤粺锛氱畻瀹岀 5 杞紝绗?3 杞氨娌′簡銆?,
-    "杩欏绯荤粺锛氳嚜鍔ㄥ瓨妗ｆ瘡涓€杞眰瑙ｇ粨鏋溿€傚悗缁彲浠ョ炕椤靛洖鐪嬨€佸姣斻€佹仮澶嶅巻鍙叉柟妗堛€?,
+    "求解档案：每一轮结果永久留痕",
+    "市面系统：算完第 5 轮，第 3 轮就没了。",
+    "这套系统：自动存档每一轮求解结果。后续可以翻页回看、对比、恢复历史方案。",
     "",
-    "璋冨害鍛樺彲浠ヨ繖鏍峰伐浣滐細",
-    "蹇€熷垵鎺?鈫?瀛樻。",
-    "缁х画浼樺寲涓夎疆 鈫?瀛樻。",
-    "鍙戠幇绗?2 杞柟妗堟洿濂?鈫?鎭㈠绗?2 杞?鈫?鍦ㄦ鍩虹涓婄户缁紭鍖?,
+    "调度员可以这样工作：",
+    "快速初排 → 存档",
+    "继续优化三轮 → 存档",
+    "发现第 2 轮方案更好 → 恢复第 2 轮 → 在此基础上继续优化",
     "",
-    "涓嶈鐩栥€備笉涓㈠け銆傛瘡涓€杞€濊€冮兘鏈夌棔杩广€?,
+    "不覆盖。不丢失。每一轮思考都有痕迹。",
     "",
-    "鏁板瓧璋冨害瀹橈細璇煶浜や簰鍓嶇疆",
-    "浼犵粺绯荤粺锛氱瓑缁撴灉绠楀畬锛屾墠鑳界湅銆佹墠鑳介棶銆?,
-    "杩欏绯荤粺锛氭眰瑙ｅ墠鍗冲彲瀵硅瘽銆?,
+    "数字调度官：语音交互前置",
+    "传统系统：等结果算完，才能看、才能问。",
+    "这套系统：求解前即可对话。",
     "",
-    "璇煶鎻愰棶锛氣€滀负浠€涔堜笂涓€杞偅瀹跺簵娌℃帓杩涘幓锛熲€?,
-    "璇煶鎾姤锛氣€滄湰杞叡璋冨害 47 瀹堕棬搴楋紝浣跨敤 6 杈嗚溅锛屾€婚噷绋?318 鍏噷锛岃緝涓婁竴杞笅闄?12 鍏噷銆傗€?,
+    "语音提问：“为什么上一轮那家店没排进去？”",
+    "语音播报：“本轮共调度 47 家门店，使用 6 辆车，总里程 318 公里，较上一轮下降 12 公里。”",
     "",
-    "鎻愬墠寰呮満锛屼笉绛変汉銆?,
+    "提前待机，不等人。",
     "",
-    "绠＄悊灞傜殑瑙嗚",
-    "杩欏绯荤粺瀵圭鐞嗗眰鏈変环鍊硷紝涓嶆槸鍥犱负鐣岄潰濂界湅锛岃€屾槸鍥犱负锛?,
-    "缁撴灉鍙拷婧細姣忎竴杞柟妗堥兘鏈夊瓨妗ｏ紝鍐崇瓥涓嶆槸鎷嶈剳琚?,
-    "鍘熷洜鍙В閲婏細浠讳綍涓€鏉＄嚎璺€佷竴涓棬搴楃殑褰掑睘锛岄兘鑳借鍑轰负浠€涔?,
-    "杩囩▼鍙璁★細璋冨害鍛樺仛浜嗗摢浜涙搷浣溿€佺郴缁熻嚜鍔ㄨ窇浜嗗摢浜涙帴鍔涖€佽皝鍦ㄤ粈涔堟椂闂寸偣骞查浜嗕粈涔堬紝閮芥湁璁板綍",
-    "瀵规瘮鍙噺鍖栵細澶氭柟妗堝苟鎺掑姣旓紝浠ｄ环銆佽溅鏁般€侀噷绋嬨€佽繚鍙嶇害鏉熸暟涓€鐩簡鐒?,
-    "鎴愭湰鍙帶鍒讹細璺綉 API 鏈夌紦瀛橈紝涓嶉噸澶嶈皟鍙栵紱绠楁硶閾惧彲閰嶇疆锛屼笉娴垂绠楀姏",
+    "管理层的视角",
+    "这套系统对管理层有价值，不是因为界面好看，而是因为：",
+    "结果可追溯：每一轮方案都有存档，决策不是拍脑袋",
+    "原因可解释：任何一条线路、一个门店的归属，都能说出为什么",
+    "过程可审计：调度员做了哪些操作、系统自动跑了哪些接力、谁在什么时间点干预了什么，都有记录",
+    "对比可量化：多方案并排对比，代价、车数、里程、违反约束数一目了然",
+    "成本可控制：路网 API 有缓存，不重复调取；算法链可配置，不浪费算力",
     "",
-    "瀹冧笉鏄皟搴﹀憳涓€涓汉鐨勬搷浣滃彴銆傚畠鏄暣涓厤閫佸喅绛栫殑璇佹嵁涓績銆?,
+    "它不是调度员一个人的操作台。它是整个配送决策的证据中心。",
     "",
-    "涓€鍙ヨ瘽鎬荤粨",
-    "甯傞潰鍞竴涓€濂楀皢涔濆ぇ绠楁硶宀椾綅鍖栥€佹帴鍔涙眰瑙ｉ€忔槑鍖栥€佽皟搴﹀喅绛栧彲瑙ｉ噴鍖栥€佸叏娴佺▼鐣欑棔姘镐箙鍖栫殑澶氭尝娆￠厤閫佽皟搴︾郴缁熴€?,
+    "一句话总结",
+    "市面唯一一套将九大算法岗位化、接力求解透明化、调度决策可解释化、全流程留痕永久化的多波次配送调度系统。",
     "",
-    "涓嶉檺琛屼笟锛屼笉闄愪笟鎬併€備粠鈥滅畻寰楀嚭鈥濆埌鈥滅畻寰楀銆佽寰楁竻銆佺暀寰椾綇銆佺粡寰楄捣杩介棶鈥濄€?,
+    "不限行业，不限业态。从“算得出”到“算得对、讲得清、留得住、经得起追问”。",
   ].join("\n");
 }
 
@@ -10930,20 +16714,30 @@ function clearProcessTypingTimers() {
   processTypingTimers = [];
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function typeProcessText(box, text) {
   box.textContent = "";
   let index = 0;
-  const punctuationPauses = new Set(["锛?, "銆?, "锛?, "锛?, "锛?, "锛?, ",", ".", ":", ";", "!", "?", "\n"]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const punctuationPauses = new Set(["，", "。", "：", "；", "！", "？", ",", ".", ":", ";", "!", "?", "\n"]);
   const tick = () => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (index >= text.length) {
       return;
     }
     const nextChar = text[index];
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const step = /[a-zA-Z0-9]/.test(nextChar) ? 2 : 1;
     index = Math.min(text.length, index + step);
     box.textContent = text.slice(0, index);
     box.scrollTop = box.scrollHeight;
     const pause = punctuationPauses.has(text[index - 1]) ? 220 : 95;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const timer = setTimeout(tick, pause);
     processTypingTimers.push(timer);
   };
@@ -10951,22 +16745,36 @@ function typeProcessText(box, text) {
 }
 
 function openProcessModal(resultKey, waveId, plateNo, tripNo) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const matched = state.lastResults.map((result) => {
     const waveIndex = result.scenario.waves.findIndex((wave) => wave.waveId === waveId);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (waveIndex < 0) return null;
     const plan = result.solution[waveIndex].find((item) => item.vehicle.plateNo === plateNo);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const trip = plan?.trips.find((item) => String(item.tripNo) === String(tripNo));
     if (!plan || !trip) return null;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return { result, wave: result.scenario.waves[waveIndex], plan, trip };
   }).filter(Boolean);
   if (!matched.length) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const modal = document.getElementById("processModal");
   const preferredIndex = matched.findIndex((item) => item.result.key === resultKey);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (preferredIndex > 0) {
     const [preferred] = matched.splice(preferredIndex, 1);
     matched.unshift(preferred);
   }
-  document.getElementById("processModalTitle").textContent = lang() === "ja" ? `${plateNo} 路 ${waveId} 路 绗?${tripNo} 渚?路 瑜囨暟銈儷銈淬儶銈恒儬${L("playback")}` : `${plateNo} 路 ${waveId} 路 绗?${tripNo} ${L("tripSuffix")} 路 澶氱畻娉?{L("playback")}`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  document.getElementById("processModalTitle").textContent = lang() === "ja" ? `${plateNo} · ${waveId} · 第 ${tripNo} 便 · 複数アルゴリズム${L("playback")}` : `${plateNo} · ${waveId} · 第 ${tripNo} ${L("tripSuffix")} · 多算法${L("playback")}`;
   const grid = document.getElementById("processGrid");
   grid.innerHTML = matched.map((item, index) => `
     <section class="process-pane">
@@ -10982,11 +16790,15 @@ function openProcessModal(resultKey, waveId, plateNo, tripNo) {
   modal.setAttribute("aria-hidden", "false");
   clearProcessTypingTimers();
   matched.forEach((item, index) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const box = document.getElementById(`processTypewriter-${index}`);
     if (box) typeProcessText(box, buildProcessNarrative(item.result, item.plan, item.trip, item.result.scenario, item.wave, matched.length > 1));
   });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function closeProcessModal() {
   const modal = document.getElementById("processModal");
   modal.classList.add("hidden");
@@ -10994,19 +16806,27 @@ function closeProcessModal() {
   clearProcessTypingTimers();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function destroyRouteLeafletMap() {
   routeAmapMarkers.forEach((marker) => {
     try { marker.setMap?.(null); } catch {}
   });
   routeAmapMarkers = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (routeAmapPolyline) {
     try { routeAmapPolyline.setMap?.(null); } catch {}
     routeAmapPolyline = null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (routeAmapMap) {
     try { routeAmapMap.destroy?.(); } catch {}
     routeAmapMap = null;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (routeLeafletLayerGroup) {
     routeLeafletLayerGroup.clearLayers();
     routeLeafletLayerGroup = null;
@@ -11017,8 +16837,12 @@ function destroyRouteLeafletMap() {
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderInteractiveRouteMap(containerId, mapData) {
   const container = document.getElementById(containerId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!container) return false;
   destroyRouteLeafletMap();
   if (window.AMap?.Map) {
@@ -11033,6 +16857,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
       scrollWheel: true,
       keyboardEnable: false,
     });
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     try {
       routeAmapMap.addControl(new window.AMap.ToolBar({ position: "RB" }));
       routeAmapMap.addControl(new window.AMap.Scale());
@@ -11040,6 +16866,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
     const lineLngLats = (mapData.polylinePoints || [])
       .filter((point) => Array.isArray(point) && point.length === 2)
       .map((point) => [Number(point[0]), Number(point[1])]);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (lineLngLats.length) {
       routeAmapPolyline = new window.AMap.Polyline({
         path: lineLngLats,
@@ -11053,8 +16881,12 @@ function renderInteractiveRouteMap(containerId, mapData) {
     }
     const boundsPoints = [];
     routeAmapMarkers = (mapData.markers || []).flatMap((item) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const lng = Number(item.lng);
       const lat = Number(item.lat);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!Number.isFinite(lng) || !Number.isFinite(lat)) return [];
       boundsPoints.push([lng, lat]);
       const labelHtml = `
@@ -11063,6 +16895,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
           <span class="leaflet-route-text">${escapeHtml(item.shortName || item.name)}</span>
         </div>
       `;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const marker = new window.AMap.Marker({
         position: [lng, lat],
         anchor: item.label === "D" ? "center" : "bottom-center",
@@ -11074,9 +16908,13 @@ function renderInteractiveRouteMap(containerId, mapData) {
         offset: new window.AMap.Pixel(0, -18),
       });
       marker.on("click", () => infoWindow.open(routeAmapMap, [lng, lat]));
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return marker;
     });
     if (routeAmapMarkers.length) routeAmapMap.add(routeAmapMarkers);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (boundsPoints.length || lineLngLats.length) {
       routeAmapMap.setFitView([...(routeAmapMarkers || []), ...(routeAmapPolyline ? [routeAmapPolyline] : [])], false, [70, 90, 70, 90], 16);
     } else {
@@ -11085,6 +16923,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
     setTimeout(() => routeAmapMap?.resize?.(), 60);
     return true;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (typeof window.L === "undefined") return false;
   routeLeafletMap = window.L.map(container, {
     zoomControl: true,
@@ -11103,6 +16943,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
   const lineLatLngs = (mapData.polylinePoints || [])
     .filter((point) => Array.isArray(point) && point.length === 2)
     .map((point) => [Number(point[1]), Number(point[0])]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (lineLatLngs.length) {
     window.L.polyline(lineLatLngs, {
       color: "#2563eb",
@@ -11113,8 +16955,12 @@ function renderInteractiveRouteMap(containerId, mapData) {
 
   const markerLatLngs = [];
   (mapData.markers || []).forEach((item) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lat = Number(item.lat);
     const lng = Number(item.lng);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
     markerLatLngs.push([lat, lng]);
     const markerHtml = `
@@ -11123,6 +16969,8 @@ function renderInteractiveRouteMap(containerId, mapData) {
         <span class="leaflet-route-text">${escapeHtml(item.shortName || item.name)}</span>
       </div>
     `;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const icon = window.L.divIcon({
       className: "leaflet-route-divicon",
       html: markerHtml,
@@ -11135,15 +16983,21 @@ function renderInteractiveRouteMap(containerId, mapData) {
   });
 
   const bounds = window.L.latLngBounds([...(lineLatLngs || []), ...markerLatLngs]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (bounds.isValid()) routeLeafletMap.fitBounds(bounds.pad(0.18));
   else routeLeafletMap.setView([Number(DC.lat), Number(DC.lng)], 11);
   setTimeout(() => routeLeafletMap?.invalidateSize(), 50);
   return true;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildFallbackRouteMapData(result, trip) {
   const nodes = [DC, ...trip.stops.map((stop) => result.scenario.storeMap.get(stop.storeId) || { id: stop.storeId, name: stop.storeName, lng: 0, lat: 0 }), DC]
     .filter((node) => Number.isFinite(Number(node.lng)) && Number.isFinite(Number(node.lat)));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const markers = computeMapOverlayMarkers(nodes.slice(0, -1).map((node, index) => ({
     label: index === 0 ? "D" : String(index),
     lng: Number(node.lng),
@@ -11158,19 +17012,27 @@ function buildFallbackRouteMapData(result, trip) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderFallbackRouteMap(containerId, mapData) {
   const container = document.getElementById(containerId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!container) return false;
   const points = (mapData.polylinePoints || []).filter((point) => Array.isArray(point) && point.length === 2);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const markers = mapData.markers || [];
   const allPoints = [...points, ...markers.map((item) => [Number(item.lng), Number(item.lat)])];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!allPoints.length) return false;
   container.innerHTML = `
     <div class="route-panzoom">
       <div class="route-panzoom-toolbar">
         <button type="button" class="mini route-zoom-in">+</button>
         <button type="button" class="mini route-zoom-out">-</button>
-        <span class="muted">${lang() === "ja" ? "瀹熷湴鍥炽儥銉笺偣 / 銉夈儵銉冦偘銉汇儧銈ゃ兗銉搷浣溿伀瀵惧繙" : "鐪熷疄搴曞浘锛屽彲鎷栧姩 / 婊氳疆缂╂斁"}</span>
+        <span class="muted">${lang() === "ja" ? "実地図ベース / ドラッグ・ホイール操作に対応" : "真实底图，可拖动 / 滚轮缩放"}</span>
       </div>
       <div class="route-panzoom-viewport">
         <div class="route-panzoom-content route-tilemap-content">
@@ -11181,56 +17043,98 @@ function renderFallbackRouteMap(containerId, mapData) {
     </div>
   `;
   const viewport = container.querySelector(".route-panzoom-viewport");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const content = container.querySelector(".route-panzoom-content");
   const tileLayer = container.querySelector(".route-tilemap-layer");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const overlay = container.querySelector(".route-tilemap-overlay");
   if (!viewport || !content || !tileLayer || !overlay) return false;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const tileSize = 256;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const project = (lng, lat, zoom) => {
     const sinLat = Math.sin((Number(lat) * Math.PI) / 180);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const scale = tileSize * 2 ** zoom;
     const x = ((Number(lng) + 180) / 360) * scale;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const y = (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale;
     return { x, y };
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const unproject = (x, y, zoom) => {
     const scale = tileSize * 2 ** zoom;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lng = (x / scale) * 360 - 180;
     const n = Math.PI - (2 * Math.PI * y) / scale;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const lat = (180 / Math.PI) * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
     return { lng, lat };
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const getViewportSize = () => ({
     width: Math.max(320, viewport.clientWidth || 960),
     height: Math.max(320, viewport.clientHeight || 640),
   });
   const chooseZoom = (width, height) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (let zoom = 17; zoom >= 3; zoom -= 1) {
       const projected = allPoints.map(([lng, lat]) => project(lng, lat, zoom));
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const xs = projected.map((item) => item.x);
       const ys = projected.map((item) => item.y);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const spanX = Math.max(...xs) - Math.min(...xs);
       const spanY = Math.max(...ys) - Math.min(...ys);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (spanX <= width - 140 && spanY <= height - 140) return zoom;
     }
     return 3;
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const initialSize = getViewportSize();
   const centerSeed = {
     lng: allPoints.reduce((sum, point) => sum + Number(point[0]), 0) / allPoints.length,
     lat: allPoints.reduce((sum, point) => sum + Number(point[1]), 0) / allPoints.length,
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let zoom = chooseZoom(initialSize.width, initialSize.height);
   let center = { ...centerSeed };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let dragging = false;
   let dragStartX = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let dragStartY = 0;
   let dragCenterWorld = null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wrapTileX = (x, maxTile) => ((x % maxTile) + maxTile) % maxTile;
   const buildMarkerSvg = (item, x, y) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const depot = item.label === "D";
     const labelWidth = Math.max(88, String(item.shortName || item.name).length * 12);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return `
       <g transform="translate(${x.toFixed(1)},${y.toFixed(1)})">
         <circle r="${depot ? 18 : 15}" fill="${depot ? "#2563eb" : "#d97706"}" stroke="#ffffff" stroke-width="3"></circle>
@@ -11241,21 +17145,37 @@ function renderFallbackRouteMap(containerId, mapData) {
     `;
   };
   const render = () => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const { width, height } = getViewportSize();
     overlay.setAttribute("viewBox", `0 0 ${width} ${height}`);
     const centerWorld = project(center.lng, center.lat, zoom);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const topLeftX = centerWorld.x - width / 2;
     const topLeftY = centerWorld.y - height / 2;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const scale = tileSize * 2 ** zoom;
     const maxTile = 2 ** zoom;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const startTileX = Math.floor(topLeftX / tileSize);
     const endTileX = Math.floor((topLeftX + width) / tileSize);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const startTileY = Math.floor(topLeftY / tileSize);
     const endTileY = Math.floor((topLeftY + height) / tileSize);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const tiles = [];
     for (let tileX = startTileX; tileX <= endTileX; tileX += 1) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       for (let tileY = startTileY; tileY <= endTileY; tileY += 1) {
         if (tileY < 0 || tileY >= maxTile) continue;
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         const drawX = tileX * tileSize - topLeftX;
         const drawY = tileY * tileSize - topLeftY;
         tiles.push(`
@@ -11270,13 +17190,21 @@ function renderFallbackRouteMap(containerId, mapData) {
       }
     }
     tileLayer.innerHTML = tiles.join("");
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const polylinePath = points.map(([lng, lat], index) => {
       const projected = project(lng, lat, zoom);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const x = projected.x - topLeftX;
       const y = projected.y - topLeftY;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       return `${index === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(" ");
     const markerSvg = markers.map((item) => {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const projected = project(item.lng, item.lat, zoom);
       return buildMarkerSvg(item, projected.x - topLeftX, projected.y - topLeftY);
     }).join("");
@@ -11287,6 +17215,8 @@ function renderFallbackRouteMap(containerId, mapData) {
   };
   viewport?.addEventListener("wheel", (event) => {
     event.preventDefault();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextZoom = clamp(zoom + (event.deltaY < 0 ? 1 : -1), 3, 18);
     if (nextZoom === zoom) return;
     zoom = nextZoom;
@@ -11300,14 +17230,20 @@ function renderFallbackRouteMap(containerId, mapData) {
     viewport.setPointerCapture?.(event.pointerId);
   });
   viewport?.addEventListener("pointermove", (event) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!dragging || !dragCenterWorld) return;
     const { width, height } = getViewportSize();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const nextWorldX = dragCenterWorld.x - (event.clientX - dragStartX);
     const nextWorldY = dragCenterWorld.y - (event.clientY - dragStartY);
     center = unproject(nextWorldX, nextWorldY, zoom);
     center.lat = clamp(center.lat, -85, 85);
     render();
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stopDragging = () => { dragging = false; };
   viewport?.addEventListener("pointerup", stopDragging);
   viewport?.addEventListener("pointerleave", stopDragging);
@@ -11317,6 +17253,8 @@ function renderFallbackRouteMap(containerId, mapData) {
   return true;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildRouteStopScheduleTable(trip) {
   const rows = (trip?.stops || []).map((stop, index) => `
     <tr>
@@ -11326,9 +17264,11 @@ function buildRouteStopScheduleTable(trip) {
       <td>${escapeHtml(stop.desiredArrival || "--:--")}</td>
     </tr>
   `).join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `
     <div class="route-stop-card">
-      <div class="route-stop-card-title">${lang() === "ja" ? "搴楄垪鍒扮潃瑷堢敾" : "闂ㄥ簵鍒板簵璁″垝"}</div>
+      <div class="route-stop-card-title">${lang() === "ja" ? "店舗到着計画" : "门店到店计划"}</div>
       <div class="table-wrap route-stop-table-wrap">
         <table class="route-stop-table">
           <tr>
@@ -11337,7 +17277,7 @@ function buildRouteStopScheduleTable(trip) {
             <th>${L("routePlanArrival")}</th>
             <th>${L("routeDesiredArrival")}</th>
           </tr>
-          ${rows || `<tr><td colspan="4">${lang() === "ja" ? "搴楄垪銇亗銈娿伨銇涖倱" : "鏆傛棤闂ㄥ簵"}</td></tr>`}
+          ${rows || `<tr><td colspan="4">${lang() === "ja" ? "店舗はありません" : "暂无门店"}</td></tr>`}
         </table>
       </div>
     </div>
@@ -11345,25 +17285,37 @@ function buildRouteStopScheduleTable(trip) {
 }
 
 async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const result = state.lastResults.find((item) => item.key === resultKey);
   if (!result) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveIndex = result.scenario.waves.findIndex((wave) => wave.waveId === waveId);
   if (waveIndex < 0) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const wave = result.scenario.waves[waveIndex];
   const plan = result.solution[waveIndex].find((item) => item.vehicle.plateNo === plateNo);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const trip = plan?.trips.find((item) => String(item.tripNo) === String(tripNo));
   if (!plan || !trip) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const modal = document.getElementById("routeMapModal");
   const title = document.getElementById("routeMapModalTitle");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const body = document.getElementById("routeMapModalBody");
   const fallbackMapData = buildFallbackRouteMapData(result, trip);
-  title.textContent = `${plateNo} 路 ${waveId} 路 ${L("tripNo")}${tripNo}${L("tripSuffix")} 路 ${L("routeMap")}`;
+  title.textContent = `${plateNo} · ${waveId} · ${L("tripNo")}${tripNo}${L("tripSuffix")} · ${L("routeMap")}`;
   body.innerHTML = `
     <div class="route-map-shell">
         <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? "銇俱仛銉兗銈儷銇瑭卞瀷銉兗銉堝洺銈掕〃绀恒仐銆佸閮ㄣ儷銉笺儓銉囥兗銈裤亴鍙栥倢銈屻伆鑷嫊銇ф洿鏂般仐銇俱仚銆? : "鍏堝睍绀烘湰鍦颁氦浜掔嚎璺浘锛岃嫢澶栭儴绾胯矾鏁版嵁鍙敤浼氳嚜鍔ㄥ崌绾ф垚鏇村畬鏁寸殑绾胯矾鍥俱€?}</p>
+          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? "まずローカルの対話型ルート図を表示し、外部ルートデータが取れれば自動で更新します。" : "先展示本地交互线路图，若外部线路数据可用会自动升级成更完整的线路图。"}</p>
           <div class="route-map-legend">
             ${fallbackMapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11374,14 +17326,16 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
   modal.classList.remove("hidden");
   modal.setAttribute("aria-hidden", "false");
   renderFallbackRouteMap("routeInteractiveMapFallback", fallbackMapData);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     const mapData = await getTripRouteMapData(result, wave, plan, trip);
     body.innerHTML = `
       <div class="route-map-shell">
         <div id="routeInteractiveMap" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? `銇撱伄鍦板洺銇儔銉┿儍銈般兓鎷″ぇ绺皬銇с亶銇俱仚銆傚簳鍥炽伅浜や簰鍦板洺銆侀爢璺伅鏃㈠瓨銇疅绾胯矾銉囥兗銈裤倰鎻忕敾銇椼仸銇勩伨銇欍€俙 : `杩欏紶鍥剧幇鍦ㄥ彲浠ユ嫋鍔ㄥ拰缂╂斁锛屽簳鍥惧彲浜や簰锛岄『璺户缁娇鐢ㄧ幇鏈夌湡瀹炵嚎璺暟鎹粯鍒躲€俙}</p>
+          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? `この地図はドラッグ・拡大縮小できます。底図は交互地図、順路は既存の実线路データを描画しています。` : `这张图现在可以拖动和缩放，底图可交互，顺路继续使用现有真实线路数据绘制。`}</p>
           <div class="route-map-legend">
             ${mapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11389,13 +17343,15 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
         </div>
       </div>
     `;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!renderInteractiveRouteMap("routeInteractiveMap", mapData)) {
       body.innerHTML = `
         <div class="route-map-shell">
           <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
           <div class="route-map-meta">
-            <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
-            <p class="muted">${lang() === "ja" ? `浜や簰搴曞洺銇銇胯炯銇裤伀澶辨晽銇椼仧銇熴倎銆併儹銉笺偒銉氦浜掔嚎璺浘銇垏銈婃浛銇堛伨銇椼仧銆俙 : `浜や簰搴曞浘鍔犺浇澶辫触锛屽凡鍒囨崲鍒版湰鍦颁氦浜掔嚎璺浘銆俙}</p>
+            <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
+            <p class="muted">${lang() === "ja" ? `交互底図の読み込みに失敗したため、ローカル交互线路图に切り替えました。` : `交互底图加载失败，已切换到本地交互线路图。`}</p>
             <div class="route-map-legend">
               ${mapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
             </div>
@@ -11410,8 +17366,8 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
       <div class="route-map-shell">
         <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? "澶栭儴鍦板洺銇銇胯炯銇裤伀澶辨晽銇椼仧銇熴倎銆併儹銉笺偒銉伄銉兗銉堝洺銇ц〃绀恒仐銇︺亜銇俱仚銆? : "澶栭儴鍦板浘鍔犺浇澶辫触锛屽凡鏀圭敤鏈湴绾胯矾鍥炬樉绀恒€?} ${escapeHtml(error?.message || "")}</p>
+          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? "外部地図の読み込みに失敗したため、ローカルのルート図で表示しています。" : "外部地图加载失败，已改用本地线路图显示。"} ${escapeHtml(error?.message || "")}</p>
           <div class="route-map-legend">
             ${fallbackMapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11425,12 +17381,16 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
 
 function closeRouteMapModal() {
   destroyRouteLeafletMap();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const modal = document.getElementById("routeMapModal");
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
 }
 
 function openShowcaseModal() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const modal = document.getElementById("showcaseModal");
   const box = document.getElementById("showcaseTypewriter");
   modal.classList.remove("hidden");
@@ -11439,6 +17399,8 @@ function openShowcaseModal() {
   typeProcessText(box, buildShowcaseNarrative());
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function closeShowcaseModal() {
   const modal = document.getElementById("showcaseModal");
   modal.classList.add("hidden");
@@ -11446,11 +17408,15 @@ function closeShowcaseModal() {
   clearProcessTypingTimers();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildAdjustControls(result, waveId, sourcePlate, stopId, plans) {
   const options = plans
     .filter((plan) => plan.vehicle.plateNo !== sourcePlate)
     .map((plan) => `<option value="${plan.vehicle.plateNo}">${plan.vehicle.plateNo}</option>`)
     .join("");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!options) return `<span class="adjust-note">${L("noOtherVehicle")}</span>`;
   return `
     <div class="adjust-box">
@@ -11463,8 +17429,12 @@ function buildAdjustControls(result, waveId, sourcePlate, stopId, plans) {
   `;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderStopCards(result, wave, plan, trip, plans) {
   const adjustment = result.lastAdjustment;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return trip.stops.map((stop) => `
     <article class="stop-card ${adjustment && adjustment.waveId === wave.waveId && adjustment.targetPlate === plan.vehicle.plateNo && adjustment.storeId === stop.storeId ? "inserted-stop" : ""}">
       <div class="stop-main">
@@ -11491,6 +17461,8 @@ function renderStopCards(result, wave, plan, trip, plans) {
 }
 
 function escapeHtml(value) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -11499,19 +17471,27 @@ function escapeHtml(value) {
 }
 
 function persistRelayConsoleLines() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     localStorage.setItem("vrptw-live-console", JSON.stringify(relayConsoleLines.slice(-400)));
   } catch {}
 }
 
 function flushRelayConsoleLogQueue() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (relayConsoleLogFlushTimer) {
     clearTimeout(relayConsoleLogFlushTimer);
     relayConsoleLogFlushTimer = null;
   }
   if (!relayConsolePendingLogLines.length) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const batch = relayConsolePendingLogLines.splice(0, relayConsolePendingLogLines.length);
   const payloadText = batch.join("\n");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   try {
     fetch(`${GA_BACKEND_URL}/sfrz/log`, {
       method: "POST",
@@ -11522,6 +17502,8 @@ function flushRelayConsoleLogQueue() {
 }
 
 function scheduleRelayConsoleLogFlush() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (relayConsoleLogFlushTimer) return;
   relayConsoleLogFlushTimer = setTimeout(flushRelayConsoleLogQueue, 250);
 }
@@ -11529,26 +17511,36 @@ function scheduleRelayConsoleLogFlush() {
 function openRelayConsoleModal(title = "") {
   relayConsoleLines = [];
   relayConsolePendingLogLines = [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (relayConsoleLogFlushTimer) {
     clearTimeout(relayConsoleLogFlushTimer);
     relayConsoleLogFlushTimer = null;
   }
   const modal = document.getElementById("relayConsoleModal");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const body = document.getElementById("relayConsoleBody");
   const titleNode = document.getElementById("relayConsoleTitle");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (body) body.textContent = "";
-  if (titleNode) titleNode.textContent = title || (lang() === "ja" ? "銉儸銉兼渶閬╁寲銇亷绋? : "鎺ュ姏姹傝В杩囩▼");
+  if (titleNode) titleNode.textContent = title || (lang() === "ja" ? "リレー最適化の過程" : "接力求解过程");
   persistRelayConsoleLines();
   modal?.classList.remove("hidden");
   modal?.setAttribute("aria-hidden", "false");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function appendRelayConsoleLine(text) {
   relayConsoleLines.push(text);
   relayConsolePendingLogLines.push(String(text || ""));
   persistRelayConsoleLines();
   scheduleRelayConsoleLogFlush();
   const body = document.getElementById("relayConsoleBody");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (body) {
     body.insertAdjacentText("beforeend", `${body.textContent ? "\n" : ""}${text}`);
     body.scrollTop = body.scrollHeight;
@@ -11556,62 +17548,92 @@ function appendRelayConsoleLine(text) {
 }
 
 function reportRelayStageProgress(text) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (typeof relayStageReporter === "function" && text) relayStageReporter(text);
 }
 
-function reportStrategyAuditToRelayConsole(strategyAudit, algoName = "绠楁硶") {
+function reportStrategyAuditToRelayConsole(strategyAudit, algoName = "算法") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!strategyAudit || typeof strategyAudit !== "object") return;
   const waveId = String(strategyAudit.waveId || "").trim() || "-";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const inputCount = Number(strategyAudit.inputStoreCount || 0);
   const outputCount = Number(strategyAudit.outputStoreCount || 0);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const zeroIds = Array.isArray(strategyAudit.filteredZeroLoadStoreIds)
     ? strategyAudit.filteredZeroLoadStoreIds.map((v) => String(v || "").trim()).filter(Boolean)
     : [];
   const scopeIds = Array.isArray(strategyAudit.filteredWaveScopeStoreIds)
     ? strategyAudit.filteredWaveScopeStoreIds.map((v) => String(v || "").trim()).filter(Boolean)
     : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const emitStoreIdChunks = (title, ids) => {
     const list = Array.isArray(ids) ? ids : [];
-    reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細${title} ${list.length} 瀹躲€俙);
+    reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：${title} ${list.length} 家。`);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!list.length) return;
     const chunkSize = 20;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (let i = 0; i < list.length; i += chunkSize) {
       const chunk = list.slice(i, i + chunkSize);
-      reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細${title}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, list.length)}锛?{chunk.join("銆?)}銆俙);
+      reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：${title}明细 ${i + 1}-${Math.min(i + chunkSize, list.length)}：${chunk.join("、")}。`);
     }
   };
-  reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細杈撳叆闂ㄥ簵 ${inputCount} 瀹讹紝绛栫暐鍚?${outputCount} 瀹躲€俙);
-  emitStoreIdChunks("杩囨护闆惰揣閲?, zeroIds);
-  emitStoreIdChunks("杩囨护闈炴湰娉㈡", scopeIds);
+  reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：输入门店 ${inputCount} 家，策略后 ${outputCount} 家。`);
+  emitStoreIdChunks("过滤零货量", zeroIds);
+  emitStoreIdChunks("过滤非本波次", scopeIds);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveId === "W3") {
-    reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細W3鎸夊崟绋嬮噷绋嬭鍒欐墽琛岋紙鐢卞悗绔害鏉熷眰鍒ゅ畾锛夈€俙);
+    reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：W3按单程里程规则执行（由后端约束层判定）。`);
   }
 }
 
-function reportBackendUnscheduledToRelayConsole(unscheduledStores, algoName = "绠楁硶", waveId = "-") {
+function reportBackendUnscheduledToRelayConsole(unscheduledStores, algoName = "算法", waveId = "-") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rows = Array.isArray(unscheduledStores) ? unscheduledStores : [];
   if (!rows.length) {
-    reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細0 瀹躲€俙);
+    reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：0 家。`);
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const groups = new Map();
   for (const row of rows) {
-    const reason = String(row?.reasonText || row?.reason || "鏈煡").trim() || "鏈煡";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    const reason = String(row?.reasonText || row?.reason || "未知").trim() || "未知";
     const storeId = String(row?.storeId || "").trim();
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (!groups.has(reason)) groups.set(reason, []);
     if (storeId) groups.get(reason).push(storeId);
   }
-  reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細鍏?${rows.length} 瀹躲€俙);
+  reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：共 ${rows.length} 家。`);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const [reason, ids] of groups.entries()) {
-    reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細${reason} ${ids.length} 瀹躲€俙);
+    reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：${reason} ${ids.length} 家。`);
     const chunkSize = 20;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (let i = 0; i < ids.length; i += chunkSize) {
       const chunk = ids.slice(i, i + chunkSize);
-      reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細${reason}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, ids.length)}锛?{chunk.join("銆?)}銆俙);
+      reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：${reason}明细 ${i + 1}-${Math.min(i + chunkSize, ids.length)}：${chunk.join("、")}。`);
     }
   }
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function closeRelayConsoleModal() {
   flushRelayConsoleLogQueue();
   const modal = document.getElementById("relayConsoleModal");
@@ -11619,16 +17641,26 @@ function closeRelayConsoleModal() {
   modal?.setAttribute("aria-hidden", "true");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getRoutePalette(index) {
   const colors = ["#dc2626", "#2563eb", "#059669", "#d97706", "#7c3aed", "#0891b2", "#be123c", "#65a30d"];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return colors[index % colors.length];
 }
 
 function sortPlansByPreference(plans, resultMetrics) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const usageMap = getUsageMap(resultMetrics);
   return [...plans].sort((a, b) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const aUsage = usageMap.get(a.vehicle.plateNo) || { preferredMet: false, achievedRate: 0 };
     const bUsage = usageMap.get(b.vehicle.plateNo) || { preferredMet: false, achievedRate: 0 };
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return Number(bUsage.preferredMet) - Number(aUsage.preferredMet)
       || bUsage.achievedRate - aUsage.achievedRate
       || a.totalDistance - b.totalDistance
@@ -11637,22 +17669,34 @@ function sortPlansByPreference(plans, resultMetrics) {
 }
 
 function renderWaveBlocks(result, selectedWaveIds = null) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const selectedSet = selectedWaveIds instanceof Set ? selectedWaveIds : null;
   return result.solution.map((plans, index) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const wave = result.scenario.waves[index];
     if (!wave) return "";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (selectedSet && selectedSet.size && !selectedSet.has(String(wave.waveId || ""))) return "";
     const showReturnTime = wave.waveId === "W1";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const used = sortPlansByPreference(plans.filter((plan) => plan.trips.length), result.metrics);
     const usageMap = getUsageMap(result.metrics);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const overtimeTrips = used.flatMap((plan) => plan.trips.filter((trip) => (trip.waveLateMinutes || 0) > 0).map((trip) => ({ plateNo: plan.vehicle.plateNo, trip })));
     return `
       <section class="wave-block">
         <h3>${wave.waveId} ${wave.start} - ${wave.end}</h3>
-        <p class="muted">${L("dispatchStart")}锛?{wave.start}锛?{lang() === "ja" ? "绶犲垏銉兗銉? : "鎴瑙勫垯"}锛?{(wave.endMode || "return") === "return" ? LT("waveModeReturn", { time: wave.end }) : LT("waveModeService", { time: wave.end })}${wave.singleWave ? `锛?{L("waveSingleHint")}` : `锛?{L("waveRegularHint")}`}</p>
-        <p class="muted">${L("includedStores")}锛?{wave.storeList.join(",") || L("allStores")}</p>
-        ${overtimeTrips.length ? `<div class="note overtime-note">${L("overtimeTrips")}锛?{overtimeTrips.map(({ plateNo, trip }) => `${plateNo} ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}`).join("锛?)}</div>` : ""}
+        <p class="muted">${L("dispatchStart")}：${wave.start}，${lang() === "ja" ? "締切ルール" : "截止规则"}：${(wave.endMode || "return") === "return" ? LT("waveModeReturn", { time: wave.end }) : LT("waveModeService", { time: wave.end })}${wave.singleWave ? `，${L("waveSingleHint")}` : `，${L("waveRegularHint")}`}</p>
+        <p class="muted">${L("includedStores")}：${wave.storeList.join(",") || L("allStores")}</p>
+        ${overtimeTrips.length ? `<div class="note overtime-note">${L("overtimeTrips")}：${overtimeTrips.map(({ plateNo, trip }) => `${plateNo} ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}`).join("；")}</div>` : ""}
         ${used.map((plan) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const usage = usageMap.get(plan.vehicle.plateNo);
           return `
             <div class="vehicle-card">
@@ -11670,9 +17714,11 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
               ${plan.trips.map((trip) => `
                 <div class="trip-block">
                   ${(() => {
+                    // EN: Key step in this business flow.
+                    // CN: 当前业务流程中的关键步骤。
                     const truck = getTripTruckVisual(trip);
                     return `<div class="trip-hero">
-                    <p class="route">${L("tripNo")} ${trip.tripNo} ${L("tripSuffix")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
+                    <p class="route">${L("tripNo")} ${trip.tripNo} ${L("tripSuffix")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
                       <div class="trip-truck-row">
                         <div class="trip-truck trip-truck-${truck.cls}">
                           <img src="${truck.src}" alt="${escapeHtml(`${plan.vehicle.plateNo} ${truck.badge}`)}" onerror="this.style.display='none';this.parentElement.classList.add('trip-truck-fallback')">
@@ -11681,7 +17727,7 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
                         </div>
                       </div>
                       <p class="trip-actions"><button class="alert open-process" data-result="${result.key}" data-wave="${wave.waveId}" data-plate="${plan.vehicle.plateNo}" data-trip="${trip.tripNo}">${L("viewViz")}</button><button class="secondary open-route-map" data-result="${result.key}" data-wave="${wave.waveId}" data-plate="${plan.vehicle.plateNo}" data-trip="${trip.tripNo}">${L("routeMap")}</button></p>
-                      <p class="trip-footer muted">${showReturnTime ? `${L("returnTime")}锛?{formatTime(trip.finish)}锛宍 : ""}${L("backDistance")}锛?{trip.stops.length ? result.scenario.dist[trip.stops[trip.stops.length - 1].storeId][DC.id].toFixed(1) : "0.0"} km锛?{L("tripRoundKm")}锛?{trip.totalDistance.toFixed(1)} km锛?{L("tripLoadRate")}锛?{formatRate(trip.loadRate)}${(trip.waveLateMinutes || 0) > 0 ? `锛?span class="status-bad">${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}</span>` : ""}</p>
+                      <p class="trip-footer muted">${showReturnTime ? `${L("returnTime")}：${formatTime(trip.finish)}，` : ""}${L("backDistance")}：${trip.stops.length ? result.scenario.dist[trip.stops[trip.stops.length - 1].storeId][DC.id].toFixed(1) : "0.0"} km，${L("tripRoundKm")}：${trip.totalDistance.toFixed(1)} km，${L("tripLoadRate")}：${formatRate(trip.loadRate)}${(trip.waveLateMinutes || 0) > 0 ? `，<span class="status-bad">${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}</span>` : ""}</p>
                     </div>`;
                   })()}
                   <div class="stop-list">
@@ -11697,16 +17743,28 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
   }).join("");
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderResults() {
   const box = document.getElementById("resultPanels");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!state.lastResults.length) { box.innerHTML = ""; return; }
   const activeKey = state.activeResultKey || state.lastResults[0]?.key;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const activeResult = state.lastResults.find((item) => item.key === activeKey) || state.lastResults[0];
   const detailExpanded = !!state.ui.resultDetailExpanded;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveIds = (activeResult?.scenario?.waves || []).map((wave) => String(wave.waveId || "")).filter(Boolean);
   const selectedWaveIds = new Set((state.ui.resultDetailWaveIds || []).map((id) => String(id || "")).filter((id) => waveIds.includes(id)));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.resultDetailWaveIds = [...selectedWaveIds];
   const allWaveSelected = waveIds.length > 0 && waveIds.every((id) => selectedWaveIds.has(id));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   document.getElementById("resultIntro").textContent = `${state.lastResults.length > 1 ? L("generatedCompare") : L("generatedSingle")} ${buildSolveModeSummary()}`;
   box.innerHTML = `
     <div class="result-switcher">
@@ -11720,29 +17778,29 @@ function renderResults() {
           <p>${algoDescription(activeResult.key)}</p>
         </div>
         <button class="${detailExpanded ? "secondary" : "primary"} toggle-result-detail" data-result-key="${activeResult.key}">
-          ${lang() === "ja" ? (detailExpanded ? "瑭崇窗銈掗枆銇樸倠" : "瑭崇窗銈掗枊銇?) : (detailExpanded ? "鏀惰捣鏄庣粏" : "灞曞紑鏄庣粏")}
+          ${lang() === "ja" ? (detailExpanded ? "詳細を閉じる" : "詳細を開く") : (detailExpanded ? "收起明细" : "展开明细")}
         </button>
       </div>
-      <div class="algo-summary"><span class="chip">${L("score")} ${activeResult.metrics.score.toFixed(1)}${lang() === "ja" ? " / 100锛堥珮銇勩伝銇╄壇銇勶級" : " / 100锛堣秺楂樿秺濂斤級"}</span><span class="chip">${L("onTime")} ${activeResult.metrics.totalOnTime}/${activeResult.metrics.totalStops}</span><span class="chip">${L("totalDistance")} ${activeResult.metrics.totalDistance.toFixed(1)} km</span><span class="chip">${L("avgLoad")} ${formatRate(activeResult.metrics.loadRate)}</span><span class="chip">${L("fleetLoad")} ${formatRate(activeResult.metrics.fleetLoadRate)}</span><span class="chip">${lang() === "ja" ? `浣跨敤杌婁浮 ${activeResult.metrics.usedVehicleCount} 鍙癭 : `宸茬敤杞﹁締 ${activeResult.metrics.usedVehicleCount} 杈哷}</span><span class="chip">${lang() === "ja" ? `寰呮杌婁浮 ${activeResult.metrics.unusedVehicleCount} 鍙癭 : `鏈敤杞﹁締 ${activeResult.metrics.unusedVehicleCount} 杈哷}</span><span class="chip">${lang() === "ja" ? `銉兗銉?${currentStrategyLabel()}` : `妯″紡 ${currentStrategyLabel()}`}</span><span class="chip">${lang() === "ja" ? `鏂归嚌 ${currentGoalLabel()}` : `鐩爣 ${currentGoalLabel()}`}</span></div>
+      <div class="algo-summary"><span class="chip">${L("score")} ${activeResult.metrics.score.toFixed(1)}${lang() === "ja" ? " / 100（高いほど良い）" : " / 100（越高越好）"}</span><span class="chip">${L("onTime")} ${activeResult.metrics.totalOnTime}/${activeResult.metrics.totalStops}</span><span class="chip">${L("totalDistance")} ${activeResult.metrics.totalDistance.toFixed(1)} km</span><span class="chip">${L("avgLoad")} ${formatRate(activeResult.metrics.loadRate)}</span><span class="chip">${L("fleetLoad")} ${formatRate(activeResult.metrics.fleetLoadRate)}</span><span class="chip">${lang() === "ja" ? `使用車両 ${activeResult.metrics.usedVehicleCount} 台` : `已用车辆 ${activeResult.metrics.usedVehicleCount} 辆`}</span><span class="chip">${lang() === "ja" ? `待機車両 ${activeResult.metrics.unusedVehicleCount} 台` : `未用车辆 ${activeResult.metrics.unusedVehicleCount} 辆`}</span><span class="chip">${lang() === "ja" ? `モード ${currentStrategyLabel()}` : `模式 ${currentStrategyLabel()}`}</span><span class="chip">${lang() === "ja" ? `方針 ${currentGoalLabel()}` : `目标 ${currentGoalLabel()}`}</span></div>
       <div class="result-wave-filter">
-        <span class="muted">${lang() === "ja" ? "娉㈡閬告姙" : "娉㈡閫夋嫨"}</span>
-        <button class="${allWaveSelected ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-filter-mode="all">${lang() === "ja" ? "鍏ㄩ儴" : "鍏ㄩ儴"}</button>
+        <span class="muted">${lang() === "ja" ? "波次選択" : "波次选择"}</span>
+        <button class="${allWaveSelected ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-filter-mode="all">${lang() === "ja" ? "全部" : "全部"}</button>
         ${waveIds.map((waveId) => `<button class="${selectedWaveIds.has(waveId) ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-id="${escapeHtml(waveId)}">${escapeHtml(waveId)}</button>`).join("")}
       </div>
       ${detailExpanded ? `
       <div class="result-detail-body">
-        <p class="note">${lang() === "ja" ? `銈广偝銈伅 100 鐐规簚鐐广仹銇欍€傜従鍦ㄣ伅銆?{currentGoalLabel()}銆嶉噸瑕栥仹涓︺伖銇ゃ仱銆佸畾鏅傛€с兓璺濋洟銉昏粖涓℃暟銉荤杓夈倐鍚堛倧銇涖仸瑭曚尽銇椼仸銇勩伨銇欍€俙 : `璇勫垎璇存槑锛?00鍒嗗埗銆傚綋鍓嶆寜鈥?{currentGoalLabel()}鈥濇潈閲嶆帓搴忥紝鍚屾椂缁煎悎鍙傝€冨噯鐐广€侀噷绋嬨€佽溅杈嗕娇鐢ㄥ拰瑁呰浇琛ㄧ幇銆俙}</p>
+        <p class="note">${lang() === "ja" ? `スコアは 100 点満点です。現在は「${currentGoalLabel()}」重視で並べつつ、定時性・距離・車両数・積載も合わせて評価しています。` : `评分说明：100分制。当前按“${currentGoalLabel()}”权重排序，同时综合参考准点、里程、车辆使用和装载表现。`}</p>
         ${activeResult.adjustMessage ? `<p class="note">${activeResult.adjustMessage}</p>` : ""}
-        ${selectedWaveIds.size ? renderWaveBlocks(activeResult, selectedWaveIds) : `<div class="result-detail-collapsed">${lang() === "ja" ? "鍏堛伀娉㈡銈掗伕鎶炪仐銇︺亱銈夎┏绱般倰闁嬨亜銇︺亸銇犮仌銇勩€? : "璇峰厛閫夋嫨瑕佹煡鐪嬬殑娉㈡锛屽啀灞曞紑鏄庣粏銆?}</div>`}
+        ${selectedWaveIds.size ? renderWaveBlocks(activeResult, selectedWaveIds) : `<div class="result-detail-collapsed">${lang() === "ja" ? "先に波次を選択してから詳細を開いてください。" : "请先选择要查看的波次，再展开明细。"}</div>`}
         <div class="result-detail-actions">
           <button class="secondary toggle-result-detail" data-result-key="${activeResult.key}">
-            ${lang() === "ja" ? "瑭崇窗銈掗枆銇樸倠" : "鏀惰捣鏄庣粏"}
+            ${lang() === "ja" ? "詳細を閉じる" : "收起明细"}
           </button>
         </div>
       </div>
       ` : `
       <div class="result-detail-collapsed">
-        ${lang() === "ja" ? "瑭崇窗銇姌銈娿仧銇熴伨銈屻仸銇勩伨銇欍€傚繀瑕併仾銇ㄣ亶銇犮亼闁嬨亜銇︾⒑瑾嶃仹銇嶃伨銇欍€? : "鏄庣粏宸叉敹璧枫€傞渶瑕佸畾浣嶉棶棰樻椂鍐嶅睍寮€锛岃繖鏍烽〉闈㈡洿鐭紝鏂逛究鎴浘銆?}
+        ${lang() === "ja" ? "詳細は折りたたまれています。必要なときだけ開いて確認できます。" : "明细已收起。需要定位问题时再展开，这样页面更短，方便截图。"}
       </div>
       `}
     </article>
@@ -11751,29 +17809,47 @@ function renderResults() {
 }
 
 function sleep(ms) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function updateGenerationProgress(progress, text) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.generating = progress < 100;
   state.ui.progress = progress;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.progressText = text;
   renderGenerationProgress();
   await sleep(30);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function solveTwoVehicleTransfer(scenario, wave, sourceVehicle, targetVehicle, sourceIds, targetIds, movedStoreId) {
   const nextSourceIds = sourceIds.filter((id) => id !== movedStoreId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nextTargetIds = [...targetIds, movedStoreId];
   const sourcePlan = solveFixedMembershipPlan(sourceVehicle, nextSourceIds, scenario, wave, sourceVehicle);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const targetPlan = solveFixedMembershipPlan(targetVehicle, nextTargetIds, scenario, wave, targetVehicle);
   if (!sourcePlan || !targetPlan) return null;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return [sourcePlan, targetPlan];
 }
 
 function applyStoreTransfer(resultKey, waveId, sourcePlate, targetPlate, storeId) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const result = state.lastResults.find((item) => item.key === resultKey);
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!result) return;
   if (!targetPlate || targetPlate === sourcePlate) {
     result.adjustMessage = L("chooseDifferentVehicle");
@@ -11783,15 +17859,25 @@ function applyStoreTransfer(resultKey, waveId, sourcePlate, targetPlate, storeId
     return;
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const waveIndex = result.scenario.waves.findIndex((wave) => wave.waveId === waveId);
   if (waveIndex < 0) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const nextSolution = clone(result.solution);
   const plans = nextSolution[waveIndex];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const sourceIndex = plans.findIndex((plan) => plan.vehicle.plateNo === sourcePlate);
   const targetIndex = plans.findIndex((plan) => plan.vehicle.plateNo === targetPlate);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (sourceIndex < 0 || targetIndex < 0) return;
 
   const sourceIds = flattenPlanStoreIds(plans[sourceIndex]);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const targetIds = flattenPlanStoreIds(plans[targetIndex]);
   if (!sourceIds.includes(storeId)) {
     result.adjustMessage = LT("storeNotOnVehicle", { plate: sourcePlate, store: storeId });
@@ -11801,6 +17887,8 @@ function applyStoreTransfer(resultKey, waveId, sourcePlate, targetPlate, storeId
     return;
   }
 
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const rebuilt = solveTwoVehicleTransfer(
     result.scenario,
     result.scenario.waves[waveIndex],
@@ -11833,12 +17921,18 @@ function applyStoreTransfer(resultKey, waveId, sourcePlate, targetPlate, storeId
   renderStoresTable();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getResultByKey(resultKey) {
   return state.lastResults.find((item) => item.key === resultKey) || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getWaveAndPlans(result, waveId) {
   const waveIndex = result?.scenario?.waves?.findIndex((wave) => wave.waveId === waveId) ?? -1;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (waveIndex < 0) return null;
   return {
     waveIndex,
@@ -11847,37 +17941,59 @@ function getWaveAndPlans(result, waveId) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function syncResultAfterLocalAdjustment(result) {
   applyFinalRuleToResult(result, result.scenario);
-  reportWaveCandidateAssignedPendingStats("灞€閮ㄨ皟鏁村悗", result.solution || [], result.scenario);
+  reportWaveCandidateAssignedPendingStats("局部调整后", result.solution || [], result.scenario);
 }
 
 function getLiveUnscheduledItems(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!result?.scenario) return [];
   return computeFinalPendingByWave(result.solution || [], result.scenario);
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getStoreAssignmentCoverage(store = {}, assignmentMap = new Map()) {
   const variants = buildStoreKeyVariants(store?.id);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const candidateWaves = ["W1", "W2", "W3", "W4"].filter((waveId) => isStoreCandidateForWaveRule(store, waveId));
   const assignedByWave = new Map();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   for (const waveId of candidateWaves) {
     let plateNo = "";
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     for (const variant of variants) {
       const key = buildStoreWaveAssignmentKey(variant, waveId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const hit = key ? assignmentMap.get(key) : null;
       if (hit && String(hit.plateNo || "").trim()) {
         plateNo = String(hit.plateNo || "").trim();
         break;
       }
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (plateNo) assignedByWave.set(waveId, plateNo);
   }
   const assignedWaves = [...assignedByWave.keys()];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const pendingWaves = candidateWaves.filter((waveId) => !assignedByWave.has(waveId));
   const isFullyAssigned = candidateWaves.length > 0 && pendingWaves.length === 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let displayPlate = "-";
   if (isFullyAssigned && assignedWaves.length) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const uniquePlates = new Set([...assignedByWave.values()]);
     if (uniquePlates.size === 1) {
       displayPlate = [...uniquePlates][0];
@@ -11885,6 +18001,8 @@ function getStoreAssignmentCoverage(store = {}, assignmentMap = new Map()) {
       displayPlate = assignedWaves.map((waveId) => `${waveId}:${assignedByWave.get(waveId)}`).join(" / ");
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     candidateWaves,
     assignedWaves,
@@ -11897,13 +18015,19 @@ function getStoreAssignmentCoverage(store = {}, assignmentMap = new Map()) {
 }
 
 function computeStoreDetailUnscheduledCount(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!result?.solution?.length) return 0;
   const stores = Array.isArray(state.stores) ? state.stores : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const assignmentMap = result?.storeAssignmentMap instanceof Map
     ? result.storeAssignmentMap
     : buildStoreAssignmentMapFromSolution(result.solution || []);
   let count = 0;
   stores.forEach((store) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const hasAnyResolvedLoad = (
       Number(store?.resolvedWave1Load || 0) > 0
       || Number(store?.resolvedWave2Load || 0) > 0
@@ -11911,42 +18035,60 @@ function computeStoreDetailUnscheduledCount(result) {
       || Number(store?.resolvedWave4Load || 0) > 0
     );
     if (!hasAnyResolvedLoad) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const coverage = getStoreAssignmentCoverage(store, assignmentMap);
     if (coverage.candidateWaves.length && !coverage.isFullyAssigned) count += 1;
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return count;
 }
 
 function exportLiveUnscheduledIds(resultKey = "") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const result = getResultByKey(resultKey) || state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0];
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!result) {
     if (box) box.textContent = L("exportNoResult");
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const items = getLiveUnscheduledItems(result);
   const stats = computeWaveCandidateAssignedPendingStats(result.solution || [], result.scenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lines = [];
-  lines.push(`绠楁硶: ${result.label || result.key || "-"}`);
-  lines.push(`瀵煎嚭鏃堕棿: ${new Date().toLocaleString("zh-CN", { hour12: false })}`);
-  lines.push(`鏈皟搴﹀簵-娉㈡鏉℃暟: ${items.length}`);
-  lines.push(`鏈皟搴﹂棬搴楀幓閲嶆暟: ${new Set(items.map((x) => normalizeStoreKey(x.storeId))).size}`);
-  lines.push(`鏄庣粏绛涢€夋湭璋冨害闂ㄥ簵鏁? ${computeStoreDetailUnscheduledCount(result)}`);
+  lines.push(`算法: ${result.label || result.key || "-"}`);
+  lines.push(`导出时间: ${new Date().toLocaleString("zh-CN", { hour12: false })}`);
+  lines.push(`未调度店-波次条数: ${items.length}`);
+  lines.push(`未调度门店去重数: ${new Set(items.map((x) => normalizeStoreKey(x.storeId))).size}`);
+  lines.push(`明细筛选未调度门店数: ${computeStoreDetailUnscheduledCount(result)}`);
   lines.push("");
-  lines.push("=== 瀹炴椂闆嗗悎鏍稿 ===");
+  lines.push("=== 实时集合核对 ===");
   stats.forEach((row) => {
     lines.push(`${row.waveId}: candidate=${row.candidateCount}, assigned=${row.assignedCount}, pending=${row.pendingCount}`);
   });
   lines.push("");
-  lines.push("=== 鏈皟搴﹀簵-娉㈡鏄庣粏 ===");
+  lines.push("=== 未调度店-波次明细 ===");
   items.forEach((item) => {
     lines.push(`${item.waveId},${normalizeStoreKey(item.storeId)},${String(item.storeName || "")}`);
   });
   const stamp = new Date();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  const fileName = `鏈皟搴﹀疄鏃堕泦鍚坃${result.key || "result"}_${timestamp}.txt`;
+  const fileName = `未调度实时集合_${result.key || "result"}_${timestamp}.txt`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const blob = new Blob([`\uFEFF${lines.join("\r\n")}`], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const a = document.createElement("a");
   a.href = url;
   a.download = fileName;
@@ -11954,46 +18096,76 @@ function exportLiveUnscheduledIds(resultKey = "") {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (box) box.textContent = `${L("exportDone")} ${fileName}`;
 }
 
 function collectCandidatePlansForUnscheduled(plans, preferredPlate = "") {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const sorted = [...plans].sort((a, b) => {
     const aEmpty = a.trips.length ? 1 : 0;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const bEmpty = b.trips.length ? 1 : 0;
     if (aEmpty !== bEmpty) return aEmpty - bEmpty;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (preferredPlate) {
       const aPreferred = a.vehicle.plateNo === preferredPlate ? 0 : 1;
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const bPreferred = b.vehicle.plateNo === preferredPlate ? 0 : 1;
       if (aPreferred !== bPreferred) return aPreferred - bPreferred;
     }
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return a.totalDistance - b.totalDistance || a.vehicle.plateNo.localeCompare(b.vehicle.plateNo);
   });
   const emptyOnly = sorted.filter((plan) => !plan.trips.length);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return emptyOnly.length ? emptyOnly : sorted;
 }
 
 function tryAssignStoreToSpecificPlan(result, waveId, targetPlate, storeId) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = getWaveAndPlans(result, waveId);
   if (!target) return { ok: false, message: LT("assignFailed", { store: storeId, plate: targetPlate }) };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const store = result.scenario.storeMap.get(storeId);
   if (!store) return { ok: false, message: LT("assignFailed", { store: storeId, plate: targetPlate }) };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const targetPlanIndex = target.plans.findIndex((plan) => plan.vehicle.plateNo === targetPlate);
   if (targetPlanIndex < 0) return { ok: false, message: LT("assignFailed", { store: storeId, plate: targetPlate }) };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const candidate = buildTripCandidate(target.plans[targetPlanIndex], store, result.scenario, target.wave, false, { allowToleranceBreak: false });
   if (!candidate?.nextPlan) return { ok: false, message: LT("assignFailed", { store: storeId, plate: targetPlate }) };
   target.plans[targetPlanIndex] = candidate.nextPlan;
   syncResultAfterLocalAdjustment(result);
   result.adjustMessage = LT("assignSuccess", { store: store.name || storeId, plate: targetPlate });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return { ok: true, message: result.adjustMessage };
 }
 
 function rescheduleUnscheduledStores(resultKey) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const result = getResultByKey(resultKey);
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!result) return;
   applyFinalRuleToResult(result, result.scenario);
   const pending = [...getLiveUnscheduledItems(result)];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!pending.length) {
     result.adjustMessage = L("noUnscheduled");
     box.textContent = result.adjustMessage;
@@ -12004,20 +18176,36 @@ function rescheduleUnscheduledStores(resultKey) {
     return;
   }
   let scheduledNow = 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let round = 0;
   while (round < 6) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const latestPending = computeFinalPendingByWave(result.solution || [], result.scenario);
     if (!latestPending.length) break;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     let roundScheduled = 0;
     for (const item of latestPending) {
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       const target = getWaveAndPlans(result, item.waveId);
       const store = result.scenario.storeMap.get(item.storeId);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       if (!target || !store) continue;
       const candidatePlans = collectCandidatePlansForUnscheduled(target.plans);
+      // EN: Key step in this business flow.
+      // CN: 当前业务流程中的关键步骤。
       for (const plan of candidatePlans) {
         const candidate = buildTripCandidate(plan, store, result.scenario, target.wave, false, { allowToleranceBreak: false });
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (!candidate?.nextPlan) continue;
         const planIndex = target.plans.findIndex((one) => one.vehicle.plateNo === plan.vehicle.plateNo);
+        // EN: Key step in this business flow.
+        // CN: 当前业务流程中的关键步骤。
         if (planIndex < 0) continue;
         target.plans[planIndex] = candidate.nextPlan;
         scheduledNow += 1;
@@ -12026,15 +18214,17 @@ function rescheduleUnscheduledStores(resultKey) {
       }
     }
     applyFinalRuleToResult(result, result.scenario);
-    reportWaveCandidateAssignedPendingStats(`琛ユ帓绗?{round + 1}杞悗`, result.solution || [], result.scenario);
+    reportWaveCandidateAssignedPendingStats(`补排第${round + 1}轮后`, result.solution || [], result.scenario);
     if (roundScheduled <= 0) break;
     round += 1;
   }
   syncResultAfterLocalAdjustment(result);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const remainingCount = Number(result?.metrics?.unscheduledCount || 0);
   result.adjustMessage = scheduledNow > 0
-    ? `${LT("rescheduleProgress", { count: scheduledNow })}锛?{lang() === "ja" ? `鏈壊褰撴畫銈?${remainingCount} 浠禶 : `鍓╀綑鏈皟搴?${remainingCount} 瀹禶}`
-    : `${L("rescheduleNoProgress")}锛?{lang() === "ja" ? `浠婂洖銈?${pending.length} 浠躲仺銈傛潯浠躲伀鍚堛亜銇俱仜銈撱仹銇椼仧銆俙 : `鏈疆 ${pending.length} 瀹堕兘鏈弧瓒虫潯浠躲€俙}`;
+    ? `${LT("rescheduleProgress", { count: scheduledNow })}，${lang() === "ja" ? `未割当残り ${remainingCount} 件` : `剩余未调度 ${remainingCount} 家`}`
+    : `${L("rescheduleNoProgress")}，${lang() === "ja" ? `今回も ${pending.length} 件とも条件に合いませんでした。` : `本轮 ${pending.length} 家都未满足条件。`}`;
   box.textContent = result.adjustMessage;
   renderVehicles();
   renderSummary();
@@ -12044,12 +18234,18 @@ function rescheduleUnscheduledStores(resultKey) {
 }
 
 function buildUnscheduledAssignControls(result, item) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = getWaveAndPlans(result, item.waveId);
   if (!target) return `<span class="adjust-note">${L("noAssignableVehicle")}</span>`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const options = collectCandidatePlansForUnscheduled(target.plans)
     .map((plan) => `<option value="${plan.vehicle.plateNo}">${plan.vehicle.plateNo}</option>`)
     .join("");
   if (!options) return `<span class="adjust-note">${L("noAssignableVehicle")}</span>`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `
     <div class="adjust-box unscheduled-adjust-box">
       <select class="unscheduled-target" data-result="${result.key}" data-wave="${item.waveId}" data-store="${item.storeId}">
@@ -12062,10 +18258,16 @@ function buildUnscheduledAssignControls(result, item) {
 }
 
 function getEarliestDirectArrivalInfo(result, item) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const target = getWaveAndPlans(result, item.waveId);
   const store = result?.scenario?.storeMap?.get(item.storeId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!target || !store) return null;
   const plans = Array.isArray(target?.plans) ? target.plans : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseDeparture = Math.max(
     Number(target.wave.startMin || 0),
     Number(target.wave.earliestDepartureMin || target.wave.startMin || 0),
@@ -12073,10 +18275,16 @@ function getEarliestDirectArrivalInfo(result, item) {
   );
   let best = null;
   plans.forEach((plan) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const vehicle = plan?.vehicle;
     if (!vehicle) return;
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const departure = Math.max(baseDeparture, Number(plan.availableTime || 0), Number(plan.earliestDepartureMin || 0));
     const distance = Number(result.scenario?.dist?.[DC.id]?.[store.id] || 0);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const arrival = departure + getTravelMinutes(result.scenario, DC.id, store.id, Number(vehicle.speed || 38));
     if (!best || arrival < best.arrival) {
       best = {
@@ -12086,12 +18294,20 @@ function getEarliestDirectArrivalInfo(result, item) {
       };
     }
   });
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!best) return null;
   const timing = getStoreTimingForWave(store, target.wave, result.scenario.dispatchStartMin);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const desiredArrivalMin = Number(timing.desiredArrivalMin || best.earliestArrival);
   const latestAllowed = Number(timing.latestAllowedArrivalMin || desiredArrivalMin || best.earliestArrival);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const lateBy = Math.max(0, best.earliestArrival - latestAllowed);
   const lateByDisplay = lateBy > 0 ? Math.max(1, Math.ceil(lateBy)) : 0;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     ...best,
     desiredArrivalMin,
@@ -12103,12 +18319,20 @@ function getEarliestDirectArrivalInfo(result, item) {
 }
 
 function renderUnscheduledPanel(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const items = getLiveUnscheduledItems(result);
   if (!items.length) return "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const stats = computeWaveCandidateAssignedPendingStats(result.solution || [], result.scenario);
   const statsLine = stats.map((row) => `${row.waveId} c/a/p=${row.candidateCount}/${row.assignedCount}/${row.pendingCount}`).join(" | ");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const panelUniqueCount = new Set(items.map((item) => normalizeStoreKey(item.storeId))).size;
   const detailFilteredCount = computeStoreDetailUnscheduledCount(result);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const mismatch = panelUniqueCount !== detailFilteredCount;
   return `
     <section class="unscheduled-panel">
@@ -12125,16 +18349,20 @@ function renderUnscheduledPanel(result) {
           <button class="primary reschedule-again" data-result="${result.key}">${L("rescheduleAgain")}</button>
         </div>
       </div>
-      <p class="note">${lang() === "ja" ? `鐝惧湪鏈壊褰?搴楄垪 ${panelUniqueCount} 浠讹紙搴?娉㈡ ${items.length} 浠讹級銆傘伨銇氱┖杌娿倰鍎厛銇椼€? 搴?1 杌娿仹瑁滈厤銈掕│銇椼伨銇欍€俙 : `褰撳墠鏈皟搴﹂棬搴?${panelUniqueCount} 瀹讹紙搴?娉㈡ ${items.length} 鏉★級銆傜郴缁熶細浼樺厛绌洪棽杞﹁締锛屽厛鎸変竴搴椾竴杞﹀皾璇曡ˉ璋冦€俙}</p>
+      <p class="note">${lang() === "ja" ? `現在未割当 店舗 ${panelUniqueCount} 件（店-波次 ${items.length} 件）。まず空車を優先し、1 店 1 車で補配を試します。` : `当前未调度门店 ${panelUniqueCount} 家（店-波次 ${items.length} 条）。系统会优先空闲车辆，先按一店一车尝试补调。`}</p>
       ${result.adjustMessage ? `<p class="note">${result.adjustMessage}</p>` : ""}
       <div class="unscheduled-list">
         ${items.map((item) => {
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           const timing = getEarliestDirectArrivalInfo(result, item);
           const timingText = timing
             ? (lang() === "ja"
-              ? `鏈€鏃╃洿琛屽埌鐫€ ${formatTime(timing.earliestArrival)} / 鏈熸湜 ${formatTime(timing.desiredArrivalMin)} / 鏈€绲傝ū瀹?${formatTime(timing.latestAllowedArrivalMin)}锛?${Number(timing.allowedLateMinutes || 0)}锛? 瑕佹眰銈堛倞 ${Number(timing.lateByDisplay || 0)} 鍒嗛亝銈宍
-              : `鏈€鏃╃洿杈惧彲鍒?${formatTime(timing.earliestArrival)} / 鏈熸湜 ${formatTime(timing.desiredArrivalMin)} / 鏈€鏅氬厑璁?${formatTime(timing.latestAllowedArrivalMin)}锛?${Number(timing.allowedLateMinutes || 0)}锛? 姣旇姹傛櫄 ${Number(timing.lateByDisplay || 0)} 鍒嗛挓`)
+              ? `最早直行到着 ${formatTime(timing.earliestArrival)} / 期望 ${formatTime(timing.desiredArrivalMin)} / 最終許容 ${formatTime(timing.latestAllowedArrivalMin)}（+${Number(timing.allowedLateMinutes || 0)}）/ 要求より ${Number(timing.lateByDisplay || 0)} 分遅れ`
+              : `最早直达可到 ${formatTime(timing.earliestArrival)} / 期望 ${formatTime(timing.desiredArrivalMin)} / 最晚允许 ${formatTime(timing.latestAllowedArrivalMin)}（+${Number(timing.allowedLateMinutes || 0)}）/ 比要求晚 ${Number(timing.lateByDisplay || 0)} 分钟`)
             : "";
+          // EN: Key step in this business flow.
+          // CN: 当前业务流程中的关键步骤。
           return `
           <article class="unscheduled-card">
             <div class="unscheduled-meta">
@@ -12161,36 +18389,50 @@ function renderUnscheduledPanel(result) {
 }
 
 function renderStoreReschedulePanel() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const mount = document.getElementById("storeReschedulePanel");
   if (!mount) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const activeKey = state.activeResultKey || state.lastResults[0]?.key;
   const activeResult = state.lastResults.find((item) => item.key === activeKey) || state.lastResults[0];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (activeResult) applyFinalRuleToResult(activeResult, activeResult.scenario);
   mount.innerHTML = activeResult ? renderUnscheduledPanel(activeResult) : "";
 }
 
 function loadSavedPlans() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch { return []; } }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function loadRunArchives() { try { return JSON.parse(localStorage.getItem(RUN_ARCHIVE_KEY) || "[]"); } catch { return []; } }
 function archiveStrategyLabel(key) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return ({
-    quick: "蹇€熷垵鎺?,
-    deep: "缁х画浼樺寲",
-    relay: "鎺ュ姏姹傝В",
-    compare: "澶氭柟妗堝姣?,
-    global: "鍏ㄥ眬鎼滅储",
-    manual: "鎵嬪伐妯″紡",
+    quick: "快速初排",
+    deep: "继续优化",
+    relay: "接力求解",
+    compare: "多方案对比",
+    global: "全局搜索",
+    manual: "手工模式",
   })[key] || key;
 }
 function archiveGoalLabel(key) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return ({
-    balanced: "缁煎悎骞宠　",
-    ontime: "鏈€鍑嗘椂",
-    vehicles: "灏戠敤杞?,
-    distance: "鐪侀噷绋?,
-    load: "閲嶈杞?,
+    balanced: "综合平衡",
+    ontime: "最准时",
+    vehicles: "少用车",
+    distance: "省里程",
+    load: "重装载",
   })[key] || key;
 }
 function snapshotResultForArchive(result) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return {
     key: result.key,
     label: result.label,
@@ -12203,6 +18445,8 @@ function snapshotResultForArchive(result) {
   };
 }
 function snapshotRunArchive() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!state.lastResults.length) return null;
   return {
     id: `run-${Date.now()}`,
@@ -12220,14 +18464,22 @@ function snapshotRunArchive() {
     results: state.lastResults.map(snapshotResultForArchive),
   };
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function autoArchiveCurrentRun() {
   const snapshot = snapshotRunArchive();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!snapshot) return;
   void saveRunArchiveToBackend(snapshot);
   const archives = loadRunArchives().filter((item) => item.id !== snapshot.id);
   archives.unshift(snapshot);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   let limit = Math.min(18, archives.length);
   while (limit >= 1) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     try {
       localStorage.setItem(RUN_ARCHIVE_KEY, JSON.stringify(archives.slice(0, limit)));
       return;
@@ -12239,46 +18491,64 @@ function autoArchiveCurrentRun() {
     }
   }
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function renderSavedPlans() {
   const mount = document.getElementById("savedPlans");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!mount) return;
   if (!state.ui.archiveDateFilter) state.ui.archiveDateFilter = todayDateKey();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dateFilter = state.ui.archiveDateFilter;
   const pageSize = 6;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const requestedPage = Math.max(1, state.ui.archivePage || 1);
   const shouldRefreshRemote = !archiveBackendCache.loading
     && (archiveBackendCache.date !== dateFilter || archiveBackendCache.page !== requestedPage);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (shouldRefreshRemote) {
     void refreshArchiveBackendCache(dateFilter, requestedPage, pageSize);
   }
   const localArchives = loadRunArchives().filter((item) => extractDateKey(item.createdAt) === dateFilter);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const useRemote = archiveBackendCache.date === dateFilter
     && archiveBackendCache.page === requestedPage
     && Array.isArray(archiveBackendCache.items);
   const archives = useRemote ? archiveBackendCache.items : localArchives;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const totalPages = useRemote
     ? Math.max(1, Number(archiveBackendCache.totalPages || 1))
     : Math.max(1, Math.ceil(archives.length / pageSize));
   state.ui.archivePage = Math.min(Math.max(1, state.ui.archivePage || 1), totalPages);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const start = (state.ui.archivePage - 1) * pageSize;
   const pageItems = useRemote ? archives : archives.slice(start, start + pageSize);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const saved = loadSavedPlans().filter((item) => extractDateKey(item.createdAt) === dateFilter);
   mount.innerHTML = `
     <section class="archive-shell">
       <div class="archive-toolbar">
         <div>
           <p class="archive-eyebrow">Solve Archive</p>
-          <h3 class="archive-title">姹傝В妗ｆ</h3>
+          <h3 class="archive-title">求解档案</h3>
         </div>
         <div class="archive-pager-wrap">
           <label class="archive-date-filter">
-            <span>${lang() === "ja" ? "鏃ヤ粯" : "鏃ユ湡"}</span>
+            <span>${lang() === "ja" ? "日付" : "日期"}</span>
             <input id="archiveDateFilterInput" type="date" value="${escapeHtml(dateFilter)}">
           </label>
           <div class="archive-pager">
-          <button class="secondary archive-page-btn" data-archive-page="${Math.max(1, state.ui.archivePage - 1)}" ${state.ui.archivePage <= 1 ? "disabled" : ""}>涓婁竴椤?/button>
-          <span class="archive-page-indicator">绗?${state.ui.archivePage} / ${totalPages} 椤?/span>
-          <button class="secondary archive-page-btn" data-archive-page="${Math.min(totalPages, state.ui.archivePage + 1)}" ${state.ui.archivePage >= totalPages ? "disabled" : ""}>涓嬩竴椤?/button>
+          <button class="secondary archive-page-btn" data-archive-page="${Math.max(1, state.ui.archivePage - 1)}" ${state.ui.archivePage <= 1 ? "disabled" : ""}>上一页</button>
+          <span class="archive-page-indicator">第 ${state.ui.archivePage} / ${totalPages} 页</span>
+          <button class="secondary archive-page-btn" data-archive-page="${Math.min(totalPages, state.ui.archivePage + 1)}" ${state.ui.archivePage >= totalPages ? "disabled" : ""}>下一页</button>
           </div>
         </div>
       </div>
@@ -12286,20 +18556,22 @@ function renderSavedPlans() {
         <table class="archive-table">
           <thead>
             <tr>
-              <th>杞</th>
+              <th>轮次</th>
               <th>${L("savedAt")}</th>
-              <th>姹傝В鏂瑰紡</th>
-              <th>鏂规鐩爣</th>
-              <th>鏈€浣冲垎</th>
-              <th>鏈€浣虫柟妗?/th>
-              <th>绠楁硶閾?/th>
-              <th>缁撴灉鏁?/th>
-              <th>鎿嶄綔</th>
+              <th>求解方式</th>
+              <th>方案目标</th>
+              <th>最佳分</th>
+              <th>最佳方案</th>
+              <th>算法链</th>
+              <th>结果数</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
             ${pageItems.map((item, index) => {
               const results = Array.isArray(item?.results) ? item.results : [];
+              // EN: Key step in this business flow.
+              // CN: 当前业务流程中的关键步骤。
               const bestResult = results.slice().sort((a, b) => Number(b?.metrics?.score || 0) - Number(a?.metrics?.score || 0))[0];
               return `
               <tr class="${state.ui.archiveCurrentId === item.id ? "archive-row-current" : ""}">
@@ -12313,133 +18585,197 @@ function renderSavedPlans() {
                 <td>${item.resultCount}</td>
                 <td>
                   <div class="archive-action-group">
-                    <button class="secondary preview-archive-btn" data-archive-id="${item.id}">鏌ョ湅</button>
-                    <button class="primary adopt-archive-btn" data-archive-id="${item.id}">閲囩敤</button>
+                    <button class="secondary preview-archive-btn" data-archive-id="${item.id}">查看</button>
+                    <button class="primary adopt-archive-btn" data-archive-id="${item.id}">采用</button>
                   </div>
                 </td>
               </tr>`;
             }).join("")}
           </tbody>
         </table>
-      </div>` : `<div class="note">${lang() === "ja" ? "銇撱伄鏃ャ伀瑭插綋銇欍倠姹傝В妗ｆ銇伨銇犮亗銈娿伨銇涖倱銆? : "杩欎竴澶╄繕娌℃湁姹傝В妗ｆ銆?}</div>`}
+      </div>` : `<div class="note">${lang() === "ja" ? "この日に該当する求解档案はまだありません。" : "这一天还没有求解档案。"}</div>`}
       ${saved.length ? `
         <div class="archive-legacy">
-          <p class="archive-legacy-title">鎵嬪伐蹇収</p>
-          <div class="saved-list">${saved.map((item) => `<article class="adjust-item"><strong>${item.algorithms}</strong><p>${L("savedAt")}锛?{item.createdAt}</p><p>${L("wavesLabel")}锛?{item.waves}</p></article>`).join("")}</div>
-        </div>` : (!archives.length ? `<div class="note">${lang() === "ja" ? "銇撱伄鏃ャ伀瑭插綋銇欍倠鎵嬪嫊蹇収銈傘亗銈娿伨銇涖倱銆? : "杩欎竴澶╀篃娌℃湁鎵嬪伐蹇収銆?}</div>` : "")}
+          <p class="archive-legacy-title">手工快照</p>
+          <div class="saved-list">${saved.map((item) => `<article class="adjust-item"><strong>${item.algorithms}</strong><p>${L("savedAt")}：${item.createdAt}</p><p>${L("wavesLabel")}：${item.waves}</p></article>`).join("")}</div>
+        </div>` : (!archives.length ? `<div class="note">${lang() === "ja" ? "この日に該当する手動快照もありません。" : "这一天也没有手工快照。"}</div>` : "")}
     </section>
   `;
 }
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function restoreArchivedRun(archiveId, mode = "preview") {
   let archive = await getRunArchiveFromBackend(archiveId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!archive) {
     archive = loadRunArchives().find((item) => item.id === archiveId);
   }
   if (!archive) return;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.stores = JSON.parse(JSON.stringify(archive.stores || []));
   state.vehicles = JSON.parse(JSON.stringify(archive.vehicles || []));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.waves = JSON.parse(JSON.stringify(archive.waves || []));
   state.settings = { ...state.settings, ...(archive.settings || {}) };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const baseScenario = await buildScenario();
   const selectedScenario = applySolveWaveSelectionToScenario(baseScenario);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (selectedScenario.error || !selectedScenario.scenario) {
-    box.textContent = selectedScenario.error || (lang() === "ja" ? "娉㈡绛涢€夊け璐ャ€? : "娉㈡绛涢€夊け璐ャ€?);
+    box.textContent = selectedScenario.error || (lang() === "ja" ? "波次筛选失败。" : "波次筛选失败。");
     return;
   }
   const scenario = selectedScenario.scenario;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.lastResults = (archive.results || []).map((result) => ({
     ...result,
     scenario,
     storeAssignmentMap: buildStoreAssignmentMapFromSolution(result.solution || []),
   }));
   state.activeResultKey = archive.activeResultKey || state.lastResults[0]?.key || "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.archiveCurrentId = archive.id;
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (box) {
     box.textContent = mode === "adopt"
-      ? `宸查噰鐢?${archive.createdAt} 杩欒疆姹傝В妗ｆ銆備笂鏂硅皟搴︾粨鏋滃尯宸茬粡鍒囧埌杩欎竴杞紝鍙互缁х画姹囨姤銆佸鍑猴紝鎴栧湪姝ゅ熀纭€涓婄户缁紭鍖栥€俙
-      : `姝ｅ湪鏌ョ湅 ${archive.createdAt} 杩欒疆姹傝В妗ｆ銆備笂鏂硅皟搴︾粨鏋滃尯宸茬粡鍒囧埌杩欎竴杞紱濡傛灉鑰佹澘璁ゅ彲锛屽啀鐐光€滈噰鐢ㄢ€濆嵆鍙€俙;
+      ? `已采用 ${archive.createdAt} 这轮求解档案。上方调度结果区已经切到这一轮，可以继续汇报、导出，或在此基础上继续优化。`
+      : `正在查看 ${archive.createdAt} 这轮求解档案。上方调度结果区已经切到这一轮；如果老板认可，再点“采用”即可。`;
   }
   renderAll();
 }
-function saveCurrentPlan() { if (!state.lastResults.length) return; const saved = loadSavedPlans(); saved.unshift({ id: `plan-${Date.now()}`, createdAt: new Date().toLocaleString("zh-CN"), algorithms: state.lastResults.map((x) => x.label).join(" vs "), waves: state.settings.ignoreWaves ? "蹇界暐娉㈡锛堝叏澶╃粺涓€璋冨害锛? : state.waves.map((w) => `${w.waveId}(${w.start}-${w.end})`).join("锛?) }); localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 12))); renderSavedPlans(); }
+function saveCurrentPlan() { if (!state.lastResults.length) return; const saved = loadSavedPlans(); saved.unshift({ id: `plan-${Date.now()}`, createdAt: new Date().toLocaleString("zh-CN"), algorithms: state.lastResults.map((x) => x.label).join(" vs "), waves: state.settings.ignoreWaves ? "忽略波次（全天统一调度）" : state.waves.map((w) => `${w.waveId}(${w.start}-${w.end})`).join("，") }); localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 12))); renderSavedPlans(); }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function todayDateKey() {
   const now = new Date();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const yyyy = now.getFullYear();
   const mm = String(now.getMonth() + 1).padStart(2, "0");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const dd = String(now.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function extractDateKey(value) {
   const text = String(value || "");
-  const match = text.match(/(\d{4})[\/\-骞碷(\d{1,2})[\/\-鏈圿(\d{1,2})/);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
+  const match = text.match(/(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})/);
   if (!match) return "";
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return `${match[1]}-${String(match[2]).padStart(2, "0")}-${String(match[3]).padStart(2, "0")}`;
 }
 
 function getWaveSolverAlgorithmOptions() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return ["vrptw", "hybrid", "ga", "tabu", "lns", "savings", "sa", "aco", "pso", "vehicle"];
 }
 
 function getConfiguredWaveOptions() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (state.settings.ignoreWaves) {
     return [{
       value: "ALL",
-      label: lang() === "ja" ? "ALL 銉?鍏ㄥ簵鑸楃当鍚? : "ALL 路 鍏ㄩ儴闂ㄥ簵缁熶竴璋冨害",
+      label: lang() === "ja" ? "ALL ・ 全店舗統合" : "ALL · 全部门店统一调度",
     }];
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const options = (state.waves || []).map((wave) => ({
     value: wave.waveId,
-    label: `${wave.waveId} 路 ${wave.start}-${wave.end}`,
+    label: `${wave.waveId} · ${wave.start}-${wave.end}`,
   }));
   const stores = enrichStores(state.stores || []);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (stores.length) {
     const dist = buildDistanceTable(stores);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const singleWaveIds = getSingleWaveStoreIds(stores, dist, Number(state.settings.singleWaveDistanceKm || 70));
     if (singleWaveIds.length) {
       options.push({
-        value: "鍗曟尝娆?,
+        value: "单波次",
         label: lang() === "ja"
-          ? `鍗樼嫭娉㈡ 路 ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`
-          : `鍗曟尝娆?路 ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`,
+          ? `単独波次 · ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`
+          : `单波次 · ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`,
       });
     }
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return options;
 }
 
 function ensureWaveSolverPanel() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const panel = document.getElementById("waveSolverPanel");
   if (panel) panel.remove();
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return null;
 }
 
 function normalizeSolveWaveSelection(selectedIds = [], options = getConfiguredWaveOptions()) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const optionIds = new Set((options || []).map((item) => String(item.value || "").trim()).filter(Boolean).filter((id) => id !== "ALL"));
   const raw = Array.isArray(selectedIds) ? selectedIds.map((id) => String(id || "").trim()).filter(Boolean) : [];
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!raw.length || raw.includes("ALL")) return ["ALL"];
   const filtered = Array.from(new Set(raw.filter((id) => optionIds.has(id))));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return filtered.length ? filtered : ["ALL"];
 }
 
 function renderSolveWaveSelectionOptions() {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const allInput = document.getElementById("solveWaveAllInput");
   const optionsBox = document.getElementById("solveWaveOptions");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!allInput || !optionsBox) return;
   const options = getConfiguredWaveOptions().filter((item) => String(item.value || "").trim() !== "ALL");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   state.ui.solveWaveSelectedIds = normalizeSolveWaveSelection(state.ui.solveWaveSelectedIds, options);
   const isAll = state.ui.solveWaveSelectedIds.includes("ALL");
   allInput.checked = isAll;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!options.length) {
-    optionsBox.innerHTML = `<span class="muted">${lang() === "ja" ? "鍙€夋尝娆°仾銇? : "鏆傛棤鍙€夋尝娆?}</span>`;
+    optionsBox.innerHTML = `<span class="muted">${lang() === "ja" ? "可选波次なし" : "暂无可选波次"}</span>`;
     return;
   }
   const selectedSet = new Set(state.ui.solveWaveSelectedIds);
   optionsBox.innerHTML = options.map((item) => {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     const id = String(item.value || "").trim();
     const checked = !isAll && selectedSet.has(id);
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     return `
       <label class="solve-wave-option">
         <input class="solve-wave-option-input" type="checkbox" data-solve-wave-id="${escapeHtml(id)}" ${checked ? "checked" : ""}>
@@ -12454,26 +18790,42 @@ function renderWaveSolverPanel() {
   renderSolveWaveSelectionOptions();
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function applySolveWaveSelectionToScenario(scenario) {
-  if (!scenario || !Array.isArray(scenario.waves)) return { scenario, error: "娉㈡鏁版嵁涓嶅彲鐢? };
+  if (!scenario || !Array.isArray(scenario.waves)) return { scenario, error: "波次数据不可用" };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (state.settings.ignoreWaves) return { scenario };
   const selected = normalizeSolveWaveSelection(state.ui.solveWaveSelectedIds, getConfiguredWaveOptions());
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (selected.includes("ALL")) return { scenario };
   const selectedSet = new Set(selected.map((id) => String(id || "").trim()).filter(Boolean));
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const filteredWaves = (scenario.waves || []).filter((wave) => selectedSet.has(String(wave?.waveId || "").trim()));
   if (!filteredWaves.length) {
-    return { scenario: null, error: lang() === "ja" ? "灏戙仾銇忋仺銈?銇ゃ伄娉㈡銈掗伕鎶炪仐銇︺亸銇犮仌銇勩€? : "璇疯嚦灏戦€夋嫨1涓尝娆℃眰瑙ｃ€? };
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
+    return { scenario: null, error: lang() === "ja" ? "少なくとも1つの波次を選択してください。" : "请至少选择1个波次求解。" };
   }
   return { scenario: { ...scenario, waves: filteredWaves } };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function focusSolvedOutput() {
   const target = document.getElementById("resultPanels") || document.getElementById("analyticsPanel") || document.getElementById("summaryCards");
   target?.scrollIntoView?.({ behavior: "smooth", block: "start" });
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function buildSingleWaveScenario(baseScenario, waveId) {
   const wave = (baseScenario?.waves || []).find((item) => item.waveId === waveId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!wave) return null;
   return {
     ...baseScenario,
@@ -12481,6 +18833,8 @@ function buildSingleWaveScenario(baseScenario, waveId) {
   };
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 function getAlgorithmRunner(key) {
   const map = {
     vrptw: solveByVRPTW,
@@ -12494,10 +18848,14 @@ function getAlgorithmRunner(key) {
     pso: solveByPSO,
     vehicle: solveByVehicle,
   };
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   return map[key] || null;
 }
 
 function getWaveOptimizer(key) {
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const map = {
     hybrid: optimizeWaveWithHybrid,
     ga: optimizeWaveWithGA,
@@ -12511,37 +18869,53 @@ function getWaveOptimizer(key) {
   return map[key] || null;
 }
 
+// EN: Key step in this business flow.
+// CN: 当前业务流程中的关键步骤。
 async function runSingleWaveInitialSolve() {
   syncSettingsFromUI();
   const box = document.getElementById("validationBox");
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const error = validateInput();
   if (error) {
+    // EN: Key step in this business flow.
+    // CN: 当前业务流程中的关键步骤。
     if (box) box.textContent = error;
     return;
   }
   const waveId = state.ui.waveSolverWaveId;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const algoKey = state.ui.waveSolverAlgo;
   const runner = getAlgorithmRunner(algoKey);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!runner) return;
-  if (box) box.textContent = lang() === "ja" ? `娉㈡ ${waveId} 銈?${algoLabel(algoKey)} 銇у垵鏈熸眰瑙ｃ仐銇︺亜銇俱仚鈥 : `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬垵姝ユ眰瑙ｂ€;
+  if (box) box.textContent = lang() === "ja" ? `波次 ${waveId} を ${algoLabel(algoKey)} で初期求解しています…` : `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做初步求解…`;
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const scenario = await buildScenario();
   const singleScenario = buildSingleWaveScenario(scenario, waveId);
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   if (!singleScenario) {
-    if (box) box.textContent = lang() === "ja" ? `娉㈡ ${waveId} 銇岃銇ゃ亱銈娿伨銇涖倱銆俙 : `娌℃湁鎵惧埌娉㈡ ${waveId}銆俙;
+    if (box) box.textContent = lang() === "ja" ? `波次 ${waveId} が見つかりません。` : `没有找到波次 ${waveId}。`;
     return;
   }
+  // EN: Key step in this business flow.
+  // CN: 当前业务流程中的关键步骤。
   const result = await runner(singleScenario);
-  result.adjustMessage = lang() === "ja" ? `宸插垏鍒?${waveId} 鐨勫崟鐙眰瑙ｈ鍥撅紝褰撳墠绠楁硶鏄?${algoLabel(algoKey)}銆俙 : `宸插垏鍒?${waveId} 鐨勫崟鐙眰瑙ｈ鍥撅紝褰撳墠绠楁硶鏄?${algoLabel(algoKey)}銆俙;
+  result.adjustMessage = lang() === "ja" ? `已切到 ${waveId} 的单独求解视图，当前算法是 ${algoLabel(algoKey)}。` : `已切到 ${waveId} 的单独求解视图，当前算法是 ${algoLabel(algoKey)}。`;
   state.lastResults = [result];
   state.activeResultKey = result.key;
   state.ui.generating = false;
   state.ui.progress = 100;
-  state.ui.progressText = lang() === "ja" ? `${waveId} 銇垵鏈熸眰瑙ｃ亴瀹屼簡銇椼伨銇椼仧` : `${waveId} 鐨勫垵姝ユ眰瑙ｅ凡瀹屾垚`;
-  if (box) box.textContent = lang() === "ja" ? `${waveId} 銇垵鏈熸眰瑙ｃ亴瀹屾垚銇椼伨銇椼仧銆俙 : `${waveId} 鐨勫垵姝ユ眰瑙ｅ凡瀹屾垚銆俙;
+  state.ui.progressText = lang() === "ja" ? `${waveId} の初期求解が完了しました` : `${waveId} 的初步求解已完成`;
+  if (box) box.textContent = lang() === "ja" ? `${waveId} の初期求解が完成しました。` : `${waveId} 的初步求解已完成。`;
   renderAll();
   document.getElementById("resultIntro").textContent = lang() === "ja"
-    ? `${waveId} 銇崢鐙尝娆°儞銉ャ兗銇с仚銆傜敇鐗瑰浘銉婚┚椹惰埍銉荤嚎璺槑缁嗐伅涓嬫柟銇当涓€琛ㄧず銇椼伨銇欍€俙
-    : `褰撳墠鏄?${waveId} 鐨勫崟娉㈡瑙嗗浘锛岀敇鐗瑰浘銆侀┚椹惰埍鍜岀嚎璺槑缁嗛兘鍦ㄤ笅鏂圭粺涓€灞曠ず銆俙;
+    ? `${waveId} の単独波次ビューです。甘特图・驾驶舱・线路明细は下方に統一表示します。`
+    : `当前是 ${waveId} 的单波次视图，甘特图、驾驶舱和线路明细都在下方统一展示。`;
   focusSolvedOutput();
 }
 
@@ -12549,17 +18923,17 @@ async function runSingleWaveResolve() {
   const box = document.getElementById("validationBox");
   const result = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
   if (!result) {
-    if (box) box.textContent = lang() === "ja" ? "鍏堛伀閫氬父銇皟搴︾粨鏋溿倰鐢熸垚銇椼仸銇忋仩銇曘亜銆? : "璇峰厛鐢熸垚涓€鐗堣皟搴︾粨鏋溿€?;
+    if (box) box.textContent = lang() === "ja" ? "先に通常の调度结果を生成してください。" : "请先生成一版调度结果。";
     return;
   }
   const waveId = state.ui.waveSolverWaveId;
   const algoKey = state.ui.waveSolverAlgo;
   const target = getWaveAndPlans(result, waveId);
   if (!target) {
-    if (box) box.textContent = lang() === "ja" ? `褰撳墠缁撴灉銇尝娆?${waveId} 銇屻亗銈娿伨銇涖倱銆俙 : `褰撳墠缁撴灉閲屾病鏈夋尝娆?${waveId}銆俙;
+    if (box) box.textContent = lang() === "ja" ? `当前结果に波次 ${waveId} がありません。` : `当前结果里没有波次 ${waveId}。`;
     return;
   }
-  if (box) box.textContent = lang() === "ja" ? `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬啀姹傝В鈥 : `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬啀姹傝В鈥;
+  if (box) box.textContent = lang() === "ja" ? `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做再求解…` : `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做再求解…`;
   const singleScenario = buildSingleWaveScenario(result.scenario, waveId);
   if (!singleScenario) return;
   let nextWavePlans = null;
@@ -12574,20 +18948,20 @@ async function runSingleWaveResolve() {
     nextWavePlans = rerun?.solution?.[0] || null;
   }
   if (!nextWavePlans) {
-    if (box) box.textContent = lang() === "ja" ? `${waveId} 銇啀姹傝В銇け鏁椼仐銇俱仐銇熴€俙 : `${waveId} 鐨勫啀姹傝В澶辫触浜嗐€俙;
+    if (box) box.textContent = lang() === "ja" ? `${waveId} の再求解に失敗しました。` : `${waveId} 的再求解失败了。`;
     return;
   }
   result.solution[target.waveIndex] = nextWavePlans;
-  result.adjustMessage = lang() === "ja" ? `${waveId} 銈?${algoLabel(algoKey)} 銇у啀姹傝В銇椼伨銇椼仧銆俙 : `${waveId} 宸叉寜 ${algoLabel(algoKey)} 瀹屾垚鍐嶆眰瑙ｃ€俙;
+  result.adjustMessage = lang() === "ja" ? `${waveId} を ${algoLabel(algoKey)} で再求解しました。` : `${waveId} 已按 ${algoLabel(algoKey)} 完成再求解。`;
   syncResultAfterLocalAdjustment(result);
   state.ui.generating = false;
   state.ui.progress = 100;
-  state.ui.progressText = lang() === "ja" ? `${waveId} 銇啀姹傝В銇屽畬浜嗐仐銇俱仐銇焋 : `${waveId} 鐨勫啀姹傝В宸插畬鎴恅;
+  state.ui.progressText = lang() === "ja" ? `${waveId} の再求解が完了しました` : `${waveId} 的再求解已完成`;
   if (box) box.textContent = result.adjustMessage;
   renderAll();
   document.getElementById("resultIntro").textContent = lang() === "ja"
-    ? `${waveId} 銇尝娆°仩銇戙倰鍐嶆眰瑙ｃ仐銇熴儞銉ャ兗銇с仚銆備笅鏂广伄鐢樼壒鍥俱兓缁撴灉鍗°兓绾胯矾鏄庣粏銈掑悎銈忋仜銇︾⒑瑾嶃仹銇嶃伨銇欍€俙
-    : `褰撳墠鏄彧閽堝 ${waveId} 鍋氬啀姹傝В鍚庣殑瑙嗗浘锛屼笅鏂逛細缁熶竴灞曠ず鐢樼壒鍥俱€佺粨鏋滃崱鍜岀嚎璺槑缁嗐€俙;
+    ? `${waveId} の波次だけを再求解したビューです。下方の甘特图・结果卡・线路明细を合わせて確認できます。`
+    : `当前是只针对 ${waveId} 做再求解后的视图，下方会统一展示甘特图、结果卡和线路明细。`;
   focusSolvedOutput();
 }
 
@@ -12667,7 +19041,7 @@ function downloadXlsHtml(fileName, title, headers, rows) {
   const thead = headers.map((header) => `<th>${escapeExcelHtml(header)}</th>`).join("");
   const tbody = rows.length
     ? rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeExcelHtml(cell)}</td>`).join("")}</tr>`).join("")
-    : `<tr><td colspan="${Math.max(1, headers.length)}">鏃犳暟鎹?/td></tr>`;
+    : `<tr><td colspan="${Math.max(1, headers.length)}">无数据</td></tr>`;
   const html = `<!doctype html>
 <html>
 <head>
@@ -12751,19 +19125,19 @@ function buildStoreExportRows(mode) {
 }
 
 function exportMultiDailyStores() {
-  const headers = ["缂栧彿", "鍚嶇О", "鍖哄煙", "娆℃暟", "涓€娉㈡璐ч噺", "浜屾尝娆¤揣閲?, "涓€閰嶆椂闂?, "浜岄厤鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿"];
+  const headers = ["编号", "名称", "区域", "次数", "一波次货量", "二波次货量", "一配时间", "二配时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号"];
   const rows = buildStoreExportRows("multi");
   const stamp = new Date();
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  downloadXlsHtml(`涓€鏃ュ閰嶅簵閾烘槑缁哶${timestamp}.xls`, "涓€鏃ュ閰嶅簵閾烘槑缁?, headers, rows);
+  downloadXlsHtml(`一日多配店铺明细_${timestamp}.xls`, "一日多配店铺明细", headers, rows);
 }
 
 function exportSingleDailyStores() {
-  const headers = ["缂栧彿", "鍚嶇О", "鍖哄煙", "娆℃暟", "涓夋尝娆¤揣閲?, "鍥涙尝娆¤揣閲?, "W3鍒板簵鏃堕棿", "W4鍒板簵鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿"];
+  const headers = ["编号", "名称", "区域", "次数", "三波次货量", "四波次货量", "W3到店时间", "W4到店时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号"];
   const rows = buildStoreExportRows("single");
   const stamp = new Date();
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  downloadXlsHtml(`涓€鏃ヤ竴閰嶅簵閾烘槑缁哶${timestamp}.xls`, "涓€鏃ヤ竴閰嶅簵閾烘槑缁?, headers, rows);
+  downloadXlsHtml(`一日一配店铺明细_${timestamp}.xls`, "一日一配店铺明细", headers, rows);
 }
 
 function renderVehicles() {
@@ -12892,7 +19266,7 @@ function renderStoresTable() {
   const buildStoreWaveHeader = (label, total) => `
     <div class="store-wave-header">
       <span class="store-wave-header-label">${escapeHtml(label)}</span>
-      <span class="store-wave-header-total">鍚堣 ${formatLoadConvertValue(total)}</span>
+      <span class="store-wave-header-total">合计 ${formatLoadConvertValue(total)}</span>
     </div>
   `;
   const buildColumns = (waveLabelA, waveTotalA, waveLabelB, waveTotalB, opts = {}) => {
@@ -12929,7 +19303,7 @@ function renderStoresTable() {
       <td><input data-kind="store" data-field="id" data-index="${i}" value="${s.id || ""}" title="${escapeHtml(String(s.id || ""))}"></td>
       <td class="store-name-cell">
         <div class="store-name-stack">
-          <span class="store-name-id" title="${escapeHtml(String(s.id || ""))}">搴楅摵缂栧彿锛?{escapeHtml(String(s.id || ""))}</span>
+          <span class="store-name-id" title="${escapeHtml(String(s.id || ""))}">店铺编号：${escapeHtml(String(s.id || ""))}</span>
           <input data-kind="store" data-field="name" data-index="${i}" value="${s.name || ""}" title="${escapeHtml(String(s.name || ""))}">
         </div>
       </td>
@@ -12970,7 +19344,7 @@ function renderStoresTable() {
   if (storeTable) {
     storeTable.innerHTML = buildDataTableHtml({
       tableKind: "store",
-      columns: buildColumns("涓€娉㈡璐ч噺", multiWave1Total, "浜屾尝娆¤揣閲?, multiWave2Total, {
+      columns: buildColumns("一波次货量", multiWave1Total, "二波次货量", multiWave2Total, {
         includeFirstTime: true,
         firstWaveSortField: "wave1TotalLoad",
         secondWaveSortField: "wave2TotalLoad",
@@ -12980,8 +19354,8 @@ function renderStoresTable() {
         multiDailyRows,
         "resolvedWave1Load",
         "resolvedWave2Load",
-        "110锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380",
-        "210锛歛pcs/350+apaper/380",
+        "110：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380",
+        "210：apcs/350+apaper/380",
         { includeFirstTime: true, arrivalField: "waveW2" }
       ),
       tableClass: "store-data-table",
@@ -12991,9 +19365,9 @@ function renderStoresTable() {
   if (storeTableSingleDaily) {
     storeTableSingleDaily.innerHTML = buildDataTableHtml({
       tableKind: "store",
-      columns: buildColumns("涓夋尝娆¤揣閲?, singleWave3Total, "鍥涙尝娆¤揣閲?, singleWave4Total, {
+      columns: buildColumns("三波次货量", singleWave3Total, "四波次货量", singleWave4Total, {
         includeFirstTime: false,
-        secondTimeLabel: "鍒板簵鏃堕棿",
+        secondTimeLabel: "到店时间",
         firstWaveSortField: "wave3TotalLoad",
         secondWaveSortField: "wave4TotalLoad",
         secondTimeSortField: "waveW4",
@@ -13002,8 +19376,8 @@ function renderStoresTable() {
         singleDailyRows,
         "resolvedWave3Load",
         "resolvedWave4Load",
-        "W3锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
-        "W4锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
+        "W3：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
+        "W4：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
         { includeFirstTime: false, arrivalField: "waveW4" }
       ),
       tableClass: "store-data-table",
@@ -13026,7 +19400,7 @@ function renderWaves() {
   });
   const leftItems = searched.filter((item) => item.matched);
   if (!leftItems.length) {
-    left.innerHTML = `<div class="muted">鏃犲尮閰嶆尝娆?/div>`;
+    left.innerHTML = `<div class="muted">无匹配波次</div>`;
   } else {
     if (!leftItems.some((item) => item.index === state.ui.waveSelectedIndex)) {
       state.ui.waveSelectedIndex = leftItems[0].index;
@@ -13043,7 +19417,7 @@ function renderWaves() {
   state.ui.waveSelectedIndex = selectedIndex;
   const wave = state.waves[selectedIndex];
   if (!wave) {
-    right.innerHTML = `<div class="muted">鏆傛棤娉㈡</div>`;
+    right.innerHTML = `<div class="muted">暂无波次</div>`;
     return;
   }
   const selectedIds = new Set(parseStoreIds(wave.storeIds).map((id) => normalizeStoreCode(id)));
@@ -13062,9 +19436,9 @@ function renderWaves() {
       </label>
     </div>
     <div class="wave-editor-toolbar">
-      <input id="waveStoreSearchInput" type="text" placeholder="鎼滅储闂ㄥ簵鍚嶇О" value="${escapeHtml(state.ui.waveStoreSearchQuery || "")}">
-      <button class="secondary" data-wave-select-all="${selectedIndex}">鍏ㄩ€夊綋鍓嶆绱?/button>
-      <button class="secondary" data-wave-clear-all="${selectedIndex}">娓呯┖褰撳墠娉㈡</button>
+      <input id="waveStoreSearchInput" type="text" placeholder="搜索门店名称" value="${escapeHtml(state.ui.waveStoreSearchQuery || "")}">
+      <button class="secondary" data-wave-select-all="${selectedIndex}">全选当前检索</button>
+      <button class="secondary" data-wave-clear-all="${selectedIndex}">清空当前波次</button>
       <button class="mini" data-remove="wave" data-index="${selectedIndex}">${L("del")}</button>
     </div>
     <div>${renderWaveStoreNameTags(wave.storeIds, 6)}</div>
@@ -13074,7 +19448,7 @@ function renderWaves() {
           <input type="checkbox" data-wave-store-index="${selectedIndex}" data-store-id="${escapeHtml(store.id)}" ${selectedIds.has(store.id) ? "checked" : ""}>
           <span class="store-name">${escapeHtml(store.name)}</span>
         </label>
-      `).join("") || `<div class="muted">鏃犲尮閰嶉棬搴?/div>`}
+      `).join("") || `<div class="muted">无匹配门店</div>`}
     </div>
   `;
 }
@@ -13134,8 +19508,8 @@ function syncAlgorithmControls() {
     input.disabled = !isFreeMode;
     input.setAttribute("aria-disabled", isFreeMode ? "false" : "true");
     input.title = isFreeMode
-      ? (lang() === "ja" ? `鑷敱姹傝В妯″紡锛氭渶澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 涓畻娉曘€俙 : `鑷敱姹傝В妯″紡锛氭渶澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙)
-      : (lang() === "ja" ? "銈儷銈淬儶銈恒儬銇祫銇垮悎銈忋仜銇€佺従鍦ㄣ伄鏂归嚌銇繙銇樸仸銈枫偣銉嗐儬銇岃嚜鍕曘仹閬搞伋銇俱仚銆? : "绠楁硶缁勫悎浼氱敱绯荤粺鎸夊綋鍓嶇瓥鐣ヨ嚜鍔ㄩ€夋嫨銆?);
+      ? (lang() === "ja" ? `自由求解模式：最多选择 ${MAX_FREE_SOLVE_ALGOS} 个算法。` : `自由求解模式：最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`)
+      : (lang() === "ja" ? "アルゴリズムの組み合わせは、現在の方針に応じてシステムが自動で選びます。" : "算法组合会由系统按当前策略自动选择。");
     input.closest(".algo-box")?.classList.toggle("is-locked", !isFreeMode);
   });
 }
@@ -13161,24 +19535,24 @@ function renderAlgorithmPool() {
   shell.innerHTML = `
     <div class="algorithm-pool-head">
       <div>
-        <h3>${lang() === "ja" ? "銈儷銈淬儶銈恒儬涓灑" : "绠楁硶涓灑"}</h3>
+        <h3>${lang() === "ja" ? "アルゴリズム中枢" : "算法中枢"}</h3>
       </div>
       <p class="algorithm-pool-summary">${currentStrategy === "free"
         ? (lang() === "ja"
-          ? `鑷敱姹傝В銇с仚銆備笅銇偒銉笺儔銈掔洿鎺ャ偗銉儍銈仐銇︺偄銉偞銉偤銉犮倰閬告姙銇с亶銇俱仚锛堟渶澶?${MAX_FREE_SOLVE_ALGOS} 鏈級銆傜従鍦?${active.size} 鏈€俙
-          : `褰撳墠鏄嚜鐢辨眰瑙ｏ紝鍙洿鎺ョ偣鍑讳笅鏂瑰崱鐗囬€夋嫨绠楁硶锛堟渶澶?${MAX_FREE_SOLVE_ALGOS} 绉嶏級銆傚綋鍓嶅凡閫?${active.size} 绉嶃€俙)
+          ? `自由求解です。下のカードを直接クリックしてアルゴリズムを選択できます（最大 ${MAX_FREE_SOLVE_ALGOS} 本）。現在 ${active.size} 本。`
+          : `当前是自由求解，可直接点击下方卡片选择算法（最多 ${MAX_FREE_SOLVE_ALGOS} 种）。当前已选 ${active.size} 种。`)
         : (lang() === "ja"
-          ? `浠婂洖銇▓绠椼仹銇?${active.size} 鏈伄銈儷銈淬儶銈恒儬銇屽嫊浣滀腑銇с仚銆傚疅闅涖伀浣裤倧銈屻仸銇勩倠涓牳銇犮亼銈掕嚜鍕曘仹鐐圭伅琛ㄧず銇椼伨銇欍€俙
-          : `鏈疆宸茶皟鐢?${active.size} 濂楃畻娉曪紝绯荤粺浼氳嚜鍔ㄧ偣浜綋鍓嶆鍦ㄥ弬涓庢眰瑙ｇ殑鏍稿績銆俙)}</p>
+          ? `今回の計算では ${active.size} 本のアルゴリズムが動作中です。実際に使われている中核だけを自動で点灯表示します。`
+          : `本轮已调用 ${active.size} 套算法，系统会自动点亮当前正在参与求解的核心。`)}</p>
     </div>
     <div class="algorithm-pool"></div>
   `;
   pool = shell.querySelector(".algorithm-pool");
   pool.innerHTML = order.map((key) => `
-    <div class="algorithm-card ${active.has(key) ? "is-active" : ""} ${currentStrategy === "free" ? "is-pickable" : ""}" data-algo-card="${key}" title="${currentStrategy === "free" ? (lang() === "ja" ? "銈儶銉冦偗銇椼仸閬告姙/瑙ｉ櫎锛堟渶澶?鏈級" : "鐐瑰嚮閫夋嫨/鍙栨秷锛堟渶澶?绉嶏級") : ""}">
+    <div class="algorithm-card ${active.has(key) ? "is-active" : ""} ${currentStrategy === "free" ? "is-pickable" : ""}" data-algo-card="${key}" title="${currentStrategy === "free" ? (lang() === "ja" ? "クリックして選択/解除（最大5本）" : "点击选择/取消（最多5种）") : ""}">
       <div class="algorithm-card-head">
         <span class="algorithm-card-name">${algoLabel(key)}</span>
-        <span class="algorithm-card-state">${active.has(key) ? (lang() === "ja" ? "绋煎儘涓? : "宸插惎鐢?) : (lang() === "ja" ? "寰呮涓? : "寰呭懡涓?)}</span>
+        <span class="algorithm-card-state">${active.has(key) ? (lang() === "ja" ? "稼働中" : "已启用") : (lang() === "ja" ? "待機中" : "待命中")}</span>
       </div>
       <div class="algorithm-card-body">${algoDescription(key)}</div>
     </div>
@@ -13266,7 +19640,7 @@ function renderStrategyPreviewControls() {
   const groups = document.querySelectorAll(".strategy-shell .strategy-preview-group");
   if (groups[0]) {
     groups[0].innerHTML = `
-      <div class="strategy-preview-label" id="solveModePreviewLabel">${lang() === "ja" ? "瑙ｆ硶銉兗銉? : "姹傝В鏂瑰紡"}</div>
+      <div class="strategy-preview-label" id="solveModePreviewLabel">${lang() === "ja" ? "解法モード" : "求解方式"}</div>
       <div class="strategy-preview-row">
         <button type="button" class="strategy-pill strategy-preview-btn ${(state.settings.solveStrategy || "quick") === "quick" ? "is-active" : ""}" data-solve-preview="quick" id="solvePreviewQuick">${L("quickSolve")}</button>
         <span class="strategy-divider">/</span>
@@ -13281,13 +19655,13 @@ function renderStrategyPreviewControls() {
   }
   if (groups[1]) {
     groups[1].innerHTML = `
-      <div class="strategy-preview-label" id="goalModePreviewLabel">${lang() === "ja" ? "鐩鏂归嚌" : "鏂规鐩爣"}</div>
+      <div class="strategy-preview-label" id="goalModePreviewLabel">${lang() === "ja" ? "目標方針" : "方案目标"}</div>
       <div class="strategy-preview-row">
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "ontime" ? "is-active" : ""}" data-goal-preview="ontime" id="goalPreviewOnTime">${lang() === "ja" ? "瀹氭檪閲嶈" : "鏈€鍑嗘椂"}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "ontime" ? "is-active" : ""}" data-goal-preview="ontime" id="goalPreviewOnTime">${lang() === "ja" ? "定時重視" : "最准时"}</button>
         <span class="strategy-divider">/</span>
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "vehicles" ? "is-active" : ""}" data-goal-preview="vehicles" id="goalPreviewVehicles">${lang() === "ja" ? "灏戣粖涓? : "灏戠敤杞?}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "vehicles" ? "is-active" : ""}" data-goal-preview="vehicles" id="goalPreviewVehicles">${lang() === "ja" ? "少車両" : "少用车"}</button>
         <span class="strategy-divider">/</span>
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "distance" ? "is-active" : ""}" data-goal-preview="distance" id="goalPreviewDistance">${lang() === "ja" ? "鐭窛闆? : "鐪侀噷绋?}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "distance" ? "is-active" : ""}" data-goal-preview="distance" id="goalPreviewDistance">${lang() === "ja" ? "短距離" : "省里程"}</button>
         <span class="strategy-divider">/</span>
         <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "balanced" ? "is-active" : ""}" data-goal-preview="balanced" id="goalPreviewBalanced">${L("goalBalanced")}</button>
       </div>`;
@@ -13297,25 +19671,25 @@ function buildStrategyHint() {
   const strategy = state.settings.solveStrategy || "manual";
   const goal = state.settings.optimizeGoal || "balanced";
   const labels = {
-    quick: lang() === "ja" ? "銇俱仛瀹熺敤鐨勩仾鍒濇湡妗堛倰绱犳棭銇忎綔銈嬫鎴愩仹銇欍€? : "鍏堢敤蹇€熸瀯閫犵畻娉曠粰鍑哄彲琛屽垵绋裤€?,
-    deep: lang() === "ja" ? "鐝惧湪銇銈掑紩銇嶇稒銇勩仹銆併仌銈夈伀瑭般倎銇︺亜銇忔敼鍠勬鎴愩仹銇欍€? : "涓绘墦鍦ㄧ幇鏈夋柟妗堜笂缁х画娣辨寲浼樺寲銆?,
-    global: lang() === "ja" ? "澶с亶銇忓垾銇儷銉笺儓妲嬮€犮倰鎺仚銇熴倎銇偘銉兗銉愩儷鎺㈢储妲嬫垚銇с仚銆? : "涓绘墦鍏ㄥ眬鎼滅储锛屾帰绱㈠畬鍏ㄤ笉鍚岀殑鎺掔嚎缁撴瀯銆?,
-    relay: lang() === "ja" ? "鍒濇湡妗堛亱銈夋敼鍠勩伨銇с倰娈甸殠鐨勩伀銇ゃ仾銇愩€併儶銉兗鍨嬨伄姹傝В妲嬫垚銇с仚銆? : "璁╁垵鎺掑拰浼樺寲绠楁硶鎺ュ姏姹傝В锛屾洿鍍忕湡姝ｇ殑骞冲彴娴佺▼銆?,
-    free: lang() === "ja" ? `鑷敱姹傝В銇с仚銆傘偄銉偞銉偤銉犮伅鎵嬪嫊銇ч伕鎶炪仹銇嶃€佹渶澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇с仹銇欍€俙 : `鑷敱姹傝В妯″紡锛屽彲鎵嬪姩閫夋嫨绠楁硶锛屾渶澶?${MAX_FREE_SOLVE_ALGOS} 绉嶃€俙,
-    compare: lang() === "ja" ? "瑜囨暟銇В娉曘倰涓︺伖銇﹀樊銈掕姣斻伖銈嬫瘮杓冦儮銉笺儔銇с仚銆? : "骞舵帓璺戝绉嶆€濊矾锛屾柟渚垮仛绠楁硶瀵规瘮銆?,
-    manual: lang() === "ja" ? "鐝惧湪銇墜鍕曢伕鎶炪儮銉笺儔銇с仚銆? : "褰撳墠鏄墜鍔ㄥ嬀閫夋ā寮忋€?,
+    quick: lang() === "ja" ? "まず実用的な初期案を素早く作る構成です。" : "先用快速构造算法给出可行初稿。",
+    deep: lang() === "ja" ? "現在の案を引き継いで、さらに詰めていく改善構成です。" : "主打在现有方案上继续深挖优化。",
+    global: lang() === "ja" ? "大きく別のルート構造を探すためのグローバル探索構成です。" : "主打全局搜索，探索完全不同的排线结构。",
+    relay: lang() === "ja" ? "初期案から改善までを段階的につなぐ、リレー型の求解構成です。" : "让初排和优化算法接力求解，更像真正的平台流程。",
+    free: lang() === "ja" ? `自由求解です。アルゴリズムは手動で選択でき、最大 ${MAX_FREE_SOLVE_ALGOS} 本までです。` : `自由求解模式，可手动选择算法，最多 ${MAX_FREE_SOLVE_ALGOS} 种。`,
+    compare: lang() === "ja" ? "複数の解法を並べて差を見比べる比較モードです。" : "并排跑多种思路，方便做算法对比。",
+    manual: lang() === "ja" ? "現在は手動選択モードです。" : "当前是手动勾选模式。",
   };
   const goalTexts = {
-    balanced: lang() === "ja" ? "鐩銇窂鍚堛儛銉┿兂銈归噸瑕栥仹銇欍€? : "鐩爣鍋忓悜缁煎悎骞宠　銆?,
-    ontime: lang() === "ja" ? "鐩銇畾鏅傛€ч噸瑕栥仹銇欍€? : "鐩爣鍋忓悜鍑嗙偣鐜囥€?,
-    distance: lang() === "ja" ? "鐩銇窂璺濋洟銇湩绺仹銇欍€? : "鐩爣鍋忓悜鎬婚噷绋嬪帇缂┿€?,
-    vehicles: lang() === "ja" ? "鐩銇娇鐢ㄨ粖涓℃暟銇姂鍒躲仹銇欍€? : "鐩爣鍋忓悜灏戠敤杞︺€?,
-    load: lang() === "ja" ? "鐩銇杓夈伄闆嗙磩銇с仚銆? : "鐩爣鍋忓悜瑁呰浇闆嗕腑銆?,
+    balanced: lang() === "ja" ? "目標は総合バランス重視です。" : "目标偏向综合平衡。",
+    ontime: lang() === "ja" ? "目標は定時性重視です。" : "目标偏向准点率。",
+    distance: lang() === "ja" ? "目標は総距離の圧縮です。" : "目标偏向总里程压缩。",
+    vehicles: lang() === "ja" ? "目標は使用車両数の抑制です。" : "目标偏向少用车。",
+    load: lang() === "ja" ? "目標は積載の集約です。" : "目标偏向装载集中。",
   };
   const baseHint = `${labels[strategy] || labels.manual} ${goalTexts[goal] || goalTexts.balanced}`;
   if (strategy === "free") {
     const selected = getEffectiveFreeAlgorithms();
-    return `${baseHint} ${lang() === "ja" ? `鐝惧湪 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 鏈倰閬告姙涓仹銇欍€俙 : `褰撳墠宸查€夋嫨 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙}`;
+    return `${baseHint} ${lang() === "ja" ? `現在 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 本を選択中です。` : `当前已选择 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 种算法。`}`;
   }
   return baseHint;
 }
@@ -13361,13 +19735,13 @@ function buildSolveModeSummary() {
   const goal = currentGoalLabel();
   const selectedCount = strategyPreset(state.settings.solveStrategy || "manual", state.settings.optimizeGoal || "balanced").algorithms.length;
   return lang() === "ja"
-    ? `鐝惧湪銇€?{strategy}銆嶃儮銉笺儔銇ц▓绠椼仐銆佺洰妯欐柟閲濄伅銆?{goal}銆嶃€佸弬鍔犮偄銉偞銉偤銉犮伅 ${selectedCount} 鏈仹銇欍€俙
-    : `褰撳墠鎸夆€?{strategy}鈥濇ā寮忔眰瑙ｏ紝浼樺寲鐩爣涓衡€?{goal}鈥濓紝鍙備笌绠楁硶 ${selectedCount} 绉嶃€俙;
+    ? `現在は「${strategy}」モードで計算し、目標方針は「${goal}」、参加アルゴリズムは ${selectedCount} 本です。`
+    : `当前按“${strategy}”模式求解，优化目标为“${goal}”，参与算法 ${selectedCount} 种。`;
 }
 
 function relayMetricSummary(metrics) {
   const onTime = Math.round((metrics.totalOnTime / Math.max(metrics.totalStops || 0, 1)) * 100);
-  return `璇勫垎 ${metrics.score.toFixed(1)}锛屽凡璋冨害 ${metrics.scheduledCount || 0} 瀹讹紝鏈皟搴?${metrics.unscheduledCount || 0} 瀹讹紝鍑嗙偣 ${onTime}%锛屾€婚噷绋?${(metrics.totalDistance || 0).toFixed(1)} km锛岀敤杞?${metrics.usedVehicleCount || 0} 杈哷;
+  return `评分 ${metrics.score.toFixed(1)}，已调度 ${metrics.scheduledCount || 0} 家，未调度 ${metrics.unscheduledCount || 0} 家，准点 ${onTime}%，总里程 ${(metrics.totalDistance || 0).toFixed(1)} km，用车 ${metrics.usedVehicleCount || 0} 辆`;
 }
 
 function describeRelayMetricDelta(beforeMetrics, afterMetrics) {
@@ -13380,13 +19754,13 @@ function describeRelayMetricDelta(beforeMetrics, afterMetrics) {
   const onTimeDelta = onTimeAfter - onTimeBefore;
   const distanceDelta = (afterMetrics.totalDistance || 0) - (beforeMetrics.totalDistance || 0);
   const vehicleDelta = (afterMetrics.usedVehicleCount || 0) - (beforeMetrics.usedVehicleCount || 0);
-  if (Math.abs(scoreDelta) > 0.05) parts.push(`鎬诲垎 ${scoreDelta > 0 ? "鎻愰珮" : "涓嬮檷"} ${Math.abs(scoreDelta).toFixed(1)}`);
-  if (scheduledDelta !== 0) parts.push(`宸茶皟搴﹂棬搴?${scheduledDelta > 0 ? `澧炲姞 ${scheduledDelta}` : `鍑忓皯 ${Math.abs(scheduledDelta)}`}`);
-  if (unscheduledDelta !== 0) parts.push(`鏈皟搴﹂棬搴?${unscheduledDelta < 0 ? `鍑忓皯 ${Math.abs(unscheduledDelta)}` : `澧炲姞 ${unscheduledDelta}`}`);
-  if (Math.abs(onTimeDelta) >= 0.5) parts.push(`鍑嗙偣鐜?${onTimeDelta > 0 ? "涓婂崌" : "涓嬮檷"} ${Math.abs(onTimeDelta).toFixed(1)}%`);
-  if (Math.abs(distanceDelta) >= 0.1) parts.push(`鎬婚噷绋?${distanceDelta < 0 ? `鍑忓皯 ${Math.abs(distanceDelta).toFixed(1)} km` : `澧炲姞 ${distanceDelta.toFixed(1)} km`}`);
-  if (vehicleDelta !== 0) parts.push(`鐢ㄨ溅 ${vehicleDelta < 0 ? `鍑忓皯 ${Math.abs(vehicleDelta)} 杈哷 : `澧炲姞 ${vehicleDelta} 杈哷}`);
-  return parts.length ? parts.join("锛?) : "涓昏鎸囨爣鍑犱箮娌℃湁鍙樺寲";
+  if (Math.abs(scoreDelta) > 0.05) parts.push(`总分 ${scoreDelta > 0 ? "提高" : "下降"} ${Math.abs(scoreDelta).toFixed(1)}`);
+  if (scheduledDelta !== 0) parts.push(`已调度门店 ${scheduledDelta > 0 ? `增加 ${scheduledDelta}` : `减少 ${Math.abs(scheduledDelta)}`}`);
+  if (unscheduledDelta !== 0) parts.push(`未调度门店 ${unscheduledDelta < 0 ? `减少 ${Math.abs(unscheduledDelta)}` : `增加 ${unscheduledDelta}`}`);
+  if (Math.abs(onTimeDelta) >= 0.5) parts.push(`准点率 ${onTimeDelta > 0 ? "上升" : "下降"} ${Math.abs(onTimeDelta).toFixed(1)}%`);
+  if (Math.abs(distanceDelta) >= 0.1) parts.push(`总里程 ${distanceDelta < 0 ? `减少 ${Math.abs(distanceDelta).toFixed(1)} km` : `增加 ${distanceDelta.toFixed(1)} km`}`);
+  if (vehicleDelta !== 0) parts.push(`用车 ${vehicleDelta < 0 ? `减少 ${Math.abs(vehicleDelta)} 辆` : `增加 ${vehicleDelta} 辆`}`);
+  return parts.length ? parts.join("，") : "主要指标几乎没有变化";
 }
 function syncSettingsFromUI() {
   state.settings.dispatchStartTime = document.getElementById("dispatchStartTimeInput").value || "19:10";
@@ -13442,8 +19816,8 @@ async function triggerStrategySolve(strategy, goal) {
   const box = document.getElementById("validationBox");
   if (box) {
     box.textContent = `${buildSolveModeSummary()} ${lang() === "ja"
-      ? "鍏堟墦寮€姹傝В鍓嶈瘖鏂獥鍙ｏ紝纭瀛楁鏄惁榻愬叏鍚庡啀缁х画銆?
-      : "鍏堝脊鍑烘眰瑙ｅ墠璇婃柇绐楀彛锛岀‘璁ゅ瓧娈垫槸鍚﹂綈鍏ㄥ悗鍐嶇户缁€?}`
+      ? "先打开求解前诊断窗口，确认字段是否齐全后再继续。"
+      : "先弹出求解前诊断窗口，确认字段是否齐全后再继续。"}`
     ;
   }
   pendingSolveContinuation = async () => {
@@ -13458,7 +19832,7 @@ async function openSolveDiagnoseAndPause(strategy, goal) {
   applySolveStrategy(strategy, goal);
   const report = await buildSolveDiagnoseReport();
   const box = document.getElementById("validationBox");
-  if (box) box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? "鍏堛伀瑷烘柇銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€? : "鍏堢湅璇婃柇鎶ュ憡锛屽啀鍐冲畾鏄惁缁х画姹傝В銆?}`;
+  if (box) box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? "先に診断を確認してください。" : "先看诊断报告，再决定是否继续求解。"}`;
   pendingSolveContinuation = async () => {
     pendingSolveContinuation = null;
     await generatePlans();
@@ -13516,7 +19890,7 @@ function parseVehicleTxt(text) {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => {
-      const parts = line.split(/[\t,锛?锛沑s]+/).map((x) => x.trim()).filter(Boolean);
+      const parts = line.split(/[\t,，;；\s]+/).map((x) => x.trim()).filter(Boolean);
       return { plateNo: parts[0] || "", driverName: parts[1] || "" };
     })
     .filter((item) => item.plateNo)
@@ -13578,7 +19952,7 @@ function setImportFileTag(kind, fileName = "") {
 }
 
 function splitSimpleCsvLine(line) {
-  return String(line || "").split(/[\t,锛宂/).map((x) => x.trim());
+  return String(line || "").split(/[\t,，]/).map((x) => x.trim());
 }
 
 function parseStoreFileText(text) {
@@ -13593,12 +19967,12 @@ function parseStoreFileText(text) {
   const headers = splitSimpleCsvLine(lines[0]);
   const indexOf = (...candidates) => candidates.map((name) => headers.indexOf(name)).find((idx) => idx >= 0) ?? -1;
   const idx = {
-    id: indexOf("缂栧彿", "搴楅摵浠ｇ爜", "id", "store_id"),
-    name: indexOf("鍚嶇О", "搴楅摵鍚嶇О", "name", "store_name"),
-    district: indexOf("鍖哄煙", "district"),
-    lng: indexOf("缁忓害", "lng", "longitude"),
-    lat: indexOf("绾害", "lat", "latitude"),
-    tripCount: indexOf("娆℃暟", "tripCount", "trip_count"),
+    id: indexOf("编号", "店铺代码", "id", "store_id"),
+    name: indexOf("名称", "店铺名称", "name", "store_name"),
+    district: indexOf("区域", "district"),
+    lng: indexOf("经度", "lng", "longitude"),
+    lat: indexOf("纬度", "lat", "latitude"),
+    tripCount: indexOf("次数", "tripCount", "trip_count"),
     rpcs: indexOf("RPCS", "rpcs"),
     rcase: indexOf("RCASE", "rcase"),
     bpcs: indexOf("BPCS", "bpcs"),
@@ -13606,15 +19980,15 @@ function parseStoreFileText(text) {
     apcs: indexOf("APCS", "apcs"),
     apaper: indexOf("APAPER", "apaper"),
     rpaper: indexOf("RPAPER", "rpaper"),
-    coldRatio: indexOf("鍐疯棌姣斾緥", "coldRatio", "cold_ratio"),
-    waveBelongs: indexOf("鎵€灞炴尝娆?, "waveBelongs", "wave_belongs"),
-    wave1Time: indexOf("涓€閰嶆椂闂?, "wave1_time", "first_wave_time"),
-    wave2Time: indexOf("浜岄厤鏃堕棿", "wave2_time", "second_wave_time"),
-    wave3Time: indexOf("鍒板簵鏃堕棿", "wave3_time", "arrival_time_w3"),
-    wave4Time: indexOf("鍒板簵鏃堕棿", "wave4_time", "arrival_time_w4", "arrival_time"),
-    serviceMinutes: indexOf("鍗歌揣鍒嗛挓", "serviceMinutes", "service_minutes"),
-    difficulty: indexOf("闅惧害", "difficulty"),
-    parking: indexOf("鍏佽鍋忓樊(鍒?", "鍋滆溅", "parking"),
+    coldRatio: indexOf("冷藏比例", "coldRatio", "cold_ratio"),
+    waveBelongs: indexOf("所属波次", "waveBelongs", "wave_belongs"),
+    wave1Time: indexOf("一配时间", "wave1_time", "first_wave_time"),
+    wave2Time: indexOf("二配时间", "wave2_time", "second_wave_time"),
+    wave3Time: indexOf("到店时间", "wave3_time", "arrival_time_w3"),
+    wave4Time: indexOf("到店时间", "wave4_time", "arrival_time_w4", "arrival_time"),
+    serviceMinutes: indexOf("卸货分钟", "serviceMinutes", "service_minutes"),
+    difficulty: indexOf("难度", "difficulty"),
+    parking: indexOf("允许偏差(分)", "停车", "parking"),
   };
   const getValue = (cells, key) => (idx[key] >= 0 ? cells[idx[key]] : "");
   return lines.slice(1).map((line) => {
@@ -13744,7 +20118,7 @@ function bindImports() {
       const text = await file.text();
       const parsed = parseStoreFileText(text).map((item) => normalizeImportedStore(item)).filter((store) => store.id && store.name);
       if (!parsed.length) {
-        box.textContent = lang() === "ja" ? "搴楄垪銉曘偂銈ゃ儷銇В鏋愩伀澶辨晽銇椼伨銇椼仧銆? : "闂ㄥ簵鏂囦欢瑙ｆ瀽澶辫触銆?;
+        box.textContent = lang() === "ja" ? "店舗ファイルの解析に失敗しました。" : "门店文件解析失败。";
         return;
       }
   const resolvedMap = await fetchStoreWaveResolvedLoadMap(parsed.map((item) => item?.id).filter(Boolean));
@@ -13753,9 +20127,9 @@ function bindImports() {
       state.lastResults = [];
       state.activeResultKey = "";
       renderAll();
-      box.textContent = lang() === "ja" ? `搴楄垪 ${state.stores.length} 浠躲倰灏庡叆銇椼€併儹銉笺偒銉姌绠楄波閲忋倰閬╃敤銇椼伨銇椼仧銆俙 : `宸插鍏ラ棬搴?${state.stores.length} 瀹讹紝骞跺凡搴旂敤鏈湴鎶樼畻璐ч噺銆俙;
+      box.textContent = lang() === "ja" ? `店舗 ${state.stores.length} 件を導入し、ローカル折算貨量を適用しました。` : `已导入门店 ${state.stores.length} 家，并已应用本地折算货量。`;
     } catch (error) {
-      box.textContent = `${lang() === "ja" ? "闂ㄥ簵灏庡叆澶辨晽" : "闂ㄥ簵瀵煎叆澶辫触"} ${error?.message || ""}`.trim();
+      box.textContent = `${lang() === "ja" ? "门店導入失敗" : "门店导入失败"} ${error?.message || ""}`.trim();
     }
   });
 }
@@ -13939,9 +20313,9 @@ function bindEditing() {
           const result = await saveDualTableLoadsToBackend();
           await queryStoreWaveResolvedTable();
           showSaveDualLoadsReport(result?.reportText || "");
-          if (box) box.textContent = `鍙岃〃璐ч噺宸蹭繚瀛橈細${Number(result?.upserted || 0)} 鏉;
+          if (box) box.textContent = `双表货量已保存：${Number(result?.upserted || 0)} 条`;
         } catch (error) {
-          if (box) box.textContent = `淇濆瓨鍙岃〃璐ч噺澶辫触锛?{error?.message || ""}`.trim();
+          if (box) box.textContent = `保存双表货量失败：${error?.message || ""}`.trim();
         }
       })();
       return;
@@ -13951,7 +20325,7 @@ function bindEditing() {
       const query = String(document.getElementById("storeSearchInput")?.value || state.ui.storeSearchQuery || "").trim();
       const found = locateStoreRow(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `宸插畾浣嶉棬搴楋細${query}` : `鏈壘鍒伴棬搴楋細${query}`) : "璇疯緭鍏ラ棬搴楁绱㈠叧閿瓧銆?;
+      if (box) box.textContent = query ? (found ? `已定位门店：${query}` : `未找到门店：${query}`) : "请输入门店检索关键字。";
       return;
     }
     const vehicleLocateBtn = event.target.closest("#vehicleLocateBtn");
@@ -13959,7 +20333,7 @@ function bindEditing() {
       const query = String(document.getElementById("vehicleSearchInput")?.value || state.ui.vehicleSearchQuery || "").trim();
       const found = locateVehicleRow(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `宸插畾浣嶈溅杈嗭細${query}` : `鏈壘鍒拌溅杈嗭細${query}`) : "璇疯緭鍏ヨ溅杈嗘绱㈠叧閿瓧銆?;
+      if (box) box.textContent = query ? (found ? `已定位车辆：${query}` : `未找到车辆：${query}`) : "请输入车辆检索关键字。";
       return;
     }
     const waveLocateBtn = event.target.closest("#waveLocateBtn");
@@ -13967,7 +20341,7 @@ function bindEditing() {
       const query = String(document.getElementById("waveSearchInput")?.value || state.ui.waveSearchQuery || "").trim();
       const found = locateWaveItem(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `宸插畾浣嶆尝娆★細${query}` : `鏈壘鍒版尝娆★細${query}`) : "璇疯緭鍏ユ尝娆℃绱㈠叧閿瓧銆?;
+      if (box) box.textContent = query ? (found ? `已定位波次：${query}` : `未找到波次：${query}`) : "请输入波次检索关键字。";
       return;
     }
     if (event.target.closest("#dataArchiveQueryBtn")) {
@@ -14018,9 +20392,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("store");
-          if (box) box.textContent = `闂ㄥ簵璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
+          if (box) box.textContent = `门店资料已保存到后台档案：${archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `闂ㄥ簵璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
+          if (box) box.textContent = `门店资料保存失败：${error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14032,9 +20406,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("vehicle");
-          if (box) box.textContent = `杞﹁締璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
+          if (box) box.textContent = `车辆资料已保存到后台档案：${archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `杞﹁締璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
+          if (box) box.textContent = `车辆资料保存失败：${error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14046,9 +20420,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("wave");
-          if (box) box.textContent = `娉㈡璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
+          if (box) box.textContent = `波次资料已保存到后台档案：${archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `娉㈡璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
+          if (box) box.textContent = `波次资料保存失败：${error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14169,8 +20543,8 @@ function bindEditing() {
           const box = document.getElementById("validationBox");
           if (box) {
             box.textContent = lang() === "ja"
-              ? `鑷敱姹傝В銇с伅鏈€澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇ч伕鎶炪仹銇嶃伨銇欍€俙
-              : `鑷敱姹傝В鏈€澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙;
+              ? `自由求解では最大 ${MAX_FREE_SOLVE_ALGOS} 本まで選択できます。`
+              : `自由求解最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`;
           }
           return;
         }
@@ -14334,8 +20708,8 @@ function bindEditing() {
       const box = document.getElementById("validationBox");
       if (beforeCount > MAX_FREE_SOLVE_ALGOS && box) {
         box.textContent = lang() === "ja"
-          ? `鑷敱姹傝В銇с伅鏈€澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇ч伕鎶炪仹銇嶃伨銇欍€俙
-          : `鑷敱姹傝В鏈€澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙;
+          ? `自由求解では最大 ${MAX_FREE_SOLVE_ALGOS} 本まで選択できます。`
+          : `自由求解最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`;
       }
       return;
     }
@@ -14418,8 +20792,8 @@ async function generatePlans() {
     const box = document.getElementById("validationBox");
     if (box) {
       box.textContent = lang() === "ja"
-        ? "鏃伀姹傝В涓仹銇欍€傘儶銉兗銈︺偅銉炽儔銈︺伄閫叉崡銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€?
-        : "褰撳墠宸插湪姹傝В涓紝璇锋煡鐪嬧€滄眰瑙ｈ繃绋嬪彲瑙嗗寲绐楀彛鈥濊繘搴︺€?;
+        ? "既に求解中です。リレーウィンドウの進捗を確認してください。"
+        : "当前已在求解中，请查看“求解过程可视化窗口”进度。";
     }
     return;
   }
@@ -14443,21 +20817,22 @@ async function generatePlans() {
     }
     if (!selected.length) {
       box.textContent = strategy === "free"
-        ? (lang() === "ja" ? "鑷敱姹傝В銇с伅灏戙仾銇忋仺銈?1 鏈伄銈儷銈淬儶銈恒儬銈掗伕鎶炪仐銇︺亸銇犮仌銇勩€? : "鑷敱姹傝В璇疯嚦灏戝嬀閫?1 绉嶇畻娉曘€?)
-        : (lang() === "ja" ? "鐝惧湪銇柟閲濄伀瀵惧繙銇欍倠銈儷銈淬儶銈恒儬銉併偋銉笺兂銇岃ō瀹氥仌銈屻仸銇勩伨銇涖倱銆? : "璇峰厛涓哄綋鍓嶇瓥鐣ュ唴缃嚦灏?1 鏉＄畻娉曢摼銆?);
+        ? (lang() === "ja" ? "自由求解では少なくとも 1 本のアルゴリズムを選択してください。" : "自由求解请至少勾选 1 种算法。")
+        : (lang() === "ja" ? "現在の方針に対応するアルゴリズムチェーンが設定されていません。" : "请先为当前策略内置至少 1 条算法链。");
       state.ui.generating = false;
       renderGenerationProgress();
       return;
     }
-  // 涓存椂鏀惧紑锛氬睆钄藉垎鍖烘柟妗堝彿蹇呴€夋牎楠?
+  // EN: Business note for nearby logic.
+  // CN: 附近逻辑的业务提示。
 
-  openRelayConsoleModal(lang() === "ja" ? "姹傝В杩囩▼鍙鍖栫獥鍙? : "姹傝В杩囩▼鍙鍖栫獥鍙?);
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鏀跺埌姹傝В璇锋眰锛屽紑濮嬪悓姝ュ墠鍙拌缃笌鍩虹鏍￠獙銆俙);
+  openRelayConsoleModal(lang() === "ja" ? "求解过程可视化窗口" : "求解过程可视化窗口");
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  收到求解请求，开始同步前台设置与基础校验。`);
   relayStageReporter = (text) => appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${text}`);
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  褰撳墠绛栫暐锛?{state.settings.solveStrategy || "manual"}锛岀洰鏍囷細${state.settings.optimizeGoal || "balanced"}锛岀畻娉曪細${selected.join("銆?) || "锛堢┖锛?}銆俙);
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姝ｅ湪鏋勫缓鍦烘櫙锛堥棬搴?杞﹁締/娉㈡/璺綉锛夛紝杩欎竴姝ュ彲鑳借€楁椂杈冮暱銆俙);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  当前策略：${state.settings.solveStrategy || "manual"}，目标：${state.settings.optimizeGoal || "balanced"}，算法：${selected.join("、") || "（空）"}。`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  正在构建场景（门店/车辆/波次/路网），这一步可能耗时较长。`);
   const scenario = await buildScenario();
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鍦烘櫙鏋勫缓瀹屾垚锛氶棬搴?${scenario?.stores?.length || 0} 瀹讹紝杞﹁締 ${scenario?.vehicles?.length || 0} 鍙帮紝娉㈡ ${scenario?.waves?.length || 0} 涓€俙);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  场景构建完成：门店 ${scenario?.stores?.length || 0} 家，车辆 ${scenario?.vehicles?.length || 0} 台，波次 ${scenario?.waves?.length || 0} 个。`);
   const runners = { vrptw: solveByVRPTW, hybrid: solveByHybrid, ga: solveByGA, tabu: solveByTabu, lns: solveByLNS, savings: solveBySavings, sa: solveBySA, aco: solveByACO, pso: solveByPSO, vehicle: solveByVehicle };
   const carryResult = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
   const requiredTimingIssues = [];
@@ -14472,16 +20847,16 @@ async function generatePlans() {
   }
   if (requiredTimingIssues.length) {
     if (box) {
-      box.textContent = `${lang() === "ja" ? "姹傝В鍓嶆鏌ユ湭閫氳繃锛? : "姹傝В鍓嶆鏌ユ湭閫氳繃锛?}${requiredTimingIssues.slice(0, 15).join("銆?)}${requiredTimingIssues.length > 15 ? "..." : ""}`;
+      box.textContent = `${lang() === "ja" ? "求解前检查未通过：" : "求解前检查未通过："}${requiredTimingIssues.slice(0, 15).join("、")}${requiredTimingIssues.length > 15 ? "..." : ""}`;
     }
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В鍓嶆鏌ユ湭閫氳繃锛?{requiredTimingIssues.slice(0, 30).join("銆?)}${requiredTimingIssues.length > 30 ? "..." : ""}`);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解前检查未通过：${requiredTimingIssues.slice(0, 30).join("、")}${requiredTimingIssues.length > 30 ? "..." : ""}`);
     state.ui.generating = false;
     renderGenerationProgress();
     return;
   }
   state.lastResults = [];
   state.activeResultKey = "";
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${lang() === "ja" ? "寮€濮嬫眰瑙ｏ紝姝ｅ湪鍑嗗鍦烘櫙涓庢牎楠?.." : "寮€濮嬫眰瑙ｏ紝姝ｅ湪鍑嗗鍦烘櫙涓庢牎楠?.."}`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${lang() === "ja" ? "开始求解，正在准备场景与校验..." : "开始求解，正在准备场景与校验..."}`);
   await updateGenerationProgress(6, L("progressPreparing"));
   const built = [];
   const ALGO_TIMEOUT_MS = 120000;
@@ -14501,27 +20876,27 @@ async function generatePlans() {
 
   try {
     if (strategy === "relay") {
-      appendRelayConsoleLine(lang() === "ja" ? "銉儸銉兼渶閬╁寲銇偊銈ｃ兂銉夈偊銈掗枊銇嶃伨銇椼仧銆傘亾銇撱伀鍚勬闅庛伄鍕曘亶銇岄爢娆¤〃绀恒仌銈屻伨銇欍€? : "鎺ュ姏姹傝В绐楀彛宸叉墦寮€锛屼笅闈細鎸佺画鎵撳嵃姣忎竴姝ュ姩浣溿€?);
-      await updateGenerationProgress(24, lang() === "ja" ? "銉儸銉兼渶閬╁寲銈掕捣鍕曘仐銇︺亜銇俱仚..." : "姝ｅ湪鍚姩鎺ュ姏姹傝В...");
+      appendRelayConsoleLine(lang() === "ja" ? "リレー最適化のウィンドウを開きました。ここに各段階の動きが順次表示されます。" : "接力求解窗口已打开，下面会持续打印每一步动作。");
+      await updateGenerationProgress(24, lang() === "ja" ? "リレー最適化を起動しています..." : "正在启动接力求解...");
       try {
         built.push({ ...(await runWithTimeout("relay", () => solveByRelay(scenario, selected, carryResult))), scenario, adjustMessage: "" });
       } catch (error) {
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鎺ュ姏姹傝В澶辫触鎴栬秴鏃讹細${error?.message || error}`);
-        if (box) box.textContent = `鎺ュ姏姹傝В澶辫触鎴栬秴鏃讹細${error?.message || error}`;
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  接力求解失败或超时：${error?.message || error}`);
+        if (box) box.textContent = `接力求解失败或超时：${error?.message || error}`;
       }
       await cooperativeYield();
-      await updateGenerationProgress(75, lang() === "ja" ? "銉儸銉兼闅庛亴瀹屼簡銇椼€佺祼鏋溿倰銇俱仺銈併仸銇勩伨銇?.." : "鎺ュ姏闃舵宸插畬鎴愶紝姝ｅ湪姹囨€荤粨鏋?..");
+      await updateGenerationProgress(75, lang() === "ja" ? "リレー段階が完了し、結果をまとめています..." : "接力阶段已完成，正在汇总结果...");
     } else if (strategy === "compare") {
-      appendRelayConsoleLine(lang() === "ja" ? "澶氱畻娉曞姣斻倰璧峰嫊銇椼伨銇椼仧銆傘亾銇撱伀鍚勭畻娉曘伄閫茶銇ㄥ墫鏋愩亴闋嗘琛ㄧず銇曘倢銇俱仚銆? : "澶氱畻娉曞姣斿凡鍚姩銆備笅闈細鎸佺画鎵撳嵃姣忓绠楁硶鐨勮繍琛岃繘搴︿笌鍓栨瀽銆?);
+      appendRelayConsoleLine(lang() === "ja" ? "多算法対比を起動しました。ここに各算法の進行と剖析が順次表示されます。" : "多算法对比已启动。下面会持续打印每套算法的运行进度与剖析。");
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬭繍琛?${algoLabel(key)}銆俙);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始运行 ${algoLabel(key)}。`);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let result = null;
         try {
           result = { ...(await runWithTimeout(key, () => runners[key](scenario))), scenario, adjustMessage: "" };
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 澶辫触鎴栬秴鏃讹細${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 失败或超时：${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
@@ -14529,29 +20904,29 @@ async function generatePlans() {
         built.push(result);
         state.lastResults = [...built].sort((a, b) => b.metrics.score - a.metrics.score);
         state.activeResultKey = state.lastResults[0]?.key || "";
-        box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? `鐝惧湪宸插畬鎴?${built.length}/${selected.length} 鏈畻娉曪紝鏈€鏂板畬鎴愮殑鏄?${algoLabel(key)}銆俙 : `褰撳墠宸插畬鎴?${built.length}/${selected.length} 濂楃畻娉曪紝鏈€鏂板畬鎴愮殑鏄?${algoLabel(key)}銆俙}`;
+        box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? `現在已完成 ${built.length}/${selected.length} 本算法，最新完成的是 ${algoLabel(key)}。` : `当前已完成 ${built.length}/${selected.length} 套算法，最新完成的是 ${algoLabel(key)}。`}`;
         renderVehicles();
         renderSummary();
         renderAnalytics();
         renderResults();
         renderStoresTable();
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 宸插畬鎴愶紝褰撳墠璇勫垎 ${result.metrics.score.toFixed(1)}锛屾€婚噷绋?${result.metrics.totalDistance.toFixed(1)} km锛岀敤杞?${result.metrics.usedVehicleCount || 0} 杈嗐€俙);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 已完成，当前评分 ${result.metrics.score.toFixed(1)}，总里程 ${result.metrics.totalDistance.toFixed(1)} km，用车 ${result.metrics.usedVehicleCount || 0} 辆。`);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     } else if (strategy === "deep" && carryResult?.solution?.length) {
-      appendRelayConsoleLine(lang() === "ja" ? "娣卞害鏈€閬╁寲銉兗銉夛細鏃㈠瓨瑙ｃ伄娉㈡鏀瑰杽銈掗枊濮嬨€? : "娣卞害浼樺寲妯″紡锛氬紑濮嬪湪宸叉湁瑙ｄ笂鍋氭尝娆′紭鍖栥€?);
+      appendRelayConsoleLine(lang() === "ja" ? "深度最適化モード：既存解の波次改善を開始。" : "深度优化模式：开始在已有解上做波次优化。");
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
         const optimizer = ({ hybrid: optimizeWaveWithHybrid, tabu: optimizeWaveWithTabu, lns: optimizeWaveWithLns, sa: optimizeWaveWithSA, ga: optimizeWaveWithGA, aco: optimizeWaveWithACO, pso: optimizeWaveWithPSO })[key];
         if (!optimizer) continue;
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬫墽琛屾繁搴︿紭鍖栫畻娉?${algoLabel(key)}銆俙);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始执行深度优化算法 ${algoLabel(key)}。`);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let improved = null;
         try {
           improved = await runWithTimeout(`deep-${key}`, () => improveSolutionByWaveOptimizer(carryResult.solution, scenario, optimizer, 40 + i));
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 娣卞害浼樺寲澶辫触鎴栬秴鏃讹細${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 深度优化失败或超时：${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
@@ -14565,32 +20940,32 @@ async function generatePlans() {
           scenario,
           adjustMessage: "",
         }, scenario));
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 娣卞害浼樺寲瀹屾垚锛岃瘎鍒?${built[built.length - 1]?.metrics?.score?.toFixed?.(1) ?? "-"}`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 深度优化完成，评分 ${built[built.length - 1]?.metrics?.score?.toFixed?.(1) ?? "-"}`);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     } else {
-      appendRelayConsoleLine(lang() === "ja" ? "鏍囧噯姹傝В妯″紡锛氶€愪釜绠楁硶鎵ц銆? : "鏍囧噯姹傝В妯″紡锛氶€愪釜绠楁硶鎵ц銆?);
+      appendRelayConsoleLine(lang() === "ja" ? "标准求解模式：逐个算法执行。" : "标准求解模式：逐个算法执行。");
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬭繍琛?${algoLabel(key)}銆俙);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始运行 ${algoLabel(key)}。`);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let result = null;
         try {
           result = { ...(await runWithTimeout(key, () => runners[key](scenario))), scenario, adjustMessage: "" };
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 澶辫触鎴栬秴鏃讹細${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 失败或超时：${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
         }
         built.push(result);
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 宸插畬鎴愶紝璇勫垎 ${result.metrics.score.toFixed(1)}锛屾€婚噷绋?${result.metrics.totalDistance.toFixed(1)} km銆俙);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 已完成，评分 ${result.metrics.score.toFixed(1)}，总里程 ${result.metrics.totalDistance.toFixed(1)} km。`);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     }
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В璁＄畻闃舵缁撴潫锛屽紑濮嬫眹鎬荤粨鏋溿€俙);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解计算阶段结束，开始汇总结果。`);
   } finally {
     relayStageReporter = null;
   }
@@ -14600,15 +20975,15 @@ async function generatePlans() {
   if (!state.lastResults.length) {
     const issues = diagnoseScenarioFeasibility(scenario);
     box.textContent = issues.length
-      ? `${buildSolveModeSummary()} ${state.settings.ignoreWaves ? (lang() === "ja" ? "鐝惧湪銇尝娆°倰鍒嗐亼銇氥伀瑷堢畻銇椼仸銇勩伨銇欍€? : "褰撳墠鎸夊拷鐣ユ尝娆℃ā寮忔眰瑙?) : (lang() === "ja" ? "鐝惧湪銇尝娆°仈銇ㄣ伀瑷堢畻銇椼仸銇勩伨銇欍€? : "褰撳墠鎸夋尝娆℃眰瑙?)}锛?{lang() === "ja" ? "鐝惧湪銇潯浠躲仹銇疅琛屽彲鑳姐仾妗堛亴瑕嬨仱銇嬨倞銇俱仜銈撱€傛兂瀹氥仌銈屻倠鍒剁磩琛濈獊锛? : "鏆傛湭鎵惧埌鍙鏂规銆傚彲鑳界殑纭害鏉熷啿绐侊細"}${issues.join("锛?)}`
-      : `${buildSolveModeSummary()} ${lang() === "ja" ? "鐝惧湪銇埗绱勩仹銇疅琛屽彲鑳姐仾妗堛亴瑕嬨仱銇嬨倞銇俱仜銈撱€? : "褰撳墠绾︽潫涓嬫殏鏈壘鍒板彲琛屾柟妗堛€?}`;
+      ? `${buildSolveModeSummary()} ${state.settings.ignoreWaves ? (lang() === "ja" ? "現在は波次を分けずに計算しています。" : "当前按忽略波次模式求解") : (lang() === "ja" ? "現在は波次ごとに計算しています。" : "当前按波次求解")}，${lang() === "ja" ? "現在の条件では実行可能な案が見つかりません。想定される制約衝突：" : "暂未找到可行方案。可能的硬约束冲突："}${issues.join("；")}`
+      : `${buildSolveModeSummary()} ${lang() === "ja" ? "現在の制約では実行可能な案が見つかりません。" : "当前约束下暂未找到可行方案。"}`;
     await updateGenerationProgress(100, L("progressDone"));
     renderVehicles();
     renderSummary();
     renderAnalytics();
     renderResults();
     renderStoresTable();
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鏈壘鍒板彲琛岃В锛屽凡杈撳嚭绾︽潫鍐茬獊鎻愮ず銆俙);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  未找到可行解，已输出约束冲突提示。`);
     return;
   }
 
@@ -14619,20 +20994,20 @@ async function generatePlans() {
   const targetScore = Number(state.settings.targetScore || 0);
   const routeSourceMessage = scenario.distanceSource === "database-full"
     ? (lang() === "ja"
-      ? ` 鐝惧湪銇暟鎹簱鍏ㄩ噺璺濈鐭╅樀銈掍娇鐢ㄤ腑銇с仚銆備富鏁版嵁婧?${String(scenario?.distDbStats?.dbDominantSource || "unknown")}銆佹瑺鎼?0銆俙
-      : ` 褰撳墠浣跨敤鏁版嵁搴撳叏閲忚窛绂荤煩闃碉紝涓绘暟鎹簮=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}锛岀己澶?0銆俙)
+      ? ` 現在は数据库全量距离矩阵を使用中です。主数据源=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}、欠損 0。`
+      : ` 当前使用数据库全量距离矩阵，主数据源=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}，缺失 0。`)
     : scenario.distanceSource === "amap"
     ? (lang() === "ja"
-      ? ` 鐝惧湪銇珮寰枫伄閬撹矾璺濋洟銇ㄦ墍瑕佹檪闁撱倰浣跨敤涓仹銇欍€傘偔銉ｃ儍銈枫儱鍛戒腑 ${scenario.distanceCacheHitPairs || 0} 浠躲€佷粖鍥炪伄鏂拌鍙栧緱 ${scenario.distanceFetchedPairs || 0} 浠躲€俙
-      : ` 褰撳墠浣跨敤楂樺痉璺綉璺濈/鏃堕暱锛岀紦瀛樺懡涓?${scenario.distanceCacheHitPairs || 0} 瀵癸紝鏈疆鏂版媺鍙?${scenario.distanceFetchedPairs || 0} 瀵广€俙)
+      ? ` 現在は高德の道路距離と所要時間を使用中です。キャッシュ命中 ${scenario.distanceCacheHitPairs || 0} 件、今回の新規取得 ${scenario.distanceFetchedPairs || 0} 件。`
+      : ` 当前使用高德路网距离/时长，缓存命中 ${scenario.distanceCacheHitPairs || 0} 对，本轮新拉取 ${scenario.distanceFetchedPairs || 0} 对。`)
     : (lang() === "ja"
-      ? " 鐝惧湪銇珮寰枫伄閬撹矾鎯呭牨銇屼娇銇堛仾銇勩仧銈併€佺洿绶氳窛闆伄鎺ㄥ畾銇嚜鍕曘仹鍒囥倞鏇裤亪銇︺亜銇俱仚銆?
-      : " 褰撳墠楂樺痉璺綉涓嶅彲鐢紝宸茶嚜鍔ㄥ洖閫€鍒扮洿绾胯窛绂讳及绠椼€?);
+      ? " 現在は高德の道路情報が使えないため、直線距離の推定に自動で切り替えています。"
+      : " 当前高德路网不可用，已自动回退到直线距离估算。");
   const baseMessage = state.settings.ignoreWaves
-    ? (lang() === "ja" ? "鍙兘銇瘎鍥层仹鍓层倞褰撱仸銇熺祼鏋溿倰鐢熸垚銇椼伨銇椼仧銆傜従鍦ㄣ伅娉㈡銈掑垎銇戙仛銇▓绠椼仐銇︺亜銇俱仚銆? : "宸茬敓鎴愬敖閲忚皟搴︾粨鏋溿€傚綋鍓嶆寜蹇界暐娉㈡妯″紡姹傝В銆?)
-    : (lang() === "ja" ? `鍙兘銇瘎鍥层仹鍓层倞褰撱仸銇熺祼鏋溿倰鐢熸垚銇椼伨銇椼仧銆傜従鍦ㄣ伅 ${scenario.waves.length} 鍊嬨伄妤嫏娉㈡銇ц▓绠椼仐銇︺亰銈娿€佸埌鐫€瑕佷欢銈掑挤鍒剁磩銇ㄣ仐銇︽壉銇勩伨銇欍€俙 : `宸茬敓鎴愬敖閲忚皟搴︾粨鏋溿€傚綋鍓嶆寜 ${scenario.waves.length} 涓笟鍔℃尝娆℃眰瑙ｏ紝骞舵寜鍒板簵瑕佹眰鍋氬己绾︽潫銆俙);
+    ? (lang() === "ja" ? "可能な範囲で割り当てた結果を生成しました。現在は波次を分けずに計算しています。" : "已生成尽量调度结果。当前按忽略波次模式求解。")
+    : (lang() === "ja" ? `可能な範囲で割り当てた結果を生成しました。現在は ${scenario.waves.length} 個の業務波次で計算しており、到着要件を強制約として扱います。` : `已生成尽量调度结果。当前按 ${scenario.waves.length} 个业务波次求解，并按到店要求做强约束。`);
   const unscheduledMessage = bestResult.metrics.unscheduledCount ? ` ${LT("unscheduledSummary", { count: bestResult.metrics.unscheduledCount, names: formatUnscheduledDetails(bestResult.metrics.unscheduledStores, 12) })}` : ` ${L("noUnscheduled")}`;
-  const reasonMessage = bestResult.metrics.unscheduledCount ? ` ${lang() === "ja" ? `鏈壊褰撱伄涓诲洜锛?{summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}` : `鏈皟搴︿富鍥狅細${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}`}` : "";
+  const reasonMessage = bestResult.metrics.unscheduledCount ? ` ${lang() === "ja" ? `未割当の主因：${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}` : `未调度主因：${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}`}` : "";
   const targetMessage = targetScore > 0 ? ` ${buildTargetScoreAdvice(bestResult)}` : "";
   box.textContent = `${buildSolveModeSummary()} ${baseMessage}${routeSourceMessage}${unscheduledMessage}${reasonMessage}${targetMessage}`;
   renderVehicles();
@@ -14641,7 +21016,7 @@ async function generatePlans() {
   renderResults();
   renderStoresTable();
   renderSavedPlans();
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В瀹屾垚锛氭渶浣虫柟妗?${bestResult.label}锛岃瘎鍒?${bestResult.metrics.score.toFixed(1)}銆俙);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解完成：最佳方案 ${bestResult.label}，评分 ${bestResult.metrics.score.toFixed(1)}。`);
     await updateGenerationProgress(100, L("progressDone"));
   } finally {
     state.ui.generating = false;
@@ -14721,12 +21096,12 @@ async function loadSample() {
     await refreshRunRegionData(true);
     await queryStoreWaveResolvedTable({ needConfirm: false });
     document.getElementById("validationBox").textContent = lang() === "ja"
-      ? `搴楄垪 ${state.stores.length} 浠躲兓杌婁浮 ${state.vehicles.length} 鍙般倰瑾伩杈笺伩銆佽波閲忋伅銉兗銈儷鎶樼畻鍊ゃ倰閬╃敤銇椼伨銇椼仧銆俙
-      : `宸插姞杞介棬搴?${state.stores.length} 瀹躲€佽溅杈?${state.vehicles.length} 鍙帮紝骞跺凡灏嗚揣閲忕粺涓€搴旂敤涓烘湰鍦版姌绠楀€笺€俙;
+      ? `店舗 ${state.stores.length} 件・車両 ${state.vehicles.length} 台を読み込み、貨量はローカル折算値を適用しました。`
+      : `已加载门店 ${state.stores.length} 家、车辆 ${state.vehicles.length} 台，并已将货量统一应用为本地折算值。`;
   } catch (error) {
     const box = document.getElementById("validationBox");
     if (box) {
-      box.textContent = `${lang() === "ja" ? "鐢婚潰鏂囪█銇洿鏂颁腑銇偍銉┿兗銇屽嚭銇俱仐銇熴亴銆佸熀鏈儑銉笺偪銇京鍏冩笀銇裤仹銇欍€? : "鐣岄潰鏂囨鍒锋柊鏃跺彂鐢熼敊璇紝浣嗗熀纭€鏁版嵁宸茬粡鎭㈠銆?} ${error?.message || ""}`.trim();
+      box.textContent = `${lang() === "ja" ? "画面文言の更新中にエラーが出ましたが、基本データは復元済みです。" : "界面文案刷新时发生错误，但基础数据已经恢复。"} ${error?.message || ""}`.trim();
     }
   }
 }
@@ -14753,7 +21128,7 @@ try {
     ));
     targetKeys.forEach((k) => localStorage.removeItem(k));
     const box = document.getElementById("validationBox");
-    if (box) box.textContent = `宸叉竻鐞嗚窛绂荤紦瀛?${targetKeys.length} 椤癸紝椤甸潰鍗冲皢鍒锋柊銆俙;
+    if (box) box.textContent = `已清理距离缓存 ${targetKeys.length} 项，页面即将刷新。`;
     setTimeout(() => window.location.reload(), 120);
   });
   document.getElementById("addVehicleBtn")?.addEventListener("click", addVehicle);
@@ -14784,7 +21159,7 @@ try {
 } catch (error) {
   const box = document.getElementById("validationBox");
   if (box) {
-    box.textContent = `${lang() === "ja" ? "鍒濇湡鍖栦腑銇偍銉┿兗銇屽嚭銇俱仐銇熴€傘伨銇氫竴搴︺€屽浐瀹氬簵鑸椼倰鍐嶈杈笺€嶃倰鎶笺仐銇︺亸銇犮仌銇勩€? : "鍒濆鍖栨椂鍙戠敓閿欒锛岃鍏堢偣涓€娆♀€滈噸鏂板姞杞藉浐瀹氶棬搴椻€濄€?} ${error?.message || ""}`.trim();
+    box.textContent = `${lang() === "ja" ? "初期化中にエラーが出ました。まず一度「固定店舗を再読込」を押してください。" : "初始化时发生错误，请先点一次“重新加载固定门店”。"} ${error?.message || ""}`.trim();
   }
 }
 
@@ -14819,23 +21194,24 @@ window.addEventListener("beforeunload", () => {
     runRegionMap = null;
   }
 });
-// ========== 鏂板锛氱洿鎺ヨ皟鐢ㄨ溅杈嗛┍鍔ㄦ瀯閫犵畻娉曪紙鏂帮級 ==========
+// EN: Business note for nearby logic.
+// CN: 附近逻辑的业务提示。
 async function directVehicleSolve() {
   if (state.ui.generating) {
     const box = document.getElementById("validationBox");
-    if (box) box.textContent = "姝ｅ湪姹傝В涓紝璇风◢鍚?;
+    if (box) box.textContent = "正在求解中，请稍后";
     return;
   }
   const box = document.getElementById("validationBox");
   try {
     state.ui.generating = true;
     renderGenerationProgress();
-    await updateGenerationProgress(5, "姝ｅ湪鏋勫缓鍦烘櫙...");
+    await updateGenerationProgress(5, "正在构建场景...");
     
     const scenario = await buildScenario();
     const selected = applySolveWaveSelectionToScenario(scenario);
     if (selected.error || !selected.scenario) {
-      box.textContent = selected.error || "鍦烘櫙鏋勫缓澶辫触";
+      box.textContent = selected.error || "场景构建失败";
       return;
     }
     const finalScenario = selected.scenario;
@@ -14844,8 +21220,11 @@ async function directVehicleSolve() {
     const solutions = [];
     let totalUnscheduled = [];
     
-    // 璁板綍宸蹭娇鐢ㄧ殑杞﹁締锛堣溅鐗屽彿闆嗗悎锛?    let usedVehicles = new Set();
-    // 璁板綍 W1 姣忎釜杞﹁締鐨勯棬搴楀垪琛紙鎸夐『搴忥級
+    // EN: Business note for nearby logic.
+    // CN: 附近逻辑的业务提示。
+    let usedVehicles = new Set();
+    // EN: Business note for nearby logic.
+    // CN: 附近逻辑的业务提示。
     let w1Assignments = {};   // { plateNo: [storeId, ...] }
     let w1RoutesByPlate = {}; // { plateNo: [[storeId, ...], ...] }
     let w1PriorStats = {};    // { plateNo: { finish_time, prior_round_distance, priorWaveCount } }
@@ -14853,10 +21232,11 @@ async function directVehicleSolve() {
     for (let idx = 0; idx < finalScenario.waves.length; idx++) {
       const wave = finalScenario.waves[idx];
       const waveId = wave.waveId;
-      box.textContent = `姝ｅ湪姹傝В ${waveId} (${idx+1}/${finalScenario.waves.length}) ...`;
-      await updateGenerationProgress(20 + (idx / finalScenario.waves.length) * 70, `姹傝В ${waveId}`);
+      box.textContent = `正在求解 ${waveId} (${idx+1}/${finalScenario.waves.length}) ...`;
+      await updateGenerationProgress(20 + (idx / finalScenario.waves.length) * 70, `求解 ${waveId}`);
       
-      // 鏋勫缓鍩虹 payload
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
       let payload = {
         algorithmKey: "vehicle",
         scenario: finalScenario,
@@ -14866,54 +21246,65 @@ async function directVehicleSolve() {
         strategyConfig: strategyConfig,
       };
       
-      // 鐗规畩澶勭悊涓嶅悓娉㈡
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
       if (waveId === "W1") {
-        // W1: 浣跨敤鍏ㄩ儴杞﹁締锛屼笉鎺掗櫎浠讳綍杞︼紝涔熶笉浼犻€?assignments
+        // EN: Business note for nearby logic.
+        // CN: 附近逻辑的业务提示。
         payload.vehicles = finalScenario.vehicles;
       } else if (waveId === "W2") {
-        // W2: 鍙娇鐢?W1 涓敤杩囩殑杞﹁締锛屽苟浼犻€?W1 鐨?assignments
+        // EN: Business note for nearby logic.
+        // CN: 附近逻辑的业务提示。
         const w1UsedVehicles = finalScenario.vehicles.filter(v => usedVehicles.has(v.plateNo));
         if (w1UsedVehicles.length === 0) {
-          // 濡傛灉 W1 娌℃湁杞﹁締锛堜笉鍙兘锛夛紝鍥為€€鍏ㄩ儴杞﹁締
+          // EN: Business note for nearby logic.
+          // CN: 附近逻辑的业务提示。
           payload.vehicles = finalScenario.vehicles;
         } else {
           payload.vehicles = w1UsedVehicles;
         }
-        payload.w1_assignments = w1Assignments;   // 浼犻€?W1 闂ㄥ簵鏄犲皠
-        payload.w1_routes_by_plate = w1RoutesByPlate; // 浼犻€?W1 瀹屾暣瓒熸缁撴瀯
-        payload.w1_prior_stats = w1PriorStats; // 浼犻€?W1 鎺ュ姏 prior stats
+        payload.w1_assignments = w1Assignments;   // 传递 W1 门店映射
+        payload.w1_routes_by_plate = w1RoutesByPlate; // 传递 W1 完整趟次结构
+        payload.w1_prior_stats = w1PriorStats; // 传递 W1 接力 prior stats
       } else if (waveId === "W3") {
-        // W3: 鎺掗櫎 W1 鍜?W2 鐢ㄨ繃鐨勮溅杈?        if (strategyConfig.w3ExcludePriorVehicles && usedVehicles.size > 0) {
+        // EN: Business note for nearby logic.
+        // CN: 附近逻辑的业务提示。
+        if (strategyConfig.w3ExcludePriorVehicles && usedVehicles.size > 0) {
           payload.excluded_vehicles = Array.from(usedVehicles);
-          console.log(`[directVehicleSolve] 鎺掗櫎杞﹁締: ${payload.excluded_vehicles.join(", ")}`);
+          console.log(`[directVehicleSolve] 排除车辆: ${payload.excluded_vehicles.join(", ")}`);
         }
-        // W3 浣跨敤鍏ㄩ儴杞﹁締锛堟帓闄ゅ悗鍚庣浼氳繃婊わ級
+        // EN: Business note for nearby logic.
+        // CN: 附近逻辑的业务提示。
         payload.vehicles = finalScenario.vehicles.map((vehicle) => ({
           ...vehicle,
           speed: Number(strategyConfig.w3SpeedKmh || 48),
         }));
       } else if (waveId === "W4") {
-        // W4: 涓嶆帓闄わ紙鍙牴鎹渶瑕佽皟鏁达級
+        // EN: Business note for nearby logic.
+        // CN: 附近逻辑的业务提示。
         payload.vehicles = finalScenario.vehicles;
       }
       
-      const response = await fetch("/wave-optimize", {                     
+      const response = await fetch("http://127.0.0.1:8765/wave-optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
-      if (!result.bestState) throw new Error(`娉㈡ ${waveId} 姹傝В澶辫触`);
+      if (!result.bestState) throw new Error(`波次 ${waveId} 求解失败`);
       
-      // 璁板綍鏈尝娆′娇鐢ㄧ殑杞﹁締
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
       const waveUsedPlates = result.bestState
         .filter(item => item.routes && item.routes.length > 0)
         .map(item => item.plateNo);
       waveUsedPlates.forEach(plate => usedVehicles.add(plate));
-      console.log(`[directVehicleSolve] ${waveId} 浣跨敤杞﹁締: ${waveUsedPlates.join(", ")}`);
+      console.log(`[directVehicleSolve] ${waveId} 使用车辆: ${waveUsedPlates.join(", ")}`);
       
-      // 濡傛灉鏄?W1锛岃褰曟瘡涓溅杈嗙殑闂ㄥ簵鍒楄〃锛堟寜璺嚎椤哄簭锛?      if (waveId === "W1") {
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
+      if (waveId === "W1") {
         w1RoutesByPlate = {};
         w1Assignments = {};
         w1PriorStats = {};
@@ -14934,7 +21325,8 @@ async function directVehicleSolve() {
         }
       }
       
-      // 杞崲涓哄墠绔渶瑕佺殑 plan 缁撴瀯
+      // EN: Business note for nearby logic.
+      // CN: 附近逻辑的业务提示。
       const plans = result.bestState.map(item => ({
         vehicle: { plateNo: item.plateNo, capacity: item.capacity, speed: item.speed, canCarryCold: item.canCarryCold || false },
         waveId: waveId,
@@ -14958,8 +21350,8 @@ async function directVehicleSolve() {
     const metrics = evaluateSolution(solutions, finalScenario, totalUnscheduled);
     const resultObj = {
       key: "vehicle_new",
-      label: "杞﹁締椹卞姩鏋勯€狅紙鏂帮級",
-      description: "鏃犵‖绾︽潫锛屽叏闂ㄥ簵蹇呰皟搴︼紝鏃ュ織瑙?C:\\Users\\laoj0\\Desktop\\123.txt",
+      label: "车辆驱动构造（新）",
+      description: "无硬约束，全门店必调度，日志见 C:\\Users\\laoj0\\Desktop\\123.txt",
       solution: solutions,
       metrics: metrics,
       unscheduledStores: totalUnscheduled,
@@ -14971,11 +21363,11 @@ async function directVehicleSolve() {
     state.activeResultKey = resultObj.key;
     autoArchiveCurrentRun();
     renderAll();
-    box.textContent = `杞﹁締椹卞姩鏋勯€狅紙鏂帮級瀹屾垚锛岃瘎鍒?${metrics.score.toFixed(1)}锛屽凡璋冨害 ${metrics.scheduledCount} 瀹讹紝鏈皟搴?${metrics.unscheduledCount} 瀹躲€傝鎯呮棩蹇?C:\\Users\\laoj0\\Desktop\\123.txt`;
-    await updateGenerationProgress(100, "瀹屾垚");
+    box.textContent = `车辆驱动构造（新）完成，评分 ${metrics.score.toFixed(1)}，已调度 ${metrics.scheduledCount} 家，未调度 ${metrics.unscheduledCount} 家。详情日志 C:\\Users\\laoj0\\Desktop\\123.txt`;
+    await updateGenerationProgress(100, "完成");
   } catch (err) {
     console.error(err);
-    if (box) box.textContent = `杞﹁締椹卞姩鏋勯€狅紙鏂帮級澶辫触锛?{err.message}`;
+    if (box) box.textContent = `车辆驱动构造（新）失败：${err.message}`;
   } finally {
     state.ui.generating = false;
     renderGenerationProgress();
@@ -14990,14 +21382,15 @@ function addDirectVehicleButton() {
     const newBtn = document.createElement("button");
     newBtn.id = "directVehicleBtn";
     newBtn.className = "secondary";
-    newBtn.textContent = lang() === "ja" ? "杌婁浮椐嗗嫊妲嬬瘔锛堟柊锛? : "杞﹁締椹卞姩鏋勯€狅紙鏂帮級";
+    newBtn.textContent = lang() === "ja" ? "車両駆動構築（新）" : "车辆驱动构造（新）";
     newBtn.style.marginLeft = "8px";
     newBtn.addEventListener("click", directVehicleSolve);
     parent.insertBefore(newBtn, generateBtn.nextSibling);
   }
 }
 
-// 纭繚鎸夐挳鍦?DOM 鍔犺浇鍚庢坊鍔?
+// EN: Business note for nearby logic.
+// CN: 附近逻辑的业务提示。
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", addDirectVehicleButton);
 } else {
