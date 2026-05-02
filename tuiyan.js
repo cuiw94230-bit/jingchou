@@ -6,7 +6,7 @@
  * 2. 减车/可行性推演：围绕失败样本、约束诊断和建议规则展开。
  */
 (function () {
-    const GA_BACKEND_URL = "http://127.0.0.1:8765";
+    const GA_BACKEND_URL = "";
 
     let currentBatch = null;
     let currentProcessedData = null;
