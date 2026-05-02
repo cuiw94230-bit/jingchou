@@ -979,7 +979,7 @@ let relayConsoleLogFlushTimer = null;
 // CN: 当前业务流程中的关键步骤。
 // EN: Control point for business behavior.
 // CN: 影响业务行为的控制节点。
-const GA_BACKEND_URL = "http://127.0.0.1:8765";
+const GA_BACKEND_URL = "";
 const USE_FULL_DISTANCE_MATRIX_FROM_BACKEND = true;
 // EN: Key step in this business flow.
 // CN: 当前业务流程中的关键步骤。
@@ -4372,12 +4372,12 @@ async function buildDistanceData(stores) {
         const params = new URLSearchParams({
           storeIds: storeIds.join(","),
           includeDuration: "true",
-          strict: "false",
+          strict: "true",
         });
         // EN: Key step in this business flow.
         // CN: 当前业务流程中的关键步骤。
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 5000);
+        const timer = setTimeout(() => controller.abort(), 30000);
         // EN: Key step in this business flow.
         // CN: 当前业务流程中的关键步骤。
         // EN: Control point for business behavior.
@@ -4425,16 +4425,16 @@ async function buildDistanceData(stores) {
                 },
               };
             }
-            throw new Error(`distance matrix incomplete, missing=${missingCount}`);                                                                                           
+            console.warn("[buildDistanceData] database full matrix incomplete, fallback to amap/straight", { missingCount, sample: data?.missingPairs?.slice?.(0, 5) || [] });
           } else {
-            throw new Error(`distance matrix http=${response.status}`);                                                 
+            console.warn(`[buildDistanceData] database full matrix http=${response.status}, fallback to amap/straight`);
           }
         } finally {
           clearTimeout(timer);
         }
       }
     } catch (error) {
-      throw new Error(`distance matrix required: ${error?.message || error}`);                                  
+      console.warn("[buildDistanceData] database full matrix request failed, fallback to amap/straight", error);
     }
   }
   // EN: Control point for business behavior.
@@ -21285,7 +21285,7 @@ async function directVehicleSolve() {
         payload.vehicles = finalScenario.vehicles;
       }
       
-      const response = await fetch("http://127.0.0.1:8765/wave-optimize", {
+      const response = await fetch("/wave-optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
