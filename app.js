@@ -1,12 +1,6 @@
 /*
- * 调度系统前端主脚本。
- *
- * 这里负责主调度页面的浏览器侧逻辑：
- * - 组织调度输入；
- * - 调用后端接口；
- * - 展示调度过程、波次结果和保存/归档能力；
- * - 管理本地缓存与页面状态恢复。
- */
+ * 璋冨害绯荤粺鍓嶇涓昏剼鏈€? *
+ * 杩欓噷璐熻矗涓昏皟搴﹂〉闈㈢殑娴忚鍣ㄤ晶閫昏緫锛? * - 缁勭粐璋冨害杈撳叆锛? * - 璋冪敤鍚庣鎺ュ彛锛? * - 灞曠ず璋冨害杩囩▼銆佹尝娆＄粨鏋滃拰淇濆瓨/褰掓。鑳藉姏锛? * - 绠＄悊鏈湴缂撳瓨涓庨〉闈㈢姸鎬佹仮澶嶃€? */
 const STORAGE_KEY = "dispatch_saved_plans_v6";
 const RUN_ARCHIVE_KEY = "dispatch_run_archive_v1";
 const DEEPSEEK_SETTINGS_KEY = "dispatch_deepseek_settings_v1";
@@ -17,7 +11,7 @@ const AMAP_ROUTE_CACHE_KEY = "dispatch_amap_route_cache_v1";
 const AMAP_ORIGIN_BATCH_SIZE = 20;
 const RECOMMENDED_PLAN_TASK_DATE_KEY = "dispatch_recommended_task_date_v1";
 const RUN_REGION_SCHEME_SELECTED_KEY = "dispatch_run_region_scheme_selected_v1";
-const ENFORCED_VEHICLE_TYPE = "4.2米厢式货车";
+const ENFORCED_VEHICLE_TYPE = "4.2绫冲帰寮忚揣杞?;
 const LOAD_CONVERT_CAPACITY_MAP = {
   rpcs: 207,
   rcase: 380,
@@ -30,64 +24,64 @@ const LOAD_CONVERT_CAPACITY_MAP = {
 const LOAD_CONVERT_WAVE1_FIELDS = ["rpcs", "rcase", "bpcs", "bpaper", "rpaper"];
 const LOAD_CONVERT_WAVE2_FIELDS = ["apcs", "apaper"];
 const algorithmMeta = {
-  vrptw: { label: "VRPTW贪心插入启发式", description: "纯前端时间维度插入式贪心 VRPTW 启发式。" },
-  hybrid: { label: "混合VRPTW启发式", description: "在贪心插入初始解上叠加禁忌搜索与大邻域搜索的纯前端混合启发式。" },
-  ga: { label: "遗传算法（GA）", description: "基于贪心初始解做轻量扰动。" },
-  tabu: { label: "禁忌搜索", description: "围绕初始解做邻域替换。" },
-  lns: { label: "大邻域搜索", description: "局部拆解后重新插入门店。" },
-  savings: { label: "Clark-Wright节约法", description: "按节约值合并路线，再做 2-opt 与车辆分配。" },
-  sa: { label: "模拟退火", description: "用退火接受准则跳出局部最优，再配合局部优化收敛。" },
-  aco: { label: "蚁群算法（ACO）", description: "用信息素和启发式构造门店序列，再做局部改进。" },
-  pso: { label: "粒子群算法", description: "用优先级实数编码、速度更新和群体最优引导搜索。" },
-  vehicle: { label: "车辆驱动构造", description: "按车辆逐台装填门店，先严格可行再做一次松弛重试。" },
-  relay: { label: "接力求解", description: "先生成初排，再按阶段串联全局搜索与局部优化，逐段接棒打磨最终方案。" },
+  vrptw: { label: "VRPTW璐績鎻掑叆鍚彂寮?, description: "绾墠绔椂闂寸淮搴︽彃鍏ュ紡璐績 VRPTW 鍚彂寮忋€? },
+  hybrid: { label: "娣峰悎VRPTW鍚彂寮?, description: "鍦ㄨ椽蹇冩彃鍏ュ垵濮嬭В涓婂彔鍔犵蹇屾悳绱笌澶ч偦鍩熸悳绱㈢殑绾墠绔贩鍚堝惎鍙戝紡銆? },
+  ga: { label: "閬椾紶绠楁硶锛圙A锛?, description: "鍩轰簬璐績鍒濆瑙ｅ仛杞婚噺鎵板姩銆? },
+  tabu: { label: "绂佸繉鎼滅储", description: "鍥寸粫鍒濆瑙ｅ仛閭诲煙鏇挎崲銆? },
+  lns: { label: "澶ч偦鍩熸悳绱?, description: "灞€閮ㄦ媶瑙ｅ悗閲嶆柊鎻掑叆闂ㄥ簵銆? },
+  savings: { label: "Clark-Wright鑺傜害娉?, description: "鎸夎妭绾﹀€煎悎骞惰矾绾匡紝鍐嶅仛 2-opt 涓庤溅杈嗗垎閰嶃€? },
+  sa: { label: "妯℃嫙閫€鐏?, description: "鐢ㄩ€€鐏帴鍙楀噯鍒欒烦鍑哄眬閮ㄦ渶浼橈紝鍐嶉厤鍚堝眬閮ㄤ紭鍖栨敹鏁涖€? },
+  aco: { label: "铓佺兢绠楁硶锛圓CO锛?, description: "鐢ㄤ俊鎭礌鍜屽惎鍙戝紡鏋勯€犻棬搴楀簭鍒楋紝鍐嶅仛灞€閮ㄦ敼杩涖€? },
+  pso: { label: "绮掑瓙缇ょ畻娉?, description: "鐢ㄤ紭鍏堢骇瀹炴暟缂栫爜銆侀€熷害鏇存柊鍜岀兢浣撴渶浼樺紩瀵兼悳绱€? },
+  vehicle: { label: "杞﹁締椹卞姩鏋勯€?, description: "鎸夎溅杈嗛€愬彴瑁呭～闂ㄥ簵锛屽厛涓ユ牸鍙鍐嶅仛涓€娆℃澗寮涢噸璇曘€? },
+  relay: { label: "鎺ュ姏姹傝В", description: "鍏堢敓鎴愬垵鎺掞紝鍐嶆寜闃舵涓茶仈鍏ㄥ眬鎼滅储涓庡眬閮ㄤ紭鍖栵紝閫愭鎺ユ鎵撶（鏈€缁堟柟妗堛€? },
 };
 function getAlgorithmQuickGuide(key) {
   const guides = {
-    aco: "🐜 蚁群算法(ACO)：模拟蚂蚁觅食，信息素引导搜索。适合100-300家门店，能找到优质路径但收敛稍慢。",
-    pso: "🐦 粒子群算法(PSO)：模拟鸟群捕食，群体智能引导。适合50-150家门店，收敛快但可能早熟。",
-    vehicle: "🚚 车辆驱动构造：按车辆逐台塞店，优先提升覆盖率，适合调试和保底排满。",
-    sa: "🔥 模拟退火(SA)：模拟金属退火，概率性接受差解。适合任意规模，能跳出局部最优。",
-    tabu: "📋 禁忌搜索(Tabu)：带记忆的邻域搜索。适合小规模精确优化，避免走回头路。",
-    lns: "🔨 大邻域搜索(LNS)：破坏-修复框架。适合200-500家门店，能大规模重构解。",
-    hybrid: "🎯 混合算法：SA+LNS+Tabu三阶段接力。追求极致质量时使用，耗时最长。",
-    ga: "🧬 遗传算法(GA)：模拟自然选择，进化搜索。全局能力强，但收敛慢。",
-    savings: "💰 Clark-Wright节约法：经典构造法，快速生成初始解。速度快，质量稳定。",
-    vrptw: "⏰ VRPTW贪心插入：时间窗优先，逐个插入。可行性好，适合快速初排。"
+    aco: "馃悳 铓佺兢绠楁硶(ACO)锛氭ā鎷熻殏铓佽椋燂紝淇℃伅绱犲紩瀵兼悳绱€傞€傚悎100-300瀹堕棬搴楋紝鑳芥壘鍒颁紭璐ㄨ矾寰勪絾鏀舵暃绋嶆參銆?,
+    pso: "馃惁 绮掑瓙缇ょ畻娉?PSO)锛氭ā鎷熼笩缇ゆ崟椋燂紝缇や綋鏅鸿兘寮曞銆傞€傚悎50-150瀹堕棬搴楋紝鏀舵暃蹇絾鍙兘鏃╃啛銆?,
+    vehicle: "馃殮 杞﹁締椹卞姩鏋勯€狅細鎸夎溅杈嗛€愬彴濉炲簵锛屼紭鍏堟彁鍗囪鐩栫巼锛岄€傚悎璋冭瘯鍜屼繚搴曟帓婊°€?,
+    sa: "馃敟 妯℃嫙閫€鐏?SA)锛氭ā鎷熼噾灞為€€鐏紝姒傜巼鎬ф帴鍙楀樊瑙ｃ€傞€傚悎浠绘剰瑙勬ā锛岃兘璺冲嚭灞€閮ㄦ渶浼樸€?,
+    tabu: "馃搵 绂佸繉鎼滅储(Tabu)锛氬甫璁板繂鐨勯偦鍩熸悳绱€傞€傚悎灏忚妯＄簿纭紭鍖栵紝閬垮厤璧板洖澶磋矾銆?,
+    lns: "馃敤 澶ч偦鍩熸悳绱?LNS)锛氱牬鍧?淇妗嗘灦銆傞€傚悎200-500瀹堕棬搴楋紝鑳藉ぇ瑙勬ā閲嶆瀯瑙ｃ€?,
+    hybrid: "馃幆 娣峰悎绠楁硶锛歋A+LNS+Tabu涓夐樁娈垫帴鍔涖€傝拷姹傛瀬鑷磋川閲忔椂浣跨敤锛岃€楁椂鏈€闀裤€?,
+    ga: "馃К 閬椾紶绠楁硶(GA)锛氭ā鎷熻嚜鐒堕€夋嫨锛岃繘鍖栨悳绱€傚叏灞€鑳藉姏寮猴紝浣嗘敹鏁涙參銆?,
+    savings: "馃挵 Clark-Wright鑺傜害娉曪細缁忓吀鏋勯€犳硶锛屽揩閫熺敓鎴愬垵濮嬭В銆傞€熷害蹇紝璐ㄩ噺绋冲畾銆?,
+    vrptw: "鈴?VRPTW璐績鎻掑叆锛氭椂闂寸獥浼樺厛锛岄€愪釜鎻掑叆銆傚彲琛屾€уソ锛岄€傚悎蹇€熷垵鎺掋€?
   };
-  return guides[key] || `${key}算法，详情请查看系统文档。`;
+  return guides[key] || `${key}绠楁硶锛岃鎯呰鏌ョ湅绯荤粺鏂囨。銆俙;
 }
 const I18N = {
   zh: {
-    algorithmLabels: { vrptw: "VRPTW贪心插入启发式", hybrid: "混合VRPTW启发式", ga: "遗传算法（GA）", tabu: "禁忌搜索", lns: "大邻域搜索", savings: "Clark-Wright节约法", sa: "模拟退火", aco: "蚁群算法（ACO）", pso: "粒子群算法", vehicle: "车辆驱动构造", relay: "接力求解" },
+    algorithmLabels: { vrptw: "VRPTW璐績鎻掑叆鍚彂寮?, hybrid: "娣峰悎VRPTW鍚彂寮?, ga: "閬椾紶绠楁硶锛圙A锛?, tabu: "绂佸繉鎼滅储", lns: "澶ч偦鍩熸悳绱?, savings: "Clark-Wright鑺傜害娉?, sa: "妯℃嫙閫€鐏?, aco: "铓佺兢绠楁硶锛圓CO锛?, pso: "绮掑瓙缇ょ畻娉?, vehicle: "杞﹁締椹卞姩鏋勯€?, relay: "鎺ュ姏姹傝В" },
     algorithmDescriptions: {
-      vrptw: "纯前端时间维度插入式贪心 VRPTW 启发式。",
-      hybrid: "在贪心插入初始解上叠加禁忌搜索与大邻域搜索的纯前端混合启发式。",
-      ga: "基于贪心初始解做轻量扰动。",
-      tabu: "围绕初始解做邻域替换。",
-      lns: "局部拆解后重新插入门店。",
-      savings: "按节约值合并路线，再做 2-opt 与车辆分配。",
-      sa: "用退火接受准则跳出局部最优，再配合局部优化收敛。",
-      aco: "用信息素和启发式构造门店序列，再做局部改进。",
-      pso: "用优先级实数编码、速度更新和群体最优引导搜索。",
-      vehicle: "按车辆逐台装填门店，先严格可行，再做一次软时间窗重试。",
-      relay: "先出初排，再按阶段串联全局搜索与局部优化，生成单条最终接力解。",
+      vrptw: "绾墠绔椂闂寸淮搴︽彃鍏ュ紡璐績 VRPTW 鍚彂寮忋€?,
+      hybrid: "鍦ㄨ椽蹇冩彃鍏ュ垵濮嬭В涓婂彔鍔犵蹇屾悳绱笌澶ч偦鍩熸悳绱㈢殑绾墠绔贩鍚堝惎鍙戝紡銆?,
+      ga: "鍩轰簬璐績鍒濆瑙ｅ仛杞婚噺鎵板姩銆?,
+      tabu: "鍥寸粫鍒濆瑙ｅ仛閭诲煙鏇挎崲銆?,
+      lns: "灞€閮ㄦ媶瑙ｅ悗閲嶆柊鎻掑叆闂ㄥ簵銆?,
+      savings: "鎸夎妭绾﹀€煎悎骞惰矾绾匡紝鍐嶅仛 2-opt 涓庤溅杈嗗垎閰嶃€?,
+      sa: "鐢ㄩ€€鐏帴鍙楀噯鍒欒烦鍑哄眬閮ㄦ渶浼橈紝鍐嶉厤鍚堝眬閮ㄤ紭鍖栨敹鏁涖€?,
+      aco: "鐢ㄤ俊鎭礌鍜屽惎鍙戝紡鏋勯€犻棬搴楀簭鍒楋紝鍐嶅仛灞€閮ㄦ敼杩涖€?,
+      pso: "鐢ㄤ紭鍏堢骇瀹炴暟缂栫爜銆侀€熷害鏇存柊鍜岀兢浣撴渶浼樺紩瀵兼悳绱€?,
+      vehicle: "鎸夎溅杈嗛€愬彴瑁呭～闂ㄥ簵锛屽厛涓ユ牸鍙锛屽啀鍋氫竴娆¤蒋鏃堕棿绐楅噸璇曘€?,
+      relay: "鍏堝嚭鍒濇帓锛屽啀鎸夐樁娈典覆鑱斿叏灞€鎼滅储涓庡眬閮ㄤ紭鍖栵紝鐢熸垚鍗曟潯鏈€缁堟帴鍔涜В銆?,
     },
   },
   ja: {
-    algorithmLabels: { vrptw: "VRPTW貪欲挿入法", hybrid: "ハイブリッドVRPTW", ga: "遺伝的アルゴリズム", tabu: "タブー探索", lns: "大近傍探索", savings: "Clark-Wright節約法", sa: "焼きなまし法", aco: "蟻コロニー最適化", pso: "粒子群最適化", vehicle: "車両駆動構築", relay: "リレー最適化" },
+    algorithmLabels: { vrptw: "VRPTW璨鎸垮叆娉?, hybrid: "銉忋偆銉栥儶銉冦儔VRPTW", ga: "閬轰紳鐨勩偄銉偞銉偤銉?, tabu: "銈裤儢銉兼帰绱?, lns: "澶ц繎鍌嶆帰绱?, savings: "Clark-Wright绡€绱勬硶", sa: "鐒笺亶銇伨銇楁硶", aco: "锜汇偝銉儖銉兼渶閬╁寲", pso: "绮掑瓙缇ゆ渶閬╁寲", vehicle: "杌婁浮椐嗗嫊妲嬬瘔", relay: "銉儸銉兼渶閬╁寲" },
     algorithmDescriptions: {
-      vrptw: "フロントエンド完結の時間次元挿入型・貪欲 VRPTW ヒューリスティック。",
-      hybrid: "貪欲挿入の初期解にタブー探索と大近傍探索を重ねる純フロントエンド混合ヒューリスティック。",
-      ga: "貪欲初期解をベースに軽量な摂動を行います。",
-      tabu: "初期解の近傍を探索し、反復を避けます。",
-      lns: "一部店舗を外して再挿入し、局所改善します。",
-      savings: "節約値順にルートを統合し、その後 2-opt と車両割当を行います。",
-      sa: "焼きなましの受理規則で局所最適から抜け出し、局所改善で収束させます。",
-      aco: "フェロモンとヒューリスティックで訪問順を構築し、その後に局所改善します。",
-      pso: "優先度の実数符号化と速度更新で、個体最良・全体最良に向けて探索します。",
-      vehicle: "車両ごとに店舗を詰める構築法で、まず厳密可行、次に緩和再試行します。",
-      relay: "初期案を作成した後、段階ごとに全域探索と局所改善をつなぎ、最終案へ磨き上げます。",
+      vrptw: "銉曘儹銉炽儓銈ㄣ兂銉夊畬绲愩伄鏅傞枔娆″厓鎸垮叆鍨嬨兓璨 VRPTW 銉掋儱銉笺儶銈广儐銈ｃ儍銈€?,
+      hybrid: "璨鎸垮叆銇垵鏈熻В銇偪銉栥兗鎺㈢储銇ㄥぇ杩戝倣鎺㈢储銈掗噸銇倠绱斻儠銉兂銉堛偍銉炽儔娣峰悎銉掋儱銉笺儶銈广儐銈ｃ儍銈€?,
+      ga: "璨鍒濇湡瑙ｃ倰銉欍兗銈广伀杌介噺銇憘鍕曘倰琛屻亜銇俱仚銆?,
+      tabu: "鍒濇湡瑙ｃ伄杩戝倣銈掓帰绱仐銆佸弽寰┿倰閬裤亼銇俱仚銆?,
+      lns: "涓€閮ㄥ簵鑸椼倰澶栥仐銇﹀啀鎸垮叆銇椼€佸眬鎵€鏀瑰杽銇椼伨銇欍€?,
+      savings: "绡€绱勫€ら爢銇儷銉笺儓銈掔当鍚堛仐銆併仢銇緦 2-opt 銇ㄨ粖涓″壊褰撱倰琛屻亜銇俱仚銆?,
+      sa: "鐒笺亶銇伨銇椼伄鍙楃悊瑕忓墖銇у眬鎵€鏈€閬┿亱銈夋姕銇戝嚭銇椼€佸眬鎵€鏀瑰杽銇у弾鏉熴仌銇涖伨銇欍€?,
+      aco: "銉曘偋銉儮銉炽仺銉掋儱銉笺儶銈广儐銈ｃ儍銈仹瑷晱闋嗐倰妲嬬瘔銇椼€併仢銇緦銇眬鎵€鏀瑰杽銇椼伨銇欍€?,
+      pso: "鍎厛搴︺伄瀹熸暟绗﹀彿鍖栥仺閫熷害鏇存柊銇с€佸€嬩綋鏈€鑹兓鍏ㄤ綋鏈€鑹伀鍚戙亼銇︽帰绱仐銇俱仚銆?,
+      vehicle: "杌婁浮銇斻仺銇簵鑸椼倰瑭般倎銈嬫绡夋硶銇с€併伨銇氬幊瀵嗗彲琛屻€佹銇珐鍜屽啀瑭﹁銇椼伨銇欍€?,
+      relay: "鍒濇湡妗堛倰浣滄垚銇椼仧寰屻€佹闅庛仈銇ㄣ伀鍏ㄥ煙鎺㈢储銇ㄥ眬鎵€鏀瑰杽銈掋仱銇亷銆佹渶绲傛銇哥（銇嶄笂銇掋伨銇欍€?,
     },
   },
 };
@@ -273,360 +267,360 @@ function buildBackendStrategyConfig(strategyConfigInput = state.strategyConfig) 
 }
 const UI_TEXT = {
   zh: {
-    showcase: "系统介绍", reload: "重新加载固定门店", save: "保存当前方案", exportResult: "导出当前结果",
-    storeInfo: "门店信息", vehicleInfo: "车辆信息", waveConfig: "波次配置", algoRun: "算法与执行", result: "调度结果", saved: "已保存方案",
-    storeDesc: "门店数据已内置到系统中，当前可直接编辑基础属性。", vehicleDesc: "车辆可通过 TXT 导入，也可以手工补充。", waveDesc: "声明可配送波次、各波次开始结束时间，以及该波次包含的门店编号。", algoDesc: "可单独生成方案，也可同时勾选两种算法做对比。最低装载率会作为排序偏好，而非硬性卡死条件。", resultDesc: "系统会展示门店路线、距离、调度过程，以及人工调车入口。", savedDesc: "方案保存在当前浏览器本地，可作为历史排线记录。",
-    foldStore: "折叠店铺明细", unfoldStore: "展开店铺明细", foldVehicle: "折叠车辆明细", unfoldVehicle: "展开车辆明细",
-    addStore: "新增门店", addVehicle: "新增车辆", addWave: "新增波次",
-    dispatchStart: "首次发车时间", maxKm: "单车往返总里程上限（公里）", minLoad: "单车最低装载率（%）", ignoreWaves: "忽略波次", autoWave: "按固定门店自动分波次", concentrateLate: "迟到线路尽量集中",
-    targetScore: "目标评分下限",
-    singleWaveDistance: "单波次距离阈值（公里）", singleWaveStart: "单波次开始", singleWaveEnd: "单波次结束", singleWaveMode: "单波次截止规则",
-    returnEnd: "回库截止", serviceEnd: "完店截止", generate: "生成调度结果", close: "关闭",
-    processTitle: "调度过程可视化", showcaseTitle: "系统能力总览",
-    storeTableHeaders: ["编号", "名称", "区域", "经度", "纬度", "次数", "一波次货量", "二波次货量", "冷藏比例", "一配时间", "二配时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号", ""],
-    vehicleTableHeaders: ["车号", "司机名", "车型", "容量", "速度", "可送冷藏", "状态", ""],
-    waveTableHeaders: ["波次", "开始", "结束", "截止规则", "包含门店", ""],
-    used: "已派车", idle: "未使用", del: "删除", scheduled: "已调度", unscheduled: "未调度", assignedVehicle: "对应车号",
-    chooseFile: "选择文件",
-    noFileChosen: "未选择文件",
-    allDay: "全天统一调度", route: "路线", totalDistance: "总里程", avgLoad: "平均单趟装载率", fleetLoad: "车队利用率", fleetLoadHint: "按已用车辆容量折算，多趟时可超过100%", score: "综合得分", onTime: "准时率",
-    detail: "明细", viewViz: "查看可视化", adjustTo: "调整到车辆...", confirmAdjust: "确认调整", noOtherVehicle: "当前波次没有其他车辆可接手",
-    inserted: "手工插入", leg: "本段", arrive: "到达", unloadStart: "开始卸货", leave: "离开", desired: "期望到达", unloadMinutes: "卸货", minutes: "分钟", notLate: "准时", late: "超时窗",
-    storesCount: "门店数", totalLoad: "累计装载", maxTrip: "最高单趟", trips: "趟数", totalRoundKm: "往返总里程", loadPreferredMet: "达到装载偏好", loadPreferredMiss: "未达装载偏好",
-    tripNo: "第", tripSuffix: "趟", returnTime: "回库时间", backDistance: "回仓距离", tripRoundKm: "单趟往返总里程", tripLoadRate: "单趟装载率", overWave: "超波次",
-    generatedSingle: "系统已生成调度方案。", generatedCompare: "系统已完成双算法对比。", savedEmpty: "还没有保存过调度方案。",
-    multiStoreDaily: "多门店单日多次配送调度",
-    targetAchieved: "已达到目标评分",
-    targetMissed: "未达到目标评分",
-    noVehicles: "请先录入或导入车辆信息。",
-    noStores: "当前固定门店数据为空。",
-    noWaves: "请先配置至少一个波次。",
-    regularMissing: "普通波次还有 {count} 家门店未分配：{names}",
-    unscheduledStores: "未调度门店",
-    scheduledStores: "已调度门店",
-    hardArrivalHint: "到店要求时间已作为强约束；超出允许到店偏差的门店会优先保留为未调度。",
-      lateFocusHint: "已启用迟到线路集中策略，系统会优先减少出现迟到的线路数。",
-      noUnscheduled: "全部门店已调度。",
-      unscheduledSummary: "当前尚有 {count} 家门店未调度：{names}",
-    unscheduledReasonArrival: "到店时间超出允许偏差窗口",
-      unscheduledReasonWave: "波次截止时间不足",
-      unscheduledReasonMileage: "里程约束不足",
-      unscheduledReasonCapacity: "车辆容量不足",
-      unscheduledReasonSlot: "现有车辆时序已满，无法再插入",
-      unscheduledReasonMixed: "多重约束叠加，当前无法插入",
-      unscheduledReasonTitle: "未调度原因",
-      unscheduledDetails: "未调度明细",
-      importedVehicles: "已导入 {count} 辆车辆。",
-    importVehicleFailed: "车辆 TXT 未解析出有效车号，请检查编码或每行一辆车的格式。",
-    autoWaveBuilt: "已按固定门店自动生成 {count} 个波次。",
-    chooseDifferentVehicle: "请选择一个不同的目标车辆。",
-    storeNotOnVehicle: "未在 {plate} 上找到门店 {store}。",
-    transferFailed: "门店 {store} 无法从 {source} 调整到 {target}，请检查时间、里程或容量。",
-    transferSuccess: "已将门店 {store} 从 {source} 调整到 {target}，并仅重算这两辆车。",
-    rescheduleAgain: "再次调度",
-    saveScheduledResult: "保存当前结果",
-    rescheduleSection: "未调度门店补调",
-    rescheduleHint: "保留已调度线路，优先用空闲车辆继续补调未安排出去的门店。",
-    exportLiveUnscheduled: "导出当前未调度ID",
-    unscheduledMismatch: "口径不一致：补调面板={panel}，明细筛选={detail}。请停止使用该结果并反馈。",
-    manualAssignVehicle: "手工指定车号",
-    manualAssignPlaceholder: "指定车号...",
-    confirmAssign: "指定调度",
-    rescheduleProgress: "本轮新增调度 {count} 家门店。",
-    rescheduleNoProgress: "本轮未能新增调度门店。",
-    noAssignableVehicle: "当前没有可用于补调的车辆。",
-    assignFailed: "门店 {store} 指定给 {plate} 失败，请检查时间、里程或容量。",
-    assignSuccess: "门店 {store} 已指定给 {plate}，并完成局部重算。",
-    savedAt: "保存时间",
-    wavesLabel: "波次",
-    waveModeReturn: "车辆需在 {time} 前回库",
-    waveModeService: "车辆需在 {time} 前完成最后一家店",
-    waveSingleHint: "该组作为单波次店铺单列求解，且单车只跑一趟",
-    waveRegularHint: "普通波次按此时间硬约束执行",
-    includedStores: "包含门店",
-    allStores: "全部门店",
-    overtimeTrips: "超波次线路",
-    playback: "回放",
-    selectedAlgorithms: "当前已勾选算法",
-    noneSelected: "未选择",
-    staticMap: "静态区域地图",
-    routeLegend: "线路图例",
-    depot: "库房",
-    viewMap: "查看地图",
-    routeMap: "看线路图",
-    routeMapHint: "按当前线路顺序在地图上描点连线，优先使用高德驾车路径缓存。",
-    routeStopSeq: "顺序",
-    routePlanArrival: "计划到店",
-    routeDesiredArrival: "希望到店",
-    routeStopName: "店铺",
-    analyticsTitle: "数字驾驶舱",
-    analyticsDesc: "用图形方式展示调度效率、算法差异、波次负荷与区域分布。",
-    dashboard: "核心指标",
-    algoCompare: "算法对比",
-    gantt: "波次甘特图",
-    loadCurve: "车辆装载曲线",
-    spatial: "区域散点分层",
-    progressTitle: "生成进度",
-    storesToday: "今日门店",
-    usedVehiclesShort: "已用车",
-    idleVehiclesShort: "闲置车",
-    overtimeTripsShort: "超时线路",
-    routeDigest: "线路摘要",
-    routeDigestHint: "每条线展示门店数、总里程、装载率，方便直接比较线路结构。",
-    algorithmScore: "算法得分",
-    scoreBreakdownTitle: "评分拆解",
-    onTimeScore: "准时得分",
-    distanceScoreLabel: "距离得分",
-    loadScoreLabel: "装载得分",
-    preferenceScoreLabel: "偏好得分",
-    progressIdle: "等待生成方案",
-    progressPreparing: "正在整理门店、车辆与波次约束…",
-    progressRunning: "正在运行 {algo}…",
-    progressFinishing: "正在汇总图形化结果…",
-    progressDone: "图形驾驶舱已刷新",
-    tripLabel: "趟次",
-    singleWaveLabel: "单波次",
-    regularWaveLabel: "普通波次",
-    loadAxis: "装载率",
-    timeAxis: "时间",
-    scatterNear: "近距门店",
-    scatterFar: "远距门店",
-    scatterSingle: "单波次店铺",
-    noChartData: "当前没有足够数据生成图形。",
-    voiceBroadcast: "语音播报",
-    voiceAsk: "语音提问",
-    mascotTitle: "鲸略使助手",
-    mascotDesc: "用更温和、更清晰的方式播报当前调度摘要与风险提示。",
-    speechUnsupported: "当前浏览器不支持语音播报。",
-    speechListenUnsupported: "当前浏览器不支持语音识别。",
-    speechMicPreparing: "正在申请麦克风权限，浏览器弹窗请直接点允许，允许后会立刻开始收音。",
-    speechMicDenied: "麦克风权限未开启，请在浏览器地址栏里允许麦克风后再试。",
-    speechMicFailed: "麦克风初始化失败，请检查浏览器是否允许当前页面使用麦克风。",
-    speechListening: "正在听，请直接提问。",
-    speechHeard: "已听到：{text}",
-    speechAnswerPrefix: "数字助理回答：",
+    showcase: "绯荤粺浠嬬粛", reload: "閲嶆柊鍔犺浇鍥哄畾闂ㄥ簵", save: "淇濆瓨褰撳墠鏂规", exportResult: "瀵煎嚭褰撳墠缁撴灉",
+    storeInfo: "闂ㄥ簵淇℃伅", vehicleInfo: "杞﹁締淇℃伅", waveConfig: "娉㈡閰嶇疆", algoRun: "绠楁硶涓庢墽琛?, result: "璋冨害缁撴灉", saved: "宸蹭繚瀛樻柟妗?,
+    storeDesc: "闂ㄥ簵鏁版嵁宸插唴缃埌绯荤粺涓紝褰撳墠鍙洿鎺ョ紪杈戝熀纭€灞炴€с€?, vehicleDesc: "杞﹁締鍙€氳繃 TXT 瀵煎叆锛屼篃鍙互鎵嬪伐琛ュ厖銆?, waveDesc: "澹版槑鍙厤閫佹尝娆°€佸悇娉㈡寮€濮嬬粨鏉熸椂闂达紝浠ュ強璇ユ尝娆″寘鍚殑闂ㄥ簵缂栧彿銆?, algoDesc: "鍙崟鐙敓鎴愭柟妗堬紝涔熷彲鍚屾椂鍕鹃€変袱绉嶇畻娉曞仛瀵规瘮銆傛渶浣庤杞界巼浼氫綔涓烘帓搴忓亸濂斤紝鑰岄潪纭€у崱姝绘潯浠躲€?, resultDesc: "绯荤粺浼氬睍绀洪棬搴楄矾绾裤€佽窛绂汇€佽皟搴﹁繃绋嬶紝浠ュ強浜哄伐璋冭溅鍏ュ彛銆?, savedDesc: "鏂规淇濆瓨鍦ㄥ綋鍓嶆祻瑙堝櫒鏈湴锛屽彲浣滀负鍘嗗彶鎺掔嚎璁板綍銆?,
+    foldStore: "鎶樺彔搴楅摵鏄庣粏", unfoldStore: "灞曞紑搴楅摵鏄庣粏", foldVehicle: "鎶樺彔杞﹁締鏄庣粏", unfoldVehicle: "灞曞紑杞﹁締鏄庣粏",
+    addStore: "鏂板闂ㄥ簵", addVehicle: "鏂板杞﹁締", addWave: "鏂板娉㈡",
+    dispatchStart: "棣栨鍙戣溅鏃堕棿", maxKm: "鍗曡溅寰€杩旀€婚噷绋嬩笂闄愶紙鍏噷锛?, minLoad: "鍗曡溅鏈€浣庤杞界巼锛?锛?, ignoreWaves: "蹇界暐娉㈡", autoWave: "鎸夊浐瀹氶棬搴楄嚜鍔ㄥ垎娉㈡", concentrateLate: "杩熷埌绾胯矾灏介噺闆嗕腑",
+    targetScore: "鐩爣璇勫垎涓嬮檺",
+    singleWaveDistance: "鍗曟尝娆¤窛绂婚槇鍊硷紙鍏噷锛?, singleWaveStart: "鍗曟尝娆″紑濮?, singleWaveEnd: "鍗曟尝娆＄粨鏉?, singleWaveMode: "鍗曟尝娆℃埅姝㈣鍒?,
+    returnEnd: "鍥炲簱鎴", serviceEnd: "瀹屽簵鎴", generate: "鐢熸垚璋冨害缁撴灉", close: "鍏抽棴",
+    processTitle: "璋冨害杩囩▼鍙鍖?, showcaseTitle: "绯荤粺鑳藉姏鎬昏",
+    storeTableHeaders: ["缂栧彿", "鍚嶇О", "鍖哄煙", "缁忓害", "绾害", "娆℃暟", "涓€娉㈡璐ч噺", "浜屾尝娆¤揣閲?, "鍐疯棌姣斾緥", "涓€閰嶆椂闂?, "浜岄厤鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿", ""],
+    vehicleTableHeaders: ["杞﹀彿", "鍙告満鍚?, "杞﹀瀷", "瀹归噺", "閫熷害", "鍙€佸喎钘?, "鐘舵€?, ""],
+    waveTableHeaders: ["娉㈡", "寮€濮?, "缁撴潫", "鎴瑙勫垯", "鍖呭惈闂ㄥ簵", ""],
+    used: "宸叉淳杞?, idle: "鏈娇鐢?, del: "鍒犻櫎", scheduled: "宸茶皟搴?, unscheduled: "鏈皟搴?, assignedVehicle: "瀵瑰簲杞﹀彿",
+    chooseFile: "閫夋嫨鏂囦欢",
+    noFileChosen: "鏈€夋嫨鏂囦欢",
+    allDay: "鍏ㄥぉ缁熶竴璋冨害", route: "璺嚎", totalDistance: "鎬婚噷绋?, avgLoad: "骞冲潎鍗曡稛瑁呰浇鐜?, fleetLoad: "杞﹂槦鍒╃敤鐜?, fleetLoadHint: "鎸夊凡鐢ㄨ溅杈嗗閲忔姌绠楋紝澶氳稛鏃跺彲瓒呰繃100%", score: "缁煎悎寰楀垎", onTime: "鍑嗘椂鐜?,
+    detail: "鏄庣粏", viewViz: "鏌ョ湅鍙鍖?, adjustTo: "璋冩暣鍒拌溅杈?..", confirmAdjust: "纭璋冩暣", noOtherVehicle: "褰撳墠娉㈡娌℃湁鍏朵粬杞﹁締鍙帴鎵?,
+    inserted: "鎵嬪伐鎻掑叆", leg: "鏈", arrive: "鍒拌揪", unloadStart: "寮€濮嬪嵏璐?, leave: "绂诲紑", desired: "鏈熸湜鍒拌揪", unloadMinutes: "鍗歌揣", minutes: "鍒嗛挓", notLate: "鍑嗘椂", late: "瓒呮椂绐?,
+    storesCount: "闂ㄥ簵鏁?, totalLoad: "绱瑁呰浇", maxTrip: "鏈€楂樺崟瓒?, trips: "瓒熸暟", totalRoundKm: "寰€杩旀€婚噷绋?, loadPreferredMet: "杈惧埌瑁呰浇鍋忓ソ", loadPreferredMiss: "鏈揪瑁呰浇鍋忓ソ",
+    tripNo: "绗?, tripSuffix: "瓒?, returnTime: "鍥炲簱鏃堕棿", backDistance: "鍥炰粨璺濈", tripRoundKm: "鍗曡稛寰€杩旀€婚噷绋?, tripLoadRate: "鍗曡稛瑁呰浇鐜?, overWave: "瓒呮尝娆?,
+    generatedSingle: "绯荤粺宸茬敓鎴愯皟搴︽柟妗堛€?, generatedCompare: "绯荤粺宸插畬鎴愬弻绠楁硶瀵规瘮銆?, savedEmpty: "杩樻病鏈変繚瀛樿繃璋冨害鏂规銆?,
+    multiStoreDaily: "澶氶棬搴楀崟鏃ュ娆￠厤閫佽皟搴?,
+    targetAchieved: "宸茶揪鍒扮洰鏍囪瘎鍒?,
+    targetMissed: "鏈揪鍒扮洰鏍囪瘎鍒?,
+    noVehicles: "璇峰厛褰曞叆鎴栧鍏ヨ溅杈嗕俊鎭€?,
+    noStores: "褰撳墠鍥哄畾闂ㄥ簵鏁版嵁涓虹┖銆?,
+    noWaves: "璇峰厛閰嶇疆鑷冲皯涓€涓尝娆°€?,
+    regularMissing: "鏅€氭尝娆¤繕鏈?{count} 瀹堕棬搴楁湭鍒嗛厤锛歿names}",
+    unscheduledStores: "鏈皟搴﹂棬搴?,
+    scheduledStores: "宸茶皟搴﹂棬搴?,
+    hardArrivalHint: "鍒板簵瑕佹眰鏃堕棿宸蹭綔涓哄己绾︽潫锛涜秴鍑哄厑璁稿埌搴楀亸宸殑闂ㄥ簵浼氫紭鍏堜繚鐣欎负鏈皟搴︺€?,
+      lateFocusHint: "宸插惎鐢ㄨ繜鍒扮嚎璺泦涓瓥鐣ワ紝绯荤粺浼氫紭鍏堝噺灏戝嚭鐜拌繜鍒扮殑绾胯矾鏁般€?,
+      noUnscheduled: "鍏ㄩ儴闂ㄥ簵宸茶皟搴︺€?,
+      unscheduledSummary: "褰撳墠灏氭湁 {count} 瀹堕棬搴楁湭璋冨害锛歿names}",
+    unscheduledReasonArrival: "鍒板簵鏃堕棿瓒呭嚭鍏佽鍋忓樊绐楀彛",
+      unscheduledReasonWave: "娉㈡鎴鏃堕棿涓嶈冻",
+      unscheduledReasonMileage: "閲岀▼绾︽潫涓嶈冻",
+      unscheduledReasonCapacity: "杞﹁締瀹归噺涓嶈冻",
+      unscheduledReasonSlot: "鐜版湁杞﹁締鏃跺簭宸叉弧锛屾棤娉曞啀鎻掑叆",
+      unscheduledReasonMixed: "澶氶噸绾︽潫鍙犲姞锛屽綋鍓嶆棤娉曟彃鍏?,
+      unscheduledReasonTitle: "鏈皟搴﹀師鍥?,
+      unscheduledDetails: "鏈皟搴︽槑缁?,
+      importedVehicles: "宸插鍏?{count} 杈嗚溅杈嗐€?,
+    importVehicleFailed: "杞﹁締 TXT 鏈В鏋愬嚭鏈夋晥杞﹀彿锛岃妫€鏌ョ紪鐮佹垨姣忚涓€杈嗚溅鐨勬牸寮忋€?,
+    autoWaveBuilt: "宸叉寜鍥哄畾闂ㄥ簵鑷姩鐢熸垚 {count} 涓尝娆°€?,
+    chooseDifferentVehicle: "璇烽€夋嫨涓€涓笉鍚岀殑鐩爣杞﹁締銆?,
+    storeNotOnVehicle: "鏈湪 {plate} 涓婃壘鍒伴棬搴?{store}銆?,
+    transferFailed: "闂ㄥ簵 {store} 鏃犳硶浠?{source} 璋冩暣鍒?{target}锛岃妫€鏌ユ椂闂淬€侀噷绋嬫垨瀹归噺銆?,
+    transferSuccess: "宸插皢闂ㄥ簵 {store} 浠?{source} 璋冩暣鍒?{target}锛屽苟浠呴噸绠楄繖涓よ締杞︺€?,
+    rescheduleAgain: "鍐嶆璋冨害",
+    saveScheduledResult: "淇濆瓨褰撳墠缁撴灉",
+    rescheduleSection: "鏈皟搴﹂棬搴楄ˉ璋?,
+    rescheduleHint: "淇濈暀宸茶皟搴︾嚎璺紝浼樺厛鐢ㄧ┖闂茶溅杈嗙户缁ˉ璋冩湭瀹夋帓鍑哄幓鐨勯棬搴椼€?,
+    exportLiveUnscheduled: "瀵煎嚭褰撳墠鏈皟搴D",
+    unscheduledMismatch: "鍙ｅ緞涓嶄竴鑷达細琛ヨ皟闈㈡澘={panel}锛屾槑缁嗙瓫閫?{detail}銆傝鍋滄浣跨敤璇ョ粨鏋滃苟鍙嶉銆?,
+    manualAssignVehicle: "鎵嬪伐鎸囧畾杞﹀彿",
+    manualAssignPlaceholder: "鎸囧畾杞﹀彿...",
+    confirmAssign: "鎸囧畾璋冨害",
+    rescheduleProgress: "鏈疆鏂板璋冨害 {count} 瀹堕棬搴椼€?,
+    rescheduleNoProgress: "鏈疆鏈兘鏂板璋冨害闂ㄥ簵銆?,
+    noAssignableVehicle: "褰撳墠娌℃湁鍙敤浜庤ˉ璋冪殑杞﹁締銆?,
+    assignFailed: "闂ㄥ簵 {store} 鎸囧畾缁?{plate} 澶辫触锛岃妫€鏌ユ椂闂淬€侀噷绋嬫垨瀹归噺銆?,
+    assignSuccess: "闂ㄥ簵 {store} 宸叉寚瀹氱粰 {plate}锛屽苟瀹屾垚灞€閮ㄩ噸绠椼€?,
+    savedAt: "淇濆瓨鏃堕棿",
+    wavesLabel: "娉㈡",
+    waveModeReturn: "杞﹁締闇€鍦?{time} 鍓嶅洖搴?,
+    waveModeService: "杞﹁締闇€鍦?{time} 鍓嶅畬鎴愭渶鍚庝竴瀹跺簵",
+    waveSingleHint: "璇ョ粍浣滀负鍗曟尝娆″簵閾哄崟鍒楁眰瑙ｏ紝涓斿崟杞﹀彧璺戜竴瓒?,
+    waveRegularHint: "鏅€氭尝娆℃寜姝ゆ椂闂寸‖绾︽潫鎵ц",
+    includedStores: "鍖呭惈闂ㄥ簵",
+    allStores: "鍏ㄩ儴闂ㄥ簵",
+    overtimeTrips: "瓒呮尝娆＄嚎璺?,
+    playback: "鍥炴斁",
+    selectedAlgorithms: "褰撳墠宸插嬀閫夌畻娉?,
+    noneSelected: "鏈€夋嫨",
+    staticMap: "闈欐€佸尯鍩熷湴鍥?,
+    routeLegend: "绾胯矾鍥句緥",
+    depot: "搴撴埧",
+    viewMap: "鏌ョ湅鍦板浘",
+    routeMap: "鐪嬬嚎璺浘",
+    routeMapHint: "鎸夊綋鍓嶇嚎璺『搴忓湪鍦板浘涓婃弿鐐硅繛绾匡紝浼樺厛浣跨敤楂樺痉椹捐溅璺緞缂撳瓨銆?,
+    routeStopSeq: "椤哄簭",
+    routePlanArrival: "璁″垝鍒板簵",
+    routeDesiredArrival: "甯屾湜鍒板簵",
+    routeStopName: "搴楅摵",
+    analyticsTitle: "鏁板瓧椹鹃┒鑸?,
+    analyticsDesc: "鐢ㄥ浘褰㈡柟寮忓睍绀鸿皟搴︽晥鐜囥€佺畻娉曞樊寮傘€佹尝娆¤礋鑽蜂笌鍖哄煙鍒嗗竷銆?,
+    dashboard: "鏍稿績鎸囨爣",
+    algoCompare: "绠楁硶瀵规瘮",
+    gantt: "娉㈡鐢樼壒鍥?,
+    loadCurve: "杞﹁締瑁呰浇鏇茬嚎",
+    spatial: "鍖哄煙鏁ｇ偣鍒嗗眰",
+    progressTitle: "鐢熸垚杩涘害",
+    storesToday: "浠婃棩闂ㄥ簵",
+    usedVehiclesShort: "宸茬敤杞?,
+    idleVehiclesShort: "闂茬疆杞?,
+    overtimeTripsShort: "瓒呮椂绾胯矾",
+    routeDigest: "绾胯矾鎽樿",
+    routeDigestHint: "姣忔潯绾垮睍绀洪棬搴楁暟銆佹€婚噷绋嬨€佽杞界巼锛屾柟渚跨洿鎺ユ瘮杈冪嚎璺粨鏋勩€?,
+    algorithmScore: "绠楁硶寰楀垎",
+    scoreBreakdownTitle: "璇勫垎鎷嗚В",
+    onTimeScore: "鍑嗘椂寰楀垎",
+    distanceScoreLabel: "璺濈寰楀垎",
+    loadScoreLabel: "瑁呰浇寰楀垎",
+    preferenceScoreLabel: "鍋忓ソ寰楀垎",
+    progressIdle: "绛夊緟鐢熸垚鏂规",
+    progressPreparing: "姝ｅ湪鏁寸悊闂ㄥ簵銆佽溅杈嗕笌娉㈡绾︽潫鈥?,
+    progressRunning: "姝ｅ湪杩愯 {algo}鈥?,
+    progressFinishing: "姝ｅ湪姹囨€诲浘褰㈠寲缁撴灉鈥?,
+    progressDone: "鍥惧舰椹鹃┒鑸卞凡鍒锋柊",
+    tripLabel: "瓒熸",
+    singleWaveLabel: "鍗曟尝娆?,
+    regularWaveLabel: "鏅€氭尝娆?,
+    loadAxis: "瑁呰浇鐜?,
+    timeAxis: "鏃堕棿",
+    scatterNear: "杩戣窛闂ㄥ簵",
+    scatterFar: "杩滆窛闂ㄥ簵",
+    scatterSingle: "鍗曟尝娆″簵閾?,
+    noChartData: "褰撳墠娌℃湁瓒冲鏁版嵁鐢熸垚鍥惧舰銆?,
+    voiceBroadcast: "璇煶鎾姤",
+    voiceAsk: "璇煶鎻愰棶",
+    mascotTitle: "椴哥暐浣垮姪鎵?,
+    mascotDesc: "鐢ㄦ洿娓╁拰銆佹洿娓呮櫚鐨勬柟寮忔挱鎶ュ綋鍓嶈皟搴︽憳瑕佷笌椋庨櫓鎻愮ず銆?,
+    speechUnsupported: "褰撳墠娴忚鍣ㄤ笉鏀寔璇煶鎾姤銆?,
+    speechListenUnsupported: "褰撳墠娴忚鍣ㄤ笉鏀寔璇煶璇嗗埆銆?,
+    speechMicPreparing: "姝ｅ湪鐢宠楹﹀厠椋庢潈闄愶紝娴忚鍣ㄥ脊绐楄鐩存帴鐐瑰厑璁革紝鍏佽鍚庝細绔嬪埢寮€濮嬫敹闊炽€?,
+    speechMicDenied: "楹﹀厠椋庢潈闄愭湭寮€鍚紝璇峰湪娴忚鍣ㄥ湴鍧€鏍忛噷鍏佽楹﹀厠椋庡悗鍐嶈瘯銆?,
+    speechMicFailed: "楹﹀厠椋庡垵濮嬪寲澶辫触锛岃妫€鏌ユ祻瑙堝櫒鏄惁鍏佽褰撳墠椤甸潰浣跨敤楹﹀厠椋庛€?,
+    speechListening: "姝ｅ湪鍚紝璇风洿鎺ユ彁闂€?,
+    speechHeard: "宸插惉鍒帮細{text}",
+    speechAnswerPrefix: "鏁板瓧鍔╃悊鍥炵瓟锛?,
     deepseekKeyLabel: "DeepSeek Key",
-    deepseekModelLabel: "DeepSeek模型",
-    deepseekModeLabel: "助手模式",
-    deepseekModeDispatch: "调度助手",
-    deepseekModeGeneral: "通用助手",
-    deepseekStyleLabel: "回答风格",
-    deepseekStyleBrief: "简洁回答",
-    deepseekStyleDetailed: "详细分析",
-    deepseekSave: "保存DeepSeek配置",
-    deepseekAsk: "问DeepSeek",
-    deepseekAskPlaceholder: "例如：为什么这次 W2 用车偏多？还能怎么优化？",
-    deepseekSaved: "DeepSeek 配置已保存在当前浏览器。",
-    deepseekMissingKey: "请先填入 DeepSeek API Key。",
-    deepseekThinking: "DeepSeek 正在结合当前调度结果思考…",
-    deepseekFailed: "DeepSeek 调用失败：{message}",
-    deepseekReady: "DeepSeek 已接入当前页面，可直接文字提问或配合语音提问。",
-    deepseekLocalFallback: "当前未配置 DeepSeek，仍使用本地按钮助手回答。",
-    deepseekAnswerPrefix: "DeepSeek回答：",
-    exportNoResult: "当前还没有可导出的调度结果。",
-    exportDone: "已导出当前调度结果。",
-    exportFilePrefix: "调度结果",
-    solveStrategy: "求解策略",
-    optimizeGoal: "优化目标",
-    strategyManual: "手动勾选",
-    strategyQuick: "快速初排",
-    strategyDeep: "深度优化",
-    strategyGlobal: "全局搜索",
-    strategyRelay: "接力求解",
-    strategyFree: "自由求解",
-    strategyCompare: "多算法对比",
-    goalBalanced: "综合平衡",
-    goalOnTime: "准点优先",
-    goalDistance: "里程优先",
-    goalVehicles: "最少用车",
-    goalLoad: "装载优先",
-    quickSolve: "快速初排",
-    deepOptimize: "继续优化",
-    globalSearch: "全局搜索",
-    relaySolve: "接力求解",
-    freeSolve: "自由求解",
-    multiCompare: "多算法对比",
-    gaBackendChecking: "GA后台：检查中…",
-    gaBackendOnline: "GA后台：已连通（Python）",
-    gaBackendOffline: "GA后台：未连通（需先恢复后端）",
+    deepseekModelLabel: "DeepSeek妯″瀷",
+    deepseekModeLabel: "鍔╂墜妯″紡",
+    deepseekModeDispatch: "璋冨害鍔╂墜",
+    deepseekModeGeneral: "閫氱敤鍔╂墜",
+    deepseekStyleLabel: "鍥炵瓟椋庢牸",
+    deepseekStyleBrief: "绠€娲佸洖绛?,
+    deepseekStyleDetailed: "璇︾粏鍒嗘瀽",
+    deepseekSave: "淇濆瓨DeepSeek閰嶇疆",
+    deepseekAsk: "闂瓺eepSeek",
+    deepseekAskPlaceholder: "渚嬪锛氫负浠€涔堣繖娆?W2 鐢ㄨ溅鍋忓锛熻繕鑳芥€庝箞浼樺寲锛?,
+    deepseekSaved: "DeepSeek 閰嶇疆宸蹭繚瀛樺湪褰撳墠娴忚鍣ㄣ€?,
+    deepseekMissingKey: "璇峰厛濉叆 DeepSeek API Key銆?,
+    deepseekThinking: "DeepSeek 姝ｅ湪缁撳悎褰撳墠璋冨害缁撴灉鎬濊€冣€?,
+    deepseekFailed: "DeepSeek 璋冪敤澶辫触锛歿message}",
+    deepseekReady: "DeepSeek 宸叉帴鍏ュ綋鍓嶉〉闈紝鍙洿鎺ユ枃瀛楁彁闂垨閰嶅悎璇煶鎻愰棶銆?,
+    deepseekLocalFallback: "褰撳墠鏈厤缃?DeepSeek锛屼粛浣跨敤鏈湴鎸夐挳鍔╂墜鍥炵瓟銆?,
+    deepseekAnswerPrefix: "DeepSeek鍥炵瓟锛?,
+    exportNoResult: "褰撳墠杩樻病鏈夊彲瀵煎嚭鐨勮皟搴︾粨鏋溿€?,
+    exportDone: "宸插鍑哄綋鍓嶈皟搴︾粨鏋溿€?,
+    exportFilePrefix: "璋冨害缁撴灉",
+    solveStrategy: "姹傝В绛栫暐",
+    optimizeGoal: "浼樺寲鐩爣",
+    strategyManual: "鎵嬪姩鍕鹃€?,
+    strategyQuick: "蹇€熷垵鎺?,
+    strategyDeep: "娣卞害浼樺寲",
+    strategyGlobal: "鍏ㄥ眬鎼滅储",
+    strategyRelay: "鎺ュ姏姹傝В",
+    strategyFree: "鑷敱姹傝В",
+    strategyCompare: "澶氱畻娉曞姣?,
+    goalBalanced: "缁煎悎骞宠　",
+    goalOnTime: "鍑嗙偣浼樺厛",
+    goalDistance: "閲岀▼浼樺厛",
+    goalVehicles: "鏈€灏戠敤杞?,
+    goalLoad: "瑁呰浇浼樺厛",
+    quickSolve: "蹇€熷垵鎺?,
+    deepOptimize: "缁х画浼樺寲",
+    globalSearch: "鍏ㄥ眬鎼滅储",
+    relaySolve: "鎺ュ姏姹傝В",
+    freeSolve: "鑷敱姹傝В",
+    multiCompare: "澶氱畻娉曞姣?,
+    gaBackendChecking: "GA鍚庡彴锛氭鏌ヤ腑鈥?,
+    gaBackendOnline: "GA鍚庡彴锛氬凡杩為€氾紙Python锛?,
+    gaBackendOffline: "GA鍚庡彴锛氭湭杩為€氾紙闇€鍏堟仮澶嶅悗绔級",
   },
   ja: {
-    showcase: "システム紹介", reload: "固定店舗を再読込", save: "現在の案を保存", exportResult: "現在結果を出力",
-    storeInfo: "店舗情報", vehicleInfo: "車両情報", waveConfig: "波次設定", algoRun: "アルゴリズム実行", result: "配送結果", saved: "保存済み案",
-    storeDesc: "店舗データはシステムに内蔵されており、基本属性を直接編集できます。", vehicleDesc: "車両は TXT 取込にも手入力にも対応します。", waveDesc: "配送波次、各波次の開始終了時間、対象店舗番号を定義します。", algoDesc: "単独案生成にも、複数アルゴリズム比較にも対応します。最低積載率はハード制約ではなく優先度として扱います。", resultDesc: "店舗ルート、距離、配送過程、手動車両調整を表示します。", savedDesc: "案は現在のブラウザに保存され、履歴として参照できます。",
-    foldStore: "店舗明細を折りたたむ", unfoldStore: "店舗明細を展開", foldVehicle: "車両明細を折りたたむ", unfoldVehicle: "車両明細を展開",
-    addStore: "店舗追加", addVehicle: "車両追加", addWave: "波次追加",
-    dispatchStart: "初回出発時刻", maxKm: "車両往復総距離上限（km）", minLoad: "車両最低積載率（%）", ignoreWaves: "波次を無視", autoWave: "固定店舗で自動波次分割", concentrateLate: "遅着ラインを集中",
-    targetScore: "目標スコア下限",
-    singleWaveDistance: "単独波次距離しきい値（km）", singleWaveStart: "単独波次開始", singleWaveEnd: "単独波次終了", singleWaveMode: "単独波次締切ルール",
-    returnEnd: "帰庫締切", serviceEnd: "最終店完了締切", generate: "配送結果を生成", close: "閉じる",
-    processTitle: "配送過程の可視化", showcaseTitle: "システム能力の総覧",
-    storeTableHeaders: ["番号", "名称", "エリア", "経度", "緯度", "配送回数", "一波次貨量", "二波次貨量", "冷蔵比率", "一配時刻", "二配時刻", "所属波次", "荷下ろし分", "難易度", "許容偏差(分)", "状態", "車番", ""],
-    vehicleTableHeaders: ["車番", "運転手名", "車種", "容量", "速度", "冷蔵可", "状態", ""],
-    waveTableHeaders: ["波次", "開始", "終了", "締切ルール", "対象店舗", ""],
-    used: "配車済み", idle: "待機", scheduled: "割当済み", unscheduled: "未割当", assignedVehicle: "担当車番",
-    chooseFile: "ファイル選択",
-    noFileChosen: "未選択",
-    allDay: "終日一括配送", route: "ルート", totalDistance: "総距離", avgLoad: "平均単便積載率", fleetLoad: "車隊稼働率", fleetLoadHint: "使用車両容量ベース換算。複数便時は100%超もあります", score: "総合スコア", onTime: "時間内率",
-    detail: "明細", viewViz: "可視化を見る", adjustTo: "移動先車両...", confirmAdjust: "調整確定", noOtherVehicle: "この波次では他に引受車両がありません",
-    inserted: "手動挿入", leg: "区間", arrive: "到着", unloadStart: "荷下ろし開始", leave: "出発", desired: "希望到着", unloadMinutes: "荷下ろし", minutes: "分", notLate: "時間内", late: "時間窓超過",
-    storesCount: "店舗数", totalLoad: "累計積載", maxTrip: "単趟最大", trips: "便数", totalRoundKm: "往復総距離", loadPreferredMet: "積載優先達成", loadPreferredMiss: "積載優先未達",
-    tripNo: "第", tripSuffix: "便", returnTime: "帰庫時刻", backDistance: "帰庫距離", tripRoundKm: "単便往復距離", tripLoadRate: "単便積載率", overWave: "波次超過",
-    generatedSingle: "配送案を生成しました。", generatedCompare: "複数アルゴリズム比較を生成しました。", savedEmpty: "まだ保存済み案はありません。",
-    multiStoreDaily: "多店舗単日複数回配送調度",
-    targetAchieved: "目標スコア達成",
-    targetMissed: "目標スコア未達",
-    noVehicles: "先に車両情報を入力または取込してください。",
-    noStores: "現在、固定店舗データがありません。",
-    noWaves: "少なくとも 1 つの波次を設定してください。",
-    regularMissing: "通常波次で未割当の店舗が {count} 件あります：{names}",
-    unscheduledStores: "未割当店舗",
-    scheduledStores: "割当済店舗",
-    hardArrivalHint: "到着要求時刻は強制約で扱い、許容偏差を超える店舗は未割当に回します。",
-      lateFocusHint: "遅着ライン集中戦略を有効化しています。遅着が発生する車線数を優先的に抑えます。",
-      noUnscheduled: "全店舗を割り当て済みです。",
-      unscheduledSummary: "現在、未割当店舗が {count} 件あります：{names}",
-    unscheduledReasonArrival: "到着要求時刻の許容偏差に収まりません",
-      unscheduledReasonWave: "波次の締切時間が不足しています",
-      unscheduledReasonMileage: "距離制約が不足しています",
-      unscheduledReasonCapacity: "車両容量が不足しています",
-      unscheduledReasonSlot: "既存車両の時系列に挿入余地がありません",
-      unscheduledReasonMixed: "複数制約が重なり、現在は挿入できません",
-      unscheduledReasonTitle: "未割当理由",
-      unscheduledDetails: "未割当明細",
-      importedVehicles: "{count} 台の車両を取込しました。",
-    importVehicleFailed: "車両 TXT から有効な車番を解析できませんでした。文字コードまたは 1 行 1 台の形式を確認してください。",
-    autoWaveBuilt: "固定店舗に基づき {count} 個の波次を自動生成しました。",
-    chooseDifferentVehicle: "異なる目標車両を選択してください。",
-    storeNotOnVehicle: "{plate} 上に店舗 {store} が見つかりません。",
-    transferFailed: "店舗 {store} を {source} から {target} へ移せません。時間・距離・容量を確認してください。",
-    transferSuccess: "店舗 {store} を {source} から {target} に移し、この 2 台のみ再計算しました。",
-    rescheduleAgain: "再割当",
-    saveScheduledResult: "現在結果を保存",
-    rescheduleSection: "未割当店舗の再割当",
-    rescheduleHint: "既存の割当ルートを保持しつつ、空き車両を優先して未割当店舗を追加で割り当てます。",
-    exportLiveUnscheduled: "現在の未割当IDを出力",
-    unscheduledMismatch: "集計不一致：再割当パネル={panel}、明細フィルタ={detail}。この結果の利用を停止して報告してください。",
-    manualAssignVehicle: "手動で車番指定",
-    manualAssignPlaceholder: "車番を指定...",
-    confirmAssign: "指定割当",
-    rescheduleProgress: "今回の再割当で {count} 店舗を追加で割り当てました。",
-    rescheduleNoProgress: "今回の再割当では追加割当がありませんでした。",
-    noAssignableVehicle: "現在、再割当に使える車両がありません。",
-    assignFailed: "店舗 {store} を {plate} に指定できませんでした。時間・距離・容量を確認してください。",
-    assignSuccess: "店舗 {store} を {plate} に指定し、局所再計算を完了しました。",
-    savedAt: "保存時刻",
-    wavesLabel: "波次",
-    waveModeReturn: "車両は {time} までに帰庫する必要があります",
-    waveModeService: "車両は {time} までに最終店舗を完了する必要があります",
-    waveSingleHint: "このグループは単独波次として別処理され、1 台 1 便のみです",
-    waveRegularHint: "通常波次はこの時間制約をハード適用します",
-    includedStores: "対象店舗",
-    allStores: "全店舗",
-    overtimeTrips: "波次超過ライン",
-    playback: "リプレイ",
-    selectedAlgorithms: "現在有効なアルゴリズム",
-    noneSelected: "未選択",
-    staticMap: "静的エリアマップ",
-    routeLegend: "ルート凡例",
-    depot: "倉庫",
-    viewMap: "地図を見る",
-    routeMap: "ルート図",
-    routeMapHint: "現在の訪問順で地図上にルートを描き、高德の走行ルートキャッシュを優先的に利用します。",
-    routeStopSeq: "順番",
-    routePlanArrival: "予定到店",
-    routeDesiredArrival: "希望到店",
-    routeStopName: "店舗",
-    analyticsTitle: "デジタルダッシュボード",
-    analyticsDesc: "配車効率、アルゴリズム差、波次負荷、エリア分布をグラフで確認できます。",
-    dashboard: "主要指標",
-    algoCompare: "アルゴリズム比較",
-    gantt: "波次タイムライン",
-    loadCurve: "車両積載推移",
-    spatial: "エリア分布",
-    progressTitle: "生成進捗",
-    storesToday: "本日店舗",
-    usedVehiclesShort: "使用車",
-    idleVehiclesShort: "待機車",
-    overtimeTripsShort: "超時ライン",
-    routeDigest: "ルート要約",
-    routeDigestHint: "各ルートの店舗数・総距離・積載率を並べて、その場で構造差を見比べられます。",
-    algorithmScore: "アルゴリズム得点",
-    scoreBreakdownTitle: "スコア内訳",
-    onTimeScore: "定時得点",
-    distanceScoreLabel: "距離得点",
-    loadScoreLabel: "積載得点",
-    preferenceScoreLabel: "嗜好得点",
-    progressIdle: "案の生成待機中です",
-    progressPreparing: "店舗・車両・波次制約を整理しています…",
-    progressRunning: "{algo} を実行しています…",
-    progressFinishing: "図形ダッシュボードを集計しています…",
-    progressDone: "ダッシュボードを更新しました",
-    tripLabel: "便",
-    singleWaveLabel: "単独波次",
-    regularWaveLabel: "通常波次",
-    loadAxis: "積載率",
-    timeAxis: "時間",
-    scatterNear: "近距離店舗",
-    scatterFar: "遠距離店舗",
-    scatterSingle: "単独波次店舗",
-    noChartData: "現在、図形を生成するための十分なデータがありません。",
-    voiceBroadcast: "音声ブリーフィング",
-    voiceAsk: "音声質問",
-    mascotTitle: "鯨略使アシスタント",
-    mascotDesc: "現在の調度状況と注意点を、やわらかく分かりやすく案内します。",
-    speechUnsupported: "このブラウザでは音声読み上げに対応していません。",
-    speechListenUnsupported: "このブラウザでは音声認識に対応していません。",
-    speechMicPreparing: "マイク権限を申請中です。ブラウザのポップアップで許可すると、そのまま音声受付を開始します。",
-    speechMicDenied: "マイク権限が無効です。ブラウザのアドレスバーでマイクを許可してから再試行してください。",
-    speechMicFailed: "マイクの初期化に失敗しました。ブラウザでこのページのマイク利用が許可されているか確認してください。",
-    speechListening: "質問を聞いています。続けて話してください。",
-    speechHeard: "聞き取った内容：{text}",
-    speechAnswerPrefix: "デジタル助手の回答：",
+    showcase: "銈枫偣銉嗐儬绱逛粙", reload: "鍥哄畾搴楄垪銈掑啀瑾炯", save: "鐝惧湪銇銈掍繚瀛?, exportResult: "鐝惧湪绲愭灉銈掑嚭鍔?,
+    storeInfo: "搴楄垪鎯呭牨", vehicleInfo: "杌婁浮鎯呭牨", waveConfig: "娉㈡瑷畾", algoRun: "銈儷銈淬儶銈恒儬瀹熻", result: "閰嶉€佺祼鏋?, saved: "淇濆瓨娓堛伩妗?,
+    storeDesc: "搴楄垪銉囥兗銈裤伅銈枫偣銉嗐儬銇唴钄点仌銈屻仸銇娿倞銆佸熀鏈睘鎬с倰鐩存帴绶ㄩ泦銇с亶銇俱仚銆?, vehicleDesc: "杌婁浮銇?TXT 鍙栬炯銇倐鎵嬪叆鍔涖伀銈傚蹇溿仐銇俱仚銆?, waveDesc: "閰嶉€佹尝娆°€佸悇娉㈡銇枊濮嬬祩浜嗘檪闁撱€佸璞″簵鑸楃暘鍙枫倰瀹氱京銇椼伨銇欍€?, algoDesc: "鍗樼嫭妗堢敓鎴愩伀銈傘€佽鏁般偄銉偞銉偤銉犳瘮杓冦伀銈傚蹇溿仐銇俱仚銆傛渶浣庣杓夌巼銇儚銉笺儔鍒剁磩銇с伅銇亸鍎厛搴︺仺銇椼仸鎵便亜銇俱仚銆?, resultDesc: "搴楄垪銉兗銉堛€佽窛闆€侀厤閫侀亷绋嬨€佹墜鍕曡粖涓¤鏁淬倰琛ㄧず銇椼伨銇欍€?, savedDesc: "妗堛伅鐝惧湪銇儢銉┿偊銈躲伀淇濆瓨銇曘倢銆佸饱姝淬仺銇椼仸鍙傜収銇с亶銇俱仚銆?,
+    foldStore: "搴楄垪鏄庣窗銈掓姌銈娿仧銇熴個", unfoldStore: "搴楄垪鏄庣窗銈掑睍闁?, foldVehicle: "杌婁浮鏄庣窗銈掓姌銈娿仧銇熴個", unfoldVehicle: "杌婁浮鏄庣窗銈掑睍闁?,
+    addStore: "搴楄垪杩藉姞", addVehicle: "杌婁浮杩藉姞", addWave: "娉㈡杩藉姞",
+    dispatchStart: "鍒濆洖鍑虹櫤鏅傚埢", maxKm: "杌婁浮寰€寰╃窂璺濋洟涓婇檺锛坘m锛?, minLoad: "杌婁浮鏈€浣庣杓夌巼锛?锛?, ignoreWaves: "娉㈡銈掔劇瑕?, autoWave: "鍥哄畾搴楄垪銇ц嚜鍕曟尝娆″垎鍓?, concentrateLate: "閬呯潃銉┿偆銉炽倰闆嗕腑",
+    targetScore: "鐩銈广偝銈笅闄?,
+    singleWaveDistance: "鍗樼嫭娉㈡璺濋洟銇椼亶銇勫€わ紙km锛?, singleWaveStart: "鍗樼嫭娉㈡闁嬪", singleWaveEnd: "鍗樼嫭娉㈡绲備簡", singleWaveMode: "鍗樼嫭娉㈡绶犲垏銉兗銉?,
+    returnEnd: "甯板韩绶犲垏", serviceEnd: "鏈€绲傚簵瀹屼簡绶犲垏", generate: "閰嶉€佺祼鏋溿倰鐢熸垚", close: "闁夈仒銈?,
+    processTitle: "閰嶉€侀亷绋嬨伄鍙鍖?, showcaseTitle: "銈枫偣銉嗐儬鑳藉姏銇窂瑕?,
+    storeTableHeaders: ["鐣彿", "鍚嶇О", "銈ㄣ儶銈?, "绲屽害", "绶害", "閰嶉€佸洖鏁?, "涓€娉㈡璨ㄩ噺", "浜屾尝娆¤波閲?, "鍐疯數姣旂巼", "涓€閰嶆檪鍒?, "浜岄厤鏅傚埢", "鎵€灞炴尝娆?, "鑽蜂笅銈嶃仐鍒?, "闆ｆ槗搴?, "瑷卞鍋忓樊(鍒?", "鐘舵厠", "杌婄暘", ""],
+    vehicleTableHeaders: ["杌婄暘", "閬嬭虎鎵嬪悕", "杌婄ó", "瀹归噺", "閫熷害", "鍐疯數鍙?, "鐘舵厠", ""],
+    waveTableHeaders: ["娉㈡", "闁嬪", "绲備簡", "绶犲垏銉兗銉?, "瀵捐薄搴楄垪", ""],
+    used: "閰嶈粖娓堛伩", idle: "寰呮", scheduled: "鍓插綋娓堛伩", unscheduled: "鏈壊褰?, assignedVehicle: "鎷呭綋杌婄暘",
+    chooseFile: "銉曘偂銈ゃ儷閬告姙",
+    noFileChosen: "鏈伕鎶?,
+    allDay: "绲傛棩涓€鎷厤閫?, route: "銉兗銉?, totalDistance: "绶忚窛闆?, avgLoad: "骞冲潎鍗樹究绌嶈級鐜?, fleetLoad: "杌婇殜绋煎儘鐜?, fleetLoadHint: "浣跨敤杌婁浮瀹归噺銉欍兗銈规彌绠椼€傝鏁颁究鏅傘伅100%瓒呫倐銇傘倞銇俱仚", score: "绶忓悎銈广偝銈?, onTime: "鏅傞枔鍐呯巼",
+    detail: "鏄庣窗", viewViz: "鍙鍖栥倰瑕嬨倠", adjustTo: "绉诲嫊鍏堣粖涓?..", confirmAdjust: "瑾挎暣纰哄畾", noOtherVehicle: "銇撱伄娉㈡銇с伅浠栥伀寮曞彈杌婁浮銇屻亗銈娿伨銇涖倱",
+    inserted: "鎵嬪嫊鎸垮叆", leg: "鍖洪枔", arrive: "鍒扮潃", unloadStart: "鑽蜂笅銈嶃仐闁嬪", leave: "鍑虹櫤", desired: "甯屾湜鍒扮潃", unloadMinutes: "鑽蜂笅銈嶃仐", minutes: "鍒?, notLate: "鏅傞枔鍐?, late: "鏅傞枔绐撹秴閬?,
+    storesCount: "搴楄垪鏁?, totalLoad: "绱▓绌嶈級", maxTrip: "鍗樿稛鏈€澶?, trips: "渚挎暟", totalRoundKm: "寰€寰╃窂璺濋洟", loadPreferredMet: "绌嶈級鍎厛閬旀垚", loadPreferredMiss: "绌嶈級鍎厛鏈仈",
+    tripNo: "绗?, tripSuffix: "渚?, returnTime: "甯板韩鏅傚埢", backDistance: "甯板韩璺濋洟", tripRoundKm: "鍗樹究寰€寰╄窛闆?, tripLoadRate: "鍗樹究绌嶈級鐜?, overWave: "娉㈡瓒呴亷",
+    generatedSingle: "閰嶉€佹銈掔敓鎴愩仐銇俱仐銇熴€?, generatedCompare: "瑜囨暟銈儷銈淬儶銈恒儬姣旇純銈掔敓鎴愩仐銇俱仐銇熴€?, savedEmpty: "銇俱仩淇濆瓨娓堛伩妗堛伅銇傘倞銇俱仜銈撱€?,
+    multiStoreDaily: "澶氬簵鑸楀崢鏃ヨ鏁板洖閰嶉€佽搴?,
+    targetAchieved: "鐩銈广偝銈㈤仈鎴?,
+    targetMissed: "鐩銈广偝銈㈡湭閬?,
+    noVehicles: "鍏堛伀杌婁浮鎯呭牨銈掑叆鍔涖伨銇熴伅鍙栬炯銇椼仸銇忋仩銇曘亜銆?,
+    noStores: "鐝惧湪銆佸浐瀹氬簵鑸椼儑銉笺偪銇屻亗銈娿伨銇涖倱銆?,
+    noWaves: "灏戙仾銇忋仺銈?1 銇ゃ伄娉㈡銈掕ō瀹氥仐銇︺亸銇犮仌銇勩€?,
+    regularMissing: "閫氬父娉㈡銇ф湭鍓插綋銇簵鑸椼亴 {count} 浠躲亗銈娿伨銇欙細{names}",
+    unscheduledStores: "鏈壊褰撳簵鑸?,
+    scheduledStores: "鍓插綋娓堝簵鑸?,
+    hardArrivalHint: "鍒扮潃瑕佹眰鏅傚埢銇挤鍒剁磩銇ф壉銇勩€佽ū瀹瑰亸宸倰瓒呫亪銈嬪簵鑸椼伅鏈壊褰撱伀鍥炪仐銇俱仚銆?,
+      lateFocusHint: "閬呯潃銉┿偆銉抽泦涓垿鐣ャ倰鏈夊姽鍖栥仐銇︺亜銇俱仚銆傞亝鐫€銇岀櫤鐢熴仚銈嬭粖绶氭暟銈掑劒鍏堢殑銇姂銇堛伨銇欍€?,
+      noUnscheduled: "鍏ㄥ簵鑸椼倰鍓层倞褰撱仸娓堛伩銇с仚銆?,
+      unscheduledSummary: "鐝惧湪銆佹湭鍓插綋搴楄垪銇?{count} 浠躲亗銈娿伨銇欙細{names}",
+    unscheduledReasonArrival: "鍒扮潃瑕佹眰鏅傚埢銇ū瀹瑰亸宸伀鍙庛伨銈娿伨銇涖倱",
+      unscheduledReasonWave: "娉㈡銇窢鍒囨檪闁撱亴涓嶈冻銇椼仸銇勩伨銇?,
+      unscheduledReasonMileage: "璺濋洟鍒剁磩銇屼笉瓒炽仐銇︺亜銇俱仚",
+      unscheduledReasonCapacity: "杌婁浮瀹归噺銇屼笉瓒炽仐銇︺亜銇俱仚",
+      unscheduledReasonSlot: "鏃㈠瓨杌婁浮銇檪绯诲垪銇尶鍏ヤ綑鍦般亴銇傘倞銇俱仜銈?,
+      unscheduledReasonMixed: "瑜囨暟鍒剁磩銇岄噸銇倞銆佺従鍦ㄣ伅鎸垮叆銇с亶銇俱仜銈?,
+      unscheduledReasonTitle: "鏈壊褰撶悊鐢?,
+      unscheduledDetails: "鏈壊褰撴槑绱?,
+      importedVehicles: "{count} 鍙般伄杌婁浮銈掑彇杈笺仐銇俱仐銇熴€?,
+    importVehicleFailed: "杌婁浮 TXT 銇嬨倝鏈夊姽銇粖鐣倰瑙ｆ瀽銇с亶銇俱仜銈撱仹銇椼仧銆傛枃瀛椼偝銉笺儔銇俱仧銇?1 琛?1 鍙般伄褰㈠紡銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€?,
+    autoWaveBuilt: "鍥哄畾搴楄垪銇熀銇ャ亶 {count} 鍊嬨伄娉㈡銈掕嚜鍕曠敓鎴愩仐銇俱仐銇熴€?,
+    chooseDifferentVehicle: "鐣般仾銈嬬洰妯欒粖涓°倰閬告姙銇椼仸銇忋仩銇曘亜銆?,
+    storeNotOnVehicle: "{plate} 涓娿伀搴楄垪 {store} 銇岃銇ゃ亱銈娿伨銇涖倱銆?,
+    transferFailed: "搴楄垪 {store} 銈?{source} 銇嬨倝 {target} 銇哥Щ銇涖伨銇涖倱銆傛檪闁撱兓璺濋洟銉诲閲忋倰纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
+    transferSuccess: "搴楄垪 {store} 銈?{source} 銇嬨倝 {target} 銇Щ銇椼€併亾銇?2 鍙般伄銇垮啀瑷堢畻銇椼伨銇椼仧銆?,
+    rescheduleAgain: "鍐嶅壊褰?,
+    saveScheduledResult: "鐝惧湪绲愭灉銈掍繚瀛?,
+    rescheduleSection: "鏈壊褰撳簵鑸椼伄鍐嶅壊褰?,
+    rescheduleHint: "鏃㈠瓨銇壊褰撱儷銉笺儓銈掍繚鎸併仐銇ゃ仱銆佺┖銇嶈粖涓°倰鍎厛銇椼仸鏈壊褰撳簵鑸椼倰杩藉姞銇у壊銈婂綋銇︺伨銇欍€?,
+    exportLiveUnscheduled: "鐝惧湪銇湭鍓插綋ID銈掑嚭鍔?,
+    unscheduledMismatch: "闆嗚▓涓嶄竴鑷达細鍐嶅壊褰撱儜銉嶃儷={panel}銆佹槑绱般儠銈ｃ儷銈?{detail}銆傘亾銇祼鏋溿伄鍒╃敤銈掑仠姝仐銇﹀牨鍛娿仐銇︺亸銇犮仌銇勩€?,
+    manualAssignVehicle: "鎵嬪嫊銇ц粖鐣寚瀹?,
+    manualAssignPlaceholder: "杌婄暘銈掓寚瀹?..",
+    confirmAssign: "鎸囧畾鍓插綋",
+    rescheduleProgress: "浠婂洖銇啀鍓插綋銇?{count} 搴楄垪銈掕拷鍔犮仹鍓层倞褰撱仸銇俱仐銇熴€?,
+    rescheduleNoProgress: "浠婂洖銇啀鍓插綋銇с伅杩藉姞鍓插綋銇屻亗銈娿伨銇涖倱銇с仐銇熴€?,
+    noAssignableVehicle: "鐝惧湪銆佸啀鍓插綋銇娇銇堛倠杌婁浮銇屻亗銈娿伨銇涖倱銆?,
+    assignFailed: "搴楄垪 {store} 銈?{plate} 銇寚瀹氥仹銇嶃伨銇涖倱銇с仐銇熴€傛檪闁撱兓璺濋洟銉诲閲忋倰纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
+    assignSuccess: "搴楄垪 {store} 銈?{plate} 銇寚瀹氥仐銆佸眬鎵€鍐嶈▓绠椼倰瀹屼簡銇椼伨銇椼仧銆?,
+    savedAt: "淇濆瓨鏅傚埢",
+    wavesLabel: "娉㈡",
+    waveModeReturn: "杌婁浮銇?{time} 銇俱仹銇赴搴仚銈嬪繀瑕併亴銇傘倞銇俱仚",
+    waveModeService: "杌婁浮銇?{time} 銇俱仹銇渶绲傚簵鑸椼倰瀹屼簡銇欍倠蹇呰銇屻亗銈娿伨銇?,
+    waveSingleHint: "銇撱伄銈般儷銉笺儣銇崢鐙尝娆°仺銇椼仸鍒ュ嚘鐞嗐仌銈屻€? 鍙?1 渚裤伄銇裤仹銇?,
+    waveRegularHint: "閫氬父娉㈡銇亾銇檪闁撳埗绱勩倰銉忋兗銉夐仼鐢ㄣ仐銇俱仚",
+    includedStores: "瀵捐薄搴楄垪",
+    allStores: "鍏ㄥ簵鑸?,
+    overtimeTrips: "娉㈡瓒呴亷銉┿偆銉?,
+    playback: "銉儣銉偆",
+    selectedAlgorithms: "鐝惧湪鏈夊姽銇偄銉偞銉偤銉?,
+    noneSelected: "鏈伕鎶?,
+    staticMap: "闈欑殑銈ㄣ儶銈優銉冦儣",
+    routeLegend: "銉兗銉堝嚒渚?,
+    depot: "鍊夊韩",
+    viewMap: "鍦板洺銈掕銈?,
+    routeMap: "銉兗銉堝洺",
+    routeMapHint: "鐝惧湪銇í鍟忛爢銇у湴鍥充笂銇儷銉笺儓銈掓弿銇嶃€侀珮寰枫伄璧拌銉兗銉堛偔銉ｃ儍銈枫儱銈掑劒鍏堢殑銇埄鐢ㄣ仐銇俱仚銆?,
+    routeStopSeq: "闋嗙暘",
+    routePlanArrival: "浜堝畾鍒板簵",
+    routeDesiredArrival: "甯屾湜鍒板簵",
+    routeStopName: "搴楄垪",
+    analyticsTitle: "銉囥偢銈裤儷銉€銉冦偡銉ャ儨銉笺儔",
+    analyticsDesc: "閰嶈粖鍔圭巼銆併偄銉偞銉偤銉犲樊銆佹尝娆¤矤鑽枫€併偍銉偄鍒嗗竷銈掋偘銉┿儠銇х⒑瑾嶃仹銇嶃伨銇欍€?,
+    dashboard: "涓昏鎸囨",
+    algoCompare: "銈儷銈淬儶銈恒儬姣旇純",
+    gantt: "娉㈡銈裤偆銉犮儵銈ゃ兂",
+    loadCurve: "杌婁浮绌嶈級鎺ㄧЩ",
+    spatial: "銈ㄣ儶銈㈠垎甯?,
+    progressTitle: "鐢熸垚閫叉崡",
+    storesToday: "鏈棩搴楄垪",
+    usedVehiclesShort: "浣跨敤杌?,
+    idleVehiclesShort: "寰呮杌?,
+    overtimeTripsShort: "瓒呮檪銉┿偆銉?,
+    routeDigest: "銉兗銉堣绱?,
+    routeDigestHint: "鍚勩儷銉笺儓銇簵鑸楁暟銉荤窂璺濋洟銉荤杓夌巼銈掍甫銇广仸銆併仢銇牬銇ф閫犲樊銈掕姣斻伖銈夈倢銇俱仚銆?,
+    algorithmScore: "銈儷銈淬儶銈恒儬寰楃偣",
+    scoreBreakdownTitle: "銈广偝銈㈠唴瑷?,
+    onTimeScore: "瀹氭檪寰楃偣",
+    distanceScoreLabel: "璺濋洟寰楃偣",
+    loadScoreLabel: "绌嶈級寰楃偣",
+    preferenceScoreLabel: "鍡滃ソ寰楃偣",
+    progressIdle: "妗堛伄鐢熸垚寰呮涓仹銇?,
+    progressPreparing: "搴楄垪銉昏粖涓°兓娉㈡鍒剁磩銈掓暣鐞嗐仐銇︺亜銇俱仚鈥?,
+    progressRunning: "{algo} 銈掑疅琛屻仐銇︺亜銇俱仚鈥?,
+    progressFinishing: "鍥冲舰銉€銉冦偡銉ャ儨銉笺儔銈掗泦瑷堛仐銇︺亜銇俱仚鈥?,
+    progressDone: "銉€銉冦偡銉ャ儨銉笺儔銈掓洿鏂般仐銇俱仐銇?,
+    tripLabel: "渚?,
+    singleWaveLabel: "鍗樼嫭娉㈡",
+    regularWaveLabel: "閫氬父娉㈡",
+    loadAxis: "绌嶈級鐜?,
+    timeAxis: "鏅傞枔",
+    scatterNear: "杩戣窛闆㈠簵鑸?,
+    scatterFar: "閬犺窛闆㈠簵鑸?,
+    scatterSingle: "鍗樼嫭娉㈡搴楄垪",
+    noChartData: "鐝惧湪銆佸洺褰倰鐢熸垚銇欍倠銇熴倎銇崄鍒嗐仾銉囥兗銈裤亴銇傘倞銇俱仜銈撱€?,
+    voiceBroadcast: "闊冲０銉栥儶銉笺儠銈ｃ兂銈?,
+    voiceAsk: "闊冲０璩晱",
+    mascotTitle: "榀ㄧ暐浣裤偄銈枫偣銈裤兂銉?,
+    mascotDesc: "鐝惧湪銇搴︾姸娉併仺娉ㄦ剰鐐广倰銆併倓銈忋倝銇嬨亸鍒嗐亱銈娿倓銇欍亸妗堝唴銇椼伨銇欍€?,
+    speechUnsupported: "銇撱伄銉栥儵銈︺偠銇с伅闊冲０瑾伩涓娿亽銇蹇溿仐銇︺亜銇俱仜銈撱€?,
+    speechListenUnsupported: "銇撱伄銉栥儵銈︺偠銇с伅闊冲０瑾嶈瓨銇蹇溿仐銇︺亜銇俱仜銈撱€?,
+    speechMicPreparing: "銉炪偆銈ī闄愩倰鐢宠珛涓仹銇欍€傘儢銉┿偊銈躲伄銉濄儍銉椼偄銉冦儣銇цū鍙仚銈嬨仺銆併仢銇伨銇鹃煶澹板彈浠樸倰闁嬪銇椼伨銇欍€?,
+    speechMicDenied: "銉炪偆銈ī闄愩亴鐒″姽銇с仚銆傘儢銉┿偊銈躲伄銈儔銉偣銉愩兗銇с優銈ゃ偗銈掕ū鍙仐銇︺亱銈夊啀瑭﹁銇椼仸銇忋仩銇曘亜銆?,
+    speechMicFailed: "銉炪偆銈伄鍒濇湡鍖栥伀澶辨晽銇椼伨銇椼仧銆傘儢銉┿偊銈躲仹銇撱伄銉氥兗銈搞伄銉炪偆銈埄鐢ㄣ亴瑷卞彲銇曘倢銇︺亜銈嬨亱纰鸿獚銇椼仸銇忋仩銇曘亜銆?,
+    speechListening: "璩晱銈掕仦銇勩仸銇勩伨銇欍€傜稓銇戙仸瑭便仐銇︺亸銇犮仌銇勩€?,
+    speechHeard: "鑱炪亶鍙栥仯銇熷唴瀹癸細{text}",
+    speechAnswerPrefix: "銉囥偢銈裤儷鍔╂墜銇洖绛旓細",
     deepseekKeyLabel: "DeepSeek Key",
-    deepseekModelLabel: "DeepSeekモデル",
-    deepseekModeLabel: "助手モード",
-    deepseekModeDispatch: "配車助手",
-    deepseekModeGeneral: "汎用助手",
-    deepseekStyleLabel: "回答スタイル",
-    deepseekStyleBrief: "簡潔回答",
-    deepseekStyleDetailed: "詳細分析",
-    deepseekSave: "DeepSeek設定を保存",
-    deepseekAsk: "DeepSeekに質問",
-    deepseekAskPlaceholder: "例：今回の W2 で使用車両が多い理由と改善方向は？",
-    deepseekSaved: "DeepSeek 設定をこのブラウザに保存しました。",
-    deepseekMissingKey: "先に DeepSeek API Key を入力してください。",
-    deepseekThinking: "DeepSeek が現在の配車結果を踏まえて考えています…",
-    deepseekFailed: "DeepSeek 呼び出しに失敗しました：{message}",
-    deepseekReady: "DeepSeek がこの画面に接続されました。テキストでも音声でも質問できます。",
-    deepseekLocalFallback: "DeepSeek が未設定のため、現在はローカルのボタン助手で回答します。",
-    deepseekAnswerPrefix: "DeepSeek回答：",
-    exportNoResult: "現在、出力できる配送結果がありません。",
-    exportDone: "現在の配送結果を出力しました。",
-    exportFilePrefix: "配送結果",
-    solveStrategy: "解法モード",
-    optimizeGoal: "目標方針",
-    strategyManual: "手動選択",
-    strategyQuick: "クイック初期案",
-    strategyDeep: "継続改善",
-    strategyGlobal: "全域探索",
-    strategyRelay: "リレー最適化",
-    strategyFree: "自由求解",
-    strategyCompare: "複数案比較",
-    goalBalanced: "総合バランス",
-    goalOnTime: "定時最優先",
-    goalDistance: "距離最優先",
-    goalVehicles: "車両数最少",
-    goalLoad: "積載優先",
-    quickSolve: "クイック初期案",
-    deepOptimize: "継続改善",
-    globalSearch: "グローバル探索",
-    relaySolve: "リレー最適化",
-    freeSolve: "自由求解",
-    multiCompare: "複数案比較",
-    gaBackendChecking: "GAバックエンド：確認中…",
-    gaBackendOnline: "GAバックエンド：接続済み（Python）",
-    gaBackendOffline: "GAバックエンド：未接続（バックエンド復旧が必要）",
+    deepseekModelLabel: "DeepSeek銉儑銉?,
+    deepseekModeLabel: "鍔╂墜銉兗銉?,
+    deepseekModeDispatch: "閰嶈粖鍔╂墜",
+    deepseekModeGeneral: "姹庣敤鍔╂墜",
+    deepseekStyleLabel: "鍥炵瓟銈广偪銈ゃ儷",
+    deepseekStyleBrief: "绨℃綌鍥炵瓟",
+    deepseekStyleDetailed: "瑭崇窗鍒嗘瀽",
+    deepseekSave: "DeepSeek瑷畾銈掍繚瀛?,
+    deepseekAsk: "DeepSeek銇唱鍟?,
+    deepseekAskPlaceholder: "渚嬶細浠婂洖銇?W2 銇т娇鐢ㄨ粖涓°亴澶氥亜鐞嗙敱銇ㄦ敼鍠勬柟鍚戙伅锛?,
+    deepseekSaved: "DeepSeek 瑷畾銈掋亾銇儢銉┿偊銈躲伀淇濆瓨銇椼伨銇椼仧銆?,
+    deepseekMissingKey: "鍏堛伀 DeepSeek API Key 銈掑叆鍔涖仐銇︺亸銇犮仌銇勩€?,
+    deepseekThinking: "DeepSeek 銇岀従鍦ㄣ伄閰嶈粖绲愭灉銈掕笍銇俱亪銇﹁€冦亪銇︺亜銇俱仚鈥?,
+    deepseekFailed: "DeepSeek 鍛笺伋鍑恒仐銇け鏁椼仐銇俱仐銇燂細{message}",
+    deepseekReady: "DeepSeek 銇屻亾銇敾闈伀鎺ョ稓銇曘倢銇俱仐銇熴€傘儐銈偣銉堛仹銈傞煶澹般仹銈傝唱鍟忋仹銇嶃伨銇欍€?,
+    deepseekLocalFallback: "DeepSeek 銇屾湭瑷畾銇仧銈併€佺従鍦ㄣ伅銉兗銈儷銇儨銈裤兂鍔╂墜銇у洖绛斻仐銇俱仚銆?,
+    deepseekAnswerPrefix: "DeepSeek鍥炵瓟锛?,
+    exportNoResult: "鐝惧湪銆佸嚭鍔涖仹銇嶃倠閰嶉€佺祼鏋溿亴銇傘倞銇俱仜銈撱€?,
+    exportDone: "鐝惧湪銇厤閫佺祼鏋溿倰鍑哄姏銇椼伨銇椼仧銆?,
+    exportFilePrefix: "閰嶉€佺祼鏋?,
+    solveStrategy: "瑙ｆ硶銉兗銉?,
+    optimizeGoal: "鐩鏂归嚌",
+    strategyManual: "鎵嬪嫊閬告姙",
+    strategyQuick: "銈偆銉冦偗鍒濇湡妗?,
+    strategyDeep: "缍欑稓鏀瑰杽",
+    strategyGlobal: "鍏ㄥ煙鎺㈢储",
+    strategyRelay: "銉儸銉兼渶閬╁寲",
+    strategyFree: "鑷敱姹傝В",
+    strategyCompare: "瑜囨暟妗堟瘮杓?,
+    goalBalanced: "绶忓悎銉愩儵銉炽偣",
+    goalOnTime: "瀹氭檪鏈€鍎厛",
+    goalDistance: "璺濋洟鏈€鍎厛",
+    goalVehicles: "杌婁浮鏁版渶灏?,
+    goalLoad: "绌嶈級鍎厛",
+    quickSolve: "銈偆銉冦偗鍒濇湡妗?,
+    deepOptimize: "缍欑稓鏀瑰杽",
+    globalSearch: "銈般儹銉笺儛銉帰绱?,
+    relaySolve: "銉儸銉兼渶閬╁寲",
+    freeSolve: "鑷敱姹傝В",
+    multiCompare: "瑜囨暟妗堟瘮杓?,
+    gaBackendChecking: "GA銉愩儍銈偍銉炽儔锛氱⒑瑾嶄腑鈥?,
+    gaBackendOnline: "GA銉愩儍銈偍銉炽儔锛氭帴缍氭笀銇匡紙Python锛?,
+    gaBackendOffline: "GA銉愩儍銈偍銉炽儔锛氭湭鎺ョ稓锛堛儛銉冦偗銈ㄣ兂銉夊京鏃с亴蹇呰锛?,
   },
 };
 function L(key) { return UI_TEXT[lang()]?.[key] ?? key; }
@@ -640,13 +634,13 @@ function LT(key, vars = {}) {
 function vehicleTypeLabel(type) {
   if (lang() !== "ja") return type || "";
   const map = {
-    "常温车": "常温車",
-    "常温+冷藏混合车": "常温・冷蔵混合車",
+    "甯告俯杞?: "甯告俯杌?,
+    "甯告俯+鍐疯棌娣峰悎杞?: "甯告俯銉诲喎钄垫贩鍚堣粖",
   };
   return map[type] || type || "";
 }
 
-const DC = { id: "DC", name: "配送中心", address: "北京市顺义区天柱路20号", lng: 116.58848, lat: 40.04776 };
+const DC = { id: "DC", name: "閰嶉€佷腑蹇?, address: "鍖椾含甯傞『涔夊尯澶╂煴璺?0鍙?, lng: 116.58848, lat: 40.04776 };
 const MASCOT_IMAGE_SRC = "./assets/mascot-whale.png";
 const TRUCK_IMAGE_LOW = "assets/truck-30-v2.jpg";
 const TRUCK_IMAGE_MID = "assets/truck-60-v2.jpg";
@@ -823,217 +817,217 @@ function getTripTruckVisual(trip) {
   const rate = trip?.loadRate || 0;
   if (rate < 0.45) return {
     src: TRUCK_IMAGE_LOW,
-    badge: lang() === "ja" ? "赤字" : "亏了",
+    badge: lang() === "ja" ? "璧ゅ瓧" : "浜忎簡",
     cls: "low",
   };
   if (rate < 0.8) return {
     src: TRUCK_IMAGE_MID,
-    badge: lang() === "ja" ? "達標" : "达标",
+    badge: lang() === "ja" ? "閬旀" : "杈炬爣",
     cls: "mid",
   };
   return {
     src: TRUCK_IMAGE_HIGH,
-    badge: lang() === "ja" ? "盈利" : "赚了",
+    badge: lang() === "ja" ? "鐩堝埄" : "璧氫簡",
     cls: "high",
   };
 }
 
 const FIXED_STORES = [
-  ["391001","月坛北街",0.000000,0.000000,""],
-  ["391012","金融街",0.000000,0.000000,""],
-  ["391028","金融街中心",0.000000,0.000000,""],
-  ["391030","庄胜崇光",0.000000,0.000000,""],
-  ["391074","德胜国际中心",0.000000,0.000000,""],
-  ["391094","紫金印象",0.000000,0.000000,""],
-  ["391409","北京地铁鼓楼大街站店",0.000000,0.000000,""],
-  ["391705","北京怀柔城市客厅店",0.000000,0.000000,""],
-  ["391709","北京大钟寺广场店",0.000000,0.000000,""],
-  ["391712","北京金融科技学院店",0.000000,0.000000,""],
-  ["391715","石景山金隅科技大厦店",0.000000,0.000000,""],
-  ["391718","北京地铁12号线驼房营站店",0.000000,0.000000,""],
-  ["391721","北京丽泽平安金融中心店",0.000000,0.000000,""],
-  ["391722","鼎好电子大厦",0.000000,0.000000,""],
-  ["392029","富华大厦",0.000000,0.000000,""],
-  ["392084","南锣鼓巷地铁站",0.000000,0.000000,""],
-  ["392144","前门大街",0.000000,0.000000,""],
-  ["392179","东四北大街店",0.000000,0.000000,""],
-  ["392315","地铁和平里北街站店",0.000000,0.000000,""],
-  ["392394","北京地铁崇文门站店",0.000000,0.000000,""],
-  ["392395","北京地铁东四站店",0.000000,0.000000,""],
-  ["392408","北京地铁安德里北街站店",0.000000,0.000000,""],
-  ["392525","北京环球贸易中心店",0.000000,0.000000,""],
-  ["392647","北京泓晟国际中心",0.000000,0.000000,""],
-  ["392678","北京地铁雍和宫站店",0.000000,0.000000,""],
-  ["392707","北京地铁3号线朝阳站店",0.000000,0.000000,""],
-  ["392708","北京地铁3号线东坝站店",0.000000,0.000000,""],
-  ["392710","北京地铁3号线团结湖站店",0.000000,0.000000,""],
-  ["392712","北京恒毅大厦店",0.000000,0.000000,""],
-  ["392713","北京地铁什刹海站店",0.000000,0.000000,""],
-  ["392715","北京地铁欢乐谷站店",0.000000,0.000000,""],
-  ["392716","北京地铁角门西站店",0.000000,0.000000,""],
-  ["392717","北京地铁丰台站店",0.000000,0.000000,""],
-  ["392718","腾讯北京总部店",0.000000,0.000000,""],
-  ["392719","金隅智造工场店新店",0.000000,0.000000,""],
-  ["392720","朝阳高铁站店",0.000000,0.000000,""],
-  ["392721","延庆环球新意百货店",0.000000,0.000000,""],
-  ["392722","北京长楹天街店",0.000000,0.000000,""],
-  ["392723","北京四惠金地名京店",0.000000,0.000000,""],
-  ["393003","环球金融中心",0.000000,0.000000,""],
-  ["393009","民生大厦",0.000000,0.000000,""],
-  ["393010","双井首城国际",0.000000,0.000000,""],
-  ["393016","奥林匹克公园",0.000000,0.000000,""],
-  ["393032","长富宫",0.000000,0.000000,""],
-  ["393033","四方桥东北侧店",0.000000,0.000000,""],
-  ["393034","劲松海文大厦",0.000000,0.000000,""],
-  ["393035","管庄新天地",0.000000,0.000000,""],
-  ["393046","小天竺路",0.000000,0.000000,""],
-  ["393067","望京北望金辉大厦",0.000000,0.000000,""],
-  ["393082","兆泰国际中心",0.000000,0.000000,""],
-  ["393117","十里堡地铁站",0.000000,0.000000,""],
-  ["393151","首都机场T3二层到达区外",0.000000,0.000000,""],
-  ["393152","首都机场T3三层出发区东指廊",0.000000,0.000000,""],
-  ["393153","首都机场T3三层出发区西指廊",0.000000,0.000000,""],
-  ["393155","首都机场T3四层出发区外东",0.000000,0.000000,""],
-  ["393156","首都机场T3D出发区",0.000000,0.000000,""],
-  ["393167","奥林匹克森林公园（南园）店",0.000000,0.000000,""],
-  ["393168","奥林匹克森林公园（北园）店",0.000000,0.000000,""],
-  ["393188","发展大厦店",0.000000,0.000000,""],
-  ["393206","东亚望京中心店",0.000000,0.000000,""],
-  ["393220","梵石中心店",0.000000,0.000000,""],
-  ["393244","利星行中心店",0.000000,0.000000,""],
-  ["393303","利星行中心二店",0.000000,0.000000,""],
-  ["393380","光明大厦店",0.000000,0.000000,""],
-  ["393399","北京地铁草房站店",0.000000,0.000000,""],
-  ["393416","北京地铁六道口店",0.000000,0.000000,""],
-  ["393425","北京地铁西土城店",0.000000,0.000000,""],
-  ["393426","北京地铁望京西站店",0.000000,0.000000,""],
-  ["393546","北京浦项中心店",0.000000,0.000000,""],
-  ["393557","北京鸿懋商务大厦店",0.000000,0.000000,""],
-  ["393651","北京平安国际金融中心店",0.000000,0.000000,""],
-  ["393675","北京阿里巴巴总部店",0.000000,0.000000,""],
-  ["393688","北京广播大厦酒店店",0.000000,0.000000,""],
-  ["393706","古北水镇三号店",0.000000,0.000000,""],
-  ["393707","北京科技财富中心店",0.000000,0.000000,""],
-  ["393708","北京怀柔商业街店",0.000000,0.000000,""],
-  ["393709","京东总部2号院店",0.000000,0.000000,""],
-  ["393710","北京地铁潘家园站店",0.000000,0.000000,""],
-  ["393711","微软中国研发集团总部店",0.000000,0.000000,""],
-  ["393715","首都国际机场T3四层出发层外西",0.000000,0.000000,""],
-  ["393717","北京南站地铁层1店",0.000000,0.000000,""],
-  ["393718","北京南站出发层1店",0.000000,0.000000,""],
-  ["393720","昌平新新公寓店",0.000000,0.000000,""],
-  ["394024","融科资讯中心",0.000000,0.000000,""],
-  ["394038","联想新园区",0.000000,0.000000,""],
-  ["394048","海淀杏石口路",0.000000,0.000000,""],
-  ["394062","火器营地铁站",0.000000,0.000000,""],
-  ["394069","互联网创新中心",0.000000,0.000000,""],
-  ["394070","木荷路华为园区",0.000000,0.000000,""],
-  ["394072","超市发万柳",0.000000,0.000000,""],
-  ["394073","超市发花园路",0.000000,0.000000,""],
-  ["394075","超市发羊坊店",0.000000,0.000000,""],
-  ["394085","超市发甘家口",0.000000,0.000000,""],
-  ["394089","超市发上地",0.000000,0.000000,""],
-  ["394096","超市发农大",0.000000,0.000000,""],
-  ["394103","超市发科南路",0.000000,0.000000,""],
-  ["394104","超市发玉泉路",0.000000,0.000000,""],
-  ["394105","超市发西长安街",0.000000,0.000000,""],
-  ["394110","新浪总部大厦",0.000000,0.000000,""],
-  ["394112","超市发海淀大街",0.000000,0.000000,""],
-  ["394118","超市发学院路超罗",0.000000,0.000000,""],
-  ["394122","联想三标大厦",0.000000,0.000000,""],
-  ["394123","联想北研园楼大厦",0.000000,0.000000,""],
-  ["394142","超市发双榆树超罗",0.000000,0.000000,""],
-  ["394150","网易研发中心",0.000000,0.000000,""],
-  ["394196","超市发岭南路店",0.000000,0.000000,""],
-  ["394234","超市发罗森北清路店",0.000000,0.000000,""],
-  ["394258","超市发罗森北安河店",0.000000,0.000000,""],
-  ["394405","北京地铁育新站店",0.000000,0.000000,""],
-  ["394406","北京地铁平安里站店",0.000000,0.000000,""],
-  ["394419","北京地铁车道沟站店",0.000000,0.000000,""],
-  ["394437","超市发罗森清河店",0.000000,0.000000,""],
-  ["394451","清华科技园店",0.000000,0.000000,""],
-  ["394485","永泰生活服务中心店",0.000000,0.000000,""],
-  ["394488","超市发罗森太舟坞店",0.000000,0.000000,""],
-  ["394489","超市发罗森六里屯店",0.000000,0.000000,""],
-  ["394510","东升科技园店",0.000000,0.000000,""],
-  ["394512","超市发罗森北清路二店",0.000000,0.000000,""],
-  ["394526","华为北研所K区店",0.000000,0.000000,""],
-  ["394560","超市发罗森北安河二店",0.000000,0.000000,""],
-  ["394620","北京快手元中心店",0.000000,0.000000,""],
-  ["394630","超市发罗森四季青路店",0.000000,0.000000,""],
-  ["394705","平谷步行街店",0.000000,0.000000,""],
-  ["394720","北京站广场东侧店",0.000000,0.000000,""],
-  ["395017","汉威国际广场",0.000000,0.000000,""],
-  ["395092","泥洼地铁站",0.000000,0.000000,""],
-  ["395274","蒲黄榆地铁站店",0.000000,0.000000,""],
-  ["395302","丽泽平安幸福中心店",0.000000,0.000000,""],
-  ["395411","北京地铁六里桥站店",0.000000,0.000000,""],
-  ["395412","北京地铁郭公庄站店",0.000000,0.000000,""],
-  ["395413","北京地铁丰台科技园区站店",0.000000,0.000000,""],
-  ["395470","丰科中心店",0.000000,0.000000,""],
-  ["395606","福海公寓",0.000000,0.000000,""],
-  ["395708","北京站6号候车室店",0.000000,0.000000,""],
-  ["395710","北京首都机场T3三层出发区北指廊店",0.000000,0.000000,""],
-  ["396053","房山南大街",0.000000,0.000000,""],
-  ["396054","良乡拱辰南大街",0.000000,0.000000,""],
-  ["396058","房山绿城百合",0.000000,0.000000,""],
-  ["396081","房山燕化医院",0.000000,0.000000,""],
-  ["396141","大兴星牌共享际",0.000000,0.000000,""],
-  ["396255","东方航空公司总部店",0.000000,0.000000,""],
-  ["396276","京东总部1号店",0.000000,0.000000,""],
-  ["396388","北京鸿坤广场店",0.000000,0.000000,""],
-  ["396449","大兴国际氢能示范区店",0.000000,0.000000,""],
-  ["396495","大兴南航总部基地店",0.000000,0.000000,""],
-  ["396706","北京南站出发层2店",0.000000,0.000000,""],
-  ["397398","北京地铁物资学院路站店",0.000000,0.000000,""],
-  ["397682","北京通州新光大",0.000000,0.000000,""],
-  ["398090","超市发天通苑西区",0.000000,0.000000,""],
-  ["398170","昌平未来科学城未来中心店",0.000000,0.000000,""],
-  ["398439","北京地铁昌平站店",0.000000,0.000000,""],
-  ["398558","北京怀柔雁栖人才社区店",0.000000,0.000000,""],
-  ["398689","回龙观体育公园店",0.000000,0.000000,""],
-  ["398708","北京站4号候车室店",0.000000,0.000000,""],
-  ["398718","北京北站店",0.000000,0.000000,""],
-  ["399519","古北水镇一号店",0.000000,0.000000,""],
-  ["399520","古北水镇二号店",0.000000,0.000000,""],
-  ["399548","北京中海大厦店",0.000000,0.000000,""],
-  ["399569","西长安中骏世界城店",0.000000,0.000000,""],
-  ["399670","北京门头沟长安天街店",0.000000,0.000000,""],
-  ["399722","北京祥云小镇店",0.000000,0.000000,""],
-  ["409392","天津市蓟州区天一绿海店",0.000000,0.000000,""],
-  ["461717","廊坊燕郊夏威夷蓝湾店",0.000000,0.000000,""],
-  ["462710","承德市德汇大厦店",0.000000,0.000000,""],
-  ["462717","承德宽广时代广场店",0.000000,0.000000,""],
-  ["466370","廊坊香河新开街店",0.000000,0.000000,""],
-  ["466435","廊坊香河新华街店",0.000000,0.000000,""],
-  ["466455","廊坊燕郊尚京广场店",0.000000,0.000000,""],
-  ["466506","廊坊燕郊诺亚大厦店",0.000000,0.000000,""],
-  ["466653","廊坊燕郊燕京理工学院店",0.000000,0.000000,""],
-  ["466697","廊坊燕郊33号街区店",0.000000,0.000000,""],
-  ["467708","三河文化艺术大街店",0.000000,0.000000,""],
-  ["469475","承德市二仙居大街店",0.000000,0.000000,""],
-  ["469476","承德市小佟沟路店",0.000000,0.000000,""],
-  ["469517","承德市福地华园店",0.000000,0.000000,""],
-  ["469559","承德市锦绣大街店",0.000000,0.000000,""],
-  ["469585","承德御龙瀚府店",0.000000,0.000000,""],
-  ["469588","承德铂悦山店",0.000000,0.000000,""],
-  ["469659","承德兴盛丽水店",0.000000,0.000000,""],
-  ["469660","承德银星丽苑店",0.000000,0.000000,""],
-  ["469691","承德市嘉和广场店",0.000000,0.000000,""],
-  ["471708","张家口崇礼汤印店-富龙子",0.000000,0.000000,""],
-  ["478480","张家口容辰庄园店",0.000000,0.000000,""],
-  ["478481","张家口明德南路店",0.000000,0.000000,""],
-  ["478566","张家口宣化八中店",0.000000,0.000000,""],
-  ["478567","张家口宣化兴泰店",0.000000,0.000000,""],
-  ["478571","张家口宣化鼓楼店",0.000000,0.000000,""],
-  ["478572","张家口宣化光大店",0.000000,0.000000,""],
-  ["478573","张家口宣化皇城店",0.000000,0.000000,""],
-  ["478581","张家口古宏大街店",0.000000,0.000000,""],
-  ["478582","张家口北方学院西校区店",0.000000,0.000000,""],
-  ["478583","张家口怀来新城佳苑店",0.000000,0.000000,""],
-  ["478584","张家口怀来新东方店",0.000000,0.000000,""],
-  ["478610","张家口职业技术学院店",0.000000,0.000000,""],
-  ["478648","张家口乐享城店",0.000000,0.000000,""],
+  ["391001","鏈堝潧鍖楄",0.000000,0.000000,""],
+  ["391012","閲戣瀺琛?,0.000000,0.000000,""],
+  ["391028","閲戣瀺琛椾腑蹇?,0.000000,0.000000,""],
+  ["391030","搴勮儨宕囧厜",0.000000,0.000000,""],
+  ["391074","寰疯儨鍥介檯涓績",0.000000,0.000000,""],
+  ["391094","绱噾鍗拌薄",0.000000,0.000000,""],
+  ["391409","鍖椾含鍦伴搧榧撴ゼ澶ц绔欏簵",0.000000,0.000000,""],
+  ["391705","鍖椾含鎬€鏌斿煄甯傚鍘呭簵",0.000000,0.000000,""],
+  ["391709","鍖椾含澶ч挓瀵哄箍鍦哄簵",0.000000,0.000000,""],
+  ["391712","鍖椾含閲戣瀺绉戞妧瀛﹂櫌搴?,0.000000,0.000000,""],
+  ["391715","鐭虫櫙灞遍噾闅呯鎶€澶у帵搴?,0.000000,0.000000,""],
+  ["391718","鍖椾含鍦伴搧12鍙风嚎椹兼埧钀ョ珯搴?,0.000000,0.000000,""],
+  ["391721","鍖椾含涓芥辰骞冲畨閲戣瀺涓績搴?,0.000000,0.000000,""],
+  ["391722","榧庡ソ鐢靛瓙澶у帵",0.000000,0.000000,""],
+  ["392029","瀵屽崕澶у帵",0.000000,0.000000,""],
+  ["392084","鍗楅敚榧撳贩鍦伴搧绔?,0.000000,0.000000,""],
+  ["392144","鍓嶉棬澶ц",0.000000,0.000000,""],
+  ["392179","涓滃洓鍖楀ぇ琛楀簵",0.000000,0.000000,""],
+  ["392315","鍦伴搧鍜屽钩閲屽寳琛楃珯搴?,0.000000,0.000000,""],
+  ["392394","鍖椾含鍦伴搧宕囨枃闂ㄧ珯搴?,0.000000,0.000000,""],
+  ["392395","鍖椾含鍦伴搧涓滃洓绔欏簵",0.000000,0.000000,""],
+  ["392408","鍖椾含鍦伴搧瀹夊痉閲屽寳琛楃珯搴?,0.000000,0.000000,""],
+  ["392525","鍖椾含鐜悆璐告槗涓績搴?,0.000000,0.000000,""],
+  ["392647","鍖椾含娉撴櫉鍥介檯涓績",0.000000,0.000000,""],
+  ["392678","鍖椾含鍦伴搧闆嶅拰瀹珯搴?,0.000000,0.000000,""],
+  ["392707","鍖椾含鍦伴搧3鍙风嚎鏈濋槼绔欏簵",0.000000,0.000000,""],
+  ["392708","鍖椾含鍦伴搧3鍙风嚎涓滃潩绔欏簵",0.000000,0.000000,""],
+  ["392710","鍖椾含鍦伴搧3鍙风嚎鍥㈢粨婀栫珯搴?,0.000000,0.000000,""],
+  ["392712","鍖椾含鎭掓瘏澶у帵搴?,0.000000,0.000000,""],
+  ["392713","鍖椾含鍦伴搧浠€鍒规捣绔欏簵",0.000000,0.000000,""],
+  ["392715","鍖椾含鍦伴搧娆箰璋风珯搴?,0.000000,0.000000,""],
+  ["392716","鍖椾含鍦伴搧瑙掗棬瑗跨珯搴?,0.000000,0.000000,""],
+  ["392717","鍖椾含鍦伴搧涓板彴绔欏簵",0.000000,0.000000,""],
+  ["392718","鑵捐鍖椾含鎬婚儴搴?,0.000000,0.000000,""],
+  ["392719","閲戦殔鏅洪€犲伐鍦哄簵鏂板簵",0.000000,0.000000,""],
+  ["392720","鏈濋槼楂橀搧绔欏簵",0.000000,0.000000,""],
+  ["392721","寤跺簡鐜悆鏂版剰鐧捐揣搴?,0.000000,0.000000,""],
+  ["392722","鍖椾含闀挎ス澶╄搴?,0.000000,0.000000,""],
+  ["392723","鍖椾含鍥涙儬閲戝湴鍚嶄含搴?,0.000000,0.000000,""],
+  ["393003","鐜悆閲戣瀺涓績",0.000000,0.000000,""],
+  ["393009","姘戠敓澶у帵",0.000000,0.000000,""],
+  ["393010","鍙屼簳棣栧煄鍥介檯",0.000000,0.000000,""],
+  ["393016","濂ユ灄鍖瑰厠鍏洯",0.000000,0.000000,""],
+  ["393032","闀垮瘜瀹?,0.000000,0.000000,""],
+  ["393033","鍥涙柟妗ヤ笢鍖椾晶搴?,0.000000,0.000000,""],
+  ["393034","鍔叉澗娴锋枃澶у帵",0.000000,0.000000,""],
+  ["393035","绠″簞鏂板ぉ鍦?,0.000000,0.000000,""],
+  ["393046","灏忓ぉ绔鸿矾",0.000000,0.000000,""],
+  ["393067","鏈涗含鍖楁湜閲戣緣澶у帵",0.000000,0.000000,""],
+  ["393082","鍏嗘嘲鍥介檯涓績",0.000000,0.000000,""],
+  ["393117","鍗侀噷鍫″湴閾佺珯",0.000000,0.000000,""],
+  ["393151","棣栭兘鏈哄満T3浜屽眰鍒拌揪鍖哄",0.000000,0.000000,""],
+  ["393152","棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖轰笢鎸囧粖",0.000000,0.000000,""],
+  ["393153","棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖鸿タ鎸囧粖",0.000000,0.000000,""],
+  ["393155","棣栭兘鏈哄満T3鍥涘眰鍑哄彂鍖哄涓?,0.000000,0.000000,""],
+  ["393156","棣栭兘鏈哄満T3D鍑哄彂鍖?,0.000000,0.000000,""],
+  ["393167","濂ユ灄鍖瑰厠妫灄鍏洯锛堝崡鍥級搴?,0.000000,0.000000,""],
+  ["393168","濂ユ灄鍖瑰厠妫灄鍏洯锛堝寳鍥級搴?,0.000000,0.000000,""],
+  ["393188","鍙戝睍澶у帵搴?,0.000000,0.000000,""],
+  ["393206","涓滀簹鏈涗含涓績搴?,0.000000,0.000000,""],
+  ["393220","姊电煶涓績搴?,0.000000,0.000000,""],
+  ["393244","鍒╂槦琛屼腑蹇冨簵",0.000000,0.000000,""],
+  ["393303","鍒╂槦琛屼腑蹇冧簩搴?,0.000000,0.000000,""],
+  ["393380","鍏夋槑澶у帵搴?,0.000000,0.000000,""],
+  ["393399","鍖椾含鍦伴搧鑽夋埧绔欏簵",0.000000,0.000000,""],
+  ["393416","鍖椾含鍦伴搧鍏亾鍙ｅ簵",0.000000,0.000000,""],
+  ["393425","鍖椾含鍦伴搧瑗垮湡鍩庡簵",0.000000,0.000000,""],
+  ["393426","鍖椾含鍦伴搧鏈涗含瑗跨珯搴?,0.000000,0.000000,""],
+  ["393546","鍖椾含娴﹂」涓績搴?,0.000000,0.000000,""],
+  ["393557","鍖椾含楦挎噵鍟嗗姟澶у帵搴?,0.000000,0.000000,""],
+  ["393651","鍖椾含骞冲畨鍥介檯閲戣瀺涓績搴?,0.000000,0.000000,""],
+  ["393675","鍖椾含闃块噷宸村反鎬婚儴搴?,0.000000,0.000000,""],
+  ["393688","鍖椾含骞挎挱澶у帵閰掑簵搴?,0.000000,0.000000,""],
+  ["393706","鍙ゅ寳姘撮晣涓夊彿搴?,0.000000,0.000000,""],
+  ["393707","鍖椾含绉戞妧璐㈠瘜涓績搴?,0.000000,0.000000,""],
+  ["393708","鍖椾含鎬€鏌斿晢涓氳搴?,0.000000,0.000000,""],
+  ["393709","浜笢鎬婚儴2鍙烽櫌搴?,0.000000,0.000000,""],
+  ["393710","鍖椾含鍦伴搧娼樺鍥珯搴?,0.000000,0.000000,""],
+  ["393711","寰蒋涓浗鐮斿彂闆嗗洟鎬婚儴搴?,0.000000,0.000000,""],
+  ["393715","棣栭兘鍥介檯鏈哄満T3鍥涘眰鍑哄彂灞傚瑗?,0.000000,0.000000,""],
+  ["393717","鍖椾含鍗楃珯鍦伴搧灞?搴?,0.000000,0.000000,""],
+  ["393718","鍖椾含鍗楃珯鍑哄彂灞?搴?,0.000000,0.000000,""],
+  ["393720","鏄屽钩鏂版柊鍏瘬搴?,0.000000,0.000000,""],
+  ["394024","铻嶇璧勮涓績",0.000000,0.000000,""],
+  ["394038","鑱旀兂鏂板洯鍖?,0.000000,0.000000,""],
+  ["394048","娴锋穩鏉忕煶鍙ｈ矾",0.000000,0.000000,""],
+  ["394062","鐏櫒钀ュ湴閾佺珯",0.000000,0.000000,""],
+  ["394069","浜掕仈缃戝垱鏂颁腑蹇?,0.000000,0.000000,""],
+  ["394070","鏈ㄨ嵎璺崕涓哄洯鍖?,0.000000,0.000000,""],
+  ["394072","瓒呭競鍙戜竾鏌?,0.000000,0.000000,""],
+  ["394073","瓒呭競鍙戣姳鍥矾",0.000000,0.000000,""],
+  ["394075","瓒呭競鍙戠緤鍧婂簵",0.000000,0.000000,""],
+  ["394085","瓒呭競鍙戠敇瀹跺彛",0.000000,0.000000,""],
+  ["394089","瓒呭競鍙戜笂鍦?,0.000000,0.000000,""],
+  ["394096","瓒呭競鍙戝啘澶?,0.000000,0.000000,""],
+  ["394103","瓒呭競鍙戠鍗楄矾",0.000000,0.000000,""],
+  ["394104","瓒呭競鍙戠帀娉夎矾",0.000000,0.000000,""],
+  ["394105","瓒呭競鍙戣タ闀垮畨琛?,0.000000,0.000000,""],
+  ["394110","鏂版氮鎬婚儴澶у帵",0.000000,0.000000,""],
+  ["394112","瓒呭競鍙戞捣娣€澶ц",0.000000,0.000000,""],
+  ["394118","瓒呭競鍙戝闄㈣矾瓒呯綏",0.000000,0.000000,""],
+  ["394122","鑱旀兂涓夋爣澶у帵",0.000000,0.000000,""],
+  ["394123","鑱旀兂鍖楃爺鍥ゼ澶у帵",0.000000,0.000000,""],
+  ["394142","瓒呭競鍙戝弻姒嗘爲瓒呯綏",0.000000,0.000000,""],
+  ["394150","缃戞槗鐮斿彂涓績",0.000000,0.000000,""],
+  ["394196","瓒呭競鍙戝箔鍗楄矾搴?,0.000000,0.000000,""],
+  ["394234","瓒呭競鍙戠綏妫寳娓呰矾搴?,0.000000,0.000000,""],
+  ["394258","瓒呭競鍙戠綏妫寳瀹夋渤搴?,0.000000,0.000000,""],
+  ["394405","鍖椾含鍦伴搧鑲叉柊绔欏簵",0.000000,0.000000,""],
+  ["394406","鍖椾含鍦伴搧骞冲畨閲岀珯搴?,0.000000,0.000000,""],
+  ["394419","鍖椾含鍦伴搧杞﹂亾娌熺珯搴?,0.000000,0.000000,""],
+  ["394437","瓒呭競鍙戠綏妫竻娌冲簵",0.000000,0.000000,""],
+  ["394451","娓呭崕绉戞妧鍥簵",0.000000,0.000000,""],
+  ["394485","姘告嘲鐢熸椿鏈嶅姟涓績搴?,0.000000,0.000000,""],
+  ["394488","瓒呭競鍙戠綏妫お鑸熷潪搴?,0.000000,0.000000,""],
+  ["394489","瓒呭競鍙戠綏妫叚閲屽悲搴?,0.000000,0.000000,""],
+  ["394510","涓滃崌绉戞妧鍥簵",0.000000,0.000000,""],
+  ["394512","瓒呭競鍙戠綏妫寳娓呰矾浜屽簵",0.000000,0.000000,""],
+  ["394526","鍗庝负鍖楃爺鎵€K鍖哄簵",0.000000,0.000000,""],
+  ["394560","瓒呭競鍙戠綏妫寳瀹夋渤浜屽簵",0.000000,0.000000,""],
+  ["394620","鍖椾含蹇墜鍏冧腑蹇冨簵",0.000000,0.000000,""],
+  ["394630","瓒呭競鍙戠綏妫洓瀛ｉ潚璺簵",0.000000,0.000000,""],
+  ["394705","骞宠胺姝ヨ琛楀簵",0.000000,0.000000,""],
+  ["394720","鍖椾含绔欏箍鍦轰笢渚у簵",0.000000,0.000000,""],
+  ["395017","姹夊▉鍥介檯骞垮満",0.000000,0.000000,""],
+  ["395092","娉ユ醇鍦伴搧绔?,0.000000,0.000000,""],
+  ["395274","钂查粍姒嗗湴閾佺珯搴?,0.000000,0.000000,""],
+  ["395302","涓芥辰骞冲畨骞哥涓績搴?,0.000000,0.000000,""],
+  ["395411","鍖椾含鍦伴搧鍏噷妗ョ珯搴?,0.000000,0.000000,""],
+  ["395412","鍖椾含鍦伴搧閮叕搴勭珯搴?,0.000000,0.000000,""],
+  ["395413","鍖椾含鍦伴搧涓板彴绉戞妧鍥尯绔欏簵",0.000000,0.000000,""],
+  ["395470","涓扮涓績搴?,0.000000,0.000000,""],
+  ["395606","绂忔捣鍏瘬",0.000000,0.000000,""],
+  ["395708","鍖椾含绔?鍙峰€欒溅瀹ゅ簵",0.000000,0.000000,""],
+  ["395710","鍖椾含棣栭兘鏈哄満T3涓夊眰鍑哄彂鍖哄寳鎸囧粖搴?,0.000000,0.000000,""],
+  ["396053","鎴垮北鍗楀ぇ琛?,0.000000,0.000000,""],
+  ["396054","鑹埂鎷辫景鍗楀ぇ琛?,0.000000,0.000000,""],
+  ["396058","鎴垮北缁垮煄鐧惧悎",0.000000,0.000000,""],
+  ["396081","鎴垮北鐕曞寲鍖婚櫌",0.000000,0.000000,""],
+  ["396141","澶у叴鏄熺墝鍏变韩闄?,0.000000,0.000000,""],
+  ["396255","涓滄柟鑸┖鍏徃鎬婚儴搴?,0.000000,0.000000,""],
+  ["396276","浜笢鎬婚儴1鍙峰簵",0.000000,0.000000,""],
+  ["396388","鍖椾含楦垮潳骞垮満搴?,0.000000,0.000000,""],
+  ["396449","澶у叴鍥介檯姘㈣兘绀鸿寖鍖哄簵",0.000000,0.000000,""],
+  ["396495","澶у叴鍗楄埅鎬婚儴鍩哄湴搴?,0.000000,0.000000,""],
+  ["396706","鍖椾含鍗楃珯鍑哄彂灞?搴?,0.000000,0.000000,""],
+  ["397398","鍖椾含鍦伴搧鐗╄祫瀛﹂櫌璺珯搴?,0.000000,0.000000,""],
+  ["397682","鍖椾含閫氬窞鏂板厜澶?,0.000000,0.000000,""],
+  ["398090","瓒呭競鍙戝ぉ閫氳嫅瑗垮尯",0.000000,0.000000,""],
+  ["398170","鏄屽钩鏈潵绉戝鍩庢湭鏉ヤ腑蹇冨簵",0.000000,0.000000,""],
+  ["398439","鍖椾含鍦伴搧鏄屽钩绔欏簵",0.000000,0.000000,""],
+  ["398558","鍖椾含鎬€鏌旈泚鏍栦汉鎵嶇ぞ鍖哄簵",0.000000,0.000000,""],
+  ["398689","鍥為緳瑙備綋鑲插叕鍥簵",0.000000,0.000000,""],
+  ["398708","鍖椾含绔?鍙峰€欒溅瀹ゅ簵",0.000000,0.000000,""],
+  ["398718","鍖椾含鍖楃珯搴?,0.000000,0.000000,""],
+  ["399519","鍙ゅ寳姘撮晣涓€鍙峰簵",0.000000,0.000000,""],
+  ["399520","鍙ゅ寳姘撮晣浜屽彿搴?,0.000000,0.000000,""],
+  ["399548","鍖椾含涓捣澶у帵搴?,0.000000,0.000000,""],
+  ["399569","瑗块暱瀹変腑楠忎笘鐣屽煄搴?,0.000000,0.000000,""],
+  ["399670","鍖椾含闂ㄥご娌熼暱瀹夊ぉ琛楀簵",0.000000,0.000000,""],
+  ["399722","鍖椾含绁ヤ簯灏忛晣搴?,0.000000,0.000000,""],
+  ["409392","澶╂触甯傝摕宸炲尯澶╀竴缁挎捣搴?,0.000000,0.000000,""],
+  ["461717","寤婂潑鐕曢儕澶忓▉澶疯摑婀惧簵",0.000000,0.000000,""],
+  ["462710","鎵垮痉甯傚痉姹囧ぇ鍘﹀簵",0.000000,0.000000,""],
+  ["462717","鎵垮痉瀹藉箍鏃朵唬骞垮満搴?,0.000000,0.000000,""],
+  ["466370","寤婂潑棣欐渤鏂板紑琛楀簵",0.000000,0.000000,""],
+  ["466435","寤婂潑棣欐渤鏂板崕琛楀簵",0.000000,0.000000,""],
+  ["466455","寤婂潑鐕曢儕灏氫含骞垮満搴?,0.000000,0.000000,""],
+  ["466506","寤婂潑鐕曢儕璇轰簹澶у帵搴?,0.000000,0.000000,""],
+  ["466653","寤婂潑鐕曢儕鐕曚含鐞嗗伐瀛﹂櫌搴?,0.000000,0.000000,""],
+  ["466697","寤婂潑鐕曢儕33鍙疯鍖哄簵",0.000000,0.000000,""],
+  ["467708","涓夋渤鏂囧寲鑹烘湳澶ц搴?,0.000000,0.000000,""],
+  ["469475","鎵垮痉甯備簩浠欏眳澶ц搴?,0.000000,0.000000,""],
+  ["469476","鎵垮痉甯傚皬浣熸矡璺簵",0.000000,0.000000,""],
+  ["469517","鎵垮痉甯傜鍦板崕鍥簵",0.000000,0.000000,""],
+  ["469559","鎵垮痉甯傞敠缁ｅぇ琛楀簵",0.000000,0.000000,""],
+  ["469585","鎵垮痉寰￠緳鐎氬簻搴?,0.000000,0.000000,""],
+  ["469588","鎵垮痉閾傛偊灞卞簵",0.000000,0.000000,""],
+  ["469659","鎵垮痉鍏寸洓涓芥按搴?,0.000000,0.000000,""],
+  ["469660","鎵垮痉閾舵槦涓借嫅搴?,0.000000,0.000000,""],
+  ["469691","鎵垮痉甯傚槈鍜屽箍鍦哄簵",0.000000,0.000000,""],
+  ["471708","寮犲鍙ｅ磭绀兼堡鍗板簵-瀵岄緳瀛?,0.000000,0.000000,""],
+  ["478480","寮犲鍙ｅ杈板簞鍥簵",0.000000,0.000000,""],
+  ["478481","寮犲鍙ｆ槑寰峰崡璺簵",0.000000,0.000000,""],
+  ["478566","寮犲鍙ｅ鍖栧叓涓簵",0.000000,0.000000,""],
+  ["478567","寮犲鍙ｅ鍖栧叴娉板簵",0.000000,0.000000,""],
+  ["478571","寮犲鍙ｅ鍖栭紦妤煎簵",0.000000,0.000000,""],
+  ["478572","寮犲鍙ｅ鍖栧厜澶у簵",0.000000,0.000000,""],
+  ["478573","寮犲鍙ｅ鍖栫殗鍩庡簵",0.000000,0.000000,""],
+  ["478581","寮犲鍙ｅ彜瀹忓ぇ琛楀簵",0.000000,0.000000,""],
+  ["478582","寮犲鍙ｅ寳鏂瑰闄㈣タ鏍″尯搴?,0.000000,0.000000,""],
+  ["478583","寮犲鍙ｆ€€鏉ユ柊鍩庝匠鑻戝簵",0.000000,0.000000,""],
+  ["478584","寮犲鍙ｆ€€鏉ユ柊涓滄柟搴?,0.000000,0.000000,""],
+  ["478610","寮犲鍙ｈ亴涓氭妧鏈闄㈠簵",0.000000,0.000000,""],
+  ["478648","寮犲鍙ｄ箰浜煄搴?,0.000000,0.000000,""],
 ];
 
 const STORE_WAVE_TIME_PRESETS = {
@@ -1675,10 +1669,10 @@ function sampleData() {
   const stores = buildStores();
   return {
     vehicles: [
-      { plateNo: "京A-1001", driverName: "", type: ENFORCED_VEHICLE_TYPE, capacity: 120, speed: 38, canCarryCold: true },
-      { plateNo: "京A-1002", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
-      { plateNo: "京A-1003", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
-      { plateNo: "京A-1004", driverName: "", type: "4.2米厢式货车", capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "浜珹-1001", driverName: "", type: ENFORCED_VEHICLE_TYPE, capacity: 120, speed: 38, canCarryCold: true },
+      { plateNo: "浜珹-1002", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "浜珹-1003", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
+      { plateNo: "浜珹-1004", driverName: "", type: "4.2绫冲帰寮忚揣杞?, capacity: 100, speed: 38, canCarryCold: false },
     ],
     stores,
     waves: buildAutoWaves(stores),
@@ -1944,28 +1938,28 @@ function buildStoreWaveResolvedQueryConfirmText(payload = {}) {
   items.forEach((row) => {
     const code = String(row?.shop_code || "").trim();
     const belongs = parseWaveBelongs(String(row?.wave_belongs || "").trim());
-    if (belongs.includes("1")) byWave["1"].push(`${code} | 货量=${Number(row?.wave1_load || 0)} | 时间=${String(row?.first_wave_time || "").trim() || "(空)"}`);
-    if (belongs.includes("2")) byWave["2"].push(`${code} | 货量=${Number(row?.wave2_load || 0)} | 时间=${String(row?.second_wave_time || "").trim() || "(空)"}`);
-    if (belongs.includes("3")) byWave["3"].push(`${code} | 货量=${Number(row?.wave3_load || 0)} | 时间=${String(row?.arrival_time_w3 || "").trim() || "(空)"}`);
-    if (belongs.includes("4")) byWave["4"].push(`${code} | 货量=${Number(row?.wave4_load || 0)} | 时间=${String(row?.arrival_time_w4 || "").trim() || "(空)"}`);
+    if (belongs.includes("1")) byWave["1"].push(`${code} | 璐ч噺=${Number(row?.wave1_load || 0)} | 鏃堕棿=${String(row?.first_wave_time || "").trim() || "(绌?"}`);
+    if (belongs.includes("2")) byWave["2"].push(`${code} | 璐ч噺=${Number(row?.wave2_load || 0)} | 鏃堕棿=${String(row?.second_wave_time || "").trim() || "(绌?"}`);
+    if (belongs.includes("3")) byWave["3"].push(`${code} | 璐ч噺=${Number(row?.wave3_load || 0)} | 鏃堕棿=${String(row?.arrival_time_w3 || "").trim() || "(绌?"}`);
+    if (belongs.includes("4")) byWave["4"].push(`${code} | 璐ч噺=${Number(row?.wave4_load || 0)} | 鏃堕棿=${String(row?.arrival_time_w4 || "").trim() || "(绌?"}`);
   });
   return [
-    "即将写入“折算货量查询”展示区（来源：store_wave_load_resolved）",
-    `返回条数：${Number(payload?.count || items.length || 0)} / 总计：${Number(payload?.total || items.length || 0)}`,
+    "鍗冲皢鍐欏叆鈥滄姌绠楄揣閲忔煡璇⑩€濆睍绀哄尯锛堟潵婧愶細store_wave_load_resolved锛?,
+    `杩斿洖鏉℃暟锛?{Number(payload?.count || items.length || 0)} / 鎬昏锛?{Number(payload?.total || items.length || 0)}`,
     "",
-    `W1 明细(${byWave["1"].length})`,
+    `W1 鏄庣粏(${byWave["1"].length})`,
     ...byWave["1"],
     "",
-    `W2 明细(${byWave["2"].length})`,
+    `W2 鏄庣粏(${byWave["2"].length})`,
     ...byWave["2"],
     "",
-    `W3 明细(${byWave["3"].length})`,
+    `W3 鏄庣粏(${byWave["3"].length})`,
     ...byWave["3"],
     "",
-    `W4 明细(${byWave["4"].length})`,
+    `W4 鏄庣粏(${byWave["4"].length})`,
     ...byWave["4"],
     "",
-    "点击“确定”继续写入查询结果，点击“取消”放弃本次写入。"
+    "鐐瑰嚮鈥滅‘瀹氣€濈户缁啓鍏ユ煡璇㈢粨鏋滐紝鐐瑰嚮鈥滃彇娑堚€濇斁寮冩湰娆″啓鍏ャ€?
   ].join("\n");
 }
 
@@ -1990,7 +1984,7 @@ function showStoreWaveResolvedQueryConfirmDialog(reportText) {
     panel.style.flexDirection = "column";
 
     const title = document.createElement("div");
-    title.textContent = "查询确认（store_wave_load_resolved）";
+    title.textContent = "鏌ヨ纭锛坰tore_wave_load_resolved锛?;
     title.style.padding = "14px 16px 8px";
     title.style.fontWeight = "700";
     title.style.fontSize = "20px";
@@ -2018,13 +2012,13 @@ function showStoreWaveResolvedQueryConfirmDialog(reportText) {
 
     const cancelBtn = document.createElement("button");
     cancelBtn.type = "button";
-    cancelBtn.textContent = "取消";
+    cancelBtn.textContent = "鍙栨秷";
     cancelBtn.style.minWidth = "96px";
     cancelBtn.style.height = "40px";
 
     const okBtn = document.createElement("button");
     okBtn.type = "button";
-    okBtn.textContent = "确定";
+    okBtn.textContent = "纭畾";
     okBtn.style.minWidth = "96px";
     okBtn.style.height = "40px";
 
@@ -2073,9 +2067,9 @@ function renderStoreWaveResolvedTable(payload = {}) {
   const count = Number(payload.count || items.length || 0);
   const total = Number(payload.total || count || 0);
   const limit = Number(payload.limit || 0);
-  summary.textContent = `当前返回 ${count} 条 / 总计 ${total} 条${limit ? `（limit=${limit}）` : ""}`;
+  summary.textContent = `褰撳墠杩斿洖 ${count} 鏉?/ 鎬昏 ${total} 鏉?{limit ? `锛坙imit=${limit}锛塦 : ""}`;
   if (!items.length) {
-    body.innerHTML = `<tr><td colspan="12" class="muted">无匹配数据</td></tr>`;
+    body.innerHTML = `<tr><td colspan="12" class="muted">鏃犲尮閰嶆暟鎹?/td></tr>`;
     return;
   }
   body.innerHTML = items.map((row) => `
@@ -2100,7 +2094,7 @@ function updateStoreWaveResolvedSortMarks() {
   document.querySelectorAll("[data-store-wave-sort]").forEach((btn) => {
     const field = String(btn.getAttribute("data-store-wave-sort") || "");
     const active = field === String(state.ui.storeWaveResolvedSortField || "");
-    const mark = active ? (state.ui.storeWaveResolvedSortDir === "desc" ? "▼" : "▲") : "";
+    const mark = active ? (state.ui.storeWaveResolvedSortDir === "desc" ? "鈻? : "鈻?) : "";
     const markNode = btn.querySelector(".store-wave-sort-mark");
     if (markNode) markNode.textContent = mark;
   });
@@ -2178,7 +2172,7 @@ async function saveDualTableLoadsToBackend() {
     const lines = picked.map((row) => {
       const load = Number(row?.[fieldLoad] || 0);
       const time = String(row?.[fieldTime] || "").trim();
-      return `${row.shop_code} | 货量=${load} | 时间=${time || "(空)"}`;
+      return `${row.shop_code} | 璐ч噺=${load} | 鏃堕棿=${time || "(绌?"}`;
     });
     return { count: picked.length, lines };
   };
@@ -2200,20 +2194,20 @@ async function saveDualTableLoadsToBackend() {
   }
   const payload = await response.json();
   const reportText = [
-    "保存双表货量结果（写入目标表：store_wave_load_resolved）",
-    `总行数：${rows.length}`,
-    `后端返回 upserted：${Number(payload?.upserted || 0)}`,
+    "淇濆瓨鍙岃〃璐ч噺缁撴灉锛堝啓鍏ョ洰鏍囪〃锛歴tore_wave_load_resolved锛?,
+    `鎬昏鏁帮細${rows.length}`,
+    `鍚庣杩斿洖 upserted锛?{Number(payload?.upserted || 0)}`,
     "",
-    `W1 写入 ${w1.count} 行：`,
+    `W1 鍐欏叆 ${w1.count} 琛岋細`,
     ...w1.lines,
     "",
-    `W2 写入 ${w2.count} 行：`,
+    `W2 鍐欏叆 ${w2.count} 琛岋細`,
     ...w2.lines,
     "",
-    `W3 写入 ${w3.count} 行：`,
+    `W3 鍐欏叆 ${w3.count} 琛岋細`,
     ...w3.lines,
     "",
-    `W4 写入 ${w4.count} 行：`,
+    `W4 鍐欏叆 ${w4.count} 琛岋細`,
     ...w4.lines,
   ].join("\n");
   return { ...(payload || {}), reportText };
@@ -2222,7 +2216,7 @@ async function saveDualTableLoadsToBackend() {
 function showSaveDualLoadsReport(reportText) {
   const text = String(reportText || "").trim();
   if (!text) {
-    window.alert("保存完成");
+    window.alert("淇濆瓨瀹屾垚");
     return;
   }
   const popup = window.open("", "_blank", "width=980,height=760");
@@ -2237,7 +2231,7 @@ function showSaveDualLoadsReport(reportText) {
     <html lang="zh-CN">
     <head>
       <meta charset="utf-8" />
-      <title>保存双表货量明细</title>
+      <title>淇濆瓨鍙岃〃璐ч噺鏄庣粏</title>
       <style>
         body { margin: 0; padding: 12px; font-family: Consolas, "Courier New", monospace; background: #f5f7fa; color: #102a43; }
         pre { white-space: pre-wrap; word-break: break-word; line-height: 1.35; font-size: 13px; margin: 0; }
@@ -2273,13 +2267,13 @@ function normalizeStoreWaveLoads(store = {}) {
   const rawTotal = wave1GroupLoad + wave2GroupLoad;
   let wave1TotalLoadBase = Math.max(0, Number(store.wave1TotalLoadBase || 0) || 0);
   let wave2TotalLoadBase = Math.max(0, Number(store.wave2TotalLoadBase || 0) || 0);
-  // 优先规则：仅属于2波次的店，一波次不算货量；二波次按全部类型计算。
-  // 公式：rpcs/207 + rcase/380 + bpcs/120 + bpaper/380 + rpaper/380 + apcs/350 + apaper/380
+  // 浼樺厛瑙勫垯锛氫粎灞炰簬2娉㈡鐨勫簵锛屼竴娉㈡涓嶇畻璐ч噺锛涗簩娉㈡鎸夊叏閮ㄧ被鍨嬭绠椼€?
+  // 鍏紡锛歳pcs/207 + rcase/380 + bpcs/120 + bpaper/380 + rpaper/380 + apcs/350 + apaper/380
   const wave1Load = onlyWave2 ? 0 : (tripCount === 2 ? wave1GroupLoad : (wave1GroupLoad + wave2GroupLoad));
   const wave2Load = onlyWave2 ? rawTotal : (tripCount === 2 ? wave2GroupLoad : 0);
   const wave1TotalLoad = onlyWave2 ? 0 : (tripCount === 2 ? wave1TotalLoadBase : (wave1TotalLoadBase + wave2TotalLoadBase));
   const wave2TotalLoad = onlyWave2 ? (wave1TotalLoadBase + wave2TotalLoadBase) : (tripCount === 2 ? wave2TotalLoadBase : 0);
-  // W3/W4 的基础口径相同（全部货量一次送完），但最终只落在所属波次列
+  // W3/W4 鐨勫熀纭€鍙ｅ緞鐩稿悓锛堝叏閮ㄨ揣閲忎竴娆￠€佸畬锛夛紝浣嗘渶缁堝彧钀藉湪鎵€灞炴尝娆″垪
   const baseW3Load = rawTotal;
   const baseW4Load = rawTotal;
   const baseW3TotalLoad = wave1TotalLoadBase + wave2TotalLoadBase;
@@ -2565,15 +2559,15 @@ function renderLoadConvertModal(preview) {
   const wave3Sum = formatLoadConvertValue(preview?.wave3Sum || 0);
   const wave4Sum = formatLoadConvertValue(preview?.wave4Sum || 0);
   summary.innerHTML = `
-    <span class="chip">一波次折算合计：${wave1Sum}</span>
-    <span class="chip">二波次折算合计：${wave2Sum}</span>
-    <span class="chip">三波次折算合计：${wave3Sum}</span>
-    <span class="chip">四波次折算合计：${wave4Sum}</span>
-    <span class="chip">门店数：${(preview?.items || []).length}</span>
+    <span class="chip">涓€娉㈡鎶樼畻鍚堣锛?{wave1Sum}</span>
+    <span class="chip">浜屾尝娆℃姌绠楀悎璁★細${wave2Sum}</span>
+    <span class="chip">涓夋尝娆℃姌绠楀悎璁★細${wave3Sum}</span>
+    <span class="chip">鍥涙尝娆℃姌绠楀悎璁★細${wave4Sum}</span>
+    <span class="chip">闂ㄥ簵鏁帮細${(preview?.items || []).length}</span>
   `;
   const rows = (preview?.items || []).map((item) => {
     const wave1Expr = item.onlyWave2
-      ? "仅2波次店：一波次=0"
+      ? "浠?娉㈡搴楋細涓€娉㈡=0"
       : (item.wave1Terms.map((term) => `${term.field}:${term.quantity}/${term.capacity || 0}=${formatLoadConvertValue(term.value)}`).join(" + ") || "0");
     const wave2ExprTerms = item.onlyWave2 ? [...item.wave1Terms, ...item.wave2Terms] : item.wave2Terms;
     const wave2Expr = wave2ExprTerms.map((term) => `${term.field}:${term.quantity}/${term.capacity || 0}=${formatLoadConvertValue(term.value)}`).join(" + ") || "0";
@@ -2594,15 +2588,15 @@ function renderLoadConvertModal(preview) {
   table.innerHTML = `
     <thead>
       <tr>
-        <th>店铺编号</th>
-        <th>店铺名称</th>
-        <th>次数</th>
-        <th>一波次折算</th>
-        <th>一波次计算过程</th>
-        <th>二波次折算</th>
-        <th>二波次计算过程</th>
-        <th>三波次折算</th>
-        <th>四波次折算</th>
+        <th>搴楅摵缂栧彿</th>
+        <th>搴楅摵鍚嶇О</th>
+        <th>娆℃暟</th>
+        <th>涓€娉㈡鎶樼畻</th>
+        <th>涓€娉㈡璁＄畻杩囩▼</th>
+        <th>浜屾尝娆℃姌绠?/th>
+        <th>浜屾尝娆¤绠楄繃绋?/th>
+        <th>涓夋尝娆℃姌绠?/th>
+        <th>鍥涙尝娆℃姌绠?/th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
@@ -2708,12 +2702,12 @@ function closeLoadConvertModal() {
 let pendingSolveContinuation = null;
 
 function describeSolveField(value, { required = false } = {}) {
-  const text = value === null || value === undefined || String(value).trim() === "" ? "缺失" : String(value).trim();
-  const ok = text !== "缺失";
+  const text = value === null || value === undefined || String(value).trim() === "" ? "缂哄け" : String(value).trim();
+  const ok = text !== "缂哄け";
   return {
     ok,
     text,
-    label: ok ? "已取得" : (required ? "缺失（会卡住求解）" : "缺失"),
+    label: ok ? "宸插彇寰? : (required ? "缂哄け锛堜細鍗′綇姹傝В锛? : "缂哄け"),
   };
 }
 
@@ -2734,9 +2728,9 @@ async function buildSolveDiagnoseReport() {
     ["dispatchStartMin", describeSolveField(dispatchStartMin, { required: true })],
     ["maxRouteKm", describeSolveField(state.settings.maxRouteKm, { required: true })],
     ["concentrateLate", describeSolveField(state.settings.concentrateLate)],
-    ["dist", { ok: false, text: "未在弹窗阶段构建；求解时 buildScenario 才会生成", label: "未直接取得" }],
-    ["storeMap", { ok: stores.length > 0, text: `当前门店数 ${stores.length}`, label: stores.length > 0 ? "已取得" : "缺失（无门店）" }],
-    ["vehicles", { ok: vehicles.length > 0, text: `当前车辆数 ${vehicles.length}`, label: vehicles.length > 0 ? "已取得" : "缺失（无车辆）" }],
+    ["dist", { ok: false, text: "鏈湪寮圭獥闃舵鏋勫缓锛涙眰瑙ｆ椂 buildScenario 鎵嶄細鐢熸垚", label: "鏈洿鎺ュ彇寰? }],
+    ["storeMap", { ok: stores.length > 0, text: `褰撳墠闂ㄥ簵鏁?${stores.length}`, label: stores.length > 0 ? "宸插彇寰? : "缂哄け锛堟棤闂ㄥ簵锛? }],
+    ["vehicles", { ok: vehicles.length > 0, text: `褰撳墠杞﹁締鏁?${vehicles.length}`, label: vehicles.length > 0 ? "宸插彇寰? : "缂哄け锛堟棤杞﹁締锛? }],
   ];
 
   const storeRows = stores.map((store) => {
@@ -2750,17 +2744,17 @@ async function buildSolveDiagnoseReport() {
     const wave4 = String(row?.arrival_time_w4 || "").trim();
     const waveTime = { 1: wave1, 2: wave2, 3: wave3, 4: wave4 };
     const requiredWaves = belongs.length ? belongs : [1];
-    const timingIssues = requiredWaves.filter((waveNo) => !String(waveTime[waveNo] || "").trim()).map((waveNo) => `W${waveNo}缺`);
+    const timingIssues = requiredWaves.filter((waveNo) => !String(waveTime[waveNo] || "").trim()).map((waveNo) => `W${waveNo}缂篳);
     const nonRequiredPresent = [1, 2, 3, 4]
       .filter((waveNo) => !requiredWaves.includes(waveNo))
       .filter((waveNo) => String(waveTime[waveNo] || "").trim())
-      .map((waveNo) => `W${waveNo}有值但未参与`);
+      .map((waveNo) => `W${waveNo}鏈夊€间絾鏈弬涓巂);
     return {
       id,
       name: String(store?.name || "").trim(),
       boxes: Number(row?.total_resolved_load || 0),
       waveBelongs: belongsText,
-      desiredArrival: requiredWaves.map((waveNo) => `W${waveNo}=${String(waveTime[waveNo] || "").trim() || "缺"}`).join(" / "),
+      desiredArrival: requiredWaves.map((waveNo) => `W${waveNo}=${String(waveTime[waveNo] || "").trim() || "缂?}`).join(" / "),
       latestAllowedArrivalMin: Number.isFinite(Number(store?.parking ?? store?.allowedLateMinutes)) ? Number(store?.parking ?? store?.allowedLateMinutes) : 0,
       actualServiceMinutes: Number(store?.serviceMinutes ?? 0),
       serviceMinutes: Number(store?.serviceMinutes || 0),
@@ -2769,11 +2763,11 @@ async function buildSolveDiagnoseReport() {
       parking: Number(store?.parking || 0),
       lng: Number(store?.lng || 0),
       lat: Number(store?.lat || 0),
-      requiredWaves: requiredWaves.map((waveNo) => `W${waveNo}`).join("、"),
+      requiredWaves: requiredWaves.map((waveNo) => `W${waveNo}`).join("銆?),
       directStatus: (!resolvedByShop.has(normalizeStoreCode(id)))
-        ? "当前门店在 store_wave_load_resolved 中无记录"
-        : (timingIssues.length ? `当前求解相关波次缺少 ${timingIssues.join("，")}` : "当前求解相关波次都已取得"),
-      fallbackStatus: nonRequiredPresent.length ? `其他波次出现数值会污染业务：${nonRequiredPresent.join("，")}` : "其他波次为空正常",
+        ? "褰撳墠闂ㄥ簵鍦?store_wave_load_resolved 涓棤璁板綍"
+        : (timingIssues.length ? `褰撳墠姹傝В鐩稿叧娉㈡缂哄皯 ${timingIssues.join("锛?)}` : "褰撳墠姹傝В鐩稿叧娉㈡閮藉凡鍙栧緱"),
+      fallbackStatus: nonRequiredPresent.length ? `鍏朵粬娉㈡鍑虹幇鏁板€间細姹℃煋涓氬姟锛?{nonRequiredPresent.join("锛?)}` : "鍏朵粬娉㈡涓虹┖姝ｅ父",
     };
   });
 
@@ -2810,7 +2804,7 @@ async function buildSolveDiagnoseReport() {
     summary: {
       strategy: currentStrategyLabel(),
       goal: currentGoalLabel(),
-      algorithms: selectedAlgorithms.map((key) => algoLabel(key)).join("、"),
+      algorithms: selectedAlgorithms.map((key) => algoLabel(key)).join("銆?),
       storeCount: stores.length,
       vehicleCount: vehicles.length,
       waveCount: waves.length,
@@ -2827,12 +2821,12 @@ function renderSolveDiagnoseModal(report) {
   const body = document.getElementById("solveDiagnoseBody");
   if (!summary || !body) return;
   const summaryParts = [
-    `当前策略：${escapeHtml(report?.summary?.strategy || "-")}`,
-    `目标：${escapeHtml(report?.summary?.goal || "-")}`,
-    `算法：${escapeHtml(report?.summary?.algorithms || "-")}`,
-    `门店 ${Number(report?.summary?.storeCount || 0)} 家`,
-    `车辆 ${Number(report?.summary?.vehicleCount || 0)} 台`,
-    `波次 ${Number(report?.summary?.waveCount || 0)} 个`,
+    `褰撳墠绛栫暐锛?{escapeHtml(report?.summary?.strategy || "-")}`,
+    `鐩爣锛?{escapeHtml(report?.summary?.goal || "-")}`,
+    `绠楁硶锛?{escapeHtml(report?.summary?.algorithms || "-")}`,
+    `闂ㄥ簵 ${Number(report?.summary?.storeCount || 0)} 瀹禶,
+    `杞﹁締 ${Number(report?.summary?.vehicleCount || 0)} 鍙癭,
+    `娉㈡ ${Number(report?.summary?.waveCount || 0)} 涓猔,
   ];
   summary.innerHTML = summaryParts.map((text) => `<span class="chip">${text}</span>`).join("");
 
@@ -2865,7 +2859,7 @@ function renderSolveDiagnoseModal(report) {
       <td>${escapeHtml(row.type || "")}</td>
       <td>${escapeHtml(String(row.capacity ?? 0))}</td>
       <td>${escapeHtml(String(row.speed ?? 0))}</td>
-      <td>${escapeHtml(row.canCarryCold ? "是" : "否")}</td>
+      <td>${escapeHtml(row.canCarryCold ? "鏄? : "鍚?)}</td>
       <td>${escapeHtml(String(row.priorRegularDistance ?? 0))}</td>
       <td>${escapeHtml(String(row.priorWaveCount ?? 0))}</td>
       <td>${escapeHtml(String(row.earliestDepartureMin ?? 0))}</td>
@@ -2878,9 +2872,9 @@ function renderSolveDiagnoseModal(report) {
       <td>${escapeHtml(String(row.startMin ?? 0))}</td>
       <td>${escapeHtml(String(row.endMin ?? 0))}</td>
       <td>${escapeHtml(row.endMode || "")}</td>
-      <td>${escapeHtml(row.relaxEnd ? "是" : "否")}</td>
-      <td>${escapeHtml(row.singleWave ? "是" : "否")}</td>
-      <td>${escapeHtml(row.isNightWave ? "是" : "否")}</td>
+      <td>${escapeHtml(row.relaxEnd ? "鏄? : "鍚?)}</td>
+      <td>${escapeHtml(row.singleWave ? "鏄? : "鍚?)}</td>
+      <td>${escapeHtml(row.isNightWave ? "鏄? : "鍚?)}</td>
       <td>${escapeHtml(String(row.earliestDepartureMin ?? 0))}</td>
       <td>${escapeHtml(String(row.storeCount ?? 0))}</td>
     </tr>
@@ -2888,28 +2882,28 @@ function renderSolveDiagnoseModal(report) {
   body.innerHTML = `
     <div class="table-wrap" style="color:#111;">
       <table class="load-convert-table">
-        <thead><tr><th>字段</th><th>状态</th><th>说明</th></tr></thead>
+        <thead><tr><th>瀛楁</th><th>鐘舵€?/th><th>璇存槑</th></tr></thead>
         <tbody>${scenarioRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">门店字段诊断：只看该门店所属波次的时间。未参与波次为空是正常业务状态，未参与波次如果有值会被视为污染。</div>
+      <div class="note" style="margin-bottom:8px;">闂ㄥ簵瀛楁璇婃柇锛氬彧鐪嬭闂ㄥ簵鎵€灞炴尝娆＄殑鏃堕棿銆傛湭鍙備笌娉㈡涓虹┖鏄甯镐笟鍔＄姸鎬侊紝鏈弬涓庢尝娆″鏋滄湁鍊间細琚涓烘薄鏌撱€?/div>
       <table class="load-convert-table">
-        <thead><tr><th>门店</th><th>名称</th><th>波次归属</th><th>应检查波次</th><th>boxes</th><th>时间状态</th><th>说明</th><th>时间内容</th><th>实际服务</th><th>备用服务</th><th>parking</th></tr></thead>
+        <thead><tr><th>闂ㄥ簵</th><th>鍚嶇О</th><th>娉㈡褰掑睘</th><th>搴旀鏌ユ尝娆?/th><th>boxes</th><th>鏃堕棿鐘舵€?/th><th>璇存槑</th><th>鏃堕棿鍐呭</th><th>瀹為檯鏈嶅姟</th><th>澶囩敤鏈嶅姟</th><th>parking</th></tr></thead>
         <tbody>${storeRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">车辆字段诊断：capacity / speed / 可否冷链 / 历史里程 / 历史波次 / routes 是否能直接取得。</div>
+      <div class="note" style="margin-bottom:8px;">杞﹁締瀛楁璇婃柇锛歝apacity / speed / 鍙惁鍐烽摼 / 鍘嗗彶閲岀▼ / 鍘嗗彶娉㈡ / routes 鏄惁鑳界洿鎺ュ彇寰椼€?/div>
       <table class="load-convert-table">
-        <thead><tr><th>车牌</th><th>司机</th><th>车型</th><th>capacity</th><th>speed</th><th>冷链</th><th>历史里程</th><th>历史波次</th><th>最早出车</th><th>routes长度</th></tr></thead>
+        <thead><tr><th>杞︾墝</th><th>鍙告満</th><th>杞﹀瀷</th><th>capacity</th><th>speed</th><th>鍐烽摼</th><th>鍘嗗彶閲岀▼</th><th>鍘嗗彶娉㈡</th><th>鏈€鏃╁嚭杞?/th><th>routes闀垮害</th></tr></thead>
         <tbody>${vehicleRows}</tbody>
       </table>
     </div>
     <div class="table-wrap" style="margin-top:12px;color:#111;">
-      <div class="note" style="margin-bottom:8px;">波次字段诊断：看看当前波次是否完整、是否是夜波/单波次、以及店铺数量是否对得上。</div>
+      <div class="note" style="margin-bottom:8px;">娉㈡瀛楁璇婃柇锛氱湅鐪嬪綋鍓嶆尝娆℃槸鍚﹀畬鏁淬€佹槸鍚︽槸澶滄尝/鍗曟尝娆°€佷互鍙婂簵閾烘暟閲忔槸鍚﹀寰椾笂銆?/div>
       <table class="load-convert-table">
-        <thead><tr><th>波次</th><th>开始</th><th>结束</th><th>结束口径</th><th>放宽结束</th><th>单波次</th><th>夜波</th><th>最早出车</th><th>门店数</th></tr></thead>
+        <thead><tr><th>娉㈡</th><th>寮€濮?/th><th>缁撴潫</th><th>缁撴潫鍙ｅ緞</th><th>鏀惧缁撴潫</th><th>鍗曟尝娆?/th><th>澶滄尝</th><th>鏈€鏃╁嚭杞?/th><th>闂ㄥ簵鏁?/th></tr></thead>
         <tbody>${waveRows}</tbody>
       </table>
     </div>
@@ -3082,13 +3076,13 @@ async function buildDistanceData(stores) {
     if (!DISTANCE_PROGRESS_VERBOSE) return;
     const list = Array.isArray(pairs) ? pairs : [];
     if (!list.length) {
-      emit(`${title}：0 条。`);
+      emit(`${title}锛? 鏉°€俙);
       return;
     }
-    emit(`${title}：${list.length} 条。`);
+    emit(`${title}锛?{list.length} 鏉°€俙);
     for (let i = 0; i < list.length; i += chunkSize) {
       const chunk = list.slice(i, i + chunkSize);
-      emit(`${title}明细 ${i + 1}-${Math.min(i + chunkSize, list.length)}：${chunk.join(" | ")}`);
+      emit(`${title}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, list.length)}锛?{chunk.join(" | ")}`);
     }
   };
   if (USE_FULL_DISTANCE_MATRIX_FROM_BACKEND) {
@@ -3114,7 +3108,7 @@ async function buildDistanceData(stores) {
               const dominantSource = String(data?.dbDominantSource || "");
               const sourceCounts = data?.dbSourceCounts || {};
               console.log(`[buildDistanceData] matrix source=database-full nodeCount=${Number(data?.nodeCount || 0)} dbReadMs=${Number(data?.dbReadMs || 0)} dbDominantSource=${dominantSource}`);
-              reportRelayStageProgress(`距离矩阵来源确认：database-full，主数据源=${dominantSource || "unknown"}，missing=0，node=${Number(data?.nodeCount || 0)}，dbReadMs=${Number(data?.dbReadMs || 0)}。`);
+              reportRelayStageProgress(`璺濈鐭╅樀鏉ユ簮纭锛歞atabase-full锛屼富鏁版嵁婧?${dominantSource || "unknown"}锛宮issing=0锛宯ode=${Number(data?.nodeCount || 0)}锛宒bReadMs=${Number(data?.dbReadMs || 0)}銆俙);
               return {
                 dist: data.dist,
                 duration: data.duration,
@@ -3133,25 +3127,25 @@ async function buildDistanceData(stores) {
                 },
               };
             }
-            console.warn("[buildDistanceData] database full matrix incomplete, fallback to amap/straight", { missingCount, sample: data?.missingPairs?.slice?.(0, 5) || [] });
+            throw new Error(`distance matrix incomplete, missing=${missingCount}`);
           } else {
-            console.warn(`[buildDistanceData] database full matrix http=${response.status}, fallback to amap/straight`);
+            throw new Error(`distance matrix http=${response.status}`);
           }
         } finally {
           clearTimeout(timer);
         }
       }
     } catch (error) {
-      console.warn("[buildDistanceData] database full matrix request failed, fallback to amap/straight", error);
+      throw new Error(`distance matrix required: ${error?.message || error}`);
     }
   }
   const straight = buildStraightDistanceData(stores);
   const nodes = [DC, ...stores];
   const nodeIds = nodes.map((node) => node.id);
   const totalPairCount = Math.max(0, nodes.length * (nodes.length - 1));
-  emit(`距离矩阵构建：节点 ${nodes.length}（库房+门店），目标有向边 ${totalPairCount} 条。`);
+  emit(`璺濈鐭╅樀鏋勫缓锛氳妭鐐?${nodes.length}锛堝簱鎴?闂ㄥ簵锛夛紝鐩爣鏈夊悜杈?${totalPairCount} 鏉°€俙);
   if (!AMAP_WEB_SERVICE_KEY || typeof fetch !== "function") {
-    emit("距离矩阵构建：高德能力不可用，直接回退直线距离。");
+    emit("璺濈鐭╅樀鏋勫缓锛氶珮寰疯兘鍔涗笉鍙敤锛岀洿鎺ュ洖閫€鐩寸嚎璺濈銆?);
     return { ...straight, source: "straight-fallback", cacheHitPairs: 0, fetchedPairs: 0, distDbStats: { fullMatrix: false, missingCount: -1 } };
   }
 
@@ -3175,15 +3169,15 @@ async function buildDistanceData(stores) {
       }
     });
   });
-  emitChunkedPairs("距离缓存命中", cacheDetails || [], 6);
+  emitChunkedPairs("璺濈缂撳瓨鍛戒腑", cacheDetails || [], 6);
 
   try {
     for (const destinationNode of nodes) {
       const pendingOrigins = nodes.filter((originNode) => originNode.id !== destinationNode.id && !(dist[originNode.id]?.[destinationNode.id] > 0));
-      emit(`距离拉取：目标点 ${destinationNode.id}，待拉取起点 ${pendingOrigins.length}。`);
+      emit(`璺濈鎷夊彇锛氱洰鏍囩偣 ${destinationNode.id}锛屽緟鎷夊彇璧风偣 ${pendingOrigins.length}銆俙);
       for (let start = 0; start < pendingOrigins.length; start += AMAP_ORIGIN_BATCH_SIZE) {
         const batch = pendingOrigins.slice(start, start + AMAP_ORIGIN_BATCH_SIZE);
-        emit(`距离拉取：目标点 ${destinationNode.id}，批次 ${Math.floor(start / AMAP_ORIGIN_BATCH_SIZE) + 1}/${Math.max(1, Math.ceil(pendingOrigins.length / AMAP_ORIGIN_BATCH_SIZE))}，起点 ${batch.map((x) => x.id).join("、")}。`);
+        emit(`璺濈鎷夊彇锛氱洰鏍囩偣 ${destinationNode.id}锛屾壒娆?${Math.floor(start / AMAP_ORIGIN_BATCH_SIZE) + 1}/${Math.max(1, Math.ceil(pendingOrigins.length / AMAP_ORIGIN_BATCH_SIZE))}锛岃捣鐐?${batch.map((x) => x.id).join("銆?)}銆俙);
         const results = await fetchAmapDistanceBatch(batch, destinationNode);
         const fetchedDetails = DISTANCE_PROGRESS_VERBOSE ? [] : null;
         batch.forEach((originNode, index) => {
@@ -3200,13 +3194,13 @@ async function buildDistanceData(stores) {
             fetchedDetails.push(`${originNode.id}->${destinationNode.id} ${distanceKm.toFixed(2)}km/${durationMinutes.toFixed(1)}m`);
           }
         });
-        emitChunkedPairs(`距离拉取结果（目标${destinationNode.id}）`, fetchedDetails || [], 6);
+        emitChunkedPairs(`璺濈鎷夊彇缁撴灉锛堢洰鏍?{destinationNode.id}锛塦, fetchedDetails || [], 6);
       }
     }
     saveAmapDistanceCache(cache);
   } catch (error) {
     console.warn("AMap distance fetch failed, fallback to straight-line data.", error);
-    emit(`距离拉取异常：${error?.message || error}，将自动补齐直线距离。`);
+    emit(`璺濈鎷夊彇寮傚父锛?{error?.message || error}锛屽皢鑷姩琛ラ綈鐩寸嚎璺濈銆俙);
   }
 
   const fallbackDetails = DISTANCE_PROGRESS_VERBOSE ? [] : null;
@@ -3224,9 +3218,9 @@ async function buildDistanceData(stores) {
       if (!(duration[fromNode.id][toNode.id] > 0)) duration[fromNode.id][toNode.id] = straight.duration[fromNode.id][toNode.id];
     });
   });
-  emitChunkedPairs("距离直线补齐", fallbackDetails || [], 6);
+  emitChunkedPairs("璺濈鐩寸嚎琛ラ綈", fallbackDetails || [], 6);
   const fallbackCount = DISTANCE_PROGRESS_VERBOSE ? fallbackDetails.length : Math.max(0, totalPairCount - cacheHitPairs - fetchedPairs);
-  emit(`距离矩阵完成：缓存命中 ${cacheHitPairs}，新拉取 ${fetchedPairs}，直线补齐 ${fallbackCount}，最终总边 ${totalPairCount}。`);
+  emit(`璺濈鐭╅樀瀹屾垚锛氱紦瀛樺懡涓?${cacheHitPairs}锛屾柊鎷夊彇 ${fetchedPairs}锛岀洿绾胯ˉ榻?${fallbackCount}锛屾渶缁堟€昏竟 ${totalPairCount}銆俙);
 
   return {
     dist,
@@ -3257,12 +3251,12 @@ function routeNodeDisplay(id, scenario) {
 }
 
 function buildRouteDisplay(routeIds = [], scenario) {
-  return [DC.id, ...routeIds, DC.id].map((id) => routeNodeDisplay(id, scenario)).join(" → ");
+  return [DC.id, ...routeIds, DC.id].map((id) => routeNodeDisplay(id, scenario)).join(" 鈫?");
 }
 
 function shortenMapName(name, limit = 14) {
   const text = String(name || "");
-  return text.length > limit ? `${text.slice(0, limit)}…` : text;
+  return text.length > limit ? `${text.slice(0, limit)}鈥 : text;
 }
 
 function computeMapOverlayMarkers(markers = [], polyline = []) {
@@ -3353,7 +3347,7 @@ async function getTripRouteMapData(result, wave, plan, trip) {
   const staticMapUrl = `https://restapi.amap.com/v3/staticmap?size=1100*640&scale=2&traffic=1&markers=${encodeURIComponent(markerSegments.join("|"))}&paths=8,0x2563EB,0.95,,0:${encodeURIComponent(pathParam)}&key=${encodeURIComponent(AMAP_WEB_SERVICE_KEY)}`;
 
   return {
-    title: `${plan.vehicle.plateNo} · ${wave.waveId} · ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}`,
+    title: `${plan.vehicle.plateNo} 路 ${wave.waveId} 路 ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}`,
     staticMapUrl,
     markers,
     legs,
@@ -3363,7 +3357,7 @@ async function getTripRouteMapData(result, wave, plan, trip) {
 }
 
 function getSingleWaveStoreIds(stores, dist, thresholdKm) {
-  // 彻底停用“单波次自动分流”，所有门店仅按业务波次（W1/W2/W3/W4）参与求解。
+  // 褰诲簳鍋滅敤鈥滃崟娉㈡鑷姩鍒嗘祦鈥濓紝鎵€鏈夐棬搴椾粎鎸変笟鍔℃尝娆★紙W1/W2/W3/W4锛夊弬涓庢眰瑙ｃ€?
   return [];
 }
 function validateInput() {
@@ -3372,7 +3366,7 @@ function validateInput() {
   if (state.settings.ignoreWaves) return "";
   if (!state.waves.length) return L("noWaves");
   const stores = enrichStores(state.stores);
-  // 停用“单波次分流”：所有门店都按业务波次校验覆盖关系
+  // 鍋滅敤鈥滃崟娉㈡鍒嗘祦鈥濓細鎵€鏈夐棬搴楅兘鎸変笟鍔℃尝娆℃牎楠岃鐩栧叧绯?
   const regularIds = new Set(stores.map((store) => store.id));
   const covered = new Set();
   for (const wave of state.waves) {
@@ -3387,7 +3381,7 @@ function validateInput() {
 
 async function buildScenario() {
   const stores = enrichStores(state.stores);
-  reportRelayStageProgress(`场景构建：开始整理门店主数据，共 ${stores.length} 家。`);
+  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氬紑濮嬫暣鐞嗛棬搴椾富鏁版嵁锛屽叡 ${stores.length} 瀹躲€俙);
   const dispatchStartMin = toMinutes(state.settings.dispatchStartTime || "19:10");
   const normalizedStores = stores.map((store) => ({
       ...store,
@@ -3398,15 +3392,15 @@ async function buildScenario() {
     }));
   const storeRows = normalizedStores.map((store) => {
     const desired = String(store.waveArrivals?.w1 || store.desiredArrival || "");
-    return `${store.id}[波次:${store.waveBelongs || "-"} 货量:${Number(store.totalResolvedLoad || 0).toFixed(6)} W1:${Number(store.resolvedWave1Load || 0).toFixed(6)} W2:${Number(store.resolvedWave2Load || 0).toFixed(6)} W3:${Number(store.resolvedWave3Load || 0).toFixed(6)} W4:${Number(store.resolvedWave4Load || 0).toFixed(6)} 期望:${desired || "--:--"} 允许偏差:${Number(store.parking || 0)} 卸货:${Number(store.actualServiceMinutes || 0)}]`;
+    return `${store.id}[娉㈡:${store.waveBelongs || "-"} 璐ч噺:${Number(store.totalResolvedLoad || 0).toFixed(6)} W1:${Number(store.resolvedWave1Load || 0).toFixed(6)} W2:${Number(store.resolvedWave2Load || 0).toFixed(6)} W3:${Number(store.resolvedWave3Load || 0).toFixed(6)} W4:${Number(store.resolvedWave4Load || 0).toFixed(6)} 鏈熸湜:${desired || "--:--"} 鍏佽鍋忓樊:${Number(store.parking || 0)} 鍗歌揣:${Number(store.actualServiceMinutes || 0)}]`;
   });
   for (let i = 0; i < storeRows.length; i += 15) {
     const chunk = storeRows.slice(i, i + 15);
-    reportRelayStageProgress(`场景构建：门店明细 ${i + 1}-${Math.min(i + 15, storeRows.length)}：${chunk.join(" | ")}`);
+    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氶棬搴楁槑缁?${i + 1}-${Math.min(i + 15, storeRows.length)}锛?{chunk.join(" | ")}`);
   }
   const distanceData = await buildDistanceData(normalizedStores);
   const dist = distanceData.dist;
-  // 停用“单波次分流”：不再按距离阈值强制切到“单波次”
+  // 鍋滅敤鈥滃崟娉㈡鍒嗘祦鈥濓細涓嶅啀鎸夎窛绂婚槇鍊煎己鍒跺垏鍒扳€滃崟娉㈡鈥?
   const singleWaveThreshold = Number(state.settings.singleWaveDistanceKm || 70);
   const singleWaveStoreIds = [];
   const singleWaveIdSet = new Set();
@@ -3443,19 +3437,19 @@ async function buildScenario() {
           isNightWave,
           earliestDepartureMin: waveId === "W2" ? 23 * 60 : startMin,
           nightGroup: isNightWave ? "NIGHT" : "",
-          // 严格按业务波次参与求解，不做单波次改分流
+          // 涓ユ牸鎸変笟鍔℃尝娆″弬涓庢眰瑙ｏ紝涓嶅仛鍗曟尝娆℃敼鍒嗘祦
           storeList: parseStoreIds(w.storeIds),
         };
       }).filter((wave) => wave.storeList.length);
       return normalWaves;
     })();
-  reportRelayStageProgress(`场景构建：波次共 ${waves.length} 个。`);
+  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氭尝娆″叡 ${waves.length} 涓€俙);
   waves.forEach((wave) => {
-    reportRelayStageProgress(`场景构建：${wave.waveId} ${wave.start || "--:--"}-${wave.end || "--:--"}，门店 ${Array.isArray(wave.storeList) ? wave.storeList.length : 0} 家，门店清单：${(wave.storeList || []).join("、") || "-"}`);
+    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛?{wave.waveId} ${wave.start || "--:--"}-${wave.end || "--:--"}锛岄棬搴?${Array.isArray(wave.storeList) ? wave.storeList.length : 0} 瀹讹紝闂ㄥ簵娓呭崟锛?{(wave.storeList || []).join("銆?) || "-"}`);
   });
-  reportRelayStageProgress(`场景构建：车辆共 ${state.vehicles.length} 台。`);
+  reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氳溅杈嗗叡 ${state.vehicles.length} 鍙般€俙);
   state.vehicles.forEach((v) => {
-    reportRelayStageProgress(`场景构建：车辆 ${v.plateNo || "-"} 类型=${ENFORCED_VEHICLE_TYPE} 容量=${Number(v.capacity || 0)} 速度=${Number(v.speed || 0)} 冷链=${Boolean(v.canCarryCold)}`);
+    reportRelayStageProgress(`鍦烘櫙鏋勫缓锛氳溅杈?${v.plateNo || "-"} 绫诲瀷=${ENFORCED_VEHICLE_TYPE} 瀹归噺=${Number(v.capacity || 0)} 閫熷害=${Number(v.speed || 0)} 鍐烽摼=${Boolean(v.canCarryCold)}`);
   });
   const backendStrategyConfig = buildBackendStrategyConfig(state.strategyConfig);
   return {
@@ -3574,8 +3568,7 @@ function buildStoreAssignmentMapFromSolution(solution = []) {
                 tripNo: trip?.tripNo || 1,
               });
             }
-            // 保留单键仅作兼容兜底，前端显示查询已切到复合键
-            map.set(storeKey, {
+            // 淇濈暀鍗曢敭浠呬綔鍏煎鍏滃簳锛屽墠绔樉绀烘煡璇㈠凡鍒囧埌澶嶅悎閿?            map.set(storeKey, {
               plateNo,
               waveId,
               tripNo: trip?.tripNo || 1,
@@ -3619,8 +3612,7 @@ function getStoreAssignmentByRule(store = {}, assignmentMap = new Map()) {
       if (hit && String(hit.plateNo || "").trim()) return hit;
     }
   }
-  // 兜底老键（避免历史归档不可见）
-  for (const variant of variants) {
+  // 鍏滃簳鑰侀敭锛堥伩鍏嶅巻鍙插綊妗ｄ笉鍙锛?  for (const variant of variants) {
     const hit = assignmentMap.get(variant);
     if (hit && String(hit.plateNo || "").trim()) return hit;
   }
@@ -3649,7 +3641,7 @@ function toggleDataTableSort(kind, field) {
 function buildSortMark(kind, field) {
   const cfg = getSortConfig(kind);
   if (state.ui[cfg.fieldKey] !== field) return "";
-  return state.ui[cfg.dirKey] === "asc" ? " ▲" : " ▼";
+  return state.ui[cfg.dirKey] === "asc" ? " 鈻? : " 鈻?;
 }
 
 function buildDataTableHtml({ tableKind = "store", columns = [], rows = [], tableClass = "" } = {}) {
@@ -3765,7 +3757,7 @@ function buildTripFromRoute(route, vehicle, scenario, wave, startTime, tripNo, o
     const store = scenario.storeMap.get(storeId);
     if (!store) return null;
     const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
-    // 冷链约束已停用：不再按 coldRatio/canCarryCold 拦截门店分配
+    // 鍐烽摼绾︽潫宸插仠鐢細涓嶅啀鎸?coldRatio/canCarryCold 鎷︽埅闂ㄥ簵鍒嗛厤
     loadBoxes += getStoreSolveLoadForWave(store, wave);
     if (!IGNORE_CAPACITY_CONSTRAINT && loadBoxes > getVehicleSolveCapacity(vehicle)) return null;
 
@@ -3826,12 +3818,12 @@ function buildTripFromRoute(route, vehicle, scenario, wave, startTime, tripNo, o
 
 function mapTripFailureLabel(code) {
   const key = String(code || "").trim();
-  if (key === "capacity") return "容量";
-  if (key === "arrival_window") return "时间窗";
-  if (key === "wave_end") return "波次截止";
-  if (key === "max_route_km" || key === "max_route_km_single" || key === "max_route_km_return" || key === "night_regular_distance") return "里程";
-  if (key === "store_missing") return "门店缺失";
-  return "综合";
+  if (key === "capacity") return "瀹归噺";
+  if (key === "arrival_window") return "鏃堕棿绐?;
+  if (key === "wave_end") return "娉㈡鎴";
+  if (key === "max_route_km" || key === "max_route_km_single" || key === "max_route_km_return" || key === "night_regular_distance") return "閲岀▼";
+  if (key === "store_missing") return "闂ㄥ簵缂哄け";
+  return "缁煎悎";
 }
 
 function diagnoseTripBuildFailure(route, vehicle, scenario, wave, startTime, options = {}) {
@@ -3845,14 +3837,14 @@ function diagnoseTripBuildFailure(route, vehicle, scenario, wave, startTime, opt
   for (const storeId of route) {
     const store = scenario.storeMap.get(storeId);
     if (!store) {
-      if (isW3Wave) console.log(`[W3] 路线拒绝: store_missing, storeId=${storeId}`);
+      if (isW3Wave) console.log(`[W3] 璺嚎鎷掔粷: store_missing, storeId=${storeId}`);
       return { code: "store_missing", label: mapTripFailureLabel("store_missing"), storeId };
     }
     const timing = getStoreTimingForWave(store, wave, scenario.dispatchStartMin);
     loadBoxes += getStoreSolveLoadForWave(store, wave);
     if (!IGNORE_CAPACITY_CONSTRAINT && loadBoxes > getVehicleSolveCapacity(vehicle)) {
       if (isW3Wave) {
-        console.log(`[W3] 路线拒绝: capacity, storeId=${storeId}, loadBoxes=${loadBoxes}, capacity=${getVehicleSolveCapacity(vehicle)}`);
+        console.log(`[W3] 璺嚎鎷掔粷: capacity, storeId=${storeId}, loadBoxes=${loadBoxes}, capacity=${getVehicleSolveCapacity(vehicle)}`);
       }
       return { code: "capacity", label: mapTripFailureLabel("capacity"), storeId };
     }
@@ -3863,16 +3855,16 @@ function diagnoseTripBuildFailure(route, vehicle, scenario, wave, startTime, opt
     totalDistance += legDistance;
     if (isW3Wave) {
       outboundDistance += legDistance;
-      console.log(`[W3] 检查路线: storeId=${storeId}, legDistance=${legDistance}, outboundDistance累计=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+      console.log(`[W3] 妫€鏌ヨ矾绾? storeId=${storeId}, legDistance=${legDistance}, outboundDistance绱=${outboundDistance}, limit=${w3OneWayMaxKm}`);
       if (outboundDistance > w3OneWayMaxKm) {
-        console.log(`[W3] 路线拒绝: max_route_km_single, storeId=${storeId}, outboundDistance=${outboundDistance}, limit=${w3OneWayMaxKm}`);
+        console.log(`[W3] 璺嚎鎷掔粷: max_route_km_single, storeId=${storeId}, outboundDistance=${outboundDistance}, limit=${w3OneWayMaxKm}`);
         return { code: "max_route_km_single", label: mapTripFailureLabel("max_route_km_single"), storeId };
       }
     }
     const overTolerance = Math.max(0, arrival - timing.latestAllowedArrivalMin);
     if (!options.allowToleranceBreak && overTolerance > 0) {
       if (isW3Wave) {
-        console.log(`[W3] 路线拒绝: arrival_window, storeId=${storeId}, arrival=${arrival}, latestAllowed=${timing.latestAllowedArrivalMin}, overTolerance=${overTolerance}`);
+        console.log(`[W3] 璺嚎鎷掔粷: arrival_window, storeId=${storeId}, arrival=${arrival}, latestAllowed=${timing.latestAllowedArrivalMin}, overTolerance=${overTolerance}`);
       }
       return { code: "arrival_window", label: mapTripFailureLabel("arrival_window"), storeId };
     }
@@ -3889,11 +3881,11 @@ function diagnoseTripBuildFailure(route, vehicle, scenario, wave, startTime, opt
     : Math.max(0, serviceEnd - wave.endMin);
   if (!wave.relaxEnd && waveLateMinutes > 0) {
     if (isW3Wave) {
-      console.log(`[W3] 路线拒绝: wave_end, storeId=${route[route.length - 1]}, finish=${finish}, serviceEnd=${serviceEnd}, endMin=${wave.endMin}, endMode=${wave.endMode || "return"}`);
+      console.log(`[W3] 璺嚎鎷掔粷: wave_end, storeId=${route[route.length - 1]}, finish=${finish}, serviceEnd=${serviceEnd}, endMin=${wave.endMin}, endMode=${wave.endMode || "return"}`);
     }
     return { code: "wave_end", label: mapTripFailureLabel("wave_end"), storeId: route[route.length - 1] };
   }
-  if (isW3Wave) console.log(`[W3] 路线拒绝: unknown, storeId=${route[0]}`);
+  if (isW3Wave) console.log(`[W3] 璺嚎鎷掔粷: unknown, storeId=${route[0]}`);
   return { code: "unknown", label: mapTripFailureLabel("unknown"), storeId: route[0] };
 }
 
@@ -4007,16 +3999,16 @@ function computePlansCostBreakdown(plans, scenario, wave) {
 function formatWaveCostBreakdown(breakdown) {
   if (!breakdown) return "";
   const parts = [
-    `里程 ${Number(breakdown.distanceCost || 0).toFixed(1)}`,
+    `閲岀▼ ${Number(breakdown.distanceCost || 0).toFixed(1)}`,
   ];
-  if (Number(breakdown.latenessPenalty || 0) > 0) parts.push(`晚到 ${Number(breakdown.latenessPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.arrivalViolationPenalty || 0) > 0) parts.push(`超允许偏差 ${Number(breakdown.arrivalViolationPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.waveLatePenalty || 0) > 0) parts.push(`波次超时 ${Number(breakdown.waveLatePenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.vehicleBusyPenalty || 0) > 0) parts.push(`车辆续跑 ${Number(breakdown.vehicleBusyPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.extraTripPenalty || 0) > 0) parts.push(`多趟次 ${Number(breakdown.extraTripPenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.lateRoutePenalty || 0) > 0) parts.push(`晚到线路 ${Number(breakdown.lateRoutePenalty || 0).toFixed(1)}`);
-  if (Number(breakdown.loadBonus || 0) > 0) parts.push(`装载抵扣 -${Number(breakdown.loadBonus || 0).toFixed(1)}`);
-  return parts.join("，");
+  if (Number(breakdown.latenessPenalty || 0) > 0) parts.push(`鏅氬埌 ${Number(breakdown.latenessPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.arrivalViolationPenalty || 0) > 0) parts.push(`瓒呭厑璁稿亸宸?${Number(breakdown.arrivalViolationPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.waveLatePenalty || 0) > 0) parts.push(`娉㈡瓒呮椂 ${Number(breakdown.waveLatePenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.vehicleBusyPenalty || 0) > 0) parts.push(`杞﹁締缁窇 ${Number(breakdown.vehicleBusyPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.extraTripPenalty || 0) > 0) parts.push(`澶氳稛娆?${Number(breakdown.extraTripPenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.lateRoutePenalty || 0) > 0) parts.push(`鏅氬埌绾胯矾 ${Number(breakdown.lateRoutePenalty || 0).toFixed(1)}`);
+  if (Number(breakdown.loadBonus || 0) > 0) parts.push(`瑁呰浇鎶垫墸 -${Number(breakdown.loadBonus || 0).toFixed(1)}`);
+  return parts.join("锛?);
 }
 
 function buildTripCandidate(plan, store, scenario, wave, debug = false, options = {}) {
@@ -4114,7 +4106,7 @@ function localizeUnscheduledReason(reason) {
 function getDisplayUnscheduledReason(item) {
   const reason = String(item?.reason || "").trim().toLowerCase();
   const reasonText = String(item?.reasonText || "").trim();
-  const isCapacity = reason === "capacity" || /capacity|容量/.test(reasonText.toLowerCase());
+  const isCapacity = reason === "capacity" || /capacity|瀹归噺/.test(reasonText.toLowerCase());
   if (IGNORE_CAPACITY_CONSTRAINT && isCapacity) {
     return localizeUnscheduledReason("slot");
   }
@@ -4162,7 +4154,7 @@ function diagnoseUnscheduledStore(store, plans, scenario, wave) {
 }
 
 function formatUnscheduledDetails(unscheduledStores, limit = 8) {
-  return (unscheduledStores || []).slice(0, limit).map((item) => `${item.storeName}（${getDisplayUnscheduledReason(item)}）`).join("、");
+  return (unscheduledStores || []).slice(0, limit).map((item) => `${item.storeName}锛?{getDisplayUnscheduledReason(item)}锛塦).join("銆?);
 }
 
 function summarizeUnscheduledReasons(unscheduledStores) {
@@ -4173,8 +4165,8 @@ function summarizeUnscheduledReasons(unscheduledStores) {
   }
   return [...buckets.entries()]
     .sort((a, b) => b[1] - a[1])
-    .map(([label, count]) => `${label} × ${count}`)
-    .join("；");
+    .map(([label, count]) => `${label} 脳 ${count}`)
+    .join("锛?);
 }
 
 function evaluateStoreInsertionChoices(plans, store, scenario, wave, traceMode = false) {
@@ -4404,7 +4396,7 @@ function rebuildWavePlansFromState(routeState, scenario, wave) {
         ? `${item.plate}[${item.reasonLabel}/${item.storeId}]`
         : `${item.plate}[${item.reasonLabel}]`
     ));
-    reportRelayStageProgress(`后端重建降级：${degradedVehicles.length} 台车辆路线不合法，已置空（${examples.join("、")}）`);
+    reportRelayStageProgress(`鍚庣閲嶅缓闄嶇骇锛?{degradedVehicles.length} 鍙拌溅杈嗚矾绾夸笉鍚堟硶锛屽凡缃┖锛?{examples.join("銆?)}锛塦);
   }
   return plans;
 }
@@ -5074,11 +5066,11 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
       scope: "wave",
       waveId: wave.waveId,
       stage: "hybrid-start",
-      textZh: `混合阶段从贪心插入初始解启动，初始综合成本 ${currentCost.toFixed(1)}。`,
-      textJa: `混合段階は貪欲挿入の初期解から開始し、初期総合コストは ${currentCost.toFixed(1)} です。`,
+      textZh: `娣峰悎闃舵浠庤椽蹇冩彃鍏ュ垵濮嬭В鍚姩锛屽垵濮嬬患鍚堟垚鏈?${currentCost.toFixed(1)}銆俙,
+      textJa: `娣峰悎娈甸殠銇勃娆叉尶鍏ャ伄鍒濇湡瑙ｃ亱銈夐枊濮嬨仐銆佸垵鏈熺窂鍚堛偝銈广儓銇?${currentCost.toFixed(1)} 銇с仚銆俙,
       },
   ];
-  reportRelayStageProgress(`${wave.waveId} 混合VRPTW已启动，当前波次内部代价 ${currentCost.toFixed(1)}，开始做混合邻域迭代。`);
+  reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW宸插惎鍔紝褰撳墠娉㈡鍐呴儴浠ｄ环 ${currentCost.toFixed(1)}锛屽紑濮嬪仛娣峰悎閭诲煙杩唬銆俙);
   for (let iteration = 0; iteration < 110; iteration += 1) {
     if (iteration && iteration % 6 === 0) await cooperativeYield();
     const neighborhood = sampleNeighborhood(currentState, scenario, wave, random, 24, true);
@@ -5109,15 +5101,15 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
         moveKey: candidate.meta?.type || "mixed",
         candidateCost: candidate.cost,
         bestCost: Math.min(bestCost, candidate.cost),
-      textZh: `第 ${iteration + 1} 轮接受 ${candidate.meta?.type || "mixed"} 动作，候选波次内部代价 ${candidate.cost.toFixed(1)}，当前最好 ${Math.min(bestCost, candidate.cost).toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目で ${candidate.meta?.type || "mixed"} 動作を採用し、候補コスト ${candidate.cost.toFixed(1)}、現時点の最良は ${Math.min(bestCost, candidate.cost).toFixed(1)}。`,
+      textZh: `绗?${iteration + 1} 杞帴鍙?${candidate.meta?.type || "mixed"} 鍔ㄤ綔锛屽€欓€夋尝娆″唴閮ㄤ唬浠?${candidate.cost.toFixed(1)}锛屽綋鍓嶆渶濂?${Math.min(bestCost, candidate.cost).toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇?${candidate.meta?.type || "mixed"} 鍕曚綔銈掓帯鐢ㄣ仐銆佸€欒銈炽偣銉?${candidate.cost.toFixed(1)}銆佺従鏅傜偣銇渶鑹伅 ${Math.min(bestCost, candidate.cost).toFixed(1)}銆俙,
       });
     }
     if (candidate.cost + 1e-6 < bestCost) {
       bestCost = candidate.cost;
       bestState = cloneWaveRouteState(candidate.plans);
       bestPlans = candidate.plans;
-      reportRelayStageProgress(`${wave.waveId} 混合VRPTW在第 ${iteration + 1} 轮刷新最优，波次内部代价降到 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环闄嶅埌 ${bestCost.toFixed(1)}銆俙);
       if (traceLog.length < 22) {
         pushTraceEvent(traceLog, {
           algorithmKey: "hybrid",
@@ -5127,13 +5119,13 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
           iteration,
           moveKey: candidate.meta?.type || "mixed",
           bestCost,
-      textZh: `第 ${iteration + 1} 轮刷新最优解，动作 ${candidate.meta?.type || "mixed"}，新的波次内部代价 ${bestCost.toFixed(1)}。`,
-          textJa: `${iteration + 1} 回目で最良解を更新し、動作 ${candidate.meta?.type || "mixed"}、新しい最良コストは ${bestCost.toFixed(1)}。`,
+      textZh: `绗?${iteration + 1} 杞埛鏂版渶浼樿В锛屽姩浣?${candidate.meta?.type || "mixed"}锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+          textJa: `${iteration + 1} 鍥炵洰銇ф渶鑹В銈掓洿鏂般仐銆佸嫊浣?${candidate.meta?.type || "mixed"}銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
         });
       }
     }
     if ((iteration + 1) % 18 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 混合VRPTW已跑到第 ${iteration + 1}/110 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW宸茶窇鍒扮 ${iteration + 1}/110 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
     }
     if (noImproveRounds >= 6) {
       const kick = localImproveState(bestState, scenario, wave, random, 3);
@@ -5156,10 +5148,10 @@ async function optimizeWaveWithHybrid(initialPlans, scenario, wave, randomSeed =
     waveId: wave.waveId,
     stage: "hybrid-finish",
     bestCost,
-    textZh: `混合阶段结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `混合段階が終了し、最終最良総合コストは ${bestCost.toFixed(1)} です。`,
+    textZh: `娣峰悎闃舵缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `娣峰悎娈甸殠銇岀祩浜嗐仐銆佹渶绲傛渶鑹窂鍚堛偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 混合VRPTW结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 娣峰悎VRPTW缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   return { plans: finalPlans, traceLog };
 }
 
@@ -5183,10 +5175,10 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
     waveId: wave.waveId,
     stage: "tabu-start",
     bestCost,
-    textZh: `禁忌搜索从当前可行解出发，初始波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `タブー探索は現在の可行解から開始し、初期コストは ${bestCost.toFixed(1)} です。`,
+    textZh: `绂佸繉鎼滅储浠庡綋鍓嶅彲琛岃В鍑哄彂锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `銈裤儢銉兼帰绱伅鐝惧湪銇彲琛岃В銇嬨倝闁嬪銇椼€佸垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 禁忌搜索已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储宸插惎鍔紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
   for (let iteration = 0; iteration < 120; iteration += 1) {
     if (iteration && iteration % 6 === 0) await cooperativeYield();
     let bestNeighbor = null;
@@ -5214,15 +5206,15 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
         candidateCost: currentCost,
         bestCost: Math.min(bestCost, currentCost),
         moveKey: bestNeighbor.meta?.type || "mixed",
-        textZh: `第 ${iteration + 1} 轮从邻域样本中选出当前最优邻居，动作 ${bestNeighbor.meta?.type || "mixed"}，成本 ${currentCost.toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目で近傍サンプルから最良隣接解を採用し、動作 ${bestNeighbor.meta?.type || "mixed"}、コストは ${currentCost.toFixed(1)} です。`,
+        textZh: `绗?${iteration + 1} 杞粠閭诲煙鏍锋湰涓€夊嚭褰撳墠鏈€浼橀偦灞咃紝鍔ㄤ綔 ${bestNeighbor.meta?.type || "mixed"}锛屾垚鏈?${currentCost.toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇ц繎鍌嶃偟銉炽儣銉亱銈夋渶鑹殻鎺ヨВ銈掓帯鐢ㄣ仐銆佸嫊浣?${bestNeighbor.meta?.type || "mixed"}銆併偝銈广儓銇?${currentCost.toFixed(1)} 銇с仚銆俙,
       });
     }
     if (currentCost < bestCost) {
       bestCost = currentCost;
       bestState = cloneWaveRouteState(currentPlans);
       bestPlans = currentPlans;
-      reportRelayStageProgress(`${wave.waveId} 禁忌搜索在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
       pushTraceEvent(traceLog, {
         algorithmKey: "tabu",
         scope: "wave",
@@ -5230,12 +5222,12 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
         stage: "tabu-best",
         iteration,
         bestCost,
-      textZh: `第 ${iteration + 1} 轮刷新禁忌搜索最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目でタブー探索の最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)} です。`,
+      textZh: `绗?${iteration + 1} 杞埛鏂扮蹇屾悳绱㈡渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇с偪銉栥兗鎺㈢储銇渶鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
       });
     }
     if ((iteration + 1) % 20 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 禁忌搜索已跑到第 ${iteration + 1}/120 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储宸茶窇鍒扮 ${iteration + 1}/120 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
     }
   }
   const finalPlans = rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans;
@@ -5245,10 +5237,10 @@ async function optimizeWaveWithTabu(initialPlans, scenario, wave, randomSeed = 7
     waveId: wave.waveId,
     stage: "tabu-finish",
     bestCost,
-    textZh: `禁忌搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `タブー探索が終了し、最終最良コストは ${bestCost.toFixed(1)} です。`,
+    textZh: `绂佸繉鎼滅储缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `銈裤儢銉兼帰绱亴绲備簡銇椼€佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 禁忌搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 绂佸繉鎼滅储缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   return { plans: finalPlans, traceLog };
 }
 
@@ -5271,10 +5263,10 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
     waveId: wave.waveId,
     stage: "lns-start",
     bestCost,
-    textZh: `大邻域搜索从初始解出发，开始做 destroy / repair 迭代，初始波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `大近傍探索は初期解から開始し、destroy / repair を反復します。初期コストは ${bestCost.toFixed(1)} です。`,
+    textZh: `澶ч偦鍩熸悳绱粠鍒濆瑙ｅ嚭鍙戯紝寮€濮嬪仛 destroy / repair 杩唬锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `澶ц繎鍌嶆帰绱伅鍒濇湡瑙ｃ亱銈夐枊濮嬨仐銆乨estroy / repair 銈掑弽寰┿仐銇俱仚銆傚垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 大邻域搜索已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熸悳绱㈠凡鍚姩锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   for (let iteration = 0; iteration < 70; iteration += 1) {
     if (iteration && iteration % 5 === 0) await cooperativeYield();
     const candidate = runLnsIteration(currentState, scenario, wave, random);
@@ -5299,15 +5291,15 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
         accepted,
         destroyKey: candidate.meta?.destroyKey || "random",
         repairKey: candidate.meta?.repairKey || "greedy",
-        textZh: `第 ${iteration + 1} 轮完成一次 ${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair，候选成本 ${candidateCost.toFixed(1)}${improved ? "，优于当前解并被接受" : "，作为扰动解被接受"}。`,
-        textJa: `${iteration + 1} 回目で ${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair を完了し、候補コスト ${candidateCost.toFixed(1)}${improved ? " は現解より良く採用されました" : " は攪乱解として採用されました"}。`,
+        textZh: `绗?${iteration + 1} 杞畬鎴愪竴娆?${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair锛屽€欓€夋垚鏈?${candidateCost.toFixed(1)}${improved ? "锛屼紭浜庡綋鍓嶈В骞惰鎺ュ彈" : "锛屼綔涓烘壈鍔ㄨВ琚帴鍙?}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇?${candidate.meta?.destroyKey || "random"} destroy + ${candidate.meta?.repairKey || "greedy"} repair 銈掑畬浜嗐仐銆佸€欒銈炽偣銉?${candidateCost.toFixed(1)}${improved ? " 銇従瑙ｃ倛銈婅壇銇忔帯鐢ㄣ仌銈屻伨銇椼仧" : " 銇敧涔辫В銇ㄣ仐銇︽帯鐢ㄣ仌銈屻伨銇椼仧"}銆俙,
       });
     }
     if (candidateCost < bestCost) {
       bestCost = candidateCost;
       bestState = cloneWaveRouteState(candidatePlans);
       bestPlans = candidatePlans;
-      reportRelayStageProgress(`${wave.waveId} 大邻域在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熷湪绗?${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
       pushTraceEvent(traceLog, {
         algorithmKey: "lns",
         scope: "wave",
@@ -5315,12 +5307,12 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
         stage: "lns-best",
         iteration,
         bestCost,
-        textZh: `第 ${iteration + 1} 轮刷新 LNS 最优解，波次内部代价 ${bestCost.toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目で LNS の最良解を更新し、最良コストは ${bestCost.toFixed(1)} です。`,
+        textZh: `绗?${iteration + 1} 杞埛鏂?LNS 鏈€浼樿В锛屾尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇?LNS 銇渶鑹В銈掓洿鏂般仐銆佹渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
       });
     }
     if ((iteration + 1) % 14 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 大邻域已跑到第 ${iteration + 1}/70 轮，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熷凡璺戝埌绗?${iteration + 1}/70 杞紝褰撳墠鏈€濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
     }
   }
   const finalPlans = rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans;
@@ -5330,10 +5322,10 @@ async function optimizeWaveWithLns(initialPlans, scenario, wave, randomSeed = 10
     waveId: wave.waveId,
     stage: "lns-finish",
     bestCost,
-    textZh: `大邻域搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `大近傍探索が終了し、最終最良コストは ${bestCost.toFixed(1)} です。`,
+    textZh: `澶ч偦鍩熸悳绱㈢粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `澶ц繎鍌嶆帰绱亴绲備簡銇椼€佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)} 銇с仚銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 大邻域搜索结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 澶ч偦鍩熸悳绱㈢粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   return { plans: finalPlans, traceLog };
 }
 
@@ -5522,7 +5514,7 @@ function formatRecommendedScore(value) {
 }
 
 function formatRecommendedScoreLabel(value) {
-  if (value === null || value === undefined || value === "") return "待计算";
+  if (value === null || value === undefined || value === "") return "寰呰绠?;
   const num = Number(value);
   return Number.isFinite(num) ? num.toFixed(4) : String(value);
 }
@@ -5547,25 +5539,25 @@ function renderRecommendedPlans() {
               <div><strong>best_score:</strong> ${formatRecommendedScore(item.snapshot?.best_score)}</div>
             </div>
           </div>
-          <button class="secondary select-recommended-plan" data-candidate-id="${item.id}">选择此方案</button>
+          <button class="secondary select-recommended-plan" data-candidate-id="${item.id}">閫夋嫨姝ゆ柟妗?/button>
         </div>
       `).join("")
-    : `<div class="empty-state">暂无推荐方案</div>`;
+    : `<div class="empty-state">鏆傛棤鎺ㄨ崘鏂规</div>`;
   mount.innerHTML = `
     <div class="panel-head">
       <div>
-        <h2>历史方案推荐</h2>
-        <p>当前任务日期：${taskDate}</p>
+        <h2>鍘嗗彶鏂规鎺ㄨ崘</h2>
+        <p>褰撳墠浠诲姟鏃ユ湡锛?{taskDate}</p>
       </div>
       <div class="toolbar inline-toolbar">
-        <button id="fetchRecommendedPlansBtn" class="primary">获取推荐方案</button>
+        <button id="fetchRecommendedPlansBtn" class="primary">鑾峰彇鎺ㄨ崘鏂规</button>
       </div>
     </div>
     <div class="recommended-selected">
       <div class="panel-head">
         <div>
-          <h3>当前已选方案</h3>
-          <p>${selected ? `sourceRunId: ${selected.sourceRunId || "-"} | created_at: ${selected.snapshot?.created_at || selected.createdAt || "-"} | strategy: ${selected.snapshot?.strategy || "-"} | goal: ${selected.snapshot?.goal || "-"} | best_score: ${formatRecommendedScore(selected.snapshot?.best_score)}` : "暂无已选方案"}</p>
+          <h3>褰撳墠宸查€夋柟妗?/h3>
+          <p>${selected ? `sourceRunId: ${selected.sourceRunId || "-"} | created_at: ${selected.snapshot?.created_at || selected.createdAt || "-"} | strategy: ${selected.snapshot?.strategy || "-"} | goal: ${selected.snapshot?.goal || "-"} | best_score: ${formatRecommendedScore(selected.snapshot?.best_score)}` : "鏆傛棤宸查€夋柟妗?}</p>
         </div>
       </div>
     </div>
@@ -5745,7 +5737,7 @@ async function ensureRunRegionMapReady() {
   if (!container) return false;
   if (runRegionMap) return true;
   if (!window.AMap?.Map) {
-    container.innerHTML = `<div class="empty-state">高德地图未加载完成，请稍后重试。</div>`;
+    container.innerHTML = `<div class="empty-state">楂樺痉鍦板浘鏈姞杞藉畬鎴愶紝璇风◢鍚庨噸璇曘€?/div>`;
     return false;
   }
   container.innerHTML = "";
@@ -5935,8 +5927,8 @@ function fitRunRegionMapView() {
 function renderRunRegionSchemeOptions() {
   const items = Array.isArray(runRegionSchemeCache.items) ? runRegionSchemeCache.items : [];
   const options = [
-    `<option value="">请选择分区方案号</option>`,
-    ...items.map((item) => `<option value="${escapeHtml(item.schemeNo)}">${escapeHtml(`${item.schemeNo} | ${item.name}${item.enabled ? "" : "（停用）"}`)}</option>`),
+    `<option value="">璇烽€夋嫨鍒嗗尯鏂规鍙?/option>`,
+    ...items.map((item) => `<option value="${escapeHtml(item.schemeNo)}">${escapeHtml(`${item.schemeNo} | ${item.name}${item.enabled ? "" : "锛堝仠鐢級"}`)}</option>`),
   ];
   const regionSelect = document.getElementById("runRegionSchemeSelect");
   if (regionSelect) {
@@ -5968,8 +5960,8 @@ function renderRunRegionTargetRegionOptions() {
   const items = Array.isArray(runRegionCache.items) ? runRegionCache.items : [];
   const previous = String(runRegionTargetRegionId || "all");
   const options = [
-    `<option value="all">全部</option>`,
-    ...items.map((item) => `<option value="${item.id}">${escapeHtml((item.regionCode ? `方案1-${item.regionCode}` : "") || item.name || `运行区-${item.id}`)}</option>`),
+    `<option value="all">鍏ㄩ儴</option>`,
+    ...items.map((item) => `<option value="${item.id}">${escapeHtml((item.regionCode ? `鏂规1-${item.regionCode}` : "") || item.name || `杩愯鍖?${item.id}`)}</option>`),
   ];
   select.innerHTML = options.join("");
   const keep = previous === "all" || items.some((item) => String(item.id) === previous);
@@ -5984,14 +5976,14 @@ function renderRunRegionList() {
   if (!getSelectedRunRegionSchemeNo()) {
     runRegionTargetRegionId = "all";
     renderRunRegionTargetRegionOptions();
-    mount.innerHTML = `<div class="empty-state">请先选择分区方案号。</div>`;
+    mount.innerHTML = `<div class="empty-state">璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?/div>`;
     return;
   }
   const items = Array.isArray(runRegionCache.items) ? runRegionCache.items : [];
   ensureRunRegionCheckedSelection(items);
   renderRunRegionTargetRegionOptions();
   if (!items.length) {
-    mount.innerHTML = `<div class="empty-state">暂无运行区，请先绘制并保存。</div>`;
+    mount.innerHTML = `<div class="empty-state">鏆傛棤杩愯鍖猴紝璇峰厛缁樺埗骞朵繚瀛樸€?/div>`;
     return;
   }
   const checkedCount = items.filter((item) => runRegionCheckedRegionIds.has(String(item.id))).length;
@@ -6000,9 +5992,9 @@ function renderRunRegionList() {
     <div class="run-region-check-toolbar">
       <label class="run-region-check-inline">
         <input type="checkbox" id="runRegionCheckAll" ${allChecked ? "checked" : ""}>
-        <span>全部</span>
+        <span>鍏ㄩ儴</span>
       </label>
-      <span class="run-region-check-summary">已选 ${checkedCount}/${items.length}</span>
+      <span class="run-region-check-summary">宸查€?${checkedCount}/${items.length}</span>
     </div>
   `;
   mount.innerHTML = items.map((item) => `
@@ -6010,15 +6002,15 @@ function renderRunRegionList() {
       <div class="run-region-item-title">
         <label class="run-region-check-inline">
           <input type="checkbox" class="run-region-visibility-check" data-region-id="${item.id}" ${runRegionCheckedRegionIds.has(String(item.id)) ? "checked" : ""}>
-          <span>${escapeHtml(item.name || `运行区-${item.id}`)}</span>
+          <span>${escapeHtml(item.name || `杩愯鍖?${item.id}`)}</span>
         </label>
       </div>
-      <div class="run-region-item-meta">方案号: ${escapeHtml(item.schemeNo || "-")} | 分区号: ${escapeHtml(item.regionCode || "-")} | ID: ${item.id} | 围栏点: ${(item.path || []).length}</div>
-      <div class="run-region-item-meta">门店集合(${(item.storeIds || []).length}): ${escapeHtml((item.storeNames && item.storeNames.length ? item.storeNames : item.storeIds || []).join("、") || "-")}</div>
-      <div class="run-region-item-meta">更新时间: ${escapeHtml(String(item.updatedAt || item.createdAt || "-"))}</div>
+      <div class="run-region-item-meta">鏂规鍙? ${escapeHtml(item.schemeNo || "-")} | 鍒嗗尯鍙? ${escapeHtml(item.regionCode || "-")} | ID: ${item.id} | 鍥存爮鐐? ${(item.path || []).length}</div>
+      <div class="run-region-item-meta">闂ㄥ簵闆嗗悎(${(item.storeIds || []).length}): ${escapeHtml((item.storeNames && item.storeNames.length ? item.storeNames : item.storeIds || []).join("銆?) || "-")}</div>
+      <div class="run-region-item-meta">鏇存柊鏃堕棿: ${escapeHtml(String(item.updatedAt || item.createdAt || "-"))}</div>
       <div class="run-region-item-actions">
-        <button class="secondary run-region-edit-btn" data-region-id="${item.id}">编辑</button>
-        <button class="alert run-region-delete-btn" data-region-id="${item.id}">删除</button>
+        <button class="secondary run-region-edit-btn" data-region-id="${item.id}">缂栬緫</button>
+        <button class="alert run-region-delete-btn" data-region-id="${item.id}">鍒犻櫎</button>
       </div>
     </article>
   `).join("");
@@ -6244,12 +6236,12 @@ async function refreshRunRegionData(force = false) {
 
 async function startRunRegionDraw() {
   if (!getSelectedRunRegionSchemeNo()) {
-    setRunRegionStatus("请先选择分区方案号。");
+    setRunRegionStatus("璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?);
     return;
   }
   const mapReady = await ensureRunRegionMapReady();
   if (!mapReady) {
-    setRunRegionStatus("地图不可用，无法绘制围栏。");
+    setRunRegionStatus("鍦板浘涓嶅彲鐢紝鏃犳硶缁樺埗鍥存爮銆?);
     return;
   }
   stopRunRegionDrawing(true);
@@ -6257,7 +6249,7 @@ async function startRunRegionDraw() {
   const nameInput = document.getElementById("runRegionNameInput");
   if (nameInput) nameInput.focus();
   if (!window.AMap?.MouseTool) {
-    setRunRegionStatus("绘图插件未加载，请刷新页面后重试。");
+    setRunRegionStatus("缁樺浘鎻掍欢鏈姞杞斤紝璇峰埛鏂伴〉闈㈠悗閲嶈瘯銆?);
     return;
   }
   runRegionMouseTool = new window.AMap.MouseTool(runRegionMap);
@@ -6280,9 +6272,9 @@ async function startRunRegionDraw() {
     }
     const saveBtn = document.getElementById("runRegionSaveBtn");
     if (saveBtn) saveBtn.disabled = false;
-    setRunRegionStatus("围栏已绘制，可拖拽编辑后保存。");
+    setRunRegionStatus("鍥存爮宸茬粯鍒讹紝鍙嫋鎷界紪杈戝悗淇濆瓨銆?);
   });
-  setRunRegionStatus("请在地图上点击绘制运行区围栏。");
+  setRunRegionStatus("璇峰湪鍦板浘涓婄偣鍑荤粯鍒惰繍琛屽尯鍥存爮銆?);
 }
 
 async function editRunRegion(regionId) {
@@ -6306,38 +6298,38 @@ async function editRunRegion(regionId) {
   const saveBtn = document.getElementById("runRegionSaveBtn");
   if (saveBtn) saveBtn.disabled = false;
   try { runRegionMap.setFitView([polygon], false, [40, 40, 40, 40], 17); } catch {}
-  setRunRegionStatus(`正在编辑运行区：${item.name || item.id}`);
+  setRunRegionStatus(`姝ｅ湪缂栬緫杩愯鍖猴細${item.name || item.id}`);
 }
 
 async function cancelRunRegionEdit() {
   stopRunRegionDrawing(true);
   const nameInput = document.getElementById("runRegionNameInput");
   if (nameInput) nameInput.value = "";
-  setRunRegionStatus("已取消编辑。");
+  setRunRegionStatus("宸插彇娑堢紪杈戙€?);
   await refreshRunRegionData(true);
 }
 
 async function saveRunRegionDraft() {
   const schemeNo = getSelectedRunRegionSchemeNo();
   if (!schemeNo) {
-    setRunRegionStatus("请先选择分区方案号。");
+    setRunRegionStatus("璇峰厛閫夋嫨鍒嗗尯鏂规鍙枫€?);
     return;
   }
   const nameInput = document.getElementById("runRegionNameInput");
   const name = String(nameInput?.value || "").trim();
   if (!name) {
-    setRunRegionStatus("请先填写运行区名称。");
+    setRunRegionStatus("璇峰厛濉啓杩愯鍖哄悕绉般€?);
     return;
   }
   const path = normalizeRunRegionPath(getPathFromRunRegionPolygon(runRegionDraftPolygon));
   if (path.length < 3) {
-    setRunRegionStatus("围栏点位不足，至少需要3个点。");
+    setRunRegionStatus("鍥存爮鐐逛綅涓嶈冻锛岃嚦灏戦渶瑕?涓偣銆?);
     return;
   }
   let available = await ensureGaBackendAvailable();
   if (!available) available = await ensureGaBackendAvailable(true);
   if (!available) {
-    setRunRegionStatus("后端不可用，无法保存运行区。");
+    setRunRegionStatus("鍚庣涓嶅彲鐢紝鏃犳硶淇濆瓨杩愯鍖恒€?);
     return;
   }
   let saved = null;
@@ -6347,12 +6339,12 @@ async function saveRunRegionDraft() {
     saved = await createRunRegionOnBackend({ schemeNo, name, path });
   }
   if (!saved) {
-    setRunRegionStatus("保存失败，请重试。");
+    setRunRegionStatus("淇濆瓨澶辫触锛岃閲嶈瘯銆?);
     return;
   }
   stopRunRegionDrawing(true);
   if (nameInput) nameInput.value = "";
-  setRunRegionStatus("运行区已保存。");
+  setRunRegionStatus("杩愯鍖哄凡淇濆瓨銆?);
   await refreshRunRegionData(true);
 }
 
@@ -6361,13 +6353,13 @@ async function removeRunRegion(regionId) {
   if (id <= 0) return;
   const ok = await deleteRunRegionOnBackend(id);
   if (!ok) {
-    setRunRegionStatus("删除失败，请重试。");
+    setRunRegionStatus("鍒犻櫎澶辫触锛岃閲嶈瘯銆?);
     return;
   }
   if (runRegionEditingId === id) {
     stopRunRegionDrawing(true);
   }
-  setRunRegionStatus("运行区已删除。");
+  setRunRegionStatus("杩愯鍖哄凡鍒犻櫎銆?);
   await refreshRunRegionData(true);
 }
 
@@ -6395,51 +6387,51 @@ function bindRunRegionEvents() {
     const name = String(document.getElementById("runRegionSchemeNameInput")?.value || "").trim();
     const enabled = Boolean(document.getElementById("runRegionSchemeEnabledInput")?.checked);
     if (!schemeNo || !name) {
-      setRunRegionStatus("请填写方案号和方案名称。");
+      setRunRegionStatus("璇峰～鍐欐柟妗堝彿鍜屾柟妗堝悕绉般€?);
       return;
     }
     const created = await createRunRegionSchemeOnBackend({ schemeNo, name, enabled });
     if (!created) {
-      setRunRegionStatus("分区方案新增失败，请重试。");
+      setRunRegionStatus("鍒嗗尯鏂规鏂板澶辫触锛岃閲嶈瘯銆?);
       return;
     }
     setSelectedRunRegionSchemeNo(created.schemeNo || schemeNo);
-    setRunRegionStatus("分区方案已新增。");
+    setRunRegionStatus("鍒嗗尯鏂规宸叉柊澧炪€?);
     await refreshRunRegionData(true);
   });
   document.getElementById("runRegionSchemeUpdateBtn")?.addEventListener("click", async () => {
     const selected = (runRegionSchemeCache.items || []).find((item) => item.schemeNo === getSelectedRunRegionSchemeNo()) || null;
     if (!selected) {
-      setRunRegionStatus("请先选择要更新的分区方案。");
+      setRunRegionStatus("璇峰厛閫夋嫨瑕佹洿鏂扮殑鍒嗗尯鏂规銆?);
       return;
     }
     const name = String(document.getElementById("runRegionSchemeNameInput")?.value || "").trim();
     const enabled = Boolean(document.getElementById("runRegionSchemeEnabledInput")?.checked);
     if (!name) {
-      setRunRegionStatus("请填写方案名称。");
+      setRunRegionStatus("璇峰～鍐欐柟妗堝悕绉般€?);
       return;
     }
     const updated = await updateRunRegionSchemeOnBackend({ id: selected.id, name, enabled });
     if (!updated) {
-      setRunRegionStatus("分区方案更新失败，请重试。");
+      setRunRegionStatus("鍒嗗尯鏂规鏇存柊澶辫触锛岃閲嶈瘯銆?);
       return;
     }
-    setRunRegionStatus("分区方案已更新。");
+    setRunRegionStatus("鍒嗗尯鏂规宸叉洿鏂般€?);
     await refreshRunRegionData(true);
   });
   document.getElementById("runRegionSchemeDeleteBtn")?.addEventListener("click", async () => {
     const selected = (runRegionSchemeCache.items || []).find((item) => item.schemeNo === getSelectedRunRegionSchemeNo()) || null;
     if (!selected) {
-      setRunRegionStatus("请先选择要删除的分区方案。");
+      setRunRegionStatus("璇峰厛閫夋嫨瑕佸垹闄ょ殑鍒嗗尯鏂规銆?);
       return;
     }
     const ok = await deleteRunRegionSchemeOnBackend(selected.id);
     if (!ok) {
-      setRunRegionStatus("删除分区方案失败（可能仍有围栏绑定）。");
+      setRunRegionStatus("鍒犻櫎鍒嗗尯鏂规澶辫触锛堝彲鑳戒粛鏈夊洿鏍忕粦瀹氾級銆?);
       return;
     }
     setSelectedRunRegionSchemeNo("");
-    setRunRegionStatus("分区方案已删除。");
+    setRunRegionStatus("鍒嗗尯鏂规宸插垹闄ゃ€?);
     await refreshRunRegionData(true);
   });
   const modeSelect = document.getElementById("runRegionStoreVisibilityMode");
@@ -6584,7 +6576,7 @@ function buildGaBackendPayload(initialPlans, scenario, wave, randomSeed = 203) {
       id: store.id,
       name: store.name,
       boxes: requireNumberForBackend(store, "boxes"),
-      // 后端按当前波次口径收时间窗，避免误用门店对象上的跨波次遗留字段
+      // 鍚庣鎸夊綋鍓嶆尝娆″彛寰勬敹鏃堕棿绐楋紝閬垮厤璇敤闂ㄥ簵瀵硅薄涓婄殑璺ㄦ尝娆￠仐鐣欏瓧娈?
       desiredArrivalMin: Number(timing.desiredArrivalMin),
       latestAllowedArrivalMin: Number(timing.latestAllowedArrivalMin),
       actualServiceMinutes: requireNumberForBackend(store, "actualServiceMinutes"),
@@ -6673,7 +6665,7 @@ function sanitizeBackendRoutes(routes = [], allowedStoreSet = new Set()) {
         seen.add(normalized);
         return true;
       }).map((storeId) => String(storeId).trim());
-      if (removed.length) console.log("[W3] sanitize过滤:", removed);
+      if (removed.length) console.log("[W3] sanitize杩囨护:", removed);
       return sanitized;
     })
     .filter((route) => route.length);
@@ -6744,7 +6736,7 @@ function reportRebuildSetStats(waveId, stage, candidateStoreSet, assignedStoreSe
   const candidateCount = candidateStoreSet instanceof Set ? candidateStoreSet.size : 0;
   const assignedCount = assignedStoreSet instanceof Set ? assignedStoreSet.size : 0;
   const pendingCount = Array.isArray(pendingStoreIds) ? pendingStoreIds.length : 0;
-  reportRelayStageProgress(`集合核对（${waveTag}/${stage}）：candidate=${candidateCount}，assigned=${assignedCount}，pending=${pendingCount}。`);
+  reportRelayStageProgress(`闆嗗悎鏍稿锛?{waveTag}/${stage}锛夛細candidate=${candidateCount}锛宎ssigned=${assignedCount}锛宲ending=${pendingCount}銆俙);
 }
 
 function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wave, strategyAudit = null) {
@@ -6769,15 +6761,15 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
     if (!backendItem?.plateNo) {
       const hasBaselineRoutes = Array.isArray(baselineState[index]?.routes) && baselineState[index].routes.length > 0;
       if (hasBaselineRoutes) {
-        reportRelayStageProgress(`后端回填提示（${wave?.waveId || "-"}）：车牌 ${plan?.vehicle?.plateNo || "-"} 未在 bestState 匹配，回退基线线路。`);
+        reportRelayStageProgress(`鍚庣鍥炲～鎻愮ず锛?{wave?.waveId || "-"}锛夛細杞︾墝 ${plan?.vehicle?.plateNo || "-"} 鏈湪 bestState 鍖归厤锛屽洖閫€鍩虹嚎绾胯矾銆俙);
       }
     }
     const sanitizedRoutes = Array.isArray(backendItem.routes)
       ? sanitizeBackendRoutes(backendItem.routes, allowedStoreSet)
       : baselineState[index].routes.map((route) => [...route]);
     if (String(wave?.waveId || "").trim().toUpperCase() === "W3") {
-      console.log("[W3] 车辆", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "原始routes:", backendItem.routes);
-      console.log("[W3] 车辆", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "sanitized后:", sanitizedRoutes);
+      console.log("[W3] 杞﹁締", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "鍘熷routes:", backendItem.routes);
+      console.log("[W3] 杞﹁締", backendItem.plateNo || plan?.vehicle?.plateNo || "-", "sanitized鍚?", sanitizedRoutes);
     }
     const backendSpeed = Number(backendItem.speed);
     const vehicle = {
@@ -6813,21 +6805,21 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
   });
   let preRebuildAssigned = collectAssignedStoreSetFromRouteState(routeState, allowedStoreSet);
   let preRebuildPending = computePendingStoreIds(allowedStoreSet, preRebuildAssigned);
-  reportRebuildSetStats(wave?.waveId || "-", "重建前", allowedStoreSet, preRebuildAssigned, preRebuildPending);
+  reportRebuildSetStats(wave?.waveId || "-", "閲嶅缓鍓?, allowedStoreSet, preRebuildAssigned, preRebuildPending);
 
   let preRebuildRound = 0;
   while (preRebuildPending.length && preRebuildRound < 6) {
     const repaired = insertStoresIntoRouteState(routeState, preRebuildPending, scenario, wave, { candidateVehicleLimit: 8 });
     if (!repaired) {
-      reportRelayStageProgress(`重建补排第${preRebuildRound + 1}轮无可行插入位，仍有 ${preRebuildPending.length} 家待排。`);
+      reportRelayStageProgress(`閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞棤鍙鎻掑叆浣嶏紝浠嶆湁 ${preRebuildPending.length} 瀹跺緟鎺掋€俙);
       break;
     }
     routeState = repaired;
     const nextAssigned = collectAssignedStoreSetFromRouteState(routeState, allowedStoreSet);
     const nextPending = computePendingStoreIds(allowedStoreSet, nextAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", `重建补排第${preRebuildRound + 1}轮后`, allowedStoreSet, nextAssigned, nextPending);
+    reportRebuildSetStats(wave?.waveId || "-", `閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞悗`, allowedStoreSet, nextAssigned, nextPending);
     if (nextPending.length >= preRebuildPending.length) {
-      reportRelayStageProgress(`重建补排第${preRebuildRound + 1}轮无进展（待排 ${preRebuildPending.length}→${nextPending.length}），停止继续补排。`);
+      reportRelayStageProgress(`閲嶅缓琛ユ帓绗?{preRebuildRound + 1}杞棤杩涘睍锛堝緟鎺?${preRebuildPending.length}鈫?{nextPending.length}锛夛紝鍋滄缁х画琛ユ帓銆俙);
       preRebuildAssigned = nextAssigned;
       preRebuildPending = nextPending;
       break;
@@ -6840,37 +6832,36 @@ function rebuildWavePlansFromBackendState(bestState, initialPlans, scenario, wav
   let rebuiltPlans = rebuildWavePlansFromState(routeState, scenario, wave);
   if (!rebuiltPlans) {
     const fallbackNote = fallbackFailures.length
-      ? `，重建失败回退车辆 ${fallbackFailures.length} 台（示例：${fallbackFailures.slice(0, 6).join("、")}）`
+      ? `锛岄噸寤哄け璐ュ洖閫€杞﹁締 ${fallbackFailures.length} 鍙帮紙绀轰緥锛?{fallbackFailures.slice(0, 6).join("銆?)}锛塦
       : "";
-    reportRelayStageProgress(`后端结果重建失败：allowed=${allowedStoreSet.size}，已分配=${preRebuildAssigned.size}，待补=${preRebuildPending.length}${fallbackNote}。`);
+    reportRelayStageProgress(`鍚庣缁撴灉閲嶅缓澶辫触锛歛llowed=${allowedStoreSet.size}锛屽凡鍒嗛厤=${preRebuildAssigned.size}锛屽緟琛?${preRebuildPending.length}${fallbackNote}銆俙);
     return null;
   }
 
-  // 二次补排：处理“重建降级置空后”再次掉出来的门店
-  let secondRound = 0;
+  // 浜屾琛ユ帓锛氬鐞嗏€滈噸寤洪檷绾х疆绌哄悗鈥濆啀娆℃帀鍑烘潵鐨勯棬搴?  let secondRound = 0;
   while (secondRound < 6) {
     const secondAssigned = collectAssignedStoreSetFromPlans(rebuiltPlans, allowedStoreSet);
     const secondPending = computePendingStoreIds(allowedStoreSet, secondAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", secondRound === 0 ? "二次补排前" : `二次补排第${secondRound}轮前`, allowedStoreSet, secondAssigned, secondPending);
+    reportRebuildSetStats(wave?.waveId || "-", secondRound === 0 ? "浜屾琛ユ帓鍓? : `浜屾琛ユ帓绗?{secondRound}杞墠`, allowedStoreSet, secondAssigned, secondPending);
     if (!secondPending.length) break;
 
     const retryState = cloneWaveRouteState(rebuiltPlans);
     const secondRepaired = insertStoresIntoRouteState(retryState, secondPending, scenario, wave, { candidateVehicleLimit: 8 });
     if (!secondRepaired) {
-      reportRelayStageProgress(`二次补排第${secondRound + 1}轮无可行插入位，仍有 ${secondPending.length} 家待排。`);
+      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞棤鍙鎻掑叆浣嶏紝浠嶆湁 ${secondPending.length} 瀹跺緟鎺掋€俙);
       break;
     }
     const secondPlans = rebuildWavePlansFromState(secondRepaired, scenario, wave);
     if (!secondPlans) {
-      reportRelayStageProgress(`二次补排第${secondRound + 1}轮未通过重建校验，仍有 ${secondPending.length} 家待排。`);
+      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞湭閫氳繃閲嶅缓鏍￠獙锛屼粛鏈?${secondPending.length} 瀹跺緟鎺掋€俙);
       break;
     }
     const afterAssigned = collectAssignedStoreSetFromPlans(secondPlans, allowedStoreSet);
     const afterPending = computePendingStoreIds(allowedStoreSet, afterAssigned);
-    reportRebuildSetStats(wave?.waveId || "-", `二次补排第${secondRound + 1}轮后`, allowedStoreSet, afterAssigned, afterPending);
+    reportRebuildSetStats(wave?.waveId || "-", `浜屾琛ユ帓绗?{secondRound + 1}杞悗`, allowedStoreSet, afterAssigned, afterPending);
     rebuiltPlans = secondPlans;
     if (afterPending.length >= secondPending.length) {
-      reportRelayStageProgress(`二次补排第${secondRound + 1}轮无进展（待排 ${secondPending.length}→${afterPending.length}），停止继续补排。`);
+      reportRelayStageProgress(`浜屾琛ユ帓绗?{secondRound + 1}杞棤杩涘睍锛堝緟鎺?${secondPending.length}鈫?{afterPending.length}锛夛紝鍋滄缁х画琛ユ帓銆俙);
       break;
     }
     secondRound += 1;
@@ -6885,12 +6876,12 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
     available = await ensureGaBackendAvailable(true);
   }
   if (!available) {
-    reportRelayStageProgress(`GA Python 后台当前不可达，${wave.waveId} 先回退到前端遗传算法。`);
+    reportRelayStageProgress(`GA Python 鍚庡彴褰撳墠涓嶅彲杈撅紝${wave.waveId} 鍏堝洖閫€鍒板墠绔仐浼犵畻娉曘€俙);
     return null;
   }
   const payload = buildGaBackendPayload(initialPlans, scenario, wave, randomSeed);
   try {
-    reportRelayStageProgress(`GA ${wave.waveId} 正在切到 Python 后台求解，浏览器主线程不再硬扛这一棒。`);
+    reportRelayStageProgress(`GA ${wave.waveId} 姝ｅ湪鍒囧埌 Python 鍚庡彴姹傝В锛屾祻瑙堝櫒涓荤嚎绋嬩笉鍐嶇‖鎵涜繖涓€妫掋€俙);
     let response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/ga-optimize-wave`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -6906,8 +6897,8 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
     }
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    reportStrategyAuditToRelayConsole(data.strategyAudit, "遗传算法（GA）");
-    reportBackendUnscheduledToRelayConsole(data.unscheduledStores, "遗传算法（GA）", wave.waveId || "-");
+    reportStrategyAuditToRelayConsole(data.strategyAudit, "閬椾紶绠楁硶锛圙A锛?);
+    reportBackendUnscheduledToRelayConsole(data.unscheduledStores, "閬椾紶绠楁硶锛圙A锛?, wave.waveId || "-");
     const plans = rebuildWavePlansFromBackendState(data.bestState || [], initialPlans, scenario, wave, data.strategyAudit || null);
     if (Array.isArray(data.traceLog) && data.traceLog.length) {
       data.traceLog.forEach((event) => {
@@ -6921,7 +6912,7 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
         : 0;
       throw new Error(`Backend state rebuild failed (vehicles=${Array.isArray(data.bestState) ? data.bestState.length : 0}, routes=${backendRouteCount})`);
     }
-    reportRelayStageProgress(`GA ${wave.waveId} 已从 Python 后台成功接回，当前波次不用再回退前端遗传算法。`);
+    reportRelayStageProgress(`GA ${wave.waveId} 宸蹭粠 Python 鍚庡彴鎴愬姛鎺ュ洖锛屽綋鍓嶆尝娆′笉鐢ㄥ啀鍥為€€鍓嶇閬椾紶绠楁硶銆俙);
     return {
       plans,
       traceLog: Array.isArray(data.traceLog) ? data.traceLog : [],
@@ -6929,14 +6920,14 @@ async function tryOptimizeWaveWithPythonGA(initialPlans, scenario, wave, randomS
     };
   } catch (error) {
     gaBackendHealth = { available: false, checkedAt: Date.now() };
-    reportRelayStageProgress(`GA Python 后台本轮失败（${error?.message || "unknown"}），本轮已中止，不再回退前端。`);
+    reportRelayStageProgress(`GA Python 鍚庡彴鏈疆澶辫触锛?{error?.message || "unknown"}锛夛紝鏈疆宸蹭腑姝紝涓嶅啀鍥為€€鍓嶇銆俙);
     throw new Error(`GA_BACKEND_REQUIRED:${error?.message || "unknown"}`);
   }
 }
 
 async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, algorithmKey, randomSeed = 203) {
   if (STRICT_ALGO_TRUTH_MODE) {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} 已切回前端真实算法求解（真实性优先模式），本轮不走 Python 近似后端。`);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} 宸插垏鍥炲墠绔湡瀹炵畻娉曟眰瑙ｏ紙鐪熷疄鎬т紭鍏堟ā寮忥級锛屾湰杞笉璧?Python 杩戜技鍚庣銆俙);
     return null;
   }
   let available = await ensureGaBackendAvailable();
@@ -6945,7 +6936,7 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
     available = await ensureGaBackendAvailable(true);
   }
   if (!available) {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 后台当前不可达。`);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 鍚庡彴褰撳墠涓嶅彲杈俱€俙);
     if (BACKEND_ONLY_REAL_ALGOS.has(String(algorithmKey || ""))) {
       throw new Error(`${algorithmKey}_BACKEND_REQUIRED:unreachable`);
     }
@@ -6953,7 +6944,7 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
   }
   const payload = buildWaveOptimizerBackendPayload(initialPlans, scenario, wave, algorithmKey, randomSeed);
   try {
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 正在切到 Python 后台求解，浏览器主线程不再硬扛这一棒。`);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 姝ｅ湪鍒囧埌 Python 鍚庡彴姹傝В锛屾祻瑙堝櫒涓荤嚎绋嬩笉鍐嶇‖鎵涜繖涓€妫掋€俙);
     let response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wave-optimize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -6987,7 +6978,7 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
       }
     }
     if (!plans) throw new Error("Backend state rebuild failed");
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 已从 Python 后台成功接回，当前波次不用再回退前端 ${algoLabel(algorithmKey)}。`);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} ${wave.waveId} 宸蹭粠 Python 鍚庡彴鎴愬姛鎺ュ洖锛屽綋鍓嶆尝娆′笉鐢ㄥ啀鍥為€€鍓嶇 ${algoLabel(algorithmKey)}銆俙);
     return {
       plans,
       traceLog: Array.isArray(data.traceLog) ? data.traceLog : [],
@@ -6997,9 +6988,9 @@ async function tryOptimizeWaveWithPythonBackend(initialPlans, scenario, wave, al
     gaBackendHealth = { available: false, checkedAt: Date.now() };
     const raw = String(error?.message || "unknown");
     const staleHint = raw.includes("_BACKEND_STALE_OR_INVALID_TRACE")
-      ? "后端返回的日志结构无效（大概率是旧进程未重启），请重启 GA 后台后重试。"
+      ? "鍚庣杩斿洖鐨勬棩蹇楃粨鏋勬棤鏁堬紙澶ф鐜囨槸鏃ц繘绋嬫湭閲嶅惎锛夛紝璇烽噸鍚?GA 鍚庡彴鍚庨噸璇曘€?
       : raw;
-    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 后台本轮失败（${staleHint}）。`);
+    reportRelayStageProgress(`${algoLabel(algorithmKey)} Python 鍚庡彴鏈疆澶辫触锛?{staleHint}锛夈€俙);
     if (BACKEND_ONLY_REAL_ALGOS.has(String(algorithmKey || ""))) {
       throw new Error(`${algorithmKey}_BACKEND_REQUIRED:${error?.message || "unknown"}`);
     }
@@ -7051,8 +7042,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
     waveId: wave.waveId,
     stage: "ga-start",
     bestCost: Math.min(...population.map((item) => item.cost)),
-    textZh: isCompareMode ? `遗传算法已生成对比种群 ${population.length} 个个体，按轻量对比预算开始做选择 / 交叉 / 变异。` : `遗传算法已生成初始种群 ${population.length} 个个体，开始做选择 / 交叉 / 变异。`,
-    textJa: isCompareMode ? `遺伝的アルゴリズムは比較用の軽量集団 ${population.length} 個体を生成し、選択 / 交叉 / 変異を開始します。` : `遺伝的アルゴリズムは初期集団 ${population.length} 個体を生成し、選択 / 交叉 / 変異を開始します。`,
+    textZh: isCompareMode ? `閬椾紶绠楁硶宸茬敓鎴愬姣旂缇?${population.length} 涓釜浣擄紝鎸夎交閲忓姣旈绠楀紑濮嬪仛閫夋嫨 / 浜ゅ弶 / 鍙樺紓銆俙 : `閬椾紶绠楁硶宸茬敓鎴愬垵濮嬬缇?${population.length} 涓釜浣擄紝寮€濮嬪仛閫夋嫨 / 浜ゅ弶 / 鍙樺紓銆俙,
+    textJa: isCompareMode ? `閬轰紳鐨勩偄銉偞銉偤銉犮伅姣旇純鐢ㄣ伄杌介噺闆嗗洠 ${population.length} 鍊嬩綋銈掔敓鎴愩仐銆侀伕鎶?/ 浜ゅ弶 / 澶夌暟銈掗枊濮嬨仐銇俱仚銆俙 : `閬轰紳鐨勩偄銉偞銉偤銉犮伅鍒濇湡闆嗗洠 ${population.length} 鍊嬩綋銈掔敓鎴愩仐銆侀伕鎶?/ 浜ゅ弶 / 澶夌暟銈掗枊濮嬨仐銇俱仚銆俙,
   });
   if (isCompareMode) {
     pushTraceEvent(traceLog, {
@@ -7060,10 +7051,10 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
       scope: "wave",
       waveId: wave.waveId,
       stage: "ga-profile-seed",
-      textZh: `GA 性能剖析已开启：初始种群阶段耗时约 ${(profile.seedMs / 1000).toFixed(2)} 秒。`,
-      textJa: `GA の性能プロファイルを有効化しました。初期集団の所要時間は約 ${(profile.seedMs / 1000).toFixed(2)} 秒です。`,
+      textZh: `GA 鎬ц兘鍓栨瀽宸插紑鍚細鍒濆绉嶇兢闃舵鑰楁椂绾?${(profile.seedMs / 1000).toFixed(2)} 绉掋€俙,
+      textJa: `GA 銇€ц兘銉椼儹銉曘偂銈ゃ儷銈掓湁鍔瑰寲銇椼伨銇椼仧銆傚垵鏈熼泦鍥ｃ伄鎵€瑕佹檪闁撱伅绱?${(profile.seedMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
     });
-    reportRelayStageProgress(`GA 剖析启动：${wave.waveId} 初始种群阶段耗时约 ${(profile.seedMs / 1000).toFixed(2)} 秒。`);
+    reportRelayStageProgress(`GA 鍓栨瀽鍚姩锛?{wave.waveId} 鍒濆绉嶇兢闃舵鑰楁椂绾?${(profile.seedMs / 1000).toFixed(2)} 绉掋€俙);
   }
 
   let bestCostSeen = Infinity;
@@ -7117,11 +7108,11 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         waveId: wave.waveId,
         stage: "ga-guard-fill",
         generation,
-        textZh: `第 ${generation + 1} 代后代生成尝试达到上限 ${maxOffspringAttempts} 次，仍未填满种群，本代剩余个体改用当前最优个体补位，避免陷入无休止尝试。`,
-        textJa: `第 ${generation + 1} 世代では子個体生成の試行が上限 ${maxOffspringAttempts} 回に達しても集団を埋めきれなかったため、残りは現時点の最良個体で補完し、無限試行を防ぎます。`,
+        textZh: `绗?${generation + 1} 浠ｅ悗浠ｇ敓鎴愬皾璇曡揪鍒颁笂闄?${maxOffspringAttempts} 娆★紝浠嶆湭濉弧绉嶇兢锛屾湰浠ｅ墿浣欎釜浣撴敼鐢ㄥ綋鍓嶆渶浼樹釜浣撹ˉ浣嶏紝閬垮厤闄峰叆鏃犱紤姝㈠皾璇曘€俙,
+        textJa: `绗?${generation + 1} 涓栦唬銇с伅瀛愬€嬩綋鐢熸垚銇│琛屻亴涓婇檺 ${maxOffspringAttempts} 鍥炪伀閬斻仐銇︺倐闆嗗洠銈掑煁銈併亶銈屻仾銇嬨仯銇熴仧銈併€佹畫銈娿伅鐝炬檪鐐广伄鏈€鑹€嬩綋銇ц瀹屻仐銆佺劇闄愯│琛屻倰闃层亷銇俱仚銆俙,
       });
       if (isCompareMode) {
-        reportRelayStageProgress(`GA ${wave.waveId} 第 ${generation + 1} 代子代生成已尝试 ${maxOffspringAttempts} 次仍未填满种群，已改用当前最优个体补位，避免卡死。`);
+        reportRelayStageProgress(`GA ${wave.waveId} 绗?${generation + 1} 浠ｅ瓙浠ｇ敓鎴愬凡灏濊瘯 ${maxOffspringAttempts} 娆′粛鏈～婊＄缇わ紝宸叉敼鐢ㄥ綋鍓嶆渶浼樹釜浣撹ˉ浣嶏紝閬垮厤鍗℃銆俙);
       }
     }
     if (generation % 5 === 4 && population.length) {
@@ -7158,8 +7149,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-generation",
         generation,
         bestCost: generationBest,
-        textZh: `第 ${generation + 1} 代完成选择、交叉与变异，当前种群最优成本 ${generationBest.toFixed(1)}。`,
-        textJa: `${generation + 1} 世代で選択・交叉・変異を完了し、現在の集団最良コストは ${generationBest.toFixed(1)} です。`,
+        textZh: `绗?${generation + 1} 浠ｅ畬鎴愰€夋嫨銆佷氦鍙変笌鍙樺紓锛屽綋鍓嶇缇ゆ渶浼樻垚鏈?${generationBest.toFixed(1)}銆俙,
+        textJa: `${generation + 1} 涓栦唬銇ч伕鎶炪兓浜ゅ弶銉诲鐣般倰瀹屼簡銇椼€佺従鍦ㄣ伄闆嗗洠鏈€鑹偝銈广儓銇?${generationBest.toFixed(1)} 銇с仚銆俙,
       });
     }
     if (isCompareMode) {
@@ -7171,10 +7162,10 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-profile-generation",
         generation,
         bestCost: generationBest,
-        textZh: `GA 第 ${generation + 1} 代耗时约 ${(generationTotalMs / 1000).toFixed(2)} 秒，其中交叉/修复 ${(generationCrossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒。`,
-        textJa: `GA 第 ${generation + 1} 世代の所要時間は約 ${(generationTotalMs / 1000).toFixed(2)} 秒で、内訳は交叉/修復 ${(generationCrossoverMs / 1000).toFixed(2)} 秒、子代評価 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒、移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒です。`,
+        textZh: `GA 绗?${generation + 1} 浠ｈ€楁椂绾?${(generationTotalMs / 1000).toFixed(2)} 绉掞紝鍏朵腑浜ゅ弶/淇 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(generationImmigrantMs / 1000).toFixed(2)} 绉掋€俙,
+        textJa: `GA 绗?${generation + 1} 涓栦唬銇墍瑕佹檪闁撱伅绱?${(generationTotalMs / 1000).toFixed(2)} 绉掋仹銆佸唴瑷炽伅浜ゅ弶/淇京 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掋€佸瓙浠ｈ渚?${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掋€佺Щ姘?${(generationImmigrantMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
       });
-      reportRelayStageProgress(`GA ${wave.waveId} 第 ${generation + 1} 代耗时约 ${(generationTotalMs / 1000).toFixed(2)} 秒，其中交叉/修复 ${(generationCrossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(generationOffspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(generationImmigrantMs / 1000).toFixed(2)} 秒。当前最优代价 ${generationBest.toFixed(1)}。`);
+      reportRelayStageProgress(`GA ${wave.waveId} 绗?${generation + 1} 浠ｈ€楁椂绾?${(generationTotalMs / 1000).toFixed(2)} 绉掞紝鍏朵腑浜ゅ弶/淇 ${(generationCrossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(generationOffspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(generationImmigrantMs / 1000).toFixed(2)} 绉掋€傚綋鍓嶆渶浼樹唬浠?${generationBest.toFixed(1)}銆俙);
     }
     if (isCompareMode && stagnantGenerations >= stagnationLimit) {
       pushTraceEvent(traceLog, {
@@ -7184,8 +7175,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
         stage: "ga-early-stop",
         generation,
         bestCost: generationBest,
-        textZh: `连续 ${stagnationLimit} 代提升不足 ${improvementThreshold.toFixed(1)}，对比模式下提前收工，避免继续空转。`,
-        textJa: `${stagnationLimit} 世代連続で改善幅が ${improvementThreshold.toFixed(1)} 未満のため、比較モードでは早めに打ち切って空転を防ぎます。`,
+        textZh: `杩炵画 ${stagnationLimit} 浠ｆ彁鍗囦笉瓒?${improvementThreshold.toFixed(1)}锛屽姣旀ā寮忎笅鎻愬墠鏀跺伐锛岄伩鍏嶇户缁┖杞€俙,
+        textJa: `${stagnationLimit} 涓栦唬閫ｇ稓銇ф敼鍠勫箙銇?${improvementThreshold.toFixed(1)} 鏈簚銇仧銈併€佹瘮杓冦儮銉笺儔銇с伅鏃┿倎銇墦銇″垏銇ｃ仸绌鸿虎銈掗槻銇庛伨銇欍€俙,
       });
       break;
     }
@@ -7198,8 +7189,8 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
     waveId: wave.waveId,
     stage: "ga-finish",
     bestCost: population[0].cost,
-    textZh: `遗传算法结束，最终种群最优成本 ${population[0].cost.toFixed(1)}。`,
-    textJa: `遺伝的アルゴリズムが終了し、最終集団の最良コストは ${population[0].cost.toFixed(1)} です。`,
+    textZh: `閬椾紶绠楁硶缁撴潫锛屾渶缁堢缇ゆ渶浼樻垚鏈?${population[0].cost.toFixed(1)}銆俙,
+    textJa: `閬轰紳鐨勩偄銉偞銉偤銉犮亴绲備簡銇椼€佹渶绲傞泦鍥ｃ伄鏈€鑹偝銈广儓銇?${population[0].cost.toFixed(1)} 銇с仚銆俙,
   });
   if (isCompareMode) {
     pushTraceEvent(traceLog, {
@@ -7208,10 +7199,10 @@ async function optimizeWaveWithGA(initialPlans, scenario, wave, randomSeed = 203
       waveId: wave.waveId,
       stage: "ga-profile-summary",
       bestCost: population[0].cost,
-      textZh: `GA 剖析汇总：初始种群 ${(profile.seedMs / 1000).toFixed(2)} 秒，交叉/修复 ${(profile.crossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒。`,
-      textJa: `GA プロファイル集計：初期集団 ${(profile.seedMs / 1000).toFixed(2)} 秒、交叉/修復 ${(profile.crossoverMs / 1000).toFixed(2)} 秒、子代評価 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒、移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒です。`,
+      textZh: `GA 鍓栨瀽姹囨€伙細鍒濆绉嶇兢 ${(profile.seedMs / 1000).toFixed(2)} 绉掞紝浜ゅ弶/淇 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(profile.immigrantMs / 1000).toFixed(2)} 绉掋€俙,
+      textJa: `GA 銉椼儹銉曘偂銈ゃ儷闆嗚▓锛氬垵鏈熼泦鍥?${(profile.seedMs / 1000).toFixed(2)} 绉掋€佷氦鍙?淇京 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掋€佸瓙浠ｈ渚?${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掋€佺Щ姘?${(profile.immigrantMs / 1000).toFixed(2)} 绉掋仹銇欍€俙,
     });
-    reportRelayStageProgress(`GA 剖析汇总：初始种群 ${(profile.seedMs / 1000).toFixed(2)} 秒，交叉/修复 ${(profile.crossoverMs / 1000).toFixed(2)} 秒，子代评估 ${(profile.offspringEvalMs / 1000).toFixed(2)} 秒，移民 ${(profile.immigrantMs / 1000).toFixed(2)} 秒。`);
+    reportRelayStageProgress(`GA 鍓栨瀽姹囨€伙細鍒濆绉嶇兢 ${(profile.seedMs / 1000).toFixed(2)} 绉掞紝浜ゅ弶/淇 ${(profile.crossoverMs / 1000).toFixed(2)} 绉掞紝瀛愪唬璇勪及 ${(profile.offspringEvalMs / 1000).toFixed(2)} 绉掞紝绉绘皯 ${(profile.immigrantMs / 1000).toFixed(2)} 绉掋€俙);
   }
   return { plans: population[0].plans, traceLog };
 }
@@ -7238,10 +7229,10 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
     waveId: wave.waveId,
     stage: "sa-start",
     bestCost,
-    textZh: `模拟退火从初始解启动，初始温度 ${temperature.toFixed(1)}，初始波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `シミュレーテッドアニーリングを初期解から開始し、初期温度 ${temperature.toFixed(1)}、初期コスト ${bestCost.toFixed(1)}。`,
+    textZh: `妯℃嫙閫€鐏粠鍒濆瑙ｅ惎鍔紝鍒濆娓╁害 ${temperature.toFixed(1)}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `銈枫儫銉ャ儸銉笺儐銉冦儔銈儖銉笺儶銉炽偘銈掑垵鏈熻В銇嬨倝闁嬪銇椼€佸垵鏈熸俯搴?${temperature.toFixed(1)}銆佸垵鏈熴偝銈广儓 ${bestCost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 模拟退火已启动，初始温度 ${temperature.toFixed(1)}，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏凡鍚姩锛屽垵濮嬫俯搴?${temperature.toFixed(1)}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   let epoch = 0;
   while (temperature > finalTemperature && epoch < 28) {
     if (epoch) await cooperativeYield();
@@ -7265,15 +7256,15 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
           candidateCost: candidate.cost,
           temperature,
           accepted,
-          textZh: `温度 ${temperature.toFixed(2)} 下接受 ${candidate.meta?.type || "mixed"} 邻域，候选成本 ${candidate.cost.toFixed(1)}。`,
-          textJa: `温度 ${temperature.toFixed(2)} で ${candidate.meta?.type || "mixed"} 近傍を採用し、候補コストは ${candidate.cost.toFixed(1)}。`,
+          textZh: `娓╁害 ${temperature.toFixed(2)} 涓嬫帴鍙?${candidate.meta?.type || "mixed"} 閭诲煙锛屽€欓€夋垚鏈?${candidate.cost.toFixed(1)}銆俙,
+          textJa: `娓╁害 ${temperature.toFixed(2)} 銇?${candidate.meta?.type || "mixed"} 杩戝倣銈掓帯鐢ㄣ仐銆佸€欒銈炽偣銉堛伅 ${candidate.cost.toFixed(1)}銆俙,
         });
       }
       if (candidate.cost + 1e-6 < bestCost) {
         bestCost = candidate.cost;
         bestState = cloneWaveRouteState(candidate.plans);
         bestPlans = candidate.plans;
-        reportRelayStageProgress(`${wave.waveId} 模拟退火在第 ${epoch + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
+        reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏湪绗?${epoch + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
         pushTraceEvent(traceLog, {
           algorithmKey: "sa",
           scope: "wave",
@@ -7281,13 +7272,13 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
           stage: "sa-best",
           epoch,
           bestCost,
-      textZh: `模拟退火刷新最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
-          textJa: `焼きなましで最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)}。`,
+      textZh: `妯℃嫙閫€鐏埛鏂版渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+          textJa: `鐒笺亶銇伨銇椼仹鏈€鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
         });
       }
     }
     if ((epoch + 1) % 4 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 模拟退火已跑到第 ${epoch + 1}/28 轮，当前温度 ${temperature.toFixed(2)}，当前最好波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏凡璺戝埌绗?${epoch + 1}/28 杞紝褰撳墠娓╁害 ${temperature.toFixed(2)}锛屽綋鍓嶆渶濂芥尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
     }
     temperature *= coolingRate;
     epoch += 1;
@@ -7304,10 +7295,10 @@ async function optimizeWaveWithSA(initialPlans, scenario, wave, randomSeed = 307
     waveId: wave.waveId,
     stage: "sa-finish",
     bestCost,
-    textZh: `模拟退火结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `シミュレーテッドアニーリングが終了し、最終最良コストは ${bestCost.toFixed(1)}。`,
+    textZh: `妯℃嫙閫€鐏粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `銈枫儫銉ャ儸銉笺儐銉冦儔銈儖銉笺儶銉炽偘銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 模拟退火结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 妯℃嫙閫€鐏粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   return { plans: rebuildWavePlansFromState(bestState, scenario, wave) || bestPlans, traceLog };
 }
 
@@ -7409,10 +7400,10 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
     waveId: wave.waveId,
     stage: "aco-start",
     bestCost,
-    textZh: `蚁群算法启动，先初始化信息素，再构造候选门店序列，初始波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `蟻コロニー最適化を開始し、フェロモンを初期化して候補順序を構築します。初期コストは ${bestCost.toFixed(1)}。`,
+    textZh: `铓佺兢绠楁硶鍚姩锛屽厛鍒濆鍖栦俊鎭礌锛屽啀鏋勯€犲€欓€夐棬搴楀簭鍒楋紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙,
+    textJa: `锜汇偝銉儖銉兼渶閬╁寲銈掗枊濮嬨仐銆併儠銈с儹銉兂銈掑垵鏈熷寲銇椼仸鍊欒闋嗗簭銈掓绡夈仐銇俱仚銆傚垵鏈熴偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 蚁群算法已启动，初始波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 铓佺兢绠楁硶宸插惎鍔紝鍒濆娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
   for (let iteration = 0; iteration < 26; iteration += 1) {
     if (iteration) await cooperativeYield();
     const ants = [];
@@ -7437,7 +7428,7 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
       bestCost = ants[0].cost;
       bestState = cloneWaveRouteState(ants[0].plans);
       bestPlans = ants[0].plans;
-      reportRelayStageProgress(`${wave.waveId} 蚁群在第 ${iteration + 1} 轮刷新最优，波次内部代价 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 铓佺兢鍦ㄧ ${iteration + 1} 杞埛鏂版渶浼橈紝娉㈡鍐呴儴浠ｄ环 ${bestCost.toFixed(1)}銆俙);
       pushTraceEvent(traceLog, {
         algorithmKey: "aco",
         scope: "wave",
@@ -7445,12 +7436,12 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
         stage: "aco-best",
         iteration,
         bestCost,
-        textZh: `第 ${iteration + 1} 轮蚁群刷新最优解，新的波次内部代价 ${bestCost.toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目で蟻群が最良解を更新し、新しい最良コストは ${bestCost.toFixed(1)}。`,
+        textZh: `绗?${iteration + 1} 杞殎缇ゅ埛鏂版渶浼樿В锛屾柊鐨勬尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇ц熁缇ゃ亴鏈€鑹В銈掓洿鏂般仐銆佹柊銇椼亜鏈€鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
       });
     }
     if ((iteration + 1) % 5 === 0) {
-      reportRelayStageProgress(`${wave.waveId} 蚁群已跑到第 ${iteration + 1}/26 轮，本轮最优候选代价 ${ants[0].cost.toFixed(1)}，全局最优 ${bestCost.toFixed(1)}。`);
+      reportRelayStageProgress(`${wave.waveId} 铓佺兢宸茶窇鍒扮 ${iteration + 1}/26 杞紝鏈疆鏈€浼樺€欓€変唬浠?${ants[0].cost.toFixed(1)}锛屽叏灞€鏈€浼?${bestCost.toFixed(1)}銆俙);
     }
     if (traceLog.length < 18) {
       pushTraceEvent(traceLog, {
@@ -7460,8 +7451,8 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
         stage: "aco-iteration",
         iteration,
         bestCost: ants[0].cost,
-        textZh: `第 ${iteration + 1} 轮信息素完成挥发与强化，本轮最优候选成本 ${ants[0].cost.toFixed(1)}。`,
-        textJa: `${iteration + 1} 回目でフェロモンの蒸発と強化を完了し、この回の最良候補コストは ${ants[0].cost.toFixed(1)}。`,
+        textZh: `绗?${iteration + 1} 杞俊鎭礌瀹屾垚鎸ュ彂涓庡己鍖栵紝鏈疆鏈€浼樺€欓€夋垚鏈?${ants[0].cost.toFixed(1)}銆俙,
+        textJa: `${iteration + 1} 鍥炵洰銇с儠銈с儹銉兂銇捀鐧恒仺寮峰寲銈掑畬浜嗐仐銆併亾銇洖銇渶鑹€欒銈炽偣銉堛伅 ${ants[0].cost.toFixed(1)}銆俙,
       });
     }
   }
@@ -7471,10 +7462,10 @@ async function optimizeWaveWithACO(initialPlans, scenario, wave, randomSeed = 40
     waveId: wave.waveId,
     stage: "aco-finish",
     bestCost,
-    textZh: `蚁群算法结束，最终波次内部代价 ${bestCost.toFixed(1)}。`,
-    textJa: `蟻コロニー最適化が終了し、最終最良コストは ${bestCost.toFixed(1)}。`,
+    textZh: `铓佺兢绠楁硶缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙,
+    textJa: `锜汇偝銉儖銉兼渶閬╁寲銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${bestCost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 蚁群算法结束，最终波次内部代价 ${bestCost.toFixed(1)}。`);
+  reportRelayStageProgress(`${wave.waveId} 铓佺兢绠楁硶缁撴潫锛屾渶缁堟尝娆″唴閮ㄤ唬浠?${bestCost.toFixed(1)}銆俙);
   return { plans: bestPlans, traceLog };
 }
 
@@ -7511,7 +7502,7 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
   const particles = [];
   const describeCurrentWaveCost = (plans) => {
     const breakdown = computePlansCostBreakdown(plans, scenario, wave);
-    return `当前这波次的内部代价约 ${Number(breakdown.totalCost || 0).toFixed(1)}，组成是：${formatWaveCostBreakdown(breakdown)}。`;
+    return `褰撳墠杩欐尝娆＄殑鍐呴儴浠ｄ环绾?${Number(breakdown.totalCost || 0).toFixed(1)}锛岀粍鎴愭槸锛?{formatWaveCostBreakdown(breakdown)}銆俙;
   };
 
   function evaluateParticle(position) {
@@ -7558,10 +7549,10 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
     waveId: wave.waveId,
     stage: "pso-start",
     bestCost: globalBest.cost,
-    textZh: `粒子群算法启动，粒子数 ${particles.length}，维度 ${dimension}，初始波次内部代价 ${globalBest.cost.toFixed(1)}。`,
-    textJa: `粒子群最適化を開始し、粒子数 ${particles.length}、次元 ${dimension}、初期の全体最良コストは ${globalBest.cost.toFixed(1)}。`,
+    textZh: `绮掑瓙缇ょ畻娉曞惎鍔紝绮掑瓙鏁?${particles.length}锛岀淮搴?${dimension}锛屽垵濮嬫尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
+    textJa: `绮掑瓙缇ゆ渶閬╁寲銈掗枊濮嬨仐銆佺矑瀛愭暟 ${particles.length}銆佹鍏?${dimension}銆佸垵鏈熴伄鍏ㄤ綋鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 已进入粒子群搜索，当前处理 ${dimension} 家门店、${particles.length} 个粒子。先用现有方案做起跑线，再让粒子群反复调整门店优先级。${describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 宸茶繘鍏ョ矑瀛愮兢鎼滅储锛屽綋鍓嶅鐞?${dimension} 瀹堕棬搴椼€?{particles.length} 涓矑瀛愩€傚厛鐢ㄧ幇鏈夋柟妗堝仛璧疯窇绾匡紝鍐嶈绮掑瓙缇ゅ弽澶嶈皟鏁撮棬搴椾紭鍏堢骇銆?{describeCurrentWaveCost(globalBest.plans)}`);
 
   let stagnation = 0;
   for (let iter = 0; iter < iterations; iter += 1) {
@@ -7603,11 +7594,11 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
           iteration: iter,
           particle: index,
           bestCost: globalBest.cost,
-          textZh: `第 ${iter + 1} 轮粒子 ${index + 1} 刷新全局最优，新的波次内部代价 ${globalBest.cost.toFixed(1)}。`,
-          textJa: `${iter + 1} 回目で粒子 ${index + 1} が全体最良を更新し、新しい最良コストは ${globalBest.cost.toFixed(1)}。`,
+          textZh: `绗?${iter + 1} 杞矑瀛?${index + 1} 鍒锋柊鍏ㄥ眬鏈€浼橈紝鏂扮殑娉㈡鍐呴儴浠ｄ环 ${globalBest.cost.toFixed(1)}銆俙,
+          textJa: `${iter + 1} 鍥炵洰銇х矑瀛?${index + 1} 銇屽叏浣撴渶鑹倰鏇存柊銇椼€佹柊銇椼亜鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
         });
         if ((iter + 1) <= 3 || (iter + 1) % 6 === 0) {
-          reportRelayStageProgress(`${wave.waveId} 第 ${iter + 1} 轮里，粒子 ${index + 1} 刷新了这一波次的当前最优。说明它确实找到更顺的排法了。${describeCurrentWaveCost(globalBest.plans)}`);
+          reportRelayStageProgress(`${wave.waveId} 绗?${iter + 1} 杞噷锛岀矑瀛?${index + 1} 鍒锋柊浜嗚繖涓€娉㈡鐨勫綋鍓嶆渶浼樸€傝鏄庡畠纭疄鎵惧埌鏇撮『鐨勬帓娉曚簡銆?{describeCurrentWaveCost(globalBest.plans)}`);
         }
       }
     });
@@ -7620,12 +7611,12 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
         iteration: iter,
         inertia,
         bestCost: globalBest.cost,
-        textZh: `第 ${iter + 1} 轮完成速度与位置更新，惯性权重 ${inertia.toFixed(2)}，当前波次内部代价 ${globalBest.cost.toFixed(1)}。`,
-        textJa: `${iter + 1} 回目で速度と位置の更新を完了し、慣性重み ${inertia.toFixed(2)}、現在の全体最良コストは ${globalBest.cost.toFixed(1)}。`,
+        textZh: `绗?${iter + 1} 杞畬鎴愰€熷害涓庝綅缃洿鏂帮紝鎯€ф潈閲?${inertia.toFixed(2)}锛屽綋鍓嶆尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
+        textJa: `${iter + 1} 鍥炵洰銇ч€熷害銇ㄤ綅缃伄鏇存柊銈掑畬浜嗐仐銆佹叄鎬ч噸銇?${inertia.toFixed(2)}銆佺従鍦ㄣ伄鍏ㄤ綋鏈€鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
       });
     }
     if ((iter + 1) === 1 || (iter + 1) % 6 === 0 || iter === iterations - 1) {
-      reportRelayStageProgress(`${wave.waveId} 粒子群已跑到第 ${iter + 1}/${iterations} 轮。这段时间主要在反复调整门店先后顺序和车辆归属。${describeCurrentWaveCost(globalBest.plans)}`);
+      reportRelayStageProgress(`${wave.waveId} 绮掑瓙缇ゅ凡璺戝埌绗?${iter + 1}/${iterations} 杞€傝繖娈垫椂闂翠富瑕佸湪鍙嶅璋冩暣闂ㄥ簵鍏堝悗椤哄簭鍜岃溅杈嗗綊灞炪€?{describeCurrentWaveCost(globalBest.plans)}`);
     }
     stagnation = improvedThisRound ? 0 : stagnation + 1;
     if (stagnation >= 8) {
@@ -7634,12 +7625,12 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
         particles[i].position = Array.from({ length: dimension }, () => random());
         particles[i].velocity = Array.from({ length: dimension }, () => (random() - 0.5) * 0.2);
       }
-      reportRelayStageProgress(`${wave.waveId} 连续几轮没有明显提升，粒子群刚刚重启了 ${restartCount} 个表现最差的粒子，避免大家一直围着同一条旧路线空转。`);
+      reportRelayStageProgress(`${wave.waveId} 杩炵画鍑犺疆娌℃湁鏄庢樉鎻愬崌锛岀矑瀛愮兢鍒氬垰閲嶅惎浜?${restartCount} 涓〃鐜版渶宸殑绮掑瓙锛岄伩鍏嶅ぇ瀹朵竴鐩村洿鐫€鍚屼竴鏉℃棫璺嚎绌鸿浆銆俙);
       stagnation = 0;
     }
   }
   const polished = localImproveState(globalBest.state, scenario, wave, random, 5);
-  reportRelayStageProgress(`${wave.waveId} 的粒子群主体搜索跑完了，正在做最后一轮局部微调，把已经找到的好方案再抛光一下。${describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 鐨勭矑瀛愮兢涓讳綋鎼滅储璺戝畬浜嗭紝姝ｅ湪鍋氭渶鍚庝竴杞眬閮ㄥ井璋冿紝鎶婂凡缁忔壘鍒扮殑濂芥柟妗堝啀鎶涘厜涓€涓嬨€?{describeCurrentWaveCost(globalBest.plans)}`);
   if (polished && polished.cost + 1e-6 < globalBest.cost) {
     globalBest = {
       position: globalBest.position,
@@ -7654,10 +7645,10 @@ async function optimizeWaveWithPSO(initialPlans, scenario, wave, randomSeed = 50
     waveId: wave.waveId,
     stage: "pso-finish",
     bestCost: globalBest.cost,
-    textZh: `粒子群算法结束，最终波次内部代价 ${globalBest.cost.toFixed(1)}。`,
-    textJa: `粒子群最適化が終了し、最終最良コストは ${globalBest.cost.toFixed(1)}。`,
+    textZh: `绮掑瓙缇ょ畻娉曠粨鏉燂紝鏈€缁堟尝娆″唴閮ㄤ唬浠?${globalBest.cost.toFixed(1)}銆俙,
+    textJa: `绮掑瓙缇ゆ渶閬╁寲銇岀祩浜嗐仐銆佹渶绲傛渶鑹偝銈广儓銇?${globalBest.cost.toFixed(1)}銆俙,
   });
-  reportRelayStageProgress(`${wave.waveId} 的粒子群搜索完成。接下来会回到整盘方案上判断这一棒值不值得正式接过去。${describeCurrentWaveCost(globalBest.plans)}`);
+  reportRelayStageProgress(`${wave.waveId} 鐨勭矑瀛愮兢鎼滅储瀹屾垚銆傛帴涓嬫潵浼氬洖鍒版暣鐩樻柟妗堜笂鍒ゆ柇杩欎竴妫掑€间笉鍊煎緱姝ｅ紡鎺ヨ繃鍘汇€?{describeCurrentWaveCost(globalBest.plans)}`);
   return { plans: globalBest.plans, traceLog };
 }
 
@@ -7795,8 +7786,8 @@ function assignSavingsRoutesToPlans(routes, seedPlans, scenario, wave, traceLog)
           scope: "wave",
           waveId: wave.waveId,
           stage: "savings-assignment",
-          textZh: `将节约法生成线路 ${item.route.join("->")} 分配给 ${plans[best.planIndex].vehicle.plateNo}，综合成本 ${best.cost.toFixed(1)}。`,
-          textJa: `節約法で生成したルート ${item.route.join("->")} を ${plans[best.planIndex].vehicle.plateNo} に割り当て、総合コストは ${best.cost.toFixed(1)}。`,
+          textZh: `灏嗚妭绾︽硶鐢熸垚绾胯矾 ${item.route.join("->")} 鍒嗛厤缁?${plans[best.planIndex].vehicle.plateNo}锛岀患鍚堟垚鏈?${best.cost.toFixed(1)}銆俙,
+          textJa: `绡€绱勬硶銇х敓鎴愩仐銇熴儷銉笺儓 ${item.route.join("->")} 銈?${plans[best.planIndex].vehicle.plateNo} 銇壊銈婂綋銇︺€佺窂鍚堛偝銈广儓銇?${best.cost.toFixed(1)}銆俙,
         });
       }
       continue;
@@ -7856,8 +7847,8 @@ function solveWaveBySavings(scenario) {
       scope: "wave",
       waveId: wave.waveId,
       stage: "savings-start",
-      textZh: `Clark-Wright 节约法启动，先生成 ${routes.length} 条单店线路，再计算 ${savings.length} 个节约值。`,
-      textJa: `Clark-Wright 節約法を開始し、まず ${routes.length} 本の単店舗ルートを作成し、その後 ${savings.length} 個の節約値を計算します。`,
+      textZh: `Clark-Wright 鑺傜害娉曞惎鍔紝鍏堢敓鎴?${routes.length} 鏉″崟搴楃嚎璺紝鍐嶈绠?${savings.length} 涓妭绾﹀€笺€俙,
+      textJa: `Clark-Wright 绡€绱勬硶銈掗枊濮嬨仐銆併伨銇?${routes.length} 鏈伄鍗樺簵鑸椼儷銉笺儓銈掍綔鎴愩仐銆併仢銇緦 ${savings.length} 鍊嬨伄绡€绱勫€ゃ倰瑷堢畻銇椼伨銇欍€俙,
     });
     for (const saving of savings) {
       const routeA = routeRefs.get(saving.storeAId);
@@ -7890,8 +7881,8 @@ function solveWaveBySavings(scenario) {
           scope: "wave",
           waveId: wave.waveId,
           stage: "savings-merge",
-          textZh: `节约值 ${saving.saving.toFixed(1)} 驱动合并 ${saving.storeAId} 与 ${saving.storeBId}，形成线路 ${bestRoute.join("->")}。`,
-          textJa: `節約値 ${saving.saving.toFixed(1)} に基づき ${saving.storeAId} と ${saving.storeBId} を統合し、ルート ${bestRoute.join("->")} を形成。`,
+          textZh: `鑺傜害鍊?${saving.saving.toFixed(1)} 椹卞姩鍚堝苟 ${saving.storeAId} 涓?${saving.storeBId}锛屽舰鎴愮嚎璺?${bestRoute.join("->")}銆俙,
+          textJa: `绡€绱勫€?${saving.saving.toFixed(1)} 銇熀銇ャ亶 ${saving.storeAId} 銇?${saving.storeBId} 銈掔当鍚堛仐銆併儷銉笺儓 ${bestRoute.join("->")} 銈掑舰鎴愩€俙,
         });
       }
     }
@@ -7924,8 +7915,8 @@ function solveWaveBySavings(scenario) {
       scope: "wave",
       waveId: wave.waveId,
       stage: "savings-finish",
-      textZh: `Clark-Wright 节约法完成 ${wave.waveId}，最终生成 ${assigned.plans.flatMap((plan) => plan.trips).length} 趟线路。`,
-      textJa: `Clark-Wright 節約法が ${wave.waveId} を完了し、最終的に ${assigned.plans.flatMap((plan) => plan.trips).length} 便を生成。`,
+      textZh: `Clark-Wright 鑺傜害娉曞畬鎴?${wave.waveId}锛屾渶缁堢敓鎴?${assigned.plans.flatMap((plan) => plan.trips).length} 瓒熺嚎璺€俙,
+      textJa: `Clark-Wright 绡€绱勬硶銇?${wave.waveId} 銈掑畬浜嗐仐銆佹渶绲傜殑銇?${assigned.plans.flatMap((plan) => plan.trips).length} 渚裤倰鐢熸垚銆俙,
     });
   }
   return { solution: optimizedSolution, traceLog, unscheduledStores };
@@ -7942,8 +7933,8 @@ async function solveWaveByWaveWithOptimizer(scenario, optimizer, baseSeed = 0, o
     algorithmKey: optimizerKey,
     scope: "wave",
     stage: `${optimizerKey}-seed`,
-    textZh: `${algoLabel(optimizerKey)} 以快速初排结果作为起跑基线，以下展示的是该算法自身的继续优化过程。`,
-    textJa: `${algoLabel(optimizerKey)} は初期配車を起点に最適化を継続します。以下は当該アルゴリズム自身のログです。`,
+    textZh: `${algoLabel(optimizerKey)} 浠ュ揩閫熷垵鎺掔粨鏋滀綔涓鸿捣璺戝熀绾匡紝浠ヤ笅灞曠ず鐨勬槸璇ョ畻娉曡嚜韬殑缁х画浼樺寲杩囩▼銆俙,
+    textJa: `${algoLabel(optimizerKey)} 銇垵鏈熼厤杌娿倰璧风偣銇渶閬╁寲銈掔稒缍氥仐銇俱仚銆備互涓嬨伅褰撹┎銈儷銈淬儶銈恒儬鑷韩銇儹銈般仹銇欍€俙,
   });
   const regularVehicleStats = new Map();
   for (let waveIndex = 0; waveIndex < scenario.waves.length; waveIndex += 1) {
@@ -8012,21 +8003,21 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
       if (item.hasTrips) focusWaveIndexes.add(item.waveIndex);
     });
   }
-  reportRelayStageProgress(`这一棒不会整盘重算，而是优先盯住问题更重的波次：${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")}。其它波次先沿用上一轮结果。`);
+  reportRelayStageProgress(`杩欎竴妫掍笉浼氭暣鐩橀噸绠楋紝鑰屾槸浼樺厛鐩綇闂鏇撮噸鐨勬尝娆★細${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)}銆傚叾瀹冩尝娆″厛娌跨敤涓婁竴杞粨鏋溿€俙);
   for (let waveIndex = 0; waveIndex < scenario.waves.length; waveIndex += 1) {
     if (waveIndex) await cooperativeYield();
     const wave = scenario.waves[waveIndex];
     const seededPlans = buildSeedPlansForWave(scenario, wave, regularVehicleStats, baseSolution[waveIndex] || []);
     if (!focusWaveIndexes.has(waveIndex)) {
-      reportRelayStageProgress(`${wave.waveId} 当前问题不重，这一棒先不动它，直接沿用上一轮排法。`);
+      reportRelayStageProgress(`${wave.waveId} 褰撳墠闂涓嶉噸锛岃繖涓€妫掑厛涓嶅姩瀹冿紝鐩存帴娌跨敤涓婁竴杞帓娉曘€俙);
       optimizedSolution.push(seededPlans);
       traceLog.push({
         algorithmKey: "focus",
         scope: "wave",
         waveId: wave.waveId,
         stage: "focus-skip",
-        textZh: `${wave.waveId} 当前问题不重，继续沿用上一轮结果，不做重复重算。`,
-        textJa: `${wave.waveId} は現時点で問題が重くないため、前輪結果をそのまま引き継ぎます。`,
+        textZh: `${wave.waveId} 褰撳墠闂涓嶉噸锛岀户缁部鐢ㄤ笂涓€杞粨鏋滐紝涓嶅仛閲嶅閲嶇畻銆俙,
+        textJa: `${wave.waveId} 銇従鏅傜偣銇у晱椤屻亴閲嶃亸銇亜銇熴倎銆佸墠杓祼鏋溿倰銇濄伄銇俱伨寮曘亶缍欍亷銇俱仚銆俙,
       });
       if (wave.isNightWave) {
         seededPlans.forEach((plan) => {
@@ -8043,7 +8034,7 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
       continue;
     }
     const tripCount = seededPlans.flatMap((plan) => plan.trips || []).length;
-    reportRelayStageProgress(`开始细修 ${wave.waveId}。这波当前有 ${tripCount} 趟线路，优化器会只在这部分里重排，看看能不能压里程、少用车，或者把评分再往上顶。`);
+    reportRelayStageProgress(`寮€濮嬬粏淇?${wave.waveId}銆傝繖娉㈠綋鍓嶆湁 ${tripCount} 瓒熺嚎璺紝浼樺寲鍣ㄤ細鍙湪杩欓儴鍒嗛噷閲嶆帓锛岀湅鐪嬭兘涓嶈兘鍘嬮噷绋嬨€佸皯鐢ㄨ溅锛屾垨鑰呮妸璇勫垎鍐嶅線涓婇《銆俙);
     const optimized = await optimizer(seededPlans, scenario, wave, baseSeed * 100 + 91 + waveIndex);
     optimizedSolution.push(optimized.plans);
     traceLog = traceLog.concat(optimized.traceLog || []);
@@ -8051,7 +8042,7 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
     const afterDistance = optimized.plans.reduce((sum, plan) => sum + (plan.totalDistance || 0), 0);
     const distanceDelta = afterDistance - beforeDistance;
     const distanceDeltaLabel = `${distanceDelta > 0 ? "+" : ""}${distanceDelta.toFixed(1)}`;
-    reportRelayStageProgress(`${wave.waveId} 这波已经算完。优化前里程约 ${beforeDistance.toFixed(1)} km，优化后约 ${afterDistance.toFixed(1)} km，变化 ${distanceDeltaLabel} km。`);
+    reportRelayStageProgress(`${wave.waveId} 杩欐尝宸茬粡绠楀畬銆備紭鍖栧墠閲岀▼绾?${beforeDistance.toFixed(1)} km锛屼紭鍖栧悗绾?${afterDistance.toFixed(1)} km锛屽彉鍖?${distanceDeltaLabel} km銆俙);
     if (wave.isNightWave) {
       optimized.plans.forEach((plan) => {
         const prev = regularVehicleStats.get(plan.vehicle.plateNo) || { priorRegularDistance: 0, priorWaveCount: 0, nightAvailableMin: wave.startMin };
@@ -8075,8 +8066,8 @@ async function improveSolutionByWaveOptimizer(baseSolution, scenario, optimizer,
     algorithmKey: "focus",
     scope: "wave",
     stage: "focus-summary",
-    textZh: `本轮优化优先处理了 ${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")}，其它波次直接承接上一轮结果，避免整盘重复重算。优化前评分 ${baseMetrics.score.toFixed(1)}，优化后评分 ${optimizedMetrics.score.toFixed(1)}。`,
-    textJa: `本輪は ${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("、")} を優先的に最適化し、他の波次は前輪結果をそのまま引き継いで全面再計算を避けました。最適化前スコア ${baseMetrics.score.toFixed(1)}、最適化後スコア ${optimizedMetrics.score.toFixed(1)}。`,
+    textZh: `鏈疆浼樺寲浼樺厛澶勭悊浜?${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)}锛屽叾瀹冩尝娆＄洿鎺ユ壙鎺ヤ笂涓€杞粨鏋滐紝閬垮厤鏁寸洏閲嶅閲嶇畻銆備紭鍖栧墠璇勫垎 ${baseMetrics.score.toFixed(1)}锛屼紭鍖栧悗璇勫垎 ${optimizedMetrics.score.toFixed(1)}銆俙,
+    textJa: `鏈吉銇?${[...focusWaveIndexes].map((index) => scenario.waves[index]?.waveId).filter(Boolean).join("銆?)} 銈掑劒鍏堢殑銇渶閬╁寲銇椼€佷粬銇尝娆°伅鍓嶈吉绲愭灉銈掋仢銇伨銇惧紩銇嶇稒銇勩仹鍏ㄩ潰鍐嶈▓绠椼倰閬裤亼銇俱仐銇熴€傛渶閬╁寲鍓嶃偣銈炽偄 ${baseMetrics.score.toFixed(1)}銆佹渶閬╁寲寰屻偣銈炽偄 ${optimizedMetrics.score.toFixed(1)}銆俙,
   });
   return { solution: optimizedSolution, traceLog };
 }
@@ -8253,7 +8244,7 @@ function computeFinalPendingByWave(solution = [], scenario = null) {
           storeId: sid,
           storeName: String(store?.name || ""),
           reason: "no_plate",
-          reasonText: "本波次有货但无车牌号",
+          reasonText: "鏈尝娆℃湁璐т絾鏃犺溅鐗屽彿",
           source: "final_state",
         });
       }
@@ -8311,10 +8302,10 @@ function computeWaveCandidateAssignedPendingStats(solution = [], scenario = null
   return stats;
 }
 
-function reportWaveCandidateAssignedPendingStats(tag = "结果", solution = [], scenario = null) {
+function reportWaveCandidateAssignedPendingStats(tag = "缁撴灉", solution = [], scenario = null) {
   const rows = computeWaveCandidateAssignedPendingStats(solution, scenario);
   rows.forEach((row) => {
-    reportRelayStageProgress(`集合核对（${row.waveId}/${tag}）：candidate=${row.candidateCount}，assigned=${row.assignedCount}，pending=${row.pendingCount}。`);
+    reportRelayStageProgress(`闆嗗悎鏍稿锛?{row.waveId}/${tag}锛夛細candidate=${row.candidateCount}锛宎ssigned=${row.assignedCount}锛宲ending=${row.pendingCount}銆俙);
   });
   return rows;
 }
@@ -8435,11 +8426,11 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
     algorithmKey: "relay",
     scope: "wave",
     stage: "relay-start",
-    textZh: `接力求解启动：初排阶段 ${initialKeys.map((key) => algoLabel(key)).join(" / ")}，后续阶段 ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "无" }。`,
-    textJa: `リレー求解を開始します。初期段階は ${initialKeys.map((key) => algoLabel(key)).join(" / ")}、後続段階は ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "なし"} です。`,
+    textZh: `鎺ュ姏姹傝В鍚姩锛氬垵鎺掗樁娈?${initialKeys.map((key) => algoLabel(key)).join(" / ")}锛屽悗缁樁娈?${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "鏃? }銆俙,
+    textJa: `銉儸銉兼眰瑙ｃ倰闁嬪銇椼伨銇欍€傚垵鏈熸闅庛伅 ${initialKeys.map((key) => algoLabel(key)).join(" / ")}銆佸緦缍氭闅庛伅 ${stageKeys.length ? stageKeys.map((key) => algoLabel(key)).join(" -> ") : "銇仐"} 銇с仚銆俙,
   });
-  relayLog(`接力求解启动。第一阶段先从 ${initialKeys.map((key) => algoLabel(key)).join(" / ")} 里挑一个更好的初排方案。后续不会把所有算法机械跑满，而是按当前目标挑最值得接棒的几棒。`);
-  relayLog(`下面日志里提到的“波次内部代价”，不是最后给客户看的综合评分，而是算法内部比较路线优劣的尺子。它主要由里程成本、晚到罚分、超允许偏差罚分、波次超时罚分、车辆续跑罚分、额外趟次罚分，再减去装载抵扣组成。`);
+  relayLog(`鎺ュ姏姹傝В鍚姩銆傜涓€闃舵鍏堜粠 ${initialKeys.map((key) => algoLabel(key)).join(" / ")} 閲屾寫涓€涓洿濂界殑鍒濇帓鏂规銆傚悗缁笉浼氭妸鎵€鏈夌畻娉曟満姊拌窇婊★紝鑰屾槸鎸夊綋鍓嶇洰鏍囨寫鏈€鍊煎緱鎺ユ鐨勫嚑妫掋€俙);
+  relayLog(`涓嬮潰鏃ュ織閲屾彁鍒扮殑鈥滄尝娆″唴閮ㄤ唬浠封€濓紝涓嶆槸鏈€鍚庣粰瀹㈡埛鐪嬬殑缁煎悎璇勫垎锛岃€屾槸绠楁硶鍐呴儴姣旇緝璺嚎浼樺姡鐨勫昂瀛愩€傚畠涓昏鐢遍噷绋嬫垚鏈€佹櫄鍒扮綒鍒嗐€佽秴鍏佽鍋忓樊缃氬垎銆佹尝娆¤秴鏃剁綒鍒嗐€佽溅杈嗙画璺戠綒鍒嗐€侀澶栬稛娆＄綒鍒嗭紝鍐嶅噺鍘昏杞芥姷鎵ｇ粍鎴愩€俙);
 
   let current = null;
   if (baseResult?.solution?.length) {
@@ -8450,32 +8441,32 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
       solution: baseResult.solution,
       traceLog: baseResult.traceLog || [],
     }, scenario);
-    relayLog(`检测到你上一轮已经有可用方案，所以这一轮接力直接从现有结果起跑，不再重复重建初排。当前起跑指标：${relayMetricSummary(current.metrics)}。`);
+    relayLog(`妫€娴嬪埌浣犱笂涓€杞凡缁忔湁鍙敤鏂规锛屾墍浠ヨ繖涓€杞帴鍔涚洿鎺ヤ粠鐜版湁缁撴灉璧疯窇锛屼笉鍐嶉噸澶嶉噸寤哄垵鎺掋€傚綋鍓嶈捣璺戞寚鏍囷細${relayMetricSummary(current.metrics)}銆俙);
   } else {
     for (let index = 0; index < initialKeys.length; index += 1) {
       const key = initialKeys[index];
-      relayLog(`正在执行初排候选 ${algoLabel(key)}，目的是先拿到一版能用的基础方案。`);
+      relayLog(`姝ｅ湪鎵ц鍒濇帓鍊欓€?${algoLabel(key)}锛岀洰鐨勬槸鍏堟嬁鍒颁竴鐗堣兘鐢ㄧ殑鍩虹鏂规銆俙);
       const candidate = await ({ vrptw: solveByVRPTW, savings: solveBySavings }[key])(scenario);
       if (!current || candidate.metrics.score > current.metrics.score) current = candidate;
-      relayLog(`${algoLabel(key)} 完成。${relayMetricSummary(candidate.metrics)}。`);
+      relayLog(`${algoLabel(key)} 瀹屾垚銆?{relayMetricSummary(candidate.metrics)}銆俙);
       pushTraceEvent(traceLog, {
         algorithmKey: "relay",
         scope: "wave",
         stage: "relay-initial",
         waveId: scenario.waves[0]?.waveId || "ALL",
-        textZh: `初排候选 ${algoLabel(key)} 完成，评分 ${candidate.metrics.score.toFixed(1)}，${current.key === candidate.key ? "暂列当前接力首棒" : "未超过当前首棒"}。`,
-        textJa: `初期候補 ${algoLabel(key)} が完了し、スコアは ${candidate.metrics.score.toFixed(1)}、${current.key === candidate.key ? "現在の第一走者として採用" : "現在の先頭案は維持"}。`,
+        textZh: `鍒濇帓鍊欓€?${algoLabel(key)} 瀹屾垚锛岃瘎鍒?${candidate.metrics.score.toFixed(1)}锛?{current.key === candidate.key ? "鏆傚垪褰撳墠鎺ュ姏棣栨" : "鏈秴杩囧綋鍓嶉妫?}銆俙,
+        textJa: `鍒濇湡鍊欒 ${algoLabel(key)} 銇屽畬浜嗐仐銆併偣銈炽偄銇?${candidate.metrics.score.toFixed(1)}銆?{current.key === candidate.key ? "鐝惧湪銇涓€璧拌€呫仺銇椼仸鎺＄敤" : "鐝惧湪銇厛闋銇董鎸?}銆俙,
       });
       await cooperativeYield();
     }
   }
   if (!current) return applyFinalRuleToResult({ key: "relay", label: algoLabel("relay"), description: algoDescription("relay"), solution: [], traceLog }, scenario);
-  relayLog(`初排阶段结束，当前接力首棒是 ${algoLabel(current.key)}。首棒的关键指标是：${relayMetricSummary(current.metrics)}。接下来进入继续优化阶段，共计划 ${stageKeys.length} 棒。`);
+  relayLog(`鍒濇帓闃舵缁撴潫锛屽綋鍓嶆帴鍔涢妫掓槸 ${algoLabel(current.key)}銆傞妫掔殑鍏抽敭鎸囨爣鏄細${relayMetricSummary(current.metrics)}銆傛帴涓嬫潵杩涘叆缁х画浼樺寲闃舵锛屽叡璁″垝 ${stageKeys.length} 妫掋€俙);
 
   let noImproveStages = 0;
   for (let index = 0; index < stageKeys.length; index += 1) {
     const key = stageKeys[index];
-    relayLog(`第 ${index + 2} 阶段由 ${algoLabel(key)} 接棒。它会在当前最好方案基础上继续找更好的排法。`);
+    relayLog(`绗?${index + 2} 闃舵鐢?${algoLabel(key)} 鎺ユ銆傚畠浼氬湪褰撳墠鏈€濂芥柟妗堝熀纭€涓婄户缁壘鏇村ソ鐨勬帓娉曘€俙);
     const beforeMetrics = current.metrics;
     const improved = await improveSolutionByWaveOptimizer(current.solution, scenario, optimizerMap[key], 30 + index);
     const metrics = evaluateSolution(improved.solution, scenario, computeFinalPendingByWave(improved.solution, scenario));
@@ -8485,14 +8476,14 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
       || (metrics.unscheduledCount || 0) < (beforeMetrics.unscheduledCount || 0)
       || (metrics.totalDistance || 0) + 3 < (beforeMetrics.totalDistance || 0)
       || (metrics.totalOnTime || 0) > (beforeMetrics.totalOnTime || 0);
-    relayLog(`${algoLabel(key)} 本轮结果：${relayMetricSummary(metrics)}。相比上一棒，${describeRelayMetricDelta(beforeMetrics, metrics)}。${accepted ? `因为新分数超过当前 ${beforeMetrics.score.toFixed(1)}，所以这一棒正式接棒。` : `因为新分数没有超过当前 ${beforeMetrics.score.toFixed(1)}，所以这一棒没有接过去。`}`);
+    relayLog(`${algoLabel(key)} 鏈疆缁撴灉锛?{relayMetricSummary(metrics)}銆傜浉姣斾笂涓€妫掞紝${describeRelayMetricDelta(beforeMetrics, metrics)}銆?{accepted ? `鍥犱负鏂板垎鏁拌秴杩囧綋鍓?${beforeMetrics.score.toFixed(1)}锛屾墍浠ヨ繖涓€妫掓寮忔帴妫掋€俙 : `鍥犱负鏂板垎鏁版病鏈夎秴杩囧綋鍓?${beforeMetrics.score.toFixed(1)}锛屾墍浠ヨ繖涓€妫掓病鏈夋帴杩囧幓銆俙}`);
     pushTraceEvent(traceLog, {
       algorithmKey: "relay",
       scope: "wave",
       stage: "relay-stage",
       waveId: scenario.waves[0]?.waveId || "ALL",
-      textZh: `${index + 2} 阶段由 ${algoLabel(key)} 接棒，候选评分 ${metrics.score.toFixed(1)}，${accepted ? `优于当前 ${current.metrics.score.toFixed(1)}，正式接棒` : `未超过当前 ${current.metrics.score.toFixed(1)}，保留原方案`}。`,
-      textJa: `${index + 2} 段階は ${algoLabel(key)} が引き継ぎ、候補スコア ${metrics.score.toFixed(1)}、${accepted ? `現行 ${current.metrics.score.toFixed(1)} を上回ったため採用` : `現行 ${current.metrics.score.toFixed(1)} を超えず元案を維持`}。`,
+      textZh: `${index + 2} 闃舵鐢?${algoLabel(key)} 鎺ユ锛屽€欓€夎瘎鍒?${metrics.score.toFixed(1)}锛?{accepted ? `浼樹簬褰撳墠 ${current.metrics.score.toFixed(1)}锛屾寮忔帴妫抈 : `鏈秴杩囧綋鍓?${current.metrics.score.toFixed(1)}锛屼繚鐣欏師鏂规`}銆俙,
+      textJa: `${index + 2} 娈甸殠銇?${algoLabel(key)} 銇屽紩銇嶇稒銇庛€佸€欒銈广偝銈?${metrics.score.toFixed(1)}銆?{accepted ? `鐝捐 ${current.metrics.score.toFixed(1)} 銈掍笂鍥炪仯銇熴仧銈佹帯鐢╜ : `鐝捐 ${current.metrics.score.toFixed(1)} 銈掕秴銇堛仛鍏冩銈掔董鎸乣}銆俙,
     });
     if (accepted) {
       current = applyFinalRuleToResult({
@@ -8504,21 +8495,21 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
       }, scenario);
       noImproveStages = materialGain ? 0 : noImproveStages + 1;
       if (!materialGain) {
-        relayLog(`这一棒虽然分数略有上升，但提升很有限。我会把它接住，同时开始关注是否该提前收工，避免空耗时间。`);
+        relayLog(`杩欎竴妫掕櫧鐒跺垎鏁扮暐鏈変笂鍗囷紝浣嗘彁鍗囧緢鏈夐檺銆傛垜浼氭妸瀹冩帴浣忥紝鍚屾椂寮€濮嬪叧娉ㄦ槸鍚﹁鎻愬墠鏀跺伐锛岄伩鍏嶇┖鑰楁椂闂淬€俙);
       }
     } else {
       noImproveStages += 1;
     }
     mergeTraceLogs(traceLog, improved.traceLog || []);
     if (noImproveStages >= 2 && index < stageKeys.length - 1) {
-      relayLog(`连续 ${noImproveStages} 棒没有带来实质提升，后面的接力先提前停止，避免继续空转耗时。`);
+      relayLog(`杩炵画 ${noImproveStages} 妫掓病鏈夊甫鏉ュ疄璐ㄦ彁鍗囷紝鍚庨潰鐨勬帴鍔涘厛鎻愬墠鍋滄锛岄伩鍏嶇户缁┖杞€楁椂銆俙);
       pushTraceEvent(traceLog, {
         algorithmKey: "relay",
         scope: "wave",
         stage: "relay-early-stop",
         waveId: scenario.waves[0]?.waveId || "ALL",
-        textZh: `连续 ${noImproveStages} 个阶段未带来实质提升，接力提前收工。`,
-        textJa: `${noImproveStages} 段階連続で実質改善が出なかったため、リレーを早期終了しました。`,
+        textZh: `杩炵画 ${noImproveStages} 涓樁娈垫湭甯︽潵瀹炶川鎻愬崌锛屾帴鍔涙彁鍓嶆敹宸ャ€俙,
+        textJa: `${noImproveStages} 娈甸殠閫ｇ稓銇у疅璩敼鍠勩亴鍑恒仾銇嬨仯銇熴仧銈併€併儶銉兗銈掓棭鏈熺祩浜嗐仐銇俱仐銇熴€俙,
       });
       break;
     }
@@ -8529,10 +8520,10 @@ async function solveByRelay(scenario, selectedKeys = [], baseResult = null) {
     algorithmKey: "relay",
     scope: "wave",
     stage: "relay-finish",
-    textZh: `接力求解完成，最终采用方案评分 ${current.metrics.score.toFixed(1)}。`,
-    textJa: `リレー求解が完了し、最終採用スコアは ${current.metrics.score.toFixed(1)} です。`,
+    textZh: `鎺ュ姏姹傝В瀹屾垚锛屾渶缁堥噰鐢ㄦ柟妗堣瘎鍒?${current.metrics.score.toFixed(1)}銆俙,
+    textJa: `銉儸銉兼眰瑙ｃ亴瀹屼簡銇椼€佹渶绲傛帯鐢ㄣ偣銈炽偄銇?${current.metrics.score.toFixed(1)} 銇с仚銆俙,
   });
-  relayLog(`接力求解完成。最终方案评分 ${current.metrics.score.toFixed(1)}，已调度 ${current.metrics.scheduledCount || 0} 家，未调度 ${(current.metrics.unscheduledCount || 0)} 家。`);
+  relayLog(`鎺ュ姏姹傝В瀹屾垚銆傛渶缁堟柟妗堣瘎鍒?${current.metrics.score.toFixed(1)}锛屽凡璋冨害 ${current.metrics.scheduledCount || 0} 瀹讹紝鏈皟搴?${(current.metrics.unscheduledCount || 0)} 瀹躲€俙);
 
   return applyFinalRuleToResult({
     key: "relay",
@@ -8560,10 +8551,10 @@ function diagnoseScenarioFeasibility(scenario) {
       const leave = start + (store.actualServiceMinutes || store.serviceMinutes || 0);
       const finish = leave + getTravelMinutes(scenario, store.id, DC.id, fastest.speed);
       if (isW3WaveForSolve(wave) && directDistance > getSolveW3OneWayMaxKm(scenario)) {
-        issues.push(`${wave.waveId} 的门店 ${store.name} 单独到店就要 ${directDistance.toFixed(1)} km`);
+        issues.push(`${wave.waveId} 鐨勯棬搴?${store.name} 鍗曠嫭鍒板簵灏辫 ${directDistance.toFixed(1)} km`);
       }
       else if ((wave.endMode || "return") === "return" ? finish > wave.endMin : leave > wave.endMin) {
-        issues.push(`${wave.waveId} 的门店 ${store.name} 单独执行也会晚于波次${(wave.endMode || "return") === "return" ? "回库" : "完店"}截止`);
+        issues.push(`${wave.waveId} 鐨勯棬搴?${store.name} 鍗曠嫭鎵ц涔熶細鏅氫簬娉㈡${(wave.endMode || "return") === "return" ? "鍥炲簱" : "瀹屽簵"}鎴`);
       }
       if (issues.length >= 6) return issues;
     }
@@ -8574,7 +8565,7 @@ function diagnoseScenarioFeasibility(scenario) {
 function formatScheduledByWave(metrics = {}) {
   const list = Array.isArray(metrics.scheduledByWave) ? metrics.scheduledByWave : [];
   if (!list.length) return `${L("scheduledStores")} ${metrics.scheduledCount || 0}`;
-  return `${L("scheduledStores")}（${list.map((item) => `${item.waveId || "-"}:${Number(item.count || 0)}`).join(" | ")}）`;
+  return `${L("scheduledStores")}锛?{list.map((item) => `${item.waveId || "-"}:${Number(item.count || 0)}`).join(" | ")}锛塦;
 }
 
 function renderSummary() {
@@ -8583,14 +8574,14 @@ function renderSummary() {
     <article class="metric-card ${state.activeResultKey === result.key ? "metric-card-active" : ""}">
       <p class="label">${algoLabel(result.key)}</p>
       <div class="value">${result.metrics.score.toFixed(1)}</div>
-      ${Number(state.settings.targetScore || 0) > 0 ? `<p class="hint">${L("targetScore")} ${Number(state.settings.targetScore).toFixed(1)}，${result.metrics.score >= Number(state.settings.targetScore || 0) ? L("targetAchieved") : L("targetMissed")}</p>` : ""}
-      <p class="hint">${lang() === "ja" ? "スコアは総合評価で、数値が高いほど良いです。" : "评分代表综合表现，数值越高越好。"}</p>
-      <p class="hint">${L("dispatchStart")} ${state.settings.dispatchStartTime}，${formatScheduledByWave(result.metrics)}，${L("unscheduledStores")} ${result.metrics.unscheduledCount}，${L("onTime")}率 ${formatRate(result.metrics.totalOnTime / Math.max(result.metrics.totalStops, 1))}，${L("totalDistance")} ${result.metrics.totalDistance.toFixed(1)} km，${L("avgLoad")} ${formatRate(result.metrics.loadRate)}，${L("fleetLoad")} ${formatRate(result.metrics.fleetLoadRate)}，${lang() === "ja" ? `使用車両 ${result.metrics.usedVehicleCount} 台 / 待機車両 ${result.metrics.unusedVehicleCount} 台` : `已用车辆 ${result.metrics.usedVehicleCount} 辆 / 未用车辆 ${result.metrics.unusedVehicleCount} 辆`}</p>
-      ${best && best.key !== result.key ? `<p class="hint">${lang() === "ja" ? `現在の最良案 ${algoLabel(best.key)} と比べると、スコア差 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}、距離差 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km、使用車両差 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 台です。` : `与当前最佳 ${algoLabel(best.key)} 相比：分数差 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}，里程差 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km，用车差 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 辆。`}</p>` : ""}
-      <p class="hint">${lang() === "ja" ? "100点制。未遅着率45% + 距離25% + 平均単便積載率15% + 積載優先達成率15%。より時間通りで、距離が短く、積載が良いほど高得点です。" : "100分制。未晚到率45% + 距离25% + 平均单趟装载率15% + 装载偏好达成率15%。也就是说，越准时、越省里程、越能装，分数越高。"}</p>
+      ${Number(state.settings.targetScore || 0) > 0 ? `<p class="hint">${L("targetScore")} ${Number(state.settings.targetScore).toFixed(1)}锛?{result.metrics.score >= Number(state.settings.targetScore || 0) ? L("targetAchieved") : L("targetMissed")}</p>` : ""}
+      <p class="hint">${lang() === "ja" ? "銈广偝銈伅绶忓悎瑭曚尽銇с€佹暟鍊ゃ亴楂樸亜銇汇仼鑹亜銇с仚銆? : "璇勫垎浠ｈ〃缁煎悎琛ㄧ幇锛屾暟鍊艰秺楂樿秺濂姐€?}</p>
+      <p class="hint">${L("dispatchStart")} ${state.settings.dispatchStartTime}锛?{formatScheduledByWave(result.metrics)}锛?{L("unscheduledStores")} ${result.metrics.unscheduledCount}锛?{L("onTime")}鐜?${formatRate(result.metrics.totalOnTime / Math.max(result.metrics.totalStops, 1))}锛?{L("totalDistance")} ${result.metrics.totalDistance.toFixed(1)} km锛?{L("avgLoad")} ${formatRate(result.metrics.loadRate)}锛?{L("fleetLoad")} ${formatRate(result.metrics.fleetLoadRate)}锛?{lang() === "ja" ? `浣跨敤杌婁浮 ${result.metrics.usedVehicleCount} 鍙?/ 寰呮杌婁浮 ${result.metrics.unusedVehicleCount} 鍙癭 : `宸茬敤杞﹁締 ${result.metrics.usedVehicleCount} 杈?/ 鏈敤杞﹁締 ${result.metrics.unusedVehicleCount} 杈哷}</p>
+      ${best && best.key !== result.key ? `<p class="hint">${lang() === "ja" ? `鐝惧湪銇渶鑹 ${algoLabel(best.key)} 銇ㄦ瘮銇广倠銇ㄣ€併偣銈炽偄宸?${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}銆佽窛闆㈠樊 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km銆佷娇鐢ㄨ粖涓″樊 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 鍙般仹銇欍€俙 : `涓庡綋鍓嶆渶浣?${algoLabel(best.key)} 鐩告瘮锛氬垎鏁板樊 ${Math.abs(best.metrics.score - result.metrics.score).toFixed(1)}锛岄噷绋嬪樊 ${Math.abs(best.metrics.totalDistance - result.metrics.totalDistance).toFixed(1)} km锛岀敤杞﹀樊 ${Math.abs((best.metrics.usedVehicleCount || 0) - (result.metrics.usedVehicleCount || 0))} 杈嗐€俙}</p>` : ""}
+      <p class="hint">${lang() === "ja" ? "100鐐瑰埗銆傛湭閬呯潃鐜?5% + 璺濋洟25% + 骞冲潎鍗樹究绌嶈級鐜?5% + 绌嶈級鍎厛閬旀垚鐜?5%銆傘倛銈婃檪闁撻€氥倞銇с€佽窛闆亴鐭亸銆佺杓夈亴鑹亜銇汇仼楂樺緱鐐广仹銇欍€? : "100鍒嗗埗銆傛湭鏅氬埌鐜?5% + 璺濈25% + 骞冲潎鍗曡稛瑁呰浇鐜?5% + 瑁呰浇鍋忓ソ杈炬垚鐜?5%銆備篃灏辨槸璇达紝瓒婂噯鏃躲€佽秺鐪侀噷绋嬨€佽秺鑳借锛屽垎鏁拌秺楂樸€?}</p>
       <p class="hint">${L("hardArrivalHint")}${state.settings.concentrateLate ? ` ${L("lateFocusHint")}` : ""}</p>
         <p class="hint">${result.metrics.unscheduledCount ? LT("unscheduledSummary", { count: result.metrics.unscheduledCount, names: formatUnscheduledDetails(result.metrics.unscheduledStores, 8) }) : L("noUnscheduled")}</p>
-        ${result.metrics.unscheduledCount ? `<p class="hint">${lang() === "ja" ? `未割当の主因：${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}` : `未调度主因：${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}`}${result.metrics.unusedVehicleCount > 0 ? (lang() === "ja" ? `。なお待機車両は ${result.metrics.unusedVehicleCount} 台あり、主因は車両不足ではなく制約側です。` : `。当前仍有 ${result.metrics.unusedVehicleCount} 辆闲置车，主因不是车不够，而是约束不满足。`) : ""}</p>` : ""}
+        ${result.metrics.unscheduledCount ? `<p class="hint">${lang() === "ja" ? `鏈壊褰撱伄涓诲洜锛?{summarizeUnscheduledReasons(result.metrics.unscheduledStores)}` : `鏈皟搴︿富鍥狅細${summarizeUnscheduledReasons(result.metrics.unscheduledStores)}`}${result.metrics.unusedVehicleCount > 0 ? (lang() === "ja" ? `銆傘仾銇婂緟姗熻粖涓°伅 ${result.metrics.unusedVehicleCount} 鍙般亗銈娿€佷富鍥犮伅杌婁浮涓嶈冻銇с伅銇亸鍒剁磩鍋淬仹銇欍€俙 : `銆傚綋鍓嶄粛鏈?${result.metrics.unusedVehicleCount} 杈嗛棽缃溅锛屼富鍥犱笉鏄溅涓嶅锛岃€屾槸绾︽潫涓嶆弧瓒炽€俙) : ""}</p>` : ""}
         <button class="secondary view-result-detail" data-result-key="${result.key}">${algoLabel(result.key)} ${L("detail")}</button>
       </article>
   `).join("");
@@ -8701,10 +8692,10 @@ function dockAssistantPanel() {
   const controls = document.createElement("div");
   controls.className = "assistant-dock-controls";
   const labels = lang() === "ja"
-    ? { collapsed: "折りたたむ", half: "簡版", full: "全量" }
-    : { collapsed: "折叠", half: "简版", full: "全量" };
+    ? { collapsed: "鎶樸倞銇熴仧銈€", half: "绨＄増", full: "鍏ㄩ噺" }
+    : { collapsed: "鎶樺彔", half: "绠€鐗?, full: "鍏ㄩ噺" };
   controls.innerHTML = `
-    <span class="assistant-dock-move" title="${lang() === "ja" ? "ドラッグして移動" : "拖拽移动"}">⋮⋮</span>
+    <span class="assistant-dock-move" title="${lang() === "ja" ? "銉夈儵銉冦偘銇椼仸绉诲嫊" : "鎷栨嫿绉诲姩"}">鈰嫯</span>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="collapsed">${labels.collapsed}</button>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="half">${labels.half}</button>
     <button type="button" class="assistant-dock-toggle" data-assistant-dock-state="full">${labels.full}</button>
@@ -8865,13 +8856,13 @@ function renderDataArchivePanels() {
   if (!table || !storeTable || !status) return;
   const items = Array.isArray(dataArchiveCache.items) ? dataArchiveCache.items : [];
   const columns = [
-    { label: "档案ID", width: 260 },
-    { label: "保存时间", width: 170 },
-    { label: "来源模块", width: 100 },
-    { label: "门店数", width: 80 },
-    { label: "车辆数", width: 80 },
-    { label: "波次数", width: 80 },
-    { label: "操作", width: 100 },
+    { label: "妗ｆID", width: 260 },
+    { label: "淇濆瓨鏃堕棿", width: 170 },
+    { label: "鏉ユ簮妯″潡", width: 100 },
+    { label: "闂ㄥ簵鏁?, width: 80 },
+    { label: "杞﹁締鏁?, width: 80 },
+    { label: "娉㈡鏁?, width: 80 },
+    { label: "鎿嶄綔", width: 100 },
   ];
   const rows = items.map((item) => `
     <tr class="${dataArchiveCache.selectedId === item.id ? "located-row" : ""}">
@@ -8881,28 +8872,28 @@ function renderDataArchivePanels() {
       <td>${Number(item.storeCount || 0)}</td>
       <td>${Number(item.vehicleCount || 0)}</td>
       <td>${Number(item.waveCount || 0)}</td>
-      <td><button class="mini" data-data-archive-view="${escapeHtml(String(item.id || ""))}">查看</button></td>
+      <td><button class="mini" data-data-archive-view="${escapeHtml(String(item.id || ""))}">鏌ョ湅</button></td>
     </tr>
   `);
   table.innerHTML = buildDataTableHtml({ tableKind: "dataArchive", columns, rows, tableClass: "data-archive-table" });
   const selected = items.find((item) => item.id === dataArchiveCache.selectedId) || items[0] || null;
   if (!selected) {
-    status.textContent = "暂无基础资料档案。";
+    status.textContent = "鏆傛棤鍩虹璧勬枡妗ｆ銆?;
     storeTable.innerHTML = "";
     return;
   }
   dataArchiveCache.selectedId = selected.id;
-  status.textContent = `当前档案：${selected.id}，门店 ${selected.storeCount} 家。`;
+  status.textContent = `褰撳墠妗ｆ锛?{selected.id}锛岄棬搴?${selected.storeCount} 瀹躲€俙;
   const storeColumns = [
-    { label: "编号", width: 110 },
-    { label: "名称", width: 220 },
-    { label: "区域", width: 120 },
-    { label: "经度", width: 140 },
-    { label: "纬度", width: 140 },
-    { label: "一波次货量", width: 110 },
-    { label: "二波次货量", width: 110 },
-    { label: "冷藏比例", width: 90 },
-    { label: "所属波次", width: 110 },
+    { label: "缂栧彿", width: 110 },
+    { label: "鍚嶇О", width: 220 },
+    { label: "鍖哄煙", width: 120 },
+    { label: "缁忓害", width: 140 },
+    { label: "绾害", width: 140 },
+    { label: "涓€娉㈡璐ч噺", width: 110 },
+    { label: "浜屾尝娆¤揣閲?, width: 110 },
+    { label: "鍐疯棌姣斾緥", width: 90 },
+    { label: "鎵€灞炴尝娆?, width: 110 },
   ];
   const storeRows = (selected.stores || []).map((store) => {
     const loads = normalizeStoreWaveLoads(store || {});
@@ -8932,7 +8923,7 @@ async function queryDataArchives() {
   const keyword = String(keywordInput.value || "").trim().toLowerCase();
   dataArchiveCache.date = dateValue;
   dataArchiveCache.keyword = keyword;
-  status.textContent = "正在查询...";
+  status.textContent = "姝ｅ湪鏌ヨ...";
   try {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/archive/list`, {
       method: "POST",
@@ -8962,7 +8953,7 @@ async function queryDataArchives() {
     dataArchiveCache.selectedId = items[0]?.id || "";
     renderDataArchivePanels();
   } catch (error) {
-    status.textContent = `查询失败：${error?.message || ""}`;
+    status.textContent = `鏌ヨ澶辫触锛?{error?.message || ""}`;
   }
 }
 
@@ -9012,7 +9003,7 @@ async function refreshBaseDataBySource() {
   state.lastResults = [];
   state.activeResultKey = "";
   renderAll();
-  setWmsSyncStatus(`店铺来源=${storeSource === "real" ? "真实业务" : "样本"}；车辆来源=${vehicleSource === "real" ? "真实业务" : "样本"}；货量/波次/时间来源=wms_cargo_raw_clean_snapshot + store_wave_timing_resolved(${resolvedMap.size}店)。`);
+  setWmsSyncStatus(`搴楅摵鏉ユ簮=${storeSource === "real" ? "鐪熷疄涓氬姟" : "鏍锋湰"}锛涜溅杈嗘潵婧?${vehicleSource === "real" ? "鐪熷疄涓氬姟" : "鏍锋湰"}锛涜揣閲?娉㈡/鏃堕棿鏉ユ簮=wms_cargo_raw_clean_snapshot + store_wave_timing_resolved(${resolvedMap.size}搴?銆俙);
 }
 
 async function refreshWmsStatus() {
@@ -9025,13 +9016,13 @@ async function refreshWmsStatus() {
     const latestBatch = payload.latestBatch || {};
     const mode = latestBatch.mode || "-";
     const finishedAt = latestBatch.finished_at || latestBatch.finishedAt || "-";
-    setWmsSyncStatus(`WMS同步状态：店铺${counts.shops || 0}，车辆${counts.vehicles || 0}，货量${counts.cargo || 0}，装载${counts.carload || 0}，到店${counts.arrivaltime || 0}；最近批次=${mode} ${finishedAt}`);
+    setWmsSyncStatus(`WMS鍚屾鐘舵€侊細搴楅摵${counts.shops || 0}锛岃溅杈?{counts.vehicles || 0}锛岃揣閲?{counts.cargo || 0}锛岃杞?{counts.carload || 0}锛屽埌搴?{counts.arrivaltime || 0}锛涙渶杩戞壒娆?${mode} ${finishedAt}`);
   } catch {}
 }
 
 async function triggerWmsFetch() {
   const box = document.getElementById("validationBox");
-  setWmsSyncStatus("正在抓取WMS（只读）...");
+  setWmsSyncStatus("姝ｅ湪鎶撳彇WMS锛堝彧璇伙級...");
   let password = "";
   for (let i = 0; i < 2; i += 1) {
     const response = await fetchJsonWithTimeout(`${GA_BACKEND_URL}/wms/fetch`, {
@@ -9041,10 +9032,10 @@ async function triggerWmsFetch() {
     }, 120000);
     const payload = response.ok ? await response.json() : { ok: false, error: `HTTP ${response.status}` };
     if (payload?.needPassword) {
-      const promptText = i === 0 ? "请输入WMS数据库密码（仅本地加密保存）：" : "密码错误，请重新输入WMS数据库密码：";
+      const promptText = i === 0 ? "璇疯緭鍏MS鏁版嵁搴撳瘑鐮侊紙浠呮湰鍦板姞瀵嗕繚瀛橈級锛? : "瀵嗙爜閿欒锛岃閲嶆柊杈撳叆WMS鏁版嵁搴撳瘑鐮侊細";
       const typed = window.prompt(promptText, "");
       if (!typed) {
-        setWmsSyncStatus("已取消WMS抓取。");
+        setWmsSyncStatus("宸插彇娑圵MS鎶撳彇銆?);
         return;
       }
       password = String(typed || "").trim();
@@ -9052,20 +9043,20 @@ async function triggerWmsFetch() {
     }
     if (!payload?.ok) {
       const err = payload?.error || "wms_fetch_failed";
-      setWmsSyncStatus(`WMS抓取失败：${err}`);
-      if (box) box.textContent = `WMS抓取失败：${err}`;
+      setWmsSyncStatus(`WMS鎶撳彇澶辫触锛?{err}`);
+      if (box) box.textContent = `WMS鎶撳彇澶辫触锛?{err}`;
       return;
     }
     const tableSummary = Array.isArray(payload?.tables) ? payload.tables : [];
     const inserted = tableSummary.reduce((sum, item) => sum + Number(item?.insertedRows || 0), 0);
     const skipped = tableSummary.reduce((sum, item) => sum + Number(item?.skippedRows || 0), 0);
-    setWmsSyncStatus(`WMS抓取完成：批次${payload.batchId || "-"}，新增${inserted}，去重跳过${skipped}。`);
-    if (box) box.textContent = `WMS只读抓取完成：新增${inserted}，跳过${skipped}。`;
+    setWmsSyncStatus(`WMS鎶撳彇瀹屾垚锛氭壒娆?{payload.batchId || "-"}锛屾柊澧?{inserted}锛屽幓閲嶈烦杩?{skipped}銆俙);
+    if (box) box.textContent = `WMS鍙鎶撳彇瀹屾垚锛氭柊澧?{inserted}锛岃烦杩?{skipped}銆俙;
     await refreshWmsStatus();
     await refreshBaseDataBySource();
     return;
   }
-  setWmsSyncStatus("WMS抓取失败：密码校验未通过。");
+  setWmsSyncStatus("WMS鎶撳彇澶辫触锛氬瘑鐮佹牎楠屾湭閫氳繃銆?);
 }
 
 function miniKpiCard(label, value, sub = "", accent = "") {
@@ -9112,7 +9103,7 @@ function renderComparisonRouteDigest(result) {
     <div class="algo-route-list">
       ${rows.map((row) => `
         <div class="algo-route-row">
-          <div class="algo-route-line">${escapeHtml(`${row.waveId} · ${row.plateNo} · ${L("tripLabel")}${row.tripNo}`)}</div>
+          <div class="algo-route-line">${escapeHtml(`${row.waveId} 路 ${row.plateNo} 路 ${L("tripLabel")}${row.tripNo}`)}</div>
           <div class="algo-route-metrics">
             <span>${L("storesCount")} ${row.storesCount}</span>
             <span>${L("tripRoundKm")} ${row.totalDistance.toFixed(1)} km</span>
@@ -9131,7 +9122,7 @@ function renderExecutiveCompare(results) {
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("algoCompare")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "総分・時間順守・距離・積載の4視点で比較します。" : "从总分、时效、距离、装载四个角度看算法差异。"}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "绶忓垎銉绘檪闁撻爢瀹堛兓璺濋洟銉荤杓夈伄4瑕栫偣銇ф瘮杓冦仐銇俱仚銆? : "浠庢€诲垎銆佹椂鏁堛€佽窛绂汇€佽杞藉洓涓搴︾湅绠楁硶宸紓銆?}</p>
       </div>
     </div>
     <div class="algo-board">
@@ -9196,7 +9187,7 @@ function collectGanttRows(result) {
         const firstStop = trip.stops[0];
         const serviceEnd = trip.stops[trip.stops.length - 1]?.leave ?? trip.finish;
         rows.push({
-          label: `${plan.vehicle.plateNo} · ${wave.waveId} · ${L("tripLabel")}${trip.tripNo}`,
+          label: `${plan.vehicle.plateNo} 路 ${wave.waveId} 路 ${L("tripLabel")}${trip.tripNo}`,
           start: firstStop ? firstStop.arrival : wave.startMin,
           end: wave.waveId === "W1" ? trip.finish : serviceEnd,
           waveType: wave.singleWave ? "single" : "regular",
@@ -9236,7 +9227,7 @@ function renderGantt(result) {
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("gantt")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "車両×波次×便の時間配置を一眼で確認できます。" : "按车辆 × 波次 × 趟次查看时间占用与超时位置。"}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "杌婁浮脳娉㈡脳渚裤伄鏅傞枔閰嶇疆銈掍竴鐪笺仹纰鸿獚銇с亶銇俱仚銆? : "鎸夎溅杈?脳 娉㈡ 脳 瓒熸鏌ョ湅鏃堕棿鍗犵敤涓庤秴鏃朵綅缃€?}</p>
       </div>
       <div class="gantt-summary">
         <span class="summary-chip">${L("tripLabel")} ${rows.length}</span>
@@ -9312,7 +9303,7 @@ function renderDashboard(result) {
     <div class="chart-head">
       <div>
         <div class="chart-title">${L("dashboard")}</div>
-        <p class="kpi-sub">${lang() === "ja" ? "当日の配車状況を一枚で把握する管理ビューです。" : "一眼查看当日调度质量、资源占用和时效表现。"}</p>
+        <p class="kpi-sub">${lang() === "ja" ? "褰撴棩銇厤杌婄姸娉併倰涓€鏋氥仹鎶婃彙銇欍倠绠＄悊銉撱儱銉笺仹銇欍€? : "涓€鐪兼煡鐪嬪綋鏃ヨ皟搴﹁川閲忋€佽祫婧愬崰鐢ㄥ拰鏃舵晥琛ㄧ幇銆?}</p>
       </div>
       <div class="cockpit-highlight ${scoreState}">
         <span>${L("score")}</span>
@@ -9323,7 +9314,7 @@ function renderDashboard(result) {
       <div class="cockpit-grid">
         ${miniKpiCard(L("storesToday"), String(result.metrics.totalStops), `${L("wavesLabel")} ${result.scenario.waves.length}`, "kpi-hero")}
         ${miniKpiCard(L("usedVehiclesShort"), String(result.metrics.usedVehicleCount), `${L("idleVehiclesShort")} ${result.metrics.unusedVehicleCount}`, `accent-used ${result.metrics.unusedVehicleCount > 0 ? "state-good" : "state-warn"}`)}
-        ${miniKpiCard(L("totalDistance"), `${result.metrics.totalDistance.toFixed(1)} km`, lang() === "ja" ? "短いほど高評価" : "越短越优", distanceState)}
+        ${miniKpiCard(L("totalDistance"), `${result.metrics.totalDistance.toFixed(1)} km`, lang() === "ja" ? "鐭亜銇汇仼楂樿渚? : "瓒婄煭瓒婁紭", distanceState)}
         ${miniKpiCard(L("onTime"), formatRate(onTimeRatio), `${L("overtimeTripsShort")} ${overtimeTrips}`, onTimeState)}
         ${miniKpiCard(L("avgLoad"), formatRate(result.metrics.loadRate), `${algoLabel(result.key)}`, loadState)}
         ${miniKpiCard(L("fleetLoad"), formatRate(result.metrics.fleetLoadRate), L("fleetLoadHint"), result.metrics.fleetLoadRate >= 0.9 ? "state-good" : result.metrics.fleetLoadRate >= 0.65 ? "state-warn" : "state-bad")}
@@ -9346,8 +9337,8 @@ function buildMascotSnapshot(result, overtimeTrips) {
       overtimeTrips,
       algorithm: algoLabel(result.key),
       riskText: overtimeTrips > 0
-        ? (lang() === "ja" ? `超時ライン ${overtimeTrips} 件に注意。` : `当前有 ${overtimeTrips} 条超时线路需要关注。`)
-        : (lang() === "ja" ? "超時ラインはありません。" : "当前没有超时线路。"),
+        ? (lang() === "ja" ? `瓒呮檪銉┿偆銉?${overtimeTrips} 浠躲伀娉ㄦ剰銆俙 : `褰撳墠鏈?${overtimeTrips} 鏉¤秴鏃剁嚎璺渶瑕佸叧娉ㄣ€俙)
+        : (lang() === "ja" ? "瓒呮檪銉┿偆銉炽伅銇傘倞銇俱仜銈撱€? : "褰撳墠娌℃湁瓒呮椂绾胯矾銆?),
       summaryChips: [
         `<span class="summary-chip">${escapeHtml(algoLabel(result.key))}</span>`,
         `<span class="summary-chip">${L("score")} ${result.metrics.score.toFixed(1)}</span>`,
@@ -9364,14 +9355,14 @@ function buildMascotSnapshot(result, overtimeTrips) {
     loadRate: 0,
     onTimeRatio: 1,
     overtimeTrips: 0,
-    algorithm: lang() === "ja" ? "待機中" : "待机中",
+    algorithm: lang() === "ja" ? "寰呮涓? : "寰呮満涓?,
     riskText: state.ui.micPriming
       ? L("speechMicPreparing")
       : (lang() === "ja"
-          ? "まだ正式な调度结果はありません。先に質問を聞くことも、生成後に要約を聞くこともできます。"
-          : "当前还没有正式调度结果。你可以先问按钮用途，生成后再听结果摘要。"),
+          ? "銇俱仩姝ｅ紡銇皟搴︾粨鏋溿伅銇傘倞銇俱仜銈撱€傚厛銇唱鍟忋倰鑱炪亸銇撱仺銈傘€佺敓鎴愬緦銇绱勩倰鑱炪亸銇撱仺銈傘仹銇嶃伨銇欍€?
+          : "褰撳墠杩樻病鏈夋寮忚皟搴︾粨鏋溿€備綘鍙互鍏堥棶鎸夐挳鐢ㄩ€旓紝鐢熸垚鍚庡啀鍚粨鏋滄憳瑕併€?),
     summaryChips: [
-      `<span class="summary-chip">${escapeHtml(lang() === "ja" ? "待機中" : "待机中")}</span>`,
+      `<span class="summary-chip">${escapeHtml(lang() === "ja" ? "寰呮涓? : "寰呮満涓?)}</span>`,
       `<span class="summary-chip">${L("storesToday")} ${state.stores.length}</span>`,
       `<span class="summary-chip">${L("usedVehiclesShort")} ${state.vehicles.length}</span>`,
     ].join(""),
@@ -9424,7 +9415,7 @@ function renderMascotAssistant(result, overtimeTrips) {
         <p class="mascot-risk">${escapeHtml(snapshot.riskText)}</p>
         <div class="assistant-inline-actions compact-assistant-actions">
           <button class="${assistantExpanded ? "secondary" : "primary"} toggle-assistant-panel">
-            ${lang() === "ja" ? (assistantExpanded ? "助手を閉じる" : "助手を開く") : (assistantExpanded ? "收起助手" : "打开助手")}
+            ${lang() === "ja" ? (assistantExpanded ? "鍔╂墜銈掗枆銇樸倠" : "鍔╂墜銈掗枊銇?) : (assistantExpanded ? "鏀惰捣鍔╂墜" : "鎵撳紑鍔╂墜")}
           </button>
         </div>
         ${assistantExpanded ? `
@@ -9475,84 +9466,84 @@ function renderMascotAssistant(result, overtimeTrips) {
 
 function buildSpeechText(payload) {
   if (lang() === "ja") {
-    return `ミツアナグマ配車官より報告します。現在の推奨アルゴリズムは${payload.algorithm}です。総合スコアは${payload.score.toFixed(1)}点。使用車両は${payload.usedVehicleCount}台、待機車両は${payload.unusedVehicleCount}台、総距離は${payload.totalDistance.toFixed(1)}キロ、平均単便積載率は${Math.round(payload.loadRate * 100)}パーセント、車隊稼働率は${Math.round((payload.fleetLoadRate || 0) * 100)}パーセント、未遅着率は${Math.round(payload.onTimeRatio * 100)}パーセントです。${payload.overtimeTrips > 0 ? `なお、超時ラインが${payload.overtimeTrips}件あります。` : "超時ラインはありません。"}`
+    return `銉熴儎銈儕銈般優閰嶈粖瀹樸倛銈婂牨鍛娿仐銇俱仚銆傜従鍦ㄣ伄鎺ㄥエ銈儷銈淬儶銈恒儬銇?{payload.algorithm}銇с仚銆傜窂鍚堛偣銈炽偄銇?{payload.score.toFixed(1)}鐐广€備娇鐢ㄨ粖涓°伅${payload.usedVehicleCount}鍙般€佸緟姗熻粖涓°伅${payload.unusedVehicleCount}鍙般€佺窂璺濋洟銇?{payload.totalDistance.toFixed(1)}銈儹銆佸钩鍧囧崢渚跨杓夌巼銇?{Math.round(payload.loadRate * 100)}銉戙兗銈汇兂銉堛€佽粖闅婄鍍嶇巼銇?{Math.round((payload.fleetLoadRate || 0) * 100)}銉戙兗銈汇兂銉堛€佹湭閬呯潃鐜囥伅${Math.round(payload.onTimeRatio * 100)}銉戙兗銈汇兂銉堛仹銇欍€?{payload.overtimeTrips > 0 ? `銇亰銆佽秴鏅傘儵銈ゃ兂銇?{payload.overtimeTrips}浠躲亗銈娿伨銇欍€俙 : "瓒呮檪銉┿偆銉炽伅銇傘倞銇俱仜銈撱€?}`
   }
-  return `鲸略使助手汇报。当前推荐算法是${payload.algorithm}。综合评分${payload.score.toFixed(1)}分。已用车辆${payload.usedVehicleCount}辆，闲置车辆${payload.unusedVehicleCount}辆，总里程${payload.totalDistance.toFixed(1)}公里，平均单趟装载率${Math.round(payload.loadRate * 100)}%，车队利用率${Math.round((payload.fleetLoadRate || 0) * 100)}%，未晚到率${Math.round(payload.onTimeRatio * 100)}%。${payload.overtimeTrips > 0 ? `另外还有${payload.overtimeTrips}条超时线路需要关注。` : "当前没有超时线路。"}`
+  return `椴哥暐浣垮姪鎵嬫眹鎶ャ€傚綋鍓嶆帹鑽愮畻娉曟槸${payload.algorithm}銆傜患鍚堣瘎鍒?{payload.score.toFixed(1)}鍒嗐€傚凡鐢ㄨ溅杈?{payload.usedVehicleCount}杈嗭紝闂茬疆杞﹁締${payload.unusedVehicleCount}杈嗭紝鎬婚噷绋?{payload.totalDistance.toFixed(1)}鍏噷锛屽钩鍧囧崟瓒熻杞界巼${Math.round(payload.loadRate * 100)}%锛岃溅闃熷埄鐢ㄧ巼${Math.round((payload.fleetLoadRate || 0) * 100)}%锛屾湭鏅氬埌鐜?{Math.round(payload.onTimeRatio * 100)}%銆?{payload.overtimeTrips > 0 ? `鍙﹀杩樻湁${payload.overtimeTrips}鏉¤秴鏃剁嚎璺渶瑕佸叧娉ㄣ€俙 : "褰撳墠娌℃湁瓒呮椂绾胯矾銆?}`
 }
 
 function assistantButtonCatalog() {
   return [
     {
       key: "generate",
-      aliases: ["生成调度结果", "生成结果", "开始调度", "run", "generate", "配車生成", "生成"],
-      answerZh: "“生成调度结果”会按当前门店、车辆、波次、算法和目标设置，正式开始计算调度方案。",
-      answerJa: "「生成调度结果」は、現在の店舗・車両・波次・アルゴリズム・目標設定に基づいて、本番の配車計算を開始します。",
+      aliases: ["鐢熸垚璋冨害缁撴灉", "鐢熸垚缁撴灉", "寮€濮嬭皟搴?, "run", "generate", "閰嶈粖鐢熸垚", "鐢熸垚"],
+      answerZh: "鈥滅敓鎴愯皟搴︾粨鏋溾€濅細鎸夊綋鍓嶉棬搴椼€佽溅杈嗐€佹尝娆°€佺畻娉曞拰鐩爣璁剧疆锛屾寮忓紑濮嬭绠楄皟搴︽柟妗堛€?,
+      answerJa: "銆岀敓鎴愯皟搴︾粨鏋溿€嶃伅銆佺従鍦ㄣ伄搴楄垪銉昏粖涓°兓娉㈡銉汇偄銉偞銉偤銉犮兓鐩瑷畾銇熀銇ャ亜銇︺€佹湰鐣伄閰嶈粖瑷堢畻銈掗枊濮嬨仐銇俱仚銆?,
     },
     {
       key: "reload",
-      aliases: ["重新加载固定门店", "重新加载", "加载样例", "reload", "サンプル再読込", "再加载"],
-      answerZh: "“重新加载固定门店”会把系统恢复到当前内置的固定门店样例数据。",
-      answerJa: "「重新加载固定门店」は、現在内蔵している固定店舗サンプルに戻します。",
+      aliases: ["閲嶆柊鍔犺浇鍥哄畾闂ㄥ簵", "閲嶆柊鍔犺浇", "鍔犺浇鏍蜂緥", "reload", "銈点兂銉椼儷鍐嶈杈?, "鍐嶅姞杞?],
+      answerZh: "鈥滈噸鏂板姞杞藉浐瀹氶棬搴椻€濅細鎶婄郴缁熸仮澶嶅埌褰撳墠鍐呯疆鐨勫浐瀹氶棬搴楁牱渚嬫暟鎹€?,
+      answerJa: "銆岄噸鏂板姞杞藉浐瀹氶棬搴椼€嶃伅銆佺従鍦ㄥ唴钄点仐銇︺亜銈嬪浐瀹氬簵鑸椼偟銉炽儣銉伀鎴汇仐銇俱仚銆?,
     },
     {
       key: "save",
-      aliases: ["保存当前方案", "保存方案", "save", "保存"],
-      answerZh: "“保存当前方案”会把当前结果存到浏览器本地，方便之后继续看或对比。",
-      answerJa: "「保存当前方案」は、現在の結果をブラウザのローカルに保存して、あとで見直したり比較できるようにします。",
+      aliases: ["淇濆瓨褰撳墠鏂规", "淇濆瓨鏂规", "save", "淇濆瓨"],
+      answerZh: "鈥滀繚瀛樺綋鍓嶆柟妗堚€濅細鎶婂綋鍓嶇粨鏋滃瓨鍒版祻瑙堝櫒鏈湴锛屾柟渚夸箣鍚庣户缁湅鎴栧姣斻€?,
+      answerJa: "銆屼繚瀛樺綋鍓嶆柟妗堛€嶃伅銆佺従鍦ㄣ伄绲愭灉銈掋儢銉┿偊銈躲伄銉兗銈儷銇繚瀛樸仐銇︺€併亗銇ㄣ仹瑕嬬洿銇椼仧銈婃瘮杓冦仹銇嶃倠銈堛亞銇仐銇俱仚銆?,
     },
     {
       key: "export",
-      aliases: ["导出当前结果", "导出结果", "export", "导出"],
-      answerZh: "“导出当前结果”会把当前选中的调度方案导出成文本结果。",
-      answerJa: "「导出当前结果」は、現在選択中の配車結果をテキストとして書き出します。",
+      aliases: ["瀵煎嚭褰撳墠缁撴灉", "瀵煎嚭缁撴灉", "export", "瀵煎嚭"],
+      answerZh: "鈥滃鍑哄綋鍓嶇粨鏋溾€濅細鎶婂綋鍓嶉€変腑鐨勮皟搴︽柟妗堝鍑烘垚鏂囨湰缁撴灉銆?,
+      answerJa: "銆屽鍑哄綋鍓嶇粨鏋溿€嶃伅銆佺従鍦ㄩ伕鎶炰腑銇厤杌婄祼鏋溿倰銉嗐偔銈广儓銇ㄣ仐銇︽浉銇嶅嚭銇椼伨銇欍€?,
     },
     {
       key: "autowave",
-      aliases: ["自动分波次", "按固定门店自动分波次", "分波次", "auto wave", "波次自動生成"],
-      answerZh: "“按固定门店自动分波次”会根据当前门店规则自动生成一版波次配置。",
-      answerJa: "「按固定门店自动分波次」は、現在の店舗ルールに基づいて波次設定を自動生成します。",
+      aliases: ["鑷姩鍒嗘尝娆?, "鎸夊浐瀹氶棬搴楄嚜鍔ㄥ垎娉㈡", "鍒嗘尝娆?, "auto wave", "娉㈡鑷嫊鐢熸垚"],
+      answerZh: "鈥滄寜鍥哄畾闂ㄥ簵鑷姩鍒嗘尝娆♀€濅細鏍规嵁褰撳墠闂ㄥ簵瑙勫垯鑷姩鐢熸垚涓€鐗堟尝娆￠厤缃€?,
+      answerJa: "銆屾寜鍥哄畾闂ㄥ簵鑷姩鍒嗘尝娆°€嶃伅銆佺従鍦ㄣ伄搴楄垪銉兗銉伀鍩恒仴銇勩仸娉㈡瑷畾銈掕嚜鍕曠敓鎴愩仐銇俱仚銆?,
     },
     {
       key: "quick",
-      aliases: ["快速初排", "快速", "初排", "quick"],
-      answerZh: "“快速初排”会直接切到快速构造模式，并马上生成一版可用初稿。",
-      answerJa: "「快速初排」は、素早い初期構築モードに切り替えて、すぐ使える初稿を作ります。",
+      aliases: ["蹇€熷垵鎺?, "蹇€?, "鍒濇帓", "quick"],
+      answerZh: "鈥滃揩閫熷垵鎺掆€濅細鐩存帴鍒囧埌蹇€熸瀯閫犳ā寮忥紝骞堕┈涓婄敓鎴愪竴鐗堝彲鐢ㄥ垵绋裤€?,
+      answerJa: "銆屽揩閫熷垵鎺掋€嶃伅銆佺礌鏃┿亜鍒濇湡妲嬬瘔銉兗銉夈伀鍒囥倞鏇裤亪銇︺€併仚銇愪娇銇堛倠鍒濈銈掍綔銈娿伨銇欍€?,
     },
     {
       key: "deep",
-      aliases: ["继续优化", "深度优化", "优化", "deep"],
-      answerZh: "“继续优化”会切到改进型算法模式，在现有思路上继续深挖更好的结果。",
-      answerJa: "「継続改善」は、改善系アルゴリズムに切り替えて、現在の案をさらに磨き込みます。",
+      aliases: ["缁х画浼樺寲", "娣卞害浼樺寲", "浼樺寲", "deep"],
+      answerZh: "鈥滅户缁紭鍖栤€濅細鍒囧埌鏀硅繘鍨嬬畻娉曟ā寮忥紝鍦ㄧ幇鏈夋€濊矾涓婄户缁繁鎸栨洿濂界殑缁撴灉銆?,
+      answerJa: "銆岀稒缍氭敼鍠勩€嶃伅銆佹敼鍠勭郴銈儷銈淬儶銈恒儬銇垏銈婃浛銇堛仸銆佺従鍦ㄣ伄妗堛倰銇曘倝銇（銇嶈炯銇裤伨銇欍€?,
     },
     {
       key: "global",
-      aliases: ["全局搜索", "全局", "global"],
-      answerZh: "“全局搜索”会启用更偏全局探索的算法，尝试找到完全不同的排线结构。",
-      answerJa: "「全局搜索」は、大域探索寄りのアルゴリズムを使って、まったく違う配線構造を探します。",
+      aliases: ["鍏ㄥ眬鎼滅储", "鍏ㄥ眬", "global"],
+      answerZh: "鈥滃叏灞€鎼滅储鈥濅細鍚敤鏇村亸鍏ㄥ眬鎺㈢储鐨勭畻娉曪紝灏濊瘯鎵惧埌瀹屽叏涓嶅悓鐨勬帓绾跨粨鏋勩€?,
+      answerJa: "銆屽叏灞€鎼滅储銆嶃伅銆佸ぇ鍩熸帰绱㈠瘎銈娿伄銈儷銈淬儶銈恒儬銈掍娇銇ｃ仸銆併伨銇ｃ仧銇忛仌銇嗛厤绶氭閫犮倰鎺仐銇俱仚銆?,
     },
     {
       key: "relay",
-      aliases: ["接力求解", "接力", "relay"],
-      answerZh: "“接力求解”会先做初排，再让后续算法一棒一棒接着优化，并实时打印每一阶段在做什么。",
-      answerJa: "「リレー最適化」は、まず初期案を作り、その後のアルゴリズムが段階ごとに引き継いで改善し、各段階の内容も順に表示します。",
+      aliases: ["鎺ュ姏姹傝В", "鎺ュ姏", "relay"],
+      answerZh: "鈥滄帴鍔涙眰瑙ｂ€濅細鍏堝仛鍒濇帓锛屽啀璁╁悗缁畻娉曚竴妫掍竴妫掓帴鐫€浼樺寲锛屽苟瀹炴椂鎵撳嵃姣忎竴闃舵鍦ㄥ仛浠€涔堛€?,
+      answerJa: "銆屻儶銉兗鏈€閬╁寲銆嶃伅銆併伨銇氬垵鏈熸銈掍綔銈娿€併仢銇緦銇偄銉偞銉偤銉犮亴娈甸殠銇斻仺銇紩銇嶇稒銇勩仹鏀瑰杽銇椼€佸悇娈甸殠銇唴瀹广倐闋嗐伀琛ㄧず銇椼伨銇欍€?,
     },
     {
       key: "compare",
-      aliases: ["多算法对比", "对比", "compare", "比較"],
-      answerZh: "“多算法对比”会并排跑多种算法，方便你看同一批数据下谁更好。",
-      answerJa: "「多算法对比」は、複数アルゴリズムを並列に走らせて、同じデータでどれが良いか比較しやすくします。",
+      aliases: ["澶氱畻娉曞姣?, "瀵规瘮", "compare", "姣旇純"],
+      answerZh: "鈥滃绠楁硶瀵规瘮鈥濅細骞舵帓璺戝绉嶇畻娉曪紝鏂逛究浣犵湅鍚屼竴鎵规暟鎹笅璋佹洿濂姐€?,
+      answerJa: "銆屽绠楁硶瀵规瘮銆嶃伅銆佽鏁般偄銉偞銉偤銉犮倰涓﹀垪銇蛋銈夈仜銇︺€佸悓銇樸儑銉笺偪銇с仼銈屻亴鑹亜銇嬫瘮杓冦仐銈勩仚銇忋仐銇俱仚銆?,
     },
     {
       key: "routeMap",
-      aliases: ["看线路图", "线路图", "route map", "地図"],
-      answerZh: "“看线路图”会打开可拖动、可缩放的路线地图，并标出顺序号和店名。",
-      answerJa: "「ルート図」は、ドラッグや拡大縮小ができる地図を開き、訪問順と店舗名を表示します。",
+      aliases: ["鐪嬬嚎璺浘", "绾胯矾鍥?, "route map", "鍦板洺"],
+      answerZh: "鈥滅湅绾胯矾鍥锯€濅細鎵撳紑鍙嫋鍔ㄣ€佸彲缂╂斁鐨勮矾绾垮湴鍥撅紝骞舵爣鍑洪『搴忓彿鍜屽簵鍚嶃€?,
+      answerJa: "銆屻儷銉笺儓鍥炽€嶃伅銆併儔銉┿儍銈般倓鎷″ぇ绺皬銇屻仹銇嶃倠鍦板洺銈掗枊銇嶃€佽í鍟忛爢銇ㄥ簵鑸楀悕銈掕〃绀恒仐銇俱仚銆?,
     },
     {
       key: "viz",
-      aliases: ["查看可视化", "可视化", "回放", "playback"],
-      answerZh: "“查看可视化”会打开过程回放，告诉你算法是怎么一步一步排出来的。",
-      answerJa: "「可視化を見る」は、計算の流れを開き、アルゴリズムがどう組み立てたかを順に確認できます。",
+      aliases: ["鏌ョ湅鍙鍖?, "鍙鍖?, "鍥炴斁", "playback"],
+      answerZh: "鈥滄煡鐪嬪彲瑙嗗寲鈥濅細鎵撳紑杩囩▼鍥炴斁锛屽憡璇変綘绠楁硶鏄€庝箞涓€姝ヤ竴姝ユ帓鍑烘潵鐨勩€?,
+      answerJa: "銆屽彲瑕栧寲銈掕銈嬨€嶃伅銆佽▓绠椼伄娴併倢銈掗枊銇嶃€併偄銉偞銉偤銉犮亴銇┿亞绲勩伩绔嬨仸銇熴亱銈掗爢銇⒑瑾嶃仹銇嶃伨銇欍€?,
     },
   ];
 }
@@ -9564,16 +9555,16 @@ function normalizeAssistantQuery(text) {
 function buildAssistantAnswer(queryText) {
   const normalized = normalizeAssistantQuery(queryText);
   const catalog = assistantButtonCatalog();
-  const askAll = ["每个按钮", "所有按钮", "按钮名字", "按钮名称", "有哪些按钮", "全部按钮", "ボタン", "すべてのボタン", "ボタン名"].some((token) => normalized.includes(normalizeAssistantQuery(token)));
+  const askAll = ["姣忎釜鎸夐挳", "鎵€鏈夋寜閽?, "鎸夐挳鍚嶅瓧", "鎸夐挳鍚嶇О", "鏈夊摢浜涙寜閽?, "鍏ㄩ儴鎸夐挳", "銉溿偪銉?, "銇欍伖銇︺伄銉溿偪銉?, "銉溿偪銉冲悕"].some((token) => normalized.includes(normalizeAssistantQuery(token)));
   if (askAll) {
     const lines = catalog.map((item) => lang() === "ja" ? item.answerJa : item.answerZh);
-    return `${lang() === "ja" ? "この画面でよく使うボタンは主に次の通りです。" : "这页常用按钮主要有这些。"} ${lines.join(" ")}`;
+    return `${lang() === "ja" ? "銇撱伄鐢婚潰銇с倛銇忎娇銇嗐儨銈裤兂銇富銇銇€氥倞銇с仚銆? : "杩欓〉甯哥敤鎸夐挳涓昏鏈夎繖浜涖€?} ${lines.join(" ")}`;
   }
   const matched = catalog.find((item) => item.aliases.some((alias) => normalized.includes(normalizeAssistantQuery(alias))));
   if (matched) return lang() === "ja" ? matched.answerJa : matched.answerZh;
   return lang() === "ja"
-    ? "質問は聞き取れましたが、まだ特定のボタンに結び付いていません。たとえば「クイック初期案は何をするの」や「この画面のボタンは何ができるの」と聞いてください。"
-    : "我听到了你的问题，但还没匹配到具体按钮。你可以直接问，比如“快速初排是干什么的”或者“每个按钮都有什么用”。";
+    ? "璩晱銇仦銇嶅彇銈屻伨銇椼仧銇屻€併伨銇犵壒瀹氥伄銉溿偪銉炽伀绲愩伋浠樸亜銇︺亜銇俱仜銈撱€傘仧銇ㄣ亪銇般€屻偗銈ゃ儍銈垵鏈熸銇綍銈掋仚銈嬨伄銆嶃倓銆屻亾銇敾闈伄銉溿偪銉炽伅浣曘亴銇с亶銈嬨伄銆嶃仺鑱炪亜銇︺亸銇犮仌銇勩€?
+    : "鎴戝惉鍒颁簡浣犵殑闂锛屼絾杩樻病鍖归厤鍒板叿浣撴寜閽€備綘鍙互鐩存帴闂紝姣斿鈥滃揩閫熷垵鎺掓槸骞蹭粈涔堢殑鈥濇垨鑰呪€滄瘡涓寜閽兘鏈変粈涔堢敤鈥濄€?;
 }
 
 function buildDeepSeekDispatchContext(result) {
@@ -9582,26 +9573,26 @@ function buildDeepSeekDispatchContext(result) {
   const briefMode = (state.ai.answerStyle || "brief") !== "detailed";
   
   const algorithmKnowledge = {
-    aco: "蚁群算法(ACO)：模拟蚂蚁觅食的信息素正反馈机制。适合100-300家门店的中等规模问题，能自动发现优质路径模式。特点是：信息素挥发率0.25、6只蚂蚁、精英策略。优点是能找到全局较优解，缺点是前期收敛较慢。",
-    pso: "粒子群算法(PSO)：模拟鸟群捕食的社会学习行为。适合50-150家门店。特点是：20个粒子、惯性权重0.7递减、个体最优+群体最优引导。优点是收敛快、适合连续优化，缺点是可能早熟。",
-    sa: "模拟退火(SA)：模拟金属退火过程的概率性搜索。适合任意规模。特点是：初始温度5000、降温速率0.97、Metropolis接受准则、自适应重启。优点是能跳出局部最优，缺点是参数敏感。",
-    tabu: "禁忌搜索(Tabu)：带短期记忆的邻域搜索。适合小规模精确优化。特点是：禁忌表长度12、特赦准则、40个邻域候选。优点是能避免循环搜索，缺点是记忆开销大。",
-    lns: "大邻域搜索(LNS)：破坏-修复双阶段优化。适合200-500家门店。特点是：破坏比例0.35、支持随机/最差破坏、贪婪/遗憾修复。优点是能大规模重构解，缺点是修复质量依赖破坏策略。",
-    hybrid: "混合算法：串联SA+LNS+Tabu三阶段。先全局探索，再局部精修，最后收口。适合追求极致质量时使用。优点是综合各算法优点，缺点是耗时最长。",
-    ga: "遗传算法(GA)：模拟自然选择的进化算法。适合中等规模。特点是：锦标赛选择、部分映射交叉、三种变异算子、精英保留。优点是全局搜索能力强，缺点是收敛慢。",
-    savings: "Clark-Wright节约法：经典构造启发式。按节约值合并路线，快速生成初始解。优点是速度快、解质量稳定，缺点是难突破局部最优。",
-    vrptw: "VRPTW贪心插入：按时间窗优先排序，逐个插入门店。优点是可行性好、约束处理严格，缺点是解质量依赖排序。"
+    aco: "铓佺兢绠楁硶(ACO)锛氭ā鎷熻殏铓佽椋熺殑淇℃伅绱犳鍙嶉鏈哄埗銆傞€傚悎100-300瀹堕棬搴楃殑涓瓑瑙勬ā闂锛岃兘鑷姩鍙戠幇浼樿川璺緞妯″紡銆傜壒鐐规槸锛氫俊鎭礌鎸ュ彂鐜?.25銆?鍙殏铓併€佺簿鑻辩瓥鐣ャ€備紭鐐规槸鑳芥壘鍒板叏灞€杈冧紭瑙ｏ紝缂虹偣鏄墠鏈熸敹鏁涜緝鎱€?,
+    pso: "绮掑瓙缇ょ畻娉?PSO)锛氭ā鎷熼笩缇ゆ崟椋熺殑绀句細瀛︿範琛屼负銆傞€傚悎50-150瀹堕棬搴椼€傜壒鐐规槸锛?0涓矑瀛愩€佹儻鎬ф潈閲?.7閫掑噺銆佷釜浣撴渶浼?缇や綋鏈€浼樺紩瀵笺€備紭鐐规槸鏀舵暃蹇€侀€傚悎杩炵画浼樺寲锛岀己鐐规槸鍙兘鏃╃啛銆?,
+    sa: "妯℃嫙閫€鐏?SA)锛氭ā鎷熼噾灞為€€鐏繃绋嬬殑姒傜巼鎬ф悳绱€傞€傚悎浠绘剰瑙勬ā銆傜壒鐐规槸锛氬垵濮嬫俯搴?000銆侀檷娓╅€熺巼0.97銆丮etropolis鎺ュ彈鍑嗗垯銆佽嚜閫傚簲閲嶅惎銆備紭鐐规槸鑳借烦鍑哄眬閮ㄦ渶浼橈紝缂虹偣鏄弬鏁版晱鎰熴€?,
+    tabu: "绂佸繉鎼滅储(Tabu)锛氬甫鐭湡璁板繂鐨勯偦鍩熸悳绱€傞€傚悎灏忚妯＄簿纭紭鍖栥€傜壒鐐规槸锛氱蹇岃〃闀垮害12銆佺壒璧﹀噯鍒欍€?0涓偦鍩熷€欓€夈€備紭鐐规槸鑳介伩鍏嶅惊鐜悳绱紝缂虹偣鏄蹇嗗紑閿€澶с€?,
+    lns: "澶ч偦鍩熸悳绱?LNS)锛氱牬鍧?淇鍙岄樁娈典紭鍖栥€傞€傚悎200-500瀹堕棬搴椼€傜壒鐐规槸锛氱牬鍧忔瘮渚?.35銆佹敮鎸侀殢鏈?鏈€宸牬鍧忋€佽椽濠?閬楁喚淇銆備紭鐐规槸鑳藉ぇ瑙勬ā閲嶆瀯瑙ｏ紝缂虹偣鏄慨澶嶈川閲忎緷璧栫牬鍧忕瓥鐣ャ€?,
+    hybrid: "娣峰悎绠楁硶锛氫覆鑱擲A+LNS+Tabu涓夐樁娈点€傚厛鍏ㄥ眬鎺㈢储锛屽啀灞€閮ㄧ簿淇紝鏈€鍚庢敹鍙ｃ€傞€傚悎杩芥眰鏋佽嚧璐ㄩ噺鏃朵娇鐢ㄣ€備紭鐐规槸缁煎悎鍚勭畻娉曚紭鐐癸紝缂虹偣鏄€楁椂鏈€闀裤€?,
+    ga: "閬椾紶绠楁硶(GA)锛氭ā鎷熻嚜鐒堕€夋嫨鐨勮繘鍖栫畻娉曘€傞€傚悎涓瓑瑙勬ā銆傜壒鐐规槸锛氶敠鏍囪禌閫夋嫨銆侀儴鍒嗘槧灏勪氦鍙夈€佷笁绉嶅彉寮傜畻瀛愩€佺簿鑻变繚鐣欍€備紭鐐规槸鍏ㄥ眬鎼滅储鑳藉姏寮猴紝缂虹偣鏄敹鏁涙參銆?,
+    savings: "Clark-Wright鑺傜害娉曪細缁忓吀鏋勯€犲惎鍙戝紡銆傛寜鑺傜害鍊煎悎骞惰矾绾匡紝蹇€熺敓鎴愬垵濮嬭В銆備紭鐐规槸閫熷害蹇€佽В璐ㄩ噺绋冲畾锛岀己鐐规槸闅剧獊鐮村眬閮ㄦ渶浼樸€?,
+    vrptw: "VRPTW璐績鎻掑叆锛氭寜鏃堕棿绐椾紭鍏堟帓搴忥紝閫愪釜鎻掑叆闂ㄥ簵銆備紭鐐规槸鍙鎬уソ銆佺害鏉熷鐞嗕弗鏍硷紝缂虹偣鏄В璐ㄩ噺渚濊禆鎺掑簭銆?
   };
   
-  const costFormula = `成本公式 = 到店超偏差罚分(超1分钟+20000) + 晚到罚分(超1分钟+60) + 超波次罚分(超1分钟+80) + 车辆续跑罚分(前波次里程×1.2 + 前波次趟数×150) + 额外趟次罚分(每多1趟+180) + 超时路线罚分(每条+1600或240) + 距离成本(每公里0.45) - 装载奖励(每箱0.08)
+  const costFormula = `鎴愭湰鍏紡 = 鍒板簵瓒呭亸宸綒鍒?瓒?鍒嗛挓+20000) + 鏅氬埌缃氬垎(瓒?鍒嗛挓+60) + 瓒呮尝娆＄綒鍒?瓒?鍒嗛挓+80) + 杞﹁締缁窇缃氬垎(鍓嶆尝娆￠噷绋嬅?.2 + 鍓嶆尝娆¤稛鏁懊?50) + 棰濆瓒熸缃氬垎(姣忓1瓒?180) + 瓒呮椂璺嚎缃氬垎(姣忔潯+1600鎴?40) + 璺濈鎴愭湰(姣忓叕閲?.45) - 瑁呰浇濂栧姳(姣忕0.08)
 
-解读：到店超偏差罚分极高(20000)意味着系统优先保证门店准时；数值越小越好，0最理想。`;
+瑙ｈ锛氬埌搴楄秴鍋忓樊缃氬垎鏋侀珮(20000)鎰忓懗鐫€绯荤粺浼樺厛淇濊瘉闂ㄥ簵鍑嗘椂锛涙暟鍊艰秺灏忚秺濂斤紝0鏈€鐞嗘兂銆俙;
 
   if (!result?.metrics) {
-    return `【系统状态】当前没有调度结果。
-【可用功能】你可以问我：这9种算法有什么区别？VRPTW和节约法哪个好？蚁群算法怎么工作的？成本是怎么算的？未调度门店怎么办？
-【回答风格】${briefMode ? "简洁回答，3-6行即可。" : "可以详细分析，但要抓住重点。"}
-【当前时间】${nowZh}，以此为准。`;
+    return `銆愮郴缁熺姸鎬併€戝綋鍓嶆病鏈夎皟搴︾粨鏋溿€?
+銆愬彲鐢ㄥ姛鑳姐€戜綘鍙互闂垜锛氳繖9绉嶇畻娉曟湁浠€涔堝尯鍒紵VRPTW鍜岃妭绾︽硶鍝釜濂斤紵铓佺兢绠楁硶鎬庝箞宸ヤ綔鐨勶紵鎴愭湰鏄€庝箞绠楃殑锛熸湭璋冨害闂ㄥ簵鎬庝箞鍔烇紵
+銆愬洖绛旈鏍笺€?{briefMode ? "绠€娲佸洖绛旓紝3-6琛屽嵆鍙€? : "鍙互璇︾粏鍒嗘瀽锛屼絾瑕佹姄浣忛噸鐐广€?}
+銆愬綋鍓嶆椂闂淬€?{nowZh}锛屼互姝や负鍑嗐€俙;
   }
 
   const waveSummaries = result.solution.map((plans, idx) => {
@@ -9610,50 +9601,50 @@ function buildDeepSeekDispatchContext(result) {
     const totalDist = plans.reduce((s, p) => s + (p.totalDistance || 0), 0);
     const usedVehicles = plans.filter(p => p.trips?.length).length;
     const lateTrips = plans.flatMap(p => p.trips || []).filter(t => (t.waveLateMinutes || 0) > 0).length;
-    return `【${wave.waveId}】${wave.start}-${wave.end}：用车${usedVehicles}辆，${totalTrips}趟，里程${totalDist.toFixed(1)}km，超时线路${lateTrips}条。`;
+    return `銆?{wave.waveId}銆?{wave.start}-${wave.end}锛氱敤杞?{usedVehicles}杈嗭紝${totalTrips}瓒燂紝閲岀▼${totalDist.toFixed(1)}km锛岃秴鏃剁嚎璺?{lateTrips}鏉°€俙;
   }).join("\n");
 
   const algorithmKey = result.key;
-  const algorithmDesc = algorithmKnowledge[algorithmKey] || `${algorithmKey}算法，详情请查看系统文档。`;
+  const algorithmDesc = algorithmKnowledge[algorithmKey] || `${algorithmKey}绠楁硶锛岃鎯呰鏌ョ湅绯荤粺鏂囨。銆俙;
 
-  return `【角色】你是鲸略使调度求解器的智能调度助手，专精于VRPTW算法解读和调度结果分析。
+  return `銆愯鑹层€戜綘鏄哺鐣ヤ娇璋冨害姹傝В鍣ㄧ殑鏅鸿兘璋冨害鍔╂墜锛屼笓绮句簬VRPTW绠楁硶瑙ｈ鍜岃皟搴︾粨鏋滃垎鏋愩€?
 
-【你能做的事】1.解释9种调度算法的原理、优缺点和适用场景 2.分析当前调度结果的质量和问题 3.解读成本拆分的含义 4.建议如何改善未调度门店 5.回答算法对比、参数调优等问题
+銆愪綘鑳藉仛鐨勪簨銆?.瑙ｉ噴9绉嶈皟搴︾畻娉曠殑鍘熺悊銆佷紭缂虹偣鍜岄€傜敤鍦烘櫙 2.鍒嗘瀽褰撳墠璋冨害缁撴灉鐨勮川閲忓拰闂 3.瑙ｈ鎴愭湰鎷嗗垎鐨勫惈涔?4.寤鸿濡備綍鏀瑰杽鏈皟搴﹂棬搴?5.鍥炵瓟绠楁硶瀵规瘮銆佸弬鏁拌皟浼樼瓑闂
 
-【当前调度结果】
-- 使用的算法: ${result.label}
-- 综合评分: ${result.metrics.score.toFixed(1)}/100
-- 已调度门店: ${result.metrics.scheduledCount || 0}家
-- 未调度门店: ${result.metrics.unscheduledCount || 0}家
-- 准时率: ${((result.metrics.totalOnTime || 0) / Math.max(result.metrics.totalStops || 1, 1) * 100).toFixed(1)}%
-- 总里程: ${(result.metrics.totalDistance || 0).toFixed(1)} km
-- 平均装载率: ${((result.metrics.loadRate || 0) * 100).toFixed(1)}%
-- 车队利用率: ${((result.metrics.fleetLoadRate || 0) * 100).toFixed(1)}%
-- 已用车辆: ${result.metrics.usedVehicleCount || 0}辆
-- 闲置车辆: ${result.metrics.unusedVehicleCount || 0}辆
+銆愬綋鍓嶈皟搴︾粨鏋溿€?
+- 浣跨敤鐨勭畻娉? ${result.label}
+- 缁煎悎璇勫垎: ${result.metrics.score.toFixed(1)}/100
+- 宸茶皟搴﹂棬搴? ${result.metrics.scheduledCount || 0}瀹?
+- 鏈皟搴﹂棬搴? ${result.metrics.unscheduledCount || 0}瀹?
+- 鍑嗘椂鐜? ${((result.metrics.totalOnTime || 0) / Math.max(result.metrics.totalStops || 1, 1) * 100).toFixed(1)}%
+- 鎬婚噷绋? ${(result.metrics.totalDistance || 0).toFixed(1)} km
+- 骞冲潎瑁呰浇鐜? ${((result.metrics.loadRate || 0) * 100).toFixed(1)}%
+- 杞﹂槦鍒╃敤鐜? ${((result.metrics.fleetLoadRate || 0) * 100).toFixed(1)}%
+- 宸茬敤杞﹁締: ${result.metrics.usedVehicleCount || 0}杈?
+- 闂茬疆杞﹁締: ${result.metrics.unusedVehicleCount || 0}杈?
 
-【各波次详情】
+銆愬悇娉㈡璇︽儏銆?
 ${waveSummaries}
 
-【成本公式】
+銆愭垚鏈叕寮忋€?
 ${costFormula}
 
-【算法知识】
-当前使用的${result.label}：${algorithmDesc}
+銆愮畻娉曠煡璇嗐€?
+褰撳墠浣跨敤鐨?{result.label}锛?{algorithmDesc}
 
-【未调度门店】
-${result.metrics.unscheduledCount ? (result.metrics.unscheduledStores || []).slice(0, 10).map(s => `- ${s.storeName}(${s.storeId})：${s.reasonText || '约束不满足'}`).join("\n") : "无未调度门店"}
+銆愭湭璋冨害闂ㄥ簵銆?
+${result.metrics.unscheduledCount ? (result.metrics.unscheduledStores || []).slice(0, 10).map(s => `- ${s.storeName}(${s.storeId})锛?{s.reasonText || '绾︽潫涓嶆弧瓒?}`).join("\n") : "鏃犳湭璋冨害闂ㄥ簵"}
 
-【回答要求】
-1. 基于以上真实数据回答，不要编造
-2. ${briefMode ? "回答要简洁，3-6行说清核心问题" : "可以详细分析，但要结构清晰"}
-3. 遇到未调度门店，给出具体改善建议（放宽时间窗、调整波次、增加车辆等）
-4. 遇到算法问题，结合算法特点解释
-5. 使用中文，语气专业但不生硬
+銆愬洖绛旇姹傘€?
+1. 鍩轰簬浠ヤ笂鐪熷疄鏁版嵁鍥炵瓟锛屼笉瑕佺紪閫?
+2. ${briefMode ? "鍥炵瓟瑕佺畝娲侊紝3-6琛岃娓呮牳蹇冮棶棰? : "鍙互璇︾粏鍒嗘瀽锛屼絾瑕佺粨鏋勬竻鏅?}
+3. 閬囧埌鏈皟搴﹂棬搴楋紝缁欏嚭鍏蜂綋鏀瑰杽寤鸿锛堟斁瀹芥椂闂寸獥銆佽皟鏁存尝娆°€佸鍔犺溅杈嗙瓑锛?
+4. 閬囧埌绠楁硶闂锛岀粨鍚堢畻娉曠壒鐐硅В閲?
+5. 浣跨敤涓枃锛岃姘斾笓涓氫絾涓嶇敓纭?
 
-【当前时间】${nowZh}
+銆愬綋鍓嶆椂闂淬€?{nowZh}
 
-用户问题：`;
+鐢ㄦ埛闂锛歚;
 }
 
 function buildDeepSeekGeneralContext() {
@@ -9663,36 +9654,36 @@ function buildDeepSeekGeneralContext() {
   const briefMode = (state.ai.answerStyle || "brief") !== "detailed";
   return lang() === "ja"
     ? [
-        "あなたはこのページ内で動作する汎用アシスタントです。",
-        `現在のローカル日時は ${nowJa} です。日付や時刻に関する質問は必ずこれを基準にしてください。`,
-        "一般的な質問にも答えてよいですが、このページ上の配車結果がある場合は、その文脈も活用してください。",
-        "不確かなことは断定せず、簡潔かつ実用的に答えてください。",
+        "銇傘仾銇熴伅銇撱伄銉氥兗銈稿唴銇у嫊浣溿仚銈嬫睅鐢ㄣ偄銈枫偣銈裤兂銉堛仹銇欍€?,
+        `鐝惧湪銇儹銉笺偒銉棩鏅傘伅 ${nowJa} 銇с仚銆傛棩浠樸倓鏅傚埢銇枹銇欍倠璩晱銇繀銇氥亾銈屻倰鍩烘簴銇仐銇︺亸銇犮仌銇勩€俙,
+        "涓€鑸殑銇唱鍟忋伀銈傜瓟銇堛仸銈堛亜銇с仚銇屻€併亾銇儦銉笺偢涓娿伄閰嶈粖绲愭灉銇屻亗銈嬪牬鍚堛伅銆併仢銇枃鑴堛倐娲荤敤銇椼仸銇忋仩銇曘亜銆?,
+        "涓嶇⒑銇嬨仾銇撱仺銇柇瀹氥仜銇氥€佺啊娼斻亱銇ゅ疅鐢ㄧ殑銇瓟銇堛仸銇忋仩銇曘亜銆?,
         briefMode
-          ? "既定では 4 〜 8 行程度の短い回答にし、Markdown の表や長い箇条書きは避けてください。"
-          : "今回はやや詳しく答えてよいですが、Markdown の表は使わず、読みやすさを優先してください。",
+          ? "鏃㈠畾銇с伅 4 銆?8 琛岀▼搴︺伄鐭亜鍥炵瓟銇仐銆丮arkdown 銇〃銈勯暦銇勭畤鏉℃浉銇嶃伅閬裤亼銇︺亸銇犮仌銇勩€?
+          : "浠婂洖銇倓銈勮┏銇椼亸绛斻亪銇︺倛銇勩仹銇欍亴銆丮arkdown 銇〃銇娇銈忋仛銆佽銇裤倓銇欍仌銈掑劒鍏堛仐銇︺亸銇犮仌銇勩€?,
       ].join("\n")
     : [
-        "你是当前页面里的通用助手。",
-        `当前本地日期时间是 ${nowZh}，凡是涉及今天几号、现在几点、星期几，都必须以这个时间为准。`,
-        "你可以回答一般问题；如果问题与当前页面调度结果有关，也可以结合页面上下文。",
-        "不确定的事不要硬编，回答尽量简洁、实用。",
+        "浣犳槸褰撳墠椤甸潰閲岀殑閫氱敤鍔╂墜銆?,
+        `褰撳墠鏈湴鏃ユ湡鏃堕棿鏄?${nowZh}锛屽嚒鏄秹鍙婁粖澶╁嚑鍙枫€佺幇鍦ㄥ嚑鐐广€佹槦鏈熷嚑锛岄兘蹇呴』浠ヨ繖涓椂闂翠负鍑嗐€俙,
+        "浣犲彲浠ュ洖绛斾竴鑸棶棰橈紱濡傛灉闂涓庡綋鍓嶉〉闈㈣皟搴︾粨鏋滄湁鍏筹紝涔熷彲浠ョ粨鍚堥〉闈笂涓嬫枃銆?,
+        "涓嶇‘瀹氱殑浜嬩笉瑕佺‖缂栵紝鍥炵瓟灏介噺绠€娲併€佸疄鐢ㄣ€?,
         briefMode
-          ? "默认只给 4 到 8 行的短回答，不要输出 Markdown 表格或超长大段。"
-          : "这次允许详细一点，但不要输出 Markdown 表格，也不要过度冗长。",
+          ? "榛樿鍙粰 4 鍒?8 琛岀殑鐭洖绛旓紝涓嶈杈撳嚭 Markdown 琛ㄦ牸鎴栬秴闀垮ぇ娈点€?
+          : "杩欐鍏佽璇︾粏涓€鐐癸紝浣嗕笉瑕佽緭鍑?Markdown 琛ㄦ牸锛屼篃涓嶈杩囧害鍐楅暱銆?,
       ].join("\n");
 }
 
 function detectAssistantPageName() {
   const path = String(window.location.pathname || "").toLowerCase();
-  if (path.includes("dengtang")) return "登堂";
-  if (path.includes("rengong-boundary")) return "缘起·性空";
-  if (path.includes("rengong")) return "坐照";
-  if (path.includes("chaos-jianwei")) return "见微";
-  if (path.includes("kuijing")) return "窥径";
-  if (path.includes("tuiyan") || path.includes("chaos")) return "混沌";
+  if (path.includes("dengtang")) return "鐧诲爞";
+  if (path.includes("rengong-boundary")) return "缂樿捣路鎬х┖";
+  if (path.includes("rengong")) return "鍧愮収";
+  if (path.includes("chaos-jianwei")) return "瑙佸井";
+  if (path.includes("kuijing")) return "绐ュ緞";
+  if (path.includes("tuiyan") || path.includes("chaos")) return "娣锋矊";
   const chaosPanel = document.getElementById("tuiyanPage");
-  if (chaosPanel && chaosPanel.style.display !== "none" && !chaosPanel.hidden) return "混沌";
-  return "坐照";
+  if (chaosPanel && chaosPanel.style.display !== "none" && !chaosPanel.hidden) return "娣锋矊";
+  return "鍧愮収";
 }
 
 function detectAssistantDate() {
@@ -9751,10 +9742,10 @@ function buildAssistantContextBlock(questionText) {
   const q = String(questionText || "");
   const debug = /debug\s*=\s*true/i.test(q);
   const ctx = {
-    page: detectAssistantPageName() || "坐照",
+    page: detectAssistantPageName() || "鍧愮収",
     date: detectAssistantDate() || "",
     route_id: detectAssistantRouteId() || "",
-    filters: detectAssistantFilters() || "全部",
+    filters: detectAssistantFilters() || "鍏ㄩ儴",
     debug: debug ? "true" : "false",
   };
   return [
@@ -9779,14 +9770,14 @@ async function askDeepSeekAssistant(questionText, result) {
   let enhancedQuestion = questionText;
   const lowerQuestion = questionText.toLowerCase();
   
-  if (lowerQuestion.includes("算法") || lowerQuestion.includes("区别") || lowerQuestion.includes("哪个好")) {
-    enhancedQuestion = `关于算法对比的问题：${questionText}\n\n请结合我上面提供的9种算法知识库来回答，说明各自特点和适用场景。`;
-  } else if (lowerQuestion.includes("为什么") || lowerQuestion.includes("原因")) {
-    enhancedQuestion = `关于原因分析的问题：${questionText}\n\n请基于上面提供的调度结果数据来分析原因，给出具体解释。`;
-  } else if (lowerQuestion.includes("怎么") || lowerQuestion.includes("如何") || lowerQuestion.includes("建议")) {
-    enhancedQuestion = `关于改进建议的问题：${questionText}\n\n请基于当前未调度门店和约束情况，给出具体可操作的建议。`;
-  } else if (lowerQuestion.includes("成本") || lowerQuestion.includes("代价") || lowerQuestion.includes("评分")) {
-    enhancedQuestion = `关于成本评分的问题：${questionText}\n\n请参考上面的成本公式来回答，解释各项罚分的含义。`;
+  if (lowerQuestion.includes("绠楁硶") || lowerQuestion.includes("鍖哄埆") || lowerQuestion.includes("鍝釜濂?)) {
+    enhancedQuestion = `鍏充簬绠楁硶瀵规瘮鐨勯棶棰橈細${questionText}\n\n璇风粨鍚堟垜涓婇潰鎻愪緵鐨?绉嶇畻娉曠煡璇嗗簱鏉ュ洖绛旓紝璇存槑鍚勮嚜鐗圭偣鍜岄€傜敤鍦烘櫙銆俙;
+  } else if (lowerQuestion.includes("涓轰粈涔?) || lowerQuestion.includes("鍘熷洜")) {
+    enhancedQuestion = `鍏充簬鍘熷洜鍒嗘瀽鐨勯棶棰橈細${questionText}\n\n璇峰熀浜庝笂闈㈡彁渚涚殑璋冨害缁撴灉鏁版嵁鏉ュ垎鏋愬師鍥狅紝缁欏嚭鍏蜂綋瑙ｉ噴銆俙;
+  } else if (lowerQuestion.includes("鎬庝箞") || lowerQuestion.includes("濡備綍") || lowerQuestion.includes("寤鸿")) {
+    enhancedQuestion = `鍏充簬鏀硅繘寤鸿鐨勯棶棰橈細${questionText}\n\n璇峰熀浜庡綋鍓嶆湭璋冨害闂ㄥ簵鍜岀害鏉熸儏鍐碉紝缁欏嚭鍏蜂綋鍙搷浣滅殑寤鸿銆俙;
+  } else if (lowerQuestion.includes("鎴愭湰") || lowerQuestion.includes("浠ｄ环") || lowerQuestion.includes("璇勫垎")) {
+    enhancedQuestion = `鍏充簬鎴愭湰璇勫垎鐨勯棶棰橈細${questionText}\n\n璇峰弬鑰冧笂闈㈢殑鎴愭湰鍏紡鏉ュ洖绛旓紝瑙ｉ噴鍚勯」缃氬垎鐨勫惈涔夈€俙;
   }
   
   const ctxPrefix = buildAssistantContextBlock(questionText);
@@ -9812,8 +9803,8 @@ async function askDeepSeekAssistant(questionText, result) {
   if (!payload?.ok) throw new Error(payload?.error || "deepseek_proxy_failed");
   let answer = String(payload?.content || "").trim();
   
-  if (answer.length < 30 && (answer.includes("sorry") || answer.includes("无法") || answer.includes("不能"))) {
-    answer = `抱歉，我理解这个问题可能有困难。\n\n您可以这样问我：\n- "为什么这次用了${result?.label || '当前'}算法？"\n- "当前结果有什么问题？"\n- "未调度门店怎么改善？"\n- "ACO和PSO算法有什么区别？"\n\n当前调度评分${result?.metrics?.score?.toFixed(1) || '?'}分，${result?.metrics?.unscheduledCount ? `有${result.metrics.unscheduledCount}家门店未调度` : '全部门店已调度'}。`;
+  if (answer.length < 30 && (answer.includes("sorry") || answer.includes("鏃犳硶") || answer.includes("涓嶈兘"))) {
+    answer = `鎶辨瓑锛屾垜鐞嗚В杩欎釜闂鍙兘鏈夊洶闅俱€俓n\n鎮ㄥ彲浠ヨ繖鏍烽棶鎴戯細\n- "涓轰粈涔堣繖娆＄敤浜?{result?.label || '褰撳墠'}绠楁硶锛?\n- "褰撳墠缁撴灉鏈変粈涔堥棶棰橈紵"\n- "鏈皟搴﹂棬搴楁€庝箞鏀瑰杽锛?\n- "ACO鍜孭SO绠楁硶鏈変粈涔堝尯鍒紵"\n\n褰撳墠璋冨害璇勫垎${result?.metrics?.score?.toFixed(1) || '?'}鍒嗭紝${result?.metrics?.unscheduledCount ? `鏈?{result.metrics.unscheduledCount}瀹堕棬搴楁湭璋冨害` : '鍏ㄩ儴闂ㄥ簵宸茶皟搴?}銆俙;
   }
   
   return answer;
@@ -9823,7 +9814,7 @@ async function submitAssistantQuestion(questionText, { speak = false } = {}) {
   const text = String(questionText || "").trim();
   const box = document.getElementById("validationBox");
   if (!text) {
-    if (box) box.textContent = lang() === "ja" ? "先に質問を入力してください。" : "请先输入问题。";
+    if (box) box.textContent = lang() === "ja" ? "鍏堛伀璩晱銈掑叆鍔涖仐銇︺亸銇犮仌銇勩€? : "璇峰厛杈撳叆闂銆?;
     return;
   }
   const activeResult = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
@@ -9842,11 +9833,11 @@ async function submitAssistantQuestion(questionText, { speak = false } = {}) {
   if (box) box.textContent = L("deepseekThinking");
   try {
     const answer = await askDeepSeekAssistant(text, activeResult);
-    state.ai.lastAnswer = answer || (lang() === "ja" ? "回答が空でした。" : "这次回答内容为空。");
+    state.ai.lastAnswer = answer || (lang() === "ja" ? "鍥炵瓟銇岀┖銇с仐銇熴€? : "杩欐鍥炵瓟鍐呭涓虹┖銆?);
     if (box) box.textContent = `${L("deepseekAnswerPrefix")} ${state.ai.lastAnswer}`;
     if (speak) speakAssistantAnswer(state.ai.lastAnswer);
   } catch (error) {
-    const message = error?.message || (lang() === "ja" ? "不明なエラー" : "未知错误");
+    const message = error?.message || (lang() === "ja" ? "涓嶆槑銇偍銉┿兗" : "鏈煡閿欒");
     if (box) box.textContent = LT("deepseekFailed", { message });
   } finally {
     state.ai.loading = false;
@@ -9938,10 +9929,10 @@ async function startAssistantListening() {
       return;
     }
     if (event?.error === "aborted") {
-      if (box) box.textContent = lang() === "ja" ? "ブラウザの権限ポップアップで一度中断されました。1 秒ほど待ってからもう一度話しかけてください。" : "刚刚被浏览器权限弹窗打断了，请稍等一秒后再问。";
+      if (box) box.textContent = lang() === "ja" ? "銉栥儵銈︺偠銇ī闄愩儩銉冦儣銈儍銉椼仹涓€搴︿腑鏂仌銈屻伨銇椼仧銆? 绉掋伝銇╁緟銇ｃ仸銇嬨倝銈傘亞涓€搴﹁┍銇椼亱銇戙仸銇忋仩銇曘亜銆? : "鍒氬垰琚祻瑙堝櫒鏉冮檺寮圭獥鎵撴柇浜嗭紝璇风◢绛変竴绉掑悗鍐嶉棶銆?;
       return;
     }
-    if (box) box.textContent = lang() === "ja" ? "音声認識に失敗しました。少し待ってからもう一度お試しください。" : "语音识别失败，请稍等片刻后再试。";
+    if (box) box.textContent = lang() === "ja" ? "闊冲０瑾嶈瓨銇け鏁椼仐銇俱仐銇熴€傚皯銇楀緟銇ｃ仸銇嬨倝銈傘亞涓€搴︺亰瑭︺仐銇忋仩銇曘亜銆? : "璇煶璇嗗埆澶辫触锛岃绋嶇瓑鐗囧埢鍚庡啀璇曘€?;
   };
   recognition.onend = () => {
     state.ui.listening = false;
@@ -10026,8 +10017,8 @@ function renderAnalytics() {
   document.getElementById("analyticsDesc").textContent = L("analyticsDesc");
   document.getElementById("ganttTitle").textContent = L("gantt");
   document.getElementById("ganttDesc").textContent = lang() === "ja"
-    ? "車両 × 波次 × 便の時間配置を下段で確認できます。"
-    : "在下方单独查看车辆 × 波次 × 趟次的时间占用。";
+    ? "杌婁浮 脳 娉㈡ 脳 渚裤伄鏅傞枔閰嶇疆銈掍笅娈点仹纰鸿獚銇с亶銇俱仚銆?
+    : "鍦ㄤ笅鏂瑰崟鐙煡鐪嬭溅杈?脳 娉㈡ 脳 瓒熸鐨勬椂闂村崰鐢ㄣ€?;
   renderGenerationProgress();
   const mount = document.getElementById("analyticsContent");
   const ganttMount = document.getElementById("ganttContent");
@@ -10040,11 +10031,11 @@ function renderAnalytics() {
         <div class="chart-head">
           <div>
             <div class="chart-title">${L("dashboard")}</div>
-            <p class="kpi-sub">${lang() === "ja" ? "まだ結果がなくても、ここで鯨略使アシスタントを起動できます。" : "即使还没生成调度结果，也可以先在这里唤起鲸略使助手。"}</p>
+            <p class="kpi-sub">${lang() === "ja" ? "銇俱仩绲愭灉銇屻仾銇忋仸銈傘€併亾銇撱仹榀ㄧ暐浣裤偄銈枫偣銈裤兂銉堛倰璧峰嫊銇с亶銇俱仚銆? : "鍗充娇杩樻病鐢熸垚璋冨害缁撴灉锛屼篃鍙互鍏堝湪杩欓噷鍞よ捣椴哥暐浣垮姪鎵嬨€?}</p>
           </div>
           <div class="cockpit-highlight state-warn">
-            <span>${lang() === "ja" ? "状態" : "状态"}</span>
-            <strong>${lang() === "ja" ? "待機中" : "待机中"}</strong>
+            <span>${lang() === "ja" ? "鐘舵厠" : "鐘舵€?}</span>
+            <strong>${lang() === "ja" ? "寰呮涓? : "寰呮満涓?}</strong>
           </div>
         </div>
         <div class="cockpit-body">
@@ -10072,40 +10063,40 @@ function buildTargetScoreAdvice(bestResult) {
   const gap = target - bestResult.metrics.score;
   if (gap <= 0) {
     return lang() === "ja"
-      ? `現在の最良案 ${algoLabel(bestResult.key)} は目標スコア ${target.toFixed(1)} を達成しています。`
-      : `当前最佳方案 ${algoLabel(bestResult.key)} 已达到目标评分 ${target.toFixed(1)}。`;
+      ? `鐝惧湪銇渶鑹 ${algoLabel(bestResult.key)} 銇洰妯欍偣銈炽偄 ${target.toFixed(1)} 銈掗仈鎴愩仐銇︺亜銇俱仚銆俙
+      : `褰撳墠鏈€浣虫柟妗?${algoLabel(bestResult.key)} 宸茶揪鍒扮洰鏍囪瘎鍒?${target.toFixed(1)}銆俙;
   }
 
   const assumptions = [];
   if (bestResult.metrics.totalDistance > 260) {
     assumptions.push(lang() === "ja"
-      ? "通常波次の距離上限を少し緩める、または遠距離店舗を単独波次へ多く移す"
-      : "适度放宽普通波次的里程上限，或把更多远距离门店划入单波次");
+      ? "閫氬父娉㈡銇窛闆笂闄愩倰灏戙仐绶┿倎銈嬨€併伨銇熴伅閬犺窛闆㈠簵鑸椼倰鍗樼嫭娉㈡銇稿銇忕Щ銇?
+      : "閫傚害鏀惧鏅€氭尝娆＄殑閲岀▼涓婇檺锛屾垨鎶婃洿澶氳繙璺濈闂ㄥ簵鍒掑叆鍗曟尝娆?);
   }
   if ((bestResult.metrics.totalOnTime / Math.max(bestResult.metrics.totalStops, 1)) < 0.98) {
     assumptions.push(lang() === "ja"
-      ? "波次の時間帯を広げる、または希望到着時刻を分散させる"
-      : "拉宽波次时段，或把期望到达时间分散一些");
+      ? "娉㈡銇檪闁撳腐銈掑簝銇掋倠銆併伨銇熴伅甯屾湜鍒扮潃鏅傚埢銈掑垎鏁ｃ仌銇涖倠"
+      : "鎷夊娉㈡鏃舵锛屾垨鎶婃湡鏈涘埌杈炬椂闂村垎鏁ｄ竴浜?);
   }
   if (bestResult.metrics.loadRate < 0.65) {
     assumptions.push(lang() === "ja"
-      ? "車両を少し減らすか、手動調車で積載を寄せる"
-      : "适度减少启用车辆，或通过手工调车把装载集中一些");
+      ? "杌婁浮銈掑皯銇楁笡銈夈仚銇嬨€佹墜鍕曡杌娿仹绌嶈級銈掑瘎銇涖倠"
+      : "閫傚害鍑忓皯鍚敤杞﹁締锛屾垨閫氳繃鎵嬪伐璋冭溅鎶婅杞介泦涓竴浜?);
   }
   if ((bestResult.metrics.unusedVehicleCount || 0) === 0) {
     assumptions.push(lang() === "ja"
-      ? "車両数を追加して、通常波次の偏りをさらに平準化する"
-      : "增加可用车辆，进一步摊平普通波次压力");
+      ? "杌婁浮鏁般倰杩藉姞銇椼仸銆侀€氬父娉㈡銇亸銈娿倰銇曘倝銇钩婧栧寲銇欍倠"
+      : "澧炲姞鍙敤杞﹁締锛岃繘涓€姝ユ憡骞虫櫘閫氭尝娆″帇鍔?);
   }
   if (!assumptions.length) {
     assumptions.push(lang() === "ja"
-      ? "一部店舗の希望到着時刻・波次・車両割当を人手で調整すれば、目標に近づける可能性があります"
-      : "通过人工微调部分门店的期望到达、波次或车辆归属，评分还有继续上探的空间");
+      ? "涓€閮ㄥ簵鑸椼伄甯屾湜鍒扮潃鏅傚埢銉绘尝娆°兓杌婁浮鍓插綋銈掍汉鎵嬨仹瑾挎暣銇欍倢銇般€佺洰妯欍伀杩戙仴銇戙倠鍙兘鎬с亴銇傘倞銇俱仚"
+      : "閫氳繃浜哄伐寰皟閮ㄥ垎闂ㄥ簵鐨勬湡鏈涘埌杈俱€佹尝娆℃垨杞﹁締褰掑睘锛岃瘎鍒嗚繕鏈夌户缁笂鎺㈢殑绌洪棿");
   }
 
   return lang() === "ja"
-    ? `現在の最良案は ${algoLabel(bestResult.key)} の ${bestResult.metrics.score.toFixed(1)} で、目標 ${target.toFixed(1)} まであと ${gap.toFixed(1)} です。業務前提を次の方向で改善すれば到達しやすくなります：${assumptions.join("；")}。`
-    : `当前最佳方案是 ${algoLabel(bestResult.key)}，评分 ${bestResult.metrics.score.toFixed(1)}，距离目标 ${target.toFixed(1)} 还差 ${gap.toFixed(1)}。如果业务前提允许，朝这些方向优化更容易实现目标：${assumptions.join("；")}。`;
+    ? `鐝惧湪銇渶鑹銇?${algoLabel(bestResult.key)} 銇?${bestResult.metrics.score.toFixed(1)} 銇с€佺洰妯?${target.toFixed(1)} 銇俱仹銇傘仺 ${gap.toFixed(1)} 銇с仚銆傛キ鍕欏墠鎻愩倰娆°伄鏂瑰悜銇ф敼鍠勩仚銈屻伆鍒伴仈銇椼倓銇欍亸銇倞銇俱仚锛?{assumptions.join("锛?)}銆俙
+    : `褰撳墠鏈€浣虫柟妗堟槸 ${algoLabel(bestResult.key)}锛岃瘎鍒?${bestResult.metrics.score.toFixed(1)}锛岃窛绂荤洰鏍?${target.toFixed(1)} 杩樺樊 ${gap.toFixed(1)}銆傚鏋滀笟鍔″墠鎻愬厑璁革紝鏈濊繖浜涙柟鍚戜紭鍖栨洿瀹规槗瀹炵幇鐩爣锛?{assumptions.join("锛?)}銆俙;
 }
 
 function renderSingleWaveInfo() {
@@ -10113,20 +10104,20 @@ function renderSingleWaveInfo() {
   if (!info) return;
   const stores = enrichStores(state.stores);
   if (!stores.length) {
-    info.textContent = lang() === "ja" ? "現在、店舗データがありません。" : "当前没有门店数据。";
+    info.textContent = lang() === "ja" ? "鐝惧湪銆佸簵鑸椼儑銉笺偪銇屻亗銈娿伨銇涖倱銆? : "褰撳墠娌℃湁闂ㄥ簵鏁版嵁銆?;
     return;
   }
   info.textContent = lang() === "ja"
-    ? "単独波次の自動分流は停止中です。すべて業務波次（W1/W2/W3/W4）で求解します。"
-    : "单波次自动分流已停用。当前所有门店都按业务波次（W1/W2/W3/W4）求解。";
+    ? "鍗樼嫭娉㈡銇嚜鍕曞垎娴併伅鍋滄涓仹銇欍€傘仚銇广仸妤嫏娉㈡锛圵1/W2/W3/W4锛夈仹姹傝В銇椼伨銇欍€?
+    : "鍗曟尝娆¤嚜鍔ㄥ垎娴佸凡鍋滅敤銆傚綋鍓嶆墍鏈夐棬搴楅兘鎸変笟鍔℃尝娆★紙W1/W2/W3/W4锛夋眰瑙ｃ€?;
 }
 
 function applyLanguage() {
   document.documentElement.lang = lang() === "ja" ? "ja" : "zh-CN";
-  document.title = lang() === "ja" ? "鯨略使オプティマイザー" : "鲸略使调度求解器";
+  document.title = lang() === "ja" ? "榀ㄧ暐浣裤偑銉椼儐銈ｃ優銈ゃ偠銉? : "椴哥暐浣胯皟搴︽眰瑙ｅ櫒";
   const tabTitles = lang() === "ja"
-    ? { basic: "基礎資料", region: "運行区定義", strategy: "調度戦略", solve: "求解と比較", result: "調度結果" }
-    : { basic: "基础资料", region: "运行区定义", strategy: "调度策略", solve: "求解与对比", result: "调度结果" };
+    ? { basic: "鍩虹璩囨枡", region: "閬嬭鍖哄畾缇?, strategy: "瑾垮害鎴︾暐", solve: "姹傝В銇ㄦ瘮杓?, result: "瑾垮害绲愭灉" }
+    : { basic: "鍩虹璧勬枡", region: "杩愯鍖哄畾涔?, strategy: "璋冨害绛栫暐", solve: "姹傝В涓庡姣?, result: "璋冨害缁撴灉" };
   const tabBasicBtn = document.getElementById("mainTabBasicBtn");
   const tabRegionBtn = document.getElementById("mainTabRegionBtn");
   const tabStrategyBtn = document.getElementById("mainTabStrategyBtn");
@@ -10141,8 +10132,8 @@ function applyLanguage() {
   if (hero) {
     const eyebrow = hero.querySelector(".eyebrow");
     if (eyebrow) eyebrow.textContent = "Cetacean Optimizer";
-    hero.querySelector("h1").textContent = lang() === "ja" ? "鯨略使オプティマイザー" : "鲸略使调度求解器";
-    hero.querySelector(".lead").textContent = lang() === "ja" ? "現在の版は実用性を優先し、多車両・多波次・多店舗単日複数回配送、手動車両調整、単独波次店舗、配送可視化に対応しています。" : "当前版本优先追求可用，支持多车、多波次、多门店单日多次配送调度、手工调车、单波次店铺，以及调度过程可视化。";
+    hero.querySelector("h1").textContent = lang() === "ja" ? "榀ㄧ暐浣裤偑銉椼儐銈ｃ優銈ゃ偠銉? : "椴哥暐浣胯皟搴︽眰瑙ｅ櫒";
+    hero.querySelector(".lead").textContent = lang() === "ja" ? "鐝惧湪銇増銇疅鐢ㄦ€с倰鍎厛銇椼€佸杌婁浮銉诲娉㈡銉诲搴楄垪鍗樻棩瑜囨暟鍥為厤閫併€佹墜鍕曡粖涓¤鏁淬€佸崢鐙尝娆″簵鑸椼€侀厤閫佸彲瑕栧寲銇蹇溿仐銇︺亜銇俱仚銆? : "褰撳墠鐗堟湰浼樺厛杩芥眰鍙敤锛屾敮鎸佸杞︺€佸娉㈡銆佸闂ㄥ簵鍗曟棩澶氭閰嶉€佽皟搴︺€佹墜宸ヨ皟杞︺€佸崟娉㈡搴楅摵锛屼互鍙婅皟搴﹁繃绋嬪彲瑙嗗寲銆?;
   }
   document.getElementById("openShowcaseBtn").textContent = L("showcase");
   document.getElementById("loadSampleBtn").textContent = L("reload");
@@ -10153,12 +10144,12 @@ function applyLanguage() {
   document.getElementById("toggleVehiclePanelBtn").textContent = document.getElementById("vehiclePanelBody").classList.contains("collapsed") ? L("unfoldVehicle") : L("foldVehicle");
   document.getElementById("addStoreBtn").textContent = L("addStore");
   document.getElementById("addVehicleBtn").textContent = L("addVehicle");
-  const locateText = lang() === "ja" ? "検索" : "定位";
-  const saveDataText = lang() === "ja" ? "資料保存" : "保存资料";
-  const storeImportText = lang() === "ja" ? "店舗導入" : "导入门店";
-  const vehicleImportText = lang() === "ja" ? "車両導入" : "导入车辆";
-  const batchReserveText = lang() === "ja" ? "一括操作（予約）" : "批量操作（预留）";
-  const waveImportText = lang() === "ja" ? "波次導入" : "导入波次";
+  const locateText = lang() === "ja" ? "妞滅储" : "瀹氫綅";
+  const saveDataText = lang() === "ja" ? "璩囨枡淇濆瓨" : "淇濆瓨璧勬枡";
+  const storeImportText = lang() === "ja" ? "搴楄垪灏庡叆" : "瀵煎叆闂ㄥ簵";
+  const vehicleImportText = lang() === "ja" ? "杌婁浮灏庡叆" : "瀵煎叆杞﹁締";
+  const batchReserveText = lang() === "ja" ? "涓€鎷搷浣滐紙浜堢磩锛? : "鎵归噺鎿嶄綔锛堥鐣欙級";
+  const waveImportText = lang() === "ja" ? "娉㈡灏庡叆" : "瀵煎叆娉㈡";
   const storeFileTrigger = document.getElementById("storeFileTrigger");
   const vehicleFileTrigger = document.getElementById("vehicleFileTrigger");
   const waveImportBtn = document.getElementById("waveImportBtn");
@@ -10184,15 +10175,15 @@ function applyLanguage() {
   if (saveStoreDataBtn) saveStoreDataBtn.textContent = saveDataText;
   if (saveVehicleDataBtn) saveVehicleDataBtn.textContent = saveDataText;
   if (saveWaveDataBtn) saveWaveDataBtn.textContent = saveDataText;
-  if (dataArchiveQueryBtn) dataArchiveQueryBtn.textContent = lang() === "ja" ? "照会" : "查询";
+  if (dataArchiveQueryBtn) dataArchiveQueryBtn.textContent = lang() === "ja" ? "鐓т細" : "鏌ヨ";
   const calcWaveLoadBtn = document.getElementById("calcWaveLoadBtn");
-  if (calcWaveLoadBtn) calcWaveLoadBtn.textContent = lang() === "ja" ? "貨量換算" : "货量折算";
+  if (calcWaveLoadBtn) calcWaveLoadBtn.textContent = lang() === "ja" ? "璨ㄩ噺鎻涚畻" : "璐ч噺鎶樼畻";
   const saveDualStoreLoadsBtn = document.getElementById("saveDualStoreLoadsBtn");
-  if (saveDualStoreLoadsBtn) saveDualStoreLoadsBtn.textContent = lang() === "ja" ? "保存双表貨量" : "保存双表货量";
+  if (saveDualStoreLoadsBtn) saveDualStoreLoadsBtn.textContent = lang() === "ja" ? "淇濆瓨鍙岃〃璨ㄩ噺" : "淇濆瓨鍙岃〃璐ч噺";
   const closeLoadConvertBtn = document.getElementById("closeLoadConvertModalBtn");
-  if (closeLoadConvertBtn) closeLoadConvertBtn.textContent = lang() === "ja" ? "適用して閉じる" : "应用并关闭";
+  if (closeLoadConvertBtn) closeLoadConvertBtn.textContent = lang() === "ja" ? "閬╃敤銇椼仸闁夈仒銈? : "搴旂敤骞跺叧闂?;
   const loadConvertTitle = document.getElementById("loadConvertModalTitle");
-  if (loadConvertTitle) loadConvertTitle.textContent = lang() === "ja" ? "貨量換算結果" : "货量折算结果";
+  if (loadConvertTitle) loadConvertTitle.textContent = lang() === "ja" ? "璨ㄩ噺鎻涚畻绲愭灉" : "璐ч噺鎶樼畻缁撴灉";
   renderWaveSolverPanel();
   const storeFile = document.getElementById("storeFile");
   const vehicleFile = document.getElementById("vehicleFile");
@@ -10222,20 +10213,20 @@ function applyLanguage() {
   const optimizeGoalLabel = document.getElementById("optimizeGoalLabel");
   if (optimizeGoalLabel) optimizeGoalLabel.textContent = L("optimizeGoal");
   const solveRegionSchemeLabel = document.getElementById("solveRegionSchemeLabel");
-  if (solveRegionSchemeLabel) solveRegionSchemeLabel.textContent = lang() === "ja" ? "分区方案番号" : "分区方案号";
+  if (solveRegionSchemeLabel) solveRegionSchemeLabel.textContent = lang() === "ja" ? "鍒嗗尯鏂规鐣彿" : "鍒嗗尯鏂规鍙?;
   document.getElementById("generateBtn").textContent = L("generate");
   document.getElementById("closeProcessModalBtn").textContent = L("close");
   document.getElementById("closeShowcaseModalBtn").textContent = L("close");
   document.getElementById("processModalTitle").textContent = L("processTitle");
   document.getElementById("showcaseModalTitle").textContent = L("showcaseTitle");
   const solveDiagnoseTitle = document.getElementById("solveDiagnoseModalTitle");
-  if (solveDiagnoseTitle) solveDiagnoseTitle.textContent = lang() === "ja" ? "求解前診断" : "求解前诊断";
+  if (solveDiagnoseTitle) solveDiagnoseTitle.textContent = lang() === "ja" ? "姹傝В鍓嶈ê鏂? : "姹傝В鍓嶈瘖鏂?;
   const closeSolveDiagnoseBtn = document.getElementById("closeSolveDiagnoseModalBtn");
-  if (closeSolveDiagnoseBtn) closeSolveDiagnoseBtn.textContent = lang() === "ja" ? "閉じる" : "关闭";
+  if (closeSolveDiagnoseBtn) closeSolveDiagnoseBtn.textContent = lang() === "ja" ? "闁夈仒銈? : "鍏抽棴";
   const cancelSolveDiagnoseBtn = document.getElementById("cancelSolveDiagnoseBtn");
-  if (cancelSolveDiagnoseBtn) cancelSolveDiagnoseBtn.textContent = lang() === "ja" ? "求解をやめる" : "取消求解";
+  if (cancelSolveDiagnoseBtn) cancelSolveDiagnoseBtn.textContent = lang() === "ja" ? "姹傝В銈掋倓銈併倠" : "鍙栨秷姹傝В";
   const continueSolveDiagnoseBtn = document.getElementById("continueSolveDiagnoseBtn");
-  if (continueSolveDiagnoseBtn) continueSolveDiagnoseBtn.textContent = lang() === "ja" ? "続けて求解" : "继续求解";
+  if (continueSolveDiagnoseBtn) continueSolveDiagnoseBtn.textContent = lang() === "ja" ? "缍氥亼銇︽眰瑙? : "缁х画姹傝В";
   document.getElementById("languageSelect").value = lang();
   const setPanelHeadText = (panelId, titleText, descText = null) => {
     const panel = document.getElementById(panelId);
@@ -10250,10 +10241,10 @@ function applyLanguage() {
   setPanelHeadText("storeInfoPanel", L("storeInfo"), L("storeDesc"));
   setPanelHeadText("vehicleInfoPanel", L("vehicleInfo"), L("vehicleDesc"));
   setPanelHeadText("waveConfigPanel", L("waveConfig"), L("waveDesc"));
-  setPanelHeadText("wmsSyncPanel", lang() === "ja" ? "WMS業務同期" : "WMS业务抓取", lang() === "ja" ? "遠端WMS五表を読み取り専用で同期。店舗/車両は样本・実业务を切替でき、貨量はCargoQTYを強制適用します。" : "一键只读抓取远端WMS五表。店铺和车辆可选样本/真实业务，货量统一使用抓取的CargoQTY。");
-  setPanelHeadText("dataArchivePanel", lang() === "ja" ? "档案照会" : "档案查询", lang() === "ja" ? "基础资料档案を照会し、緯度経度を含む完全データを確認できます。" : "查询基础资料档案，并查看完整经纬度门店数据。");
+  setPanelHeadText("wmsSyncPanel", lang() === "ja" ? "WMS妤嫏鍚屾湡" : "WMS涓氬姟鎶撳彇", lang() === "ja" ? "閬犵WMS浜旇〃銈掕銇垮彇銈婂皞鐢ㄣ仹鍚屾湡銆傚簵鑸?杌婁浮銇牱鏈兓瀹熶笟鍔°倰鍒囨浛銇с亶銆佽波閲忋伅CargoQTY銈掑挤鍒堕仼鐢ㄣ仐銇俱仚銆? : "涓€閿彧璇绘姄鍙栬繙绔疻MS浜旇〃銆傚簵閾哄拰杞﹁締鍙€夋牱鏈?鐪熷疄涓氬姟锛岃揣閲忕粺涓€浣跨敤鎶撳彇鐨凜argoQTY銆?);
+  setPanelHeadText("dataArchivePanel", lang() === "ja" ? "妗ｆ鐓т細" : "妗ｆ鏌ヨ", lang() === "ja" ? "鍩虹璧勬枡妗ｆ銈掔収浼氥仐銆佺矾搴︾祵搴︺倰鍚個瀹屽叏銉囥兗銈裤倰纰鸿獚銇с亶銇俱仚銆? : "鏌ヨ鍩虹璧勬枡妗ｆ锛屽苟鏌ョ湅瀹屾暣缁忕含搴﹂棬搴楁暟鎹€?);
   setPanelHeadText("strategyPanel", L("algoRun"), L("algoDesc"));
-  setPanelHeadText("solveComparePanel", tabTitles.solve, lang() === "ja" ? "求解実行・進捗・アルゴリズム比較をこのセクションで扱います。" : "在本区进行求解执行、进度跟踪与算法对比。");
+  setPanelHeadText("solveComparePanel", tabTitles.solve, lang() === "ja" ? "姹傝В瀹熻銉婚€叉崡銉汇偄銉偞銉偤銉犳瘮杓冦倰銇撱伄銈汇偗銈枫儳銉炽仹鎵便亜銇俱仚銆? : "鍦ㄦ湰鍖鸿繘琛屾眰瑙ｆ墽琛屻€佽繘搴﹁窡韪笌绠楁硶瀵规瘮銆?);
   setPanelHeadText("dispatchResultPanel", L("result"));
   const savePanel = document.getElementById("savedPlans")?.closest(".panel");
   if (savePanel) {
@@ -10299,19 +10290,19 @@ function applyLanguage() {
   const globalSearchBtn = document.getElementById("globalSearchBtn");
   if (globalSearchBtn) globalSearchBtn.textContent = L("globalSearch");
   const wmsFetchBtn = document.getElementById("wmsFetchBtn");
-  if (wmsFetchBtn) wmsFetchBtn.textContent = lang() === "ja" ? "WMS同期" : "一键抓取WMS";
+  if (wmsFetchBtn) wmsFetchBtn.textContent = lang() === "ja" ? "WMS鍚屾湡" : "涓€閿姄鍙朩MS";
   const runRegionSchemeCreateBtn = document.getElementById("runRegionSchemeCreateBtn");
-  if (runRegionSchemeCreateBtn) runRegionSchemeCreateBtn.textContent = lang() === "ja" ? "方案追加" : "新增方案";
+  if (runRegionSchemeCreateBtn) runRegionSchemeCreateBtn.textContent = lang() === "ja" ? "鏂规杩藉姞" : "鏂板鏂规";
   const runRegionSchemeUpdateBtn = document.getElementById("runRegionSchemeUpdateBtn");
-  if (runRegionSchemeUpdateBtn) runRegionSchemeUpdateBtn.textContent = lang() === "ja" ? "方案更新" : "更新方案";
+  if (runRegionSchemeUpdateBtn) runRegionSchemeUpdateBtn.textContent = lang() === "ja" ? "鏂规鏇存柊" : "鏇存柊鏂规";
   const runRegionSchemeDeleteBtn = document.getElementById("runRegionSchemeDeleteBtn");
-  if (runRegionSchemeDeleteBtn) runRegionSchemeDeleteBtn.textContent = lang() === "ja" ? "方案削除" : "删除方案";
+  if (runRegionSchemeDeleteBtn) runRegionSchemeDeleteBtn.textContent = lang() === "ja" ? "鏂规鍓婇櫎" : "鍒犻櫎鏂规";
   const storeSourceSelect = document.getElementById("storeSourceSelect");
-  if (storeSourceSelect?.options?.[0]) storeSourceSelect.options[0].text = lang() === "ja" ? "样本" : "样本";
-  if (storeSourceSelect?.options?.[1]) storeSourceSelect.options[1].text = lang() === "ja" ? "実业务" : "真实业务";
+  if (storeSourceSelect?.options?.[0]) storeSourceSelect.options[0].text = lang() === "ja" ? "鏍锋湰" : "鏍锋湰";
+  if (storeSourceSelect?.options?.[1]) storeSourceSelect.options[1].text = lang() === "ja" ? "瀹熶笟鍔? : "鐪熷疄涓氬姟";
   const vehicleSourceSelect = document.getElementById("vehicleSourceSelect");
-  if (vehicleSourceSelect?.options?.[0]) vehicleSourceSelect.options[0].text = lang() === "ja" ? "样本" : "样本";
-  if (vehicleSourceSelect?.options?.[1]) vehicleSourceSelect.options[1].text = lang() === "ja" ? "実业务" : "真实业务";
+  if (vehicleSourceSelect?.options?.[0]) vehicleSourceSelect.options[0].text = lang() === "ja" ? "鏍锋湰" : "鏍锋湰";
+  if (vehicleSourceSelect?.options?.[1]) vehicleSourceSelect.options[1].text = lang() === "ja" ? "瀹熶笟鍔? : "鐪熷疄涓氬姟";
   const relaySolveBtn = document.getElementById("relaySolveBtn");
   if (relaySolveBtn) relaySolveBtn.textContent = L("relaySolve");
   const freeSolveBtn = document.getElementById("freeSolveBtn");
@@ -10326,8 +10317,8 @@ function applyLanguage() {
   renderGaBackendStatus();
   if (!state.lastResults.length && state.stores.length) {
     document.getElementById("validationBox").textContent = lang() === "ja"
-      ? `固定店舗 ${state.stores.length} 件を読み込み、通常波次 ${state.waves.length} 件を生成しました。`
-      : `已加载固定门店 ${state.stores.length} 家，并自动分成 ${state.waves.length} 个普通波次。`;
+      ? `鍥哄畾搴楄垪 ${state.stores.length} 浠躲倰瑾伩杈笺伩銆侀€氬父娉㈡ ${state.waves.length} 浠躲倰鐢熸垚銇椼伨銇椼仧銆俙
+      : `宸插姞杞藉浐瀹氶棬搴?${state.stores.length} 瀹讹紝骞惰嚜鍔ㄥ垎鎴?${state.waves.length} 涓櫘閫氭尝娆°€俙;
   }
 }
 
@@ -10362,10 +10353,10 @@ function renderTripLegs(trip, scenario) {
   const legs = [];
   let from = DC.id;
   for (const stop of trip.stops) {
-    legs.push(`${from}→${stop.storeId} ${stop.distance.toFixed(1)}km`);
+    legs.push(`${from}鈫?{stop.storeId} ${stop.distance.toFixed(1)}km`);
     from = stop.storeId;
   }
-  if (trip.stops.length) legs.push(`${from}→${DC.id} ${scenario.dist[from][DC.id].toFixed(1)}km`);
+  if (trip.stops.length) legs.push(`${from}鈫?{DC.id} ${scenario.dist[from][DC.id].toFixed(1)}km`);
   return legs.join(" / ");
 }
 
@@ -10393,7 +10384,7 @@ function buildProcessSteps(plan, trip, scenario) {
       leave: stop.leave,
       estimatedBack,
       onTime: stop.onTime,
-      route: [DC.id, ...trip.stops.slice(0, index + 1).map((item) => item.storeId)].join(" → "),
+      route: [DC.id, ...trip.stops.slice(0, index + 1).map((item) => item.storeId)].join(" 鈫?"),
     });
   }
   return steps;
@@ -10409,26 +10400,26 @@ function traceAlgorithmKeysForResult(result) {
 function buildAlgorithmNarrativeHint(result) {
   const key = String(result?.key || "");
   const hintsZh = {
-    hybrid: "混合启发式会先做扰动探索，再做局部精修，日志重点看“动作”和“刷新最优”轮次。",
-    tabu: "禁忌搜索会记录禁忌动作与最优刷新，日志重点看“避免回头路”后的改进轨迹。",
-    lns: "大邻域搜索会反复 destroy/repair，日志重点看大扰动后是否出现显著降本。",
-    sa: "模拟退火会出现“接受差解”的阶段，日志重点看温度下降后如何逐步收敛。",
-    aco: "蚁群算法会按轮次强化优路径，日志重点看轮次内最优与全局最优变化。",
-    pso: "粒子群会记录粒子刷新最优与重启，日志重点看群体最优何时被突破。",
-    ga: "遗传算法会记录世代迭代、改进幅度和提前收敛，日志重点看代际最优变化。",
-    savings: "节约法是构造型算法，日志重点看节约值合并与车辆分配。",
-    vrptw: "VRPTW 初排是可行性优先，日志重点看门店插入比较与约束可行性。",
+    hybrid: "娣峰悎鍚彂寮忎細鍏堝仛鎵板姩鎺㈢储锛屽啀鍋氬眬閮ㄧ簿淇紝鏃ュ織閲嶇偣鐪嬧€滃姩浣溾€濆拰鈥滃埛鏂版渶浼樷€濊疆娆°€?,
+    tabu: "绂佸繉鎼滅储浼氳褰曠蹇屽姩浣滀笌鏈€浼樺埛鏂帮紝鏃ュ織閲嶇偣鐪嬧€滈伩鍏嶅洖澶磋矾鈥濆悗鐨勬敼杩涜建杩广€?,
+    lns: "澶ч偦鍩熸悳绱細鍙嶅 destroy/repair锛屾棩蹇楅噸鐐圭湅澶ф壈鍔ㄥ悗鏄惁鍑虹幇鏄捐憲闄嶆湰銆?,
+    sa: "妯℃嫙閫€鐏細鍑虹幇鈥滄帴鍙楀樊瑙ｂ€濈殑闃舵锛屾棩蹇楅噸鐐圭湅娓╁害涓嬮檷鍚庡浣曢€愭鏀舵暃銆?,
+    aco: "铓佺兢绠楁硶浼氭寜杞寮哄寲浼樿矾寰勶紝鏃ュ織閲嶇偣鐪嬭疆娆″唴鏈€浼樹笌鍏ㄥ眬鏈€浼樺彉鍖栥€?,
+    pso: "绮掑瓙缇や細璁板綍绮掑瓙鍒锋柊鏈€浼樹笌閲嶅惎锛屾棩蹇楅噸鐐圭湅缇や綋鏈€浼樹綍鏃惰绐佺牬銆?,
+    ga: "閬椾紶绠楁硶浼氳褰曚笘浠ｈ凯浠ｃ€佹敼杩涘箙搴﹀拰鎻愬墠鏀舵暃锛屾棩蹇楅噸鐐圭湅浠ｉ檯鏈€浼樺彉鍖栥€?,
+    savings: "鑺傜害娉曟槸鏋勯€犲瀷绠楁硶锛屾棩蹇楅噸鐐圭湅鑺傜害鍊煎悎骞朵笌杞﹁締鍒嗛厤銆?,
+    vrptw: "VRPTW 鍒濇帓鏄彲琛屾€т紭鍏堬紝鏃ュ織閲嶇偣鐪嬮棬搴楁彃鍏ユ瘮杈冧笌绾︽潫鍙鎬с€?,
   };
   const hintsJa = {
-    hybrid: "ハイブリッドは広域探索と局所改善を組み合わせます。動作種別と最良更新回を重点確認します。",
-    tabu: "タブー探索は戻り手を禁じます。最良更新の軌跡で改善の質を確認します。",
-    lns: "LNS は destroy/repair を繰り返します。大きな再構成後の改善幅を重点確認します。",
-    sa: "SA は一時的に劣解受理が発生します。温度低下後の収束過程を確認します。",
-    aco: "ACO は反復で良経路を強化します。各反復の最良値推移を確認します。",
-    pso: "PSO は粒子群で最良解を更新します。群最良が更新される局面を確認します。",
-    ga: "GA は世代ごとに進化します。世代最良と早期収束の発生点を確認します。",
-    savings: "節約法は構成型です。節約値による統合と配車結果を確認します。",
-    vrptw: "VRPTW 初期配車は可行性優先です。挿入比較と制約充足を確認します。",
+    hybrid: "銉忋偆銉栥儶銉冦儔銇簝鍩熸帰绱仺灞€鎵€鏀瑰杽銈掔祫銇垮悎銈忋仜銇俱仚銆傚嫊浣滅ó鍒ャ仺鏈€鑹洿鏂板洖銈掗噸鐐圭⒑瑾嶃仐銇俱仚銆?,
+    tabu: "銈裤儢銉兼帰绱伅鎴汇倞鎵嬨倰绂併仒銇俱仚銆傛渶鑹洿鏂般伄杌岃贰銇ф敼鍠勩伄璩倰纰鸿獚銇椼伨銇欍€?,
+    lns: "LNS 銇?destroy/repair 銈掔拱銈婅繑銇椼伨銇欍€傚ぇ銇嶃仾鍐嶆鎴愬緦銇敼鍠勫箙銈掗噸鐐圭⒑瑾嶃仐銇俱仚銆?,
+    sa: "SA 銇竴鏅傜殑銇姡瑙ｅ彈鐞嗐亴鐧虹敓銇椼伨銇欍€傛俯搴︿綆涓嬪緦銇弾鏉熼亷绋嬨倰纰鸿獚銇椼伨銇欍€?,
+    aco: "ACO 銇弽寰┿仹鑹祵璺倰寮峰寲銇椼伨銇欍€傚悇鍙嶅京銇渶鑹€ゆ帹绉汇倰纰鸿獚銇椼伨銇欍€?,
+    pso: "PSO 銇矑瀛愮兢銇ф渶鑹В銈掓洿鏂般仐銇俱仚銆傜兢鏈€鑹亴鏇存柊銇曘倢銈嬪眬闈倰纰鸿獚銇椼伨銇欍€?,
+    ga: "GA 銇笘浠ｃ仈銇ㄣ伀閫插寲銇椼伨銇欍€備笘浠ｆ渶鑹仺鏃╂湡鍙庢潫銇櫤鐢熺偣銈掔⒑瑾嶃仐銇俱仚銆?,
+    savings: "绡€绱勬硶銇鎴愬瀷銇с仚銆傜瘈绱勫€ゃ伀銈堛倠绲卞悎銇ㄩ厤杌婄祼鏋溿倰纰鸿獚銇椼伨銇欍€?,
+    vrptw: "VRPTW 鍒濇湡閰嶈粖銇彲琛屾€у劒鍏堛仹銇欍€傛尶鍏ユ瘮杓冦仺鍒剁磩鍏呰冻銈掔⒑瑾嶃仐銇俱仚銆?,
   };
   return lang() === "ja" ? (hintsJa[key] || "") : (hintsZh[key] || "");
 }
@@ -10451,16 +10442,16 @@ function buildTraceNarrative(result, plan, trip, wave) {
     return keys.has(String(entry.algorithmKey || ""));
   });
   const lines = [
-    lang() === "ja" ? "> 真の探索ログ" : "> 真实算法搜索日志",
+    lang() === "ja" ? "> 鐪熴伄鎺㈢储銉偘" : "> 鐪熷疄绠楁硶鎼滅储鏃ュ織",
     lang() === "ja"
-      ? "> 上段はアルゴリズムが実際に受理した探索イベント、下段はこの便に入る店舗の割当比較です。"
-      : "> 上面先展示算法真正执行并接受的搜索事件，下面再展示这条线路内门店的插入比较。",
+      ? "> 涓婃銇偄銉偞銉偤銉犮亴瀹熼殯銇彈鐞嗐仐銇熸帰绱偆銉欍兂銉堛€佷笅娈点伅銇撱伄渚裤伀鍏ャ倠搴楄垪銇壊褰撴瘮杓冦仹銇欍€?
+      : "> 涓婇潰鍏堝睍绀虹畻娉曠湡姝ｆ墽琛屽苟鎺ュ彈鐨勬悳绱簨浠讹紝涓嬮潰鍐嶅睍绀鸿繖鏉＄嚎璺唴闂ㄥ簵鐨勬彃鍏ユ瘮杈冦€?,
     lang() === "ja"
-      ? "> コスト式: 遅着ペナルティ + 波次超過ペナルティ + 車両繁忙ペナルティ + 追加便ペナルティ + 距離コスト - 積載ボーナス。値が低いほど良いです。"
-      : "> 成本公式: 晚到罚分 + 超波次罚分 + 车辆繁忙罚分 + 额外趟次罚分 + 距离成本 - 装载奖励。数值越低越好。",
+      ? "> 銈炽偣銉堝紡: 閬呯潃銉氥儕銉儐銈?+ 娉㈡瓒呴亷銉氥儕銉儐銈?+ 杌婁浮绻佸繖銉氥儕銉儐銈?+ 杩藉姞渚裤儦銉娿儷銉嗐偅 + 璺濋洟銈炽偣銉?- 绌嶈級銉溿兗銉娿偣銆傚€ゃ亴浣庛亜銇汇仼鑹亜銇с仚銆?
+      : "> 鎴愭湰鍏紡: 鏅氬埌缃氬垎 + 瓒呮尝娆＄綒鍒?+ 杞﹁締绻佸繖缃氬垎 + 棰濆瓒熸缃氬垎 + 璺濈鎴愭湰 - 瑁呰浇濂栧姳銆傛暟鍊艰秺浣庤秺濂姐€?,
     lang() === "ja"
-      ? `> 現在ルートのコスト内訳: 遅着ペナルティ ${breakdown.latenessPenalty.toFixed(1)} / 波次超過ペナルティ ${breakdown.waveLatePenalty.toFixed(1)} / 距離コスト ${breakdown.distanceCost.toFixed(1)} / 積載ボーナス ${breakdown.loadBonus.toFixed(1)} / 繁忙ペナルティ ${breakdown.vehicleBusyPenalty.toFixed(1)} / 追加便ペナルティ ${breakdown.extraTripPenalty.toFixed(1)} / 総コスト ${breakdown.totalCost.toFixed(1)}`
-      : `> 当前线路成本拆分: 晚到罚分 ${breakdown.latenessPenalty.toFixed(1)} / 超波次罚分 ${breakdown.waveLatePenalty.toFixed(1)} / 距离成本 ${breakdown.distanceCost.toFixed(1)} / 装载奖励 ${breakdown.loadBonus.toFixed(1)} / 繁忙罚分 ${breakdown.vehicleBusyPenalty.toFixed(1)} / 额外趟次罚分 ${breakdown.extraTripPenalty.toFixed(1)} / 总成本 ${breakdown.totalCost.toFixed(1)}`,
+      ? `> 鐝惧湪銉兗銉堛伄銈炽偣銉堝唴瑷? 閬呯潃銉氥儕銉儐銈?${breakdown.latenessPenalty.toFixed(1)} / 娉㈡瓒呴亷銉氥儕銉儐銈?${breakdown.waveLatePenalty.toFixed(1)} / 璺濋洟銈炽偣銉?${breakdown.distanceCost.toFixed(1)} / 绌嶈級銉溿兗銉娿偣 ${breakdown.loadBonus.toFixed(1)} / 绻佸繖銉氥儕銉儐銈?${breakdown.vehicleBusyPenalty.toFixed(1)} / 杩藉姞渚裤儦銉娿儷銉嗐偅 ${breakdown.extraTripPenalty.toFixed(1)} / 绶忋偝銈广儓 ${breakdown.totalCost.toFixed(1)}`
+      : `> 褰撳墠绾胯矾鎴愭湰鎷嗗垎: 鏅氬埌缃氬垎 ${breakdown.latenessPenalty.toFixed(1)} / 瓒呮尝娆＄綒鍒?${breakdown.waveLatePenalty.toFixed(1)} / 璺濈鎴愭湰 ${breakdown.distanceCost.toFixed(1)} / 瑁呰浇濂栧姳 ${breakdown.loadBonus.toFixed(1)} / 绻佸繖缃氬垎 ${breakdown.vehicleBusyPenalty.toFixed(1)} / 棰濆瓒熸缃氬垎 ${breakdown.extraTripPenalty.toFixed(1)} / 鎬绘垚鏈?${breakdown.totalCost.toFixed(1)}`,
     "",
   ];
   const fallbackWaveLogs = (result.traceLog || []).filter((entry) => {
@@ -10469,7 +10460,7 @@ function buildTraceNarrative(result, plan, trip, wave) {
     return keys.has(String(entry.algorithmKey || ""));
   });
   if (waveLogs.length) {
-    lines.push(lang() === "ja" ? "[波次レベル探索（当該波次）]" : "[波次级搜索（当前波次）]");
+    lines.push(lang() === "ja" ? "[娉㈡銉儥銉帰绱紙褰撹┎娉㈡锛塢" : "[娉㈡绾ф悳绱紙褰撳墠娉㈡锛塢");
     waveLogs.slice(0, 28).forEach((entry) => {
       const stage = String(entry.stage || "").trim();
       const stageTag = stage ? `[${stage}] ` : "";
@@ -10478,17 +10469,17 @@ function buildTraceNarrative(result, plan, trip, wave) {
       const cb = entry?.costBreakdown || null;
       if (cb && typeof cb === "object") {
         const line = lang() === "ja"
-          ? `  cost = 到店超偏差罚分 ${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 晚到罚分 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 超波次罚分 ${Number(cb.waveLatePenalty || 0).toFixed(1)} + 车辆续跑罚分 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 额外趟次罚分 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 超时路线罚分 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 距离成本 ${Number(cb.distanceCost || 0).toFixed(1)} - 装载抵扣 ${Number(cb.loadBonus || 0).toFixed(1)}`
-          : `  cost = 到店超偏差罚分 ${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 晚到罚分 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 超波次罚分 ${Number(cb.waveLatePenalty || 0).toFixed(1)} + 车辆续跑罚分 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 额外趟次罚分 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 超时路线罚分 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 距离成本 ${Number(cb.distanceCost || 0).toFixed(1)} - 装载抵扣 ${Number(cb.loadBonus || 0).toFixed(1)}`;
+          ? `  cost = 鍒板簵瓒呭亸宸綒鍒?${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 鏅氬埌缃氬垎 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 瓒呮尝娆＄綒鍒?${Number(cb.waveLatePenalty || 0).toFixed(1)} + 杞﹁締缁窇缃氬垎 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 棰濆瓒熸缃氬垎 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 瓒呮椂璺嚎缃氬垎 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 璺濈鎴愭湰 ${Number(cb.distanceCost || 0).toFixed(1)} - 瑁呰浇鎶垫墸 ${Number(cb.loadBonus || 0).toFixed(1)}`
+          : `  cost = 鍒板簵瓒呭亸宸綒鍒?${Number(cb.arrivalViolationPenalty || 0).toFixed(1)} + 鏅氬埌缃氬垎 ${Number(cb.latenessPenalty || 0).toFixed(1)} + 瓒呮尝娆＄綒鍒?${Number(cb.waveLatePenalty || 0).toFixed(1)} + 杞﹁締缁窇缃氬垎 ${Number(cb.vehicleBusyPenalty || 0).toFixed(1)} + 棰濆瓒熸缃氬垎 ${Number(cb.extraTripPenalty || 0).toFixed(1)} + 瓒呮椂璺嚎缃氬垎 ${Number(cb.lateRoutePenalty || 0).toFixed(1)} + 璺濈鎴愭湰 ${Number(cb.distanceCost || 0).toFixed(1)} - 瑁呰浇鎶垫墸 ${Number(cb.loadBonus || 0).toFixed(1)}`;
         lines.push(line);
       }
     });
     lines.push("");
   } else if (fallbackWaveLogs.length) {
-    lines.push(lang() === "ja" ? "[波次レベル探索（アルゴリズム全体）]" : "[波次级搜索（该算法全局）]");
+    lines.push(lang() === "ja" ? "[娉㈡銉儥銉帰绱紙銈儷銈淬儶銈恒儬鍏ㄤ綋锛塢" : "[娉㈡绾ф悳绱紙璇ョ畻娉曞叏灞€锛塢");
     lines.push(lang() === "ja"
-      ? "> この便に対応する波次ログはありません。代わりに本ラウンドで当該アルゴリズムが実行した探索ログを表示します。"
-      : "> 当前这趟没有命中该算法的本波次日志，下面展示该算法本轮真实执行的全局搜索日志。");
+      ? "> 銇撱伄渚裤伀瀵惧繙銇欍倠娉㈡銉偘銇亗銈娿伨銇涖倱銆備唬銈忋倞銇湰銉┿偊銉炽儔銇у綋瑭层偄銉偞銉偤銉犮亴瀹熻銇椼仧鎺㈢储銉偘銈掕〃绀恒仐銇俱仚銆?
+      : "> 褰撳墠杩欒稛娌℃湁鍛戒腑璇ョ畻娉曠殑鏈尝娆℃棩蹇楋紝涓嬮潰灞曠ず璇ョ畻娉曟湰杞湡瀹炴墽琛岀殑鍏ㄥ眬鎼滅储鏃ュ織銆?);
     fallbackWaveLogs.slice(0, 28).forEach((entry) => {
       const stage = String(entry.stage || "").trim();
       const stageTag = stage ? `[${stage}] ` : "";
@@ -10503,45 +10494,45 @@ function buildTraceNarrative(result, plan, trip, wave) {
     const startCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("start")).length;
     const finishCount = waveLogs.filter((entry) => String(entry?.stage || "").includes("finish")).length;
     const costLines = waveLogs.filter((entry) => entry?.costBreakdown && typeof entry.costBreakdown === "object").length;
-    lines.push(lang() === "ja" ? "[探索日志统计]" : "[搜索日志统计]");
+    lines.push(lang() === "ja" ? "[鎺㈢储鏃ュ織缁熻]" : "[鎼滅储鏃ュ織缁熻]");
     lines.push(lang() === "ja"
-      ? `${algoLabel(algorithmKey)} の本輪ログ: 開始 ${startCount} 件 / 反復 ${iterCount} 件 / 最良更新 ${bestCount} 件 / 終了 ${finishCount} 件 / コスト内訳付き ${costLines} 件。`
-      : `${algoLabel(algorithmKey)} 本轮日志统计：开始 ${startCount} 条 / 迭代 ${iterCount} 条 / 刷新最优 ${bestCount} 条 / 结束 ${finishCount} 条 / 含成本拆分 ${costLines} 条。`);
+      ? `${algoLabel(algorithmKey)} 銇湰杓儹銈? 闁嬪 ${startCount} 浠?/ 鍙嶅京 ${iterCount} 浠?/ 鏈€鑹洿鏂?${bestCount} 浠?/ 绲備簡 ${finishCount} 浠?/ 銈炽偣銉堝唴瑷充粯銇?${costLines} 浠躲€俙
+      : `${algoLabel(algorithmKey)} 鏈疆鏃ュ織缁熻锛氬紑濮?${startCount} 鏉?/ 杩唬 ${iterCount} 鏉?/ 鍒锋柊鏈€浼?${bestCount} 鏉?/ 缁撴潫 ${finishCount} 鏉?/ 鍚垚鏈媶鍒?${costLines} 鏉°€俙);
     lines.push("");
     return lines;
   }
   if (!traces.length) {
-    lines.push(lang() === "ja" ? "[便内割当比較]" : "[趟内分配比较]");
+    lines.push(lang() === "ja" ? "[渚垮唴鍓插綋姣旇純]" : "[瓒熷唴鍒嗛厤姣旇緝]");
     lines.push(lang() === "ja"
-      ? "この便に直結する挿入比較ログは未記録です（上段に実際の探索ログを表示）。"
-      : "该算法本轮未记录“这趟直连的插入比较日志”（上面已展示真实搜索日志）。");
+      ? "銇撱伄渚裤伀鐩寸祼銇欍倠鎸垮叆姣旇純銉偘銇湭瑷橀尣銇с仚锛堜笂娈点伀瀹熼殯銇帰绱儹銈般倰琛ㄧず锛夈€?
+      : "璇ョ畻娉曟湰杞湭璁板綍鈥滆繖瓒熺洿杩炵殑鎻掑叆姣旇緝鏃ュ織鈥濓紙涓婇潰宸插睍绀虹湡瀹炴悳绱㈡棩蹇楋級銆?);
     lines.push("");
     return lines;
   }
-  lines.push(lang() === "ja" ? "[便内割当比較]" : "[趟内分配比较]");
+  lines.push(lang() === "ja" ? "[渚垮唴鍓插綋姣旇純]" : "[瓒熷唴鍒嗛厤姣旇緝]");
   traces.forEach((entry, index) => {
     lines.push(lang() === "ja"
-      ? `[計算 ${index + 1}] 店舗 ${entry.storeId} ${entry.storeName}`
-      : `[计算 ${index + 1}] 门店 ${entry.storeId} ${entry.storeName}`);
+      ? `[瑷堢畻 ${index + 1}] 搴楄垪 ${entry.storeId} ${entry.storeName}`
+      : `[璁＄畻 ${index + 1}] 闂ㄥ簵 ${entry.storeId} ${entry.storeName}`);
     lines.push(lang() === "ja"
-      ? `  目的: どの車両のどの便・どの位置に入れると総コストが最も低くなるかを比較`
-      : `  目标: 比较“插入哪辆车、哪一趟、哪个位置”时整体验证后的综合成本`);
+      ? `  鐩殑: 銇┿伄杌婁浮銇仼銇究銉汇仼銇綅缃伀鍏ャ倢銈嬨仺绶忋偝銈广儓銇屾渶銈備綆銇忋仾銈嬨亱銈掓瘮杓僠
+      : `  鐩爣: 姣旇緝鈥滄彃鍏ュ摢杈嗚溅銆佸摢涓€瓒熴€佸摢涓綅缃€濇椂鏁翠綋楠岃瘉鍚庣殑缁煎悎鎴愭湰`);
     entry.vehicleEvaluations.slice(0, 4).forEach((item, vehicleRank) => {
       lines.push(lang() === "ja"
-        ? `  候補車 ${vehicleRank + 1}: ${item.plateNo} | 挿入案 ${item.optionCount} 個 | 最良コスト ${item.bestCost.toFixed(1)} | 採用便 ${item.chosenTripNo}`
-        : `  候选车 ${vehicleRank + 1}: ${item.plateNo} | 插入方案 ${item.optionCount} 个 | 最优成本 ${item.bestCost.toFixed(1)} | 落在第 ${item.chosenTripNo} 趟`);
+        ? `  鍊欒杌?${vehicleRank + 1}: ${item.plateNo} | 鎸垮叆妗?${item.optionCount} 鍊?| 鏈€鑹偝銈广儓 ${item.bestCost.toFixed(1)} | 鎺＄敤渚?${item.chosenTripNo}`
+        : `  鍊欓€夎溅 ${vehicleRank + 1}: ${item.plateNo} | 鎻掑叆鏂规 ${item.optionCount} 涓?| 鏈€浼樻垚鏈?${item.bestCost.toFixed(1)} | 钀藉湪绗?${item.chosenTripNo} 瓒焋);
       item.candidates.slice(0, 2).forEach((candidate, candidateIndex) => {
         lines.push(lang() === "ja"
-          ? `    - 案 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "新便" : `第${candidate.tripIndex + 1}便・位置${candidate.insertAt + 1}`} | ルート ${candidate.routePreview} | 距離 ${candidate.totalDistance.toFixed(1)} km | 波次超過 ${candidate.waveLateMinutes.toFixed(0)} 分`
-          : `    - 方案 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "新开一趟" : `第${candidate.tripIndex + 1}趟第${candidate.insertAt + 1}个位置`} | 路线 ${candidate.routePreview} | 里程 ${candidate.totalDistance.toFixed(1)} km | 超波次 ${candidate.waveLateMinutes.toFixed(0)} 分`);
+          ? `    - 妗?${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "鏂颁究" : `绗?{candidate.tripIndex + 1}渚裤兓浣嶇疆${candidate.insertAt + 1}`} | 銉兗銉?${candidate.routePreview} | 璺濋洟 ${candidate.totalDistance.toFixed(1)} km | 娉㈡瓒呴亷 ${candidate.waveLateMinutes.toFixed(0)} 鍒哷
+          : `    - 鏂规 ${candidateIndex + 1}: ${candidate.mode === "new-trip" ? "鏂板紑涓€瓒? : `绗?{candidate.tripIndex + 1}瓒熺${candidate.insertAt + 1}涓綅缃甡} | 璺嚎 ${candidate.routePreview} | 閲岀▼ ${candidate.totalDistance.toFixed(1)} km | 瓒呮尝娆?${candidate.waveLateMinutes.toFixed(0)} 鍒哷);
       });
     });
     lines.push(lang() === "ja"
-      ? `  => 最終採用: ${entry.chosenPlate} / 第${entry.chosenTripNo}便 / コスト ${entry.bestCost.toFixed(1)}`
-      : `  => 最终采用: ${entry.chosenPlate} / 第${entry.chosenTripNo}趟 / 成本 ${entry.bestCost.toFixed(1)}`);
+      ? `  => 鏈€绲傛帯鐢? ${entry.chosenPlate} / 绗?{entry.chosenTripNo}渚?/ 銈炽偣銉?${entry.bestCost.toFixed(1)}`
+      : `  => 鏈€缁堥噰鐢? ${entry.chosenPlate} / 绗?{entry.chosenTripNo}瓒?/ 鎴愭湰 ${entry.bestCost.toFixed(1)}`);
     lines.push(lang() === "ja"
-      ? "  理由: その時点で制約を守りつつ、最も低コストだったため"
-      : "  原因: 在满足当前约束的候选方案里，这个方案综合成本最低");
+      ? "  鐞嗙敱: 銇濄伄鏅傜偣銇у埗绱勩倰瀹堛倞銇ゃ仱銆佹渶銈備綆銈炽偣銉堛仩銇ｃ仧銇熴倎"
+      : "  鍘熷洜: 鍦ㄦ弧瓒冲綋鍓嶇害鏉熺殑鍊欓€夋柟妗堥噷锛岃繖涓柟妗堢患鍚堟垚鏈渶浣?);
     lines.push("");
   });
   return lines;
@@ -10550,45 +10541,45 @@ function buildTraceNarrative(result, plan, trip, wave) {
 function buildProcessNarrative(result, plan, trip, scenario, wave, isMultiCompare = false) {
   const steps = buildProcessSteps(plan, trip, scenario);
   const lines = [
-    lang() === "ja" ? `> ${wave.waveId} / ${plan.vehicle.plateNo} / 第${trip.tripNo}便 ${L("playback")}` : `> ${wave.waveId} / ${plan.vehicle.plateNo} / 第${trip.tripNo}${L("tripSuffix")} ${L("playback")}`,
+    lang() === "ja" ? `> ${wave.waveId} / ${plan.vehicle.plateNo} / 绗?{trip.tripNo}渚?${L("playback")}` : `> ${wave.waveId} / ${plan.vehicle.plateNo} / 绗?{trip.tripNo}${L("tripSuffix")} ${L("playback")}`,
     `> ${L("route")}: ${[DC.id, ...trip.route, DC.id].join(" -> ")}`,
     `> ${L("tripRoundKm")}: ${trip.totalDistance.toFixed(1)} km`,
     `> ${L("tripLoadRate")}: ${formatRate(trip.loadRate)}`,
     "",
   ];
   lines.push(...buildTraceNarrative(result, plan, trip, wave));
-  if (isMultiCompare) lines.push(lang() === "ja" ? "> 以下は当該アルゴリズムの最終ルート実行ログです。" : "> 以下是该算法最终线路执行日志。");
-  lines.push(lang() === "ja" ? "> 以下は最終確定ルートの実行回放です。" : "> 以下是最终确定线路的执行回放。");
+  if (isMultiCompare) lines.push(lang() === "ja" ? "> 浠ヤ笅銇綋瑭层偄銉偞銉偤銉犮伄鏈€绲傘儷銉笺儓瀹熻銉偘銇с仚銆? : "> 浠ヤ笅鏄绠楁硶鏈€缁堢嚎璺墽琛屾棩蹇椼€?);
+  lines.push(lang() === "ja" ? "> 浠ヤ笅銇渶绲傜⒑瀹氥儷銉笺儓銇疅琛屽洖鏀俱仹銇欍€? : "> 浠ヤ笅鏄渶缁堢‘瀹氱嚎璺殑鎵ц鍥炴斁銆?);
   lines.push("");
   steps.forEach((step) => {
-    lines.push(lang() === "ja" ? `[ステップ ${step.index}] ${step.storeId} ${step.storeName} を追加` : `[步骤 ${step.index}] 加入 ${step.storeId} ${step.storeName}`);
+    lines.push(lang() === "ja" ? `[銈广儐銉冦儣 ${step.index}] ${step.storeId} ${step.storeName} 銈掕拷鍔燻 : `[姝ラ ${step.index}] 鍔犲叆 ${step.storeId} ${step.storeName}`);
     lines.push(`  ${L("route")}: ${step.route}`);
     lines.push(lang() === "ja"
-      ? `  ${L("leg")}距離: +${step.legDistance.toFixed(1)} km | 累計距離: ${step.cumulativeDistance.toFixed(1)} km`
-      : `  ${L("leg")}距离: +${step.legDistance.toFixed(1)} km | 累计距离: ${step.cumulativeDistance.toFixed(1)} km`);
+      ? `  ${L("leg")}璺濋洟: +${step.legDistance.toFixed(1)} km | 绱▓璺濋洟: ${step.cumulativeDistance.toFixed(1)} km`
+      : `  ${L("leg")}璺濈: +${step.legDistance.toFixed(1)} km | 绱璺濈: ${step.cumulativeDistance.toFixed(1)} km`);
     lines.push(`  ${L("totalLoad")}: ${step.loadBoxes}/${getVehicleSolveCapacity(plan.vehicle)} | ${L("avgLoad")}: ${formatRate(step.loadRate)}`);
     lines.push(`  ${L("arrive")}: ${formatTime(step.arrival)} | ${L("unloadMinutes")}: ${formatMinutesValue(step.storeId ? scenario.storeMap.get(step.storeId)?.actualServiceMinutes || scenario.storeMap.get(step.storeId)?.serviceMinutes || 0 : 0)} ${L("minutes")} | ${L("leave")}: ${formatTime(step.leave)}`);
-    lines.push(`  ${L("desired")}: ${trip.stops[step.index - 1]?.desiredArrival || "--:--"} | ${lang() === "ja" ? "帰庫見込み" : "预计回仓"}: ${formatTime(step.estimatedBack)}`);
-    lines.push(`  ${lang() === "ja" ? "状態" : "状态"}: ${step.onTime ? L("notLate") : L("late")}`);
+    lines.push(`  ${L("desired")}: ${trip.stops[step.index - 1]?.desiredArrival || "--:--"} | ${lang() === "ja" ? "甯板韩瑕嬭炯銇? : "棰勮鍥炰粨"}: ${formatTime(step.estimatedBack)}`);
+    lines.push(`  ${lang() === "ja" ? "鐘舵厠" : "鐘舵€?}: ${step.onTime ? L("notLate") : L("late")}`);
     lines.push("");
   });
-  lines.push(lang() === "ja" ? "> リプレイ終了" : "> 回放结束");
+  lines.push(lang() === "ja" ? "> 銉儣銉偆绲備簡" : "> 鍥炴斁缁撴潫");
   return lines.join("\n");
 }
 
 function buildPenaltyRuleCard() {
   return `
     <div class="penalty-rule-card">
-      <div class="penalty-rule-title">${lang() === "ja" ? "ペナルティルール" : "罚分规则说明"}</div>
+      <div class="penalty-rule-title">${lang() === "ja" ? "銉氥儕銉儐銈ｃ儷銉笺儷" : "缃氬垎瑙勫垯璇存槑"}</div>
       <div class="penalty-rule-list">
-        <span class="chip">晚到罚分：每超 1 分钟 +60</span>
-        <span class="chip">超允许偏差：每超 1 分钟 +20000</span>
-        <span class="chip">超波次罚分：每超 1 分钟 +80</span>
-        <span class="chip">额外趟次：每多 1 趟 +180</span>
-        <span class="chip">距离成本：每 1 km 按 0.45 折算</span>
-        <span class="chip">装载奖励：每多 1 箱按 0.08 抵扣</span>
+        <span class="chip">鏅氬埌缃氬垎锛氭瘡瓒?1 鍒嗛挓 +60</span>
+        <span class="chip">瓒呭厑璁稿亸宸細姣忚秴 1 鍒嗛挓 +20000</span>
+        <span class="chip">瓒呮尝娆＄綒鍒嗭細姣忚秴 1 鍒嗛挓 +80</span>
+        <span class="chip">棰濆瓒熸锛氭瘡澶?1 瓒?+180</span>
+        <span class="chip">璺濈鎴愭湰锛氭瘡 1 km 鎸?0.45 鎶樼畻</span>
+        <span class="chip">瑁呰浇濂栧姳锛氭瘡澶?1 绠辨寜 0.08 鎶垫墸</span>
       </div>
-      <p class="penalty-rule-note">${lang() === "ja" ? "いま超過がなければ該当ペナルティは 0 と表示されます。超過が発生すると、分単位または便単位で加算され、固定で 1 回だけではありません。" : "当前没有超出时，对应罚分会显示为 0；一旦超出，会按分钟或按趟次继续累加，不是固定只罚一次。"}</p>
+      <p class="penalty-rule-note">${lang() === "ja" ? "銇勩伨瓒呴亷銇屻仾銇戙倢銇拌┎褰撱儦銉娿儷銉嗐偅銇?0 銇ㄨ〃绀恒仌銈屻伨銇欍€傝秴閬庛亴鐧虹敓銇欍倠銇ㄣ€佸垎鍗樹綅銇俱仧銇究鍗樹綅銇у姞绠椼仌銈屻€佸浐瀹氥仹 1 鍥炪仩銇戙仹銇亗銈娿伨銇涖倱銆? : "褰撳墠娌℃湁瓒呭嚭鏃讹紝瀵瑰簲缃氬垎浼氭樉绀轰负 0锛涗竴鏃﹁秴鍑猴紝浼氭寜鍒嗛挓鎴栨寜瓒熸缁х画绱姞锛屼笉鏄浐瀹氬彧缃氫竴娆°€?}</p>
     </div>
   `;
 }
@@ -10598,339 +10589,339 @@ function buildShowcaseNarrative() {
   const selectedAlgorithms = (currentPreset.algorithms || []).map((key) => algoLabel(key));
   if (lang() === "ja") {
     return [
-      "都市配送AI調度システム",
+      "閮藉競閰嶉€丄I瑾垮害銈枫偣銉嗐儬",
       "",
-      "中核ポジション",
-      "これは単なる配車ツールではありません。アルゴリズム意思決定チェーン、説明可能な調度、全工程の履歴保持を備えた AI 調度オペレーティングシステムです。",
+      "涓牳銉濄偢銈枫儳銉?,
+      "銇撱倢銇崢銇倠閰嶈粖銉勩兗銉仹銇亗銈娿伨銇涖倱銆傘偄銉偞銉偤銉犳剰鎬濇焙瀹氥儊銈с兗銉炽€佽鏄庡彲鑳姐仾瑾垮害銆佸叏宸ョ▼銇饱姝翠繚鎸併倰鍌欍亪銇?AI 瑾垮害銈儦銉兗銉嗐偅銉炽偘銈枫偣銉嗐儬銇с仚銆?,
       "",
-      "市販の大半の調度システムは、入力データ → 単一アルゴリズム実行 → 表出力の 3 段階で終わります。配車担当は結果を受け取っても、その案がなぜ出たのか、なぜ別案ではないのかを知ることができません。",
+      "甯傝博銇ぇ鍗娿伄瑾垮害銈枫偣銉嗐儬銇€佸叆鍔涖儑銉笺偪 鈫?鍗樹竴銈儷銈淬儶銈恒儬瀹熻 鈫?琛ㄥ嚭鍔涖伄 3 娈甸殠銇х祩銈忋倞銇俱仚銆傞厤杌婃媴褰撱伅绲愭灉銈掑彈銇戝彇銇ｃ仸銈傘€併仢銇銇屻仾銇滃嚭銇熴伄銇嬨€併仾銇滃垾妗堛仹銇仾銇勩伄銇嬨倰鐭ャ倠銇撱仺銇屻仹銇嶃伨銇涖倱銆?,
       "",
-      "このシステムは違います。9 つのアルゴリズムが協調して意思決定する過程をそのまま可視化し、配車担当が見て、理解し、介入し、振り返れるようにします。経営層は追跡し、比較し、判断できます。",
+      "銇撱伄銈枫偣銉嗐儬銇仌銇勩伨銇欍€? 銇ゃ伄銈儷銈淬儶銈恒儬銇屽崝瑾裤仐銇︽剰鎬濇焙瀹氥仚銈嬮亷绋嬨倰銇濄伄銇俱伨鍙鍖栥仐銆侀厤杌婃媴褰撱亴瑕嬨仸銆佺悊瑙ｃ仐銆佷粙鍏ャ仐銆佹尟銈婅繑銈屻倠銈堛亞銇仐銇俱仚銆傜祵鍠跺堡銇拷璺°仐銆佹瘮杓冦仐銆佸垽鏂仹銇嶃伨銇欍€?,
       "",
-      "適用業種：チェーン小売、飲食店舗、医薬配送、コミュニティ EC、コールドチェーン生鮮、セントラルキッチン配送、ガソリンスタンド補充、共同配送 3PL など。「同じ車群で、1 日複数回、各拠点が固有の時間窓と補充リズムを持つ」業務ならそのまま展開できます。",
+      "閬╃敤妤ó锛氥儊銈с兗銉冲皬澹层€侀２椋熷簵鑸椼€佸尰钖厤閫併€併偝銉熴儱銉嬨儐銈?EC銆併偝銉笺儷銉夈儊銈с兗銉崇敓楫€併偦銉炽儓銉┿儷銈儍銉併兂閰嶉€併€併偓銈姐儶銉炽偣銈裤兂銉夎鍏呫€佸叡鍚岄厤閫?3PL 銇仼銆傘€屽悓銇樿粖缇ゃ仹銆? 鏃ヨ鏁板洖銆佸悇鎷犵偣銇屽浐鏈夈伄鏅傞枔绐撱仺瑁滃厖銉偤銉犮倰鎸併仱銆嶆キ鍕欍仾銈夈仢銇伨銇惧睍闁嬨仹銇嶃伨銇欍€?,
       "",
-      "鲸略使調度ソルバー - 製品概要",
-      "9 大アルゴリズムエンジン、真の工業級最適化。",
-      "鲸略使調度ソルバーは VRPTW（時間窓付き車両経路問題）向けの企業級インテリジェント調度システムであり、コアは 9 種の本格メタヒューリスティックです。単なるルール寄せ集めではありません。",
+      "椴哥暐浣胯搴︺偨銉儛銉?- 瑁藉搧姒傝",
+      "9 澶с偄銉偞銉偤銉犮偍銉炽偢銉炽€佺湡銇伐妤礆鏈€閬╁寲銆?,
+      "椴哥暐浣胯搴︺偨銉儛銉笺伅 VRPTW锛堟檪闁撶獡浠樸亶杌婁浮绲岃矾鍟忛锛夊悜銇戙伄浼佹キ绱氥偆銉炽儐銉偢銈с兂銉堣搴︺偡銈广儐銉犮仹銇傘倞銆併偝銈伅 9 绋伄鏈牸銉°偪銉掋儱銉笺儶銈广儐銈ｃ儍銈仹銇欍€傚崢銇倠銉兗銉瘎銇涢泦銈併仹銇亗銈娿伨銇涖倱銆?,
       "",
-      "コアアルゴリズムマトリクス",
-      "群知能系：ACO（蟻コロニー最適化）は情報素揮発とエリート戦略を実装。PSO（粒子群最適化）は速度-位置更新を実装。",
-      "局所探索系：SA（焼きなまし）は Metropolis 基準と適応リスタートを採用。Tabu（タブー探索）は禁忌表と特赦機構を実装。LNS（大近傍探索）は destroy-repair の 2 段最適化を実装。",
-      "進化計算系：GA（遺伝的アルゴリズム）はトーナメント選択、多点交叉、3 種の変異演算子をサポート。",
-      "混合・構築系：Hybrid は SA+LNS+Tabu の 3 段最適化を直列化。Clark-Wright 節約法と VRPTW 貪欲挿入で高品質初期解を生成。",
+      "銈炽偄銈儷銈淬儶銈恒儬銉炪儓銉偗銈?,
+      "缇ょ煡鑳界郴锛欰CO锛堣熁銈炽儹銉嬨兗鏈€閬╁寲锛夈伅鎯呭牨绱犳彯鐧恒仺銈ㄣ儶銉笺儓鎴︾暐銈掑疅瑁呫€侾SO锛堢矑瀛愮兢鏈€閬╁寲锛夈伅閫熷害-浣嶇疆鏇存柊銈掑疅瑁呫€?,
+      "灞€鎵€鎺㈢储绯伙細SA锛堢劶銇嶃仾銇俱仐锛夈伅 Metropolis 鍩烘簴銇ㄩ仼蹇溿儶銈广偪銉笺儓銈掓帯鐢ㄣ€俆abu锛堛偪銉栥兗鎺㈢储锛夈伅绂佸繉琛ㄣ仺鐗硅郸姗熸銈掑疅瑁呫€侺NS锛堝ぇ杩戝倣鎺㈢储锛夈伅 destroy-repair 銇?2 娈垫渶閬╁寲銈掑疅瑁呫€?,
+      "閫插寲瑷堢畻绯伙細GA锛堥伜浼濈殑銈儷銈淬儶銈恒儬锛夈伅銉堛兗銉娿儭銉炽儓閬告姙銆佸鐐逛氦鍙夈€? 绋伄澶夌暟婕旂畻瀛愩倰銈点儩銉笺儓銆?,
+      "娣峰悎銉绘绡夌郴锛欻ybrid 銇?SA+LNS+Tabu 銇?3 娈垫渶閬╁寲銈掔洿鍒楀寲銆侰lark-Wright 绡€绱勬硶銇?VRPTW 璨鎸垮叆銇ч珮鍝佽唱鍒濇湡瑙ｃ倰鐢熸垚銆?,
       "",
-      "自動チューニングと並列加速",
-      "ベイズ最適化（ガウス過程代理モデル）を統合し、最適パラメータ探索を自動化。チューニング効率を約 70% 向上。",
-      "マルチコア並列評価と GPU（CuPy）加速をサポートし、8 コア環境で最大 5.2 倍の高速化。",
+      "鑷嫊銉併儱銉笺儖銉炽偘銇ㄤ甫鍒楀姞閫?,
+      "銉欍偆銈烘渶閬╁寲锛堛偓銈︺偣閬庣▼浠ｇ悊銉儑銉級銈掔当鍚堛仐銆佹渶閬┿儜銉┿儭銉笺偪鎺㈢储銈掕嚜鍕曞寲銆傘儊銉ャ兗銉嬨兂銈板姽鐜囥倰绱?70% 鍚戜笂銆?,
+      "銉炪儷銉併偝銈甫鍒楄渚°仺 GPU锛圕uPy锛夊姞閫熴倰銈点儩銉笺儓銇椼€? 銈炽偄鐠板銇ф渶澶?5.2 鍊嶃伄楂橀€熷寲銆?,
       "",
-      "アルゴリズム構成",
-      "構築ヒューリスティック（2 種）→ 初期解を高速生成",
-      "改良アルゴリズム（6 種）→ 深度最適化",
-      "混合戦略（1 種）→ 長所を統合",
+      "銈儷銈淬儶銈恒儬妲嬫垚",
+      "妲嬬瘔銉掋儱銉笺儶銈广儐銈ｃ儍銈紙2 绋級鈫?鍒濇湡瑙ｃ倰楂橀€熺敓鎴?,
+      "鏀硅壇銈儷銈淬儶銈恒儬锛? 绋級鈫?娣卞害鏈€閬╁寲",
+      "娣峰悎鎴︾暐锛? 绋級鈫?闀锋墍銈掔当鍚?,
       "",
-      "鲸略使調度ソルバー - 9 大アルゴリズムコア",
-      "1. ACO：情報素正帰還に基づく群知能手法。情報素行列、確率選択、エリート蟻戦略、情報素揮発を実装。",
-      "2. PSO：粒子の位置・速度を反復更新し、個体最良と全体最良を保持。慣性重み減衰で探索と収束を両立。",
-      "3. SA：Metropolis 受理規則と温度減衰を採用。局所最適脱出のための確率ジャンプ、適応再始動と多近傍演算子を搭載。",
-      "4. Tabu：禁忌表で最近の移動を記録し、特赦規則と渇望水準で破禁。近傍探索で継続的に改善。",
-      "5. LNS：破壊と修復の 2 段フレーム。破壊はランダム除去/最悪除去、修復は貪欲挿入/遺憾挿入、さらに SA 受理規則を併用。",
-      "6. GA：トーナメント選択、部分写像交叉、3 種変異（再配置・交換・2-opt）、エリート保持を実装。",
-      "7. Hybrid：SA→LNS→Tabu の 3 段を直列接続し、前段結果を後段へ引き継ぐ統合最適化。",
-      "8. Clark-Wright 節約法：節約値計算、可行ルート統合、制約チェックで高品質初期解を高速生成。",
-      "9. VRPTW 貪欲挿入：時間窓優先で店舗を並べ、最安挿入で逐次配置し、可行性を逐次検証。",
+      "椴哥暐浣胯搴︺偨銉儛銉?- 9 澶с偄銉偞銉偤銉犮偝銈?,
+      "1. ACO锛氭儏鍫辩礌姝ｅ赴閭勩伀鍩恒仴銇忕兢鐭ヨ兘鎵嬫硶銆傛儏鍫辩礌琛屽垪銆佺⒑鐜囬伕鎶炪€併偍銉兗銉堣熁鎴︾暐銆佹儏鍫辩礌鎻櫤銈掑疅瑁呫€?,
+      "2. PSO锛氱矑瀛愩伄浣嶇疆銉婚€熷害銈掑弽寰╂洿鏂般仐銆佸€嬩綋鏈€鑹仺鍏ㄤ綋鏈€鑹倰淇濇寔銆傛叄鎬ч噸銇挎笡琛般仹鎺㈢储銇ㄥ弾鏉熴倰涓＄珛銆?,
+      "3. SA锛歁etropolis 鍙楃悊瑕忓墖銇ㄦ俯搴︽笡琛般倰鎺＄敤銆傚眬鎵€鏈€閬╄劚鍑恒伄銇熴倎銇⒑鐜囥偢銉ｃ兂銉椼€侀仼蹇滃啀濮嬪嫊銇ㄥ杩戝倣婕旂畻瀛愩倰鎼級銆?,
+      "4. Tabu锛氱蹇岃〃銇ф渶杩戙伄绉诲嫊銈掕閷层仐銆佺壒璧﹁鍓囥仺娓囨湜姘存簴銇х牬绂併€傝繎鍌嶆帰绱仹缍欑稓鐨勩伀鏀瑰杽銆?,
+      "5. LNS锛氱牬澹娿仺淇京銇?2 娈点儠銉兗銉犮€傜牬澹娿伅銉┿兂銉€銉犻櫎鍘?鏈€鎮櫎鍘汇€佷慨寰┿伅璨鎸垮叆/閬烘喚鎸垮叆銆併仌銈夈伀 SA 鍙楃悊瑕忓墖銈掍降鐢ㄣ€?,
+      "6. GA锛氥儓銉笺儕銉°兂銉堥伕鎶炪€侀儴鍒嗗啓鍍忎氦鍙夈€? 绋鐣帮紙鍐嶉厤缃兓浜ゆ彌銉?-opt锛夈€併偍銉兗銉堜繚鎸併倰瀹熻銆?,
+      "7. Hybrid锛歋A鈫扡NS鈫扵abu 銇?3 娈点倰鐩村垪鎺ョ稓銇椼€佸墠娈电祼鏋溿倰寰屾銇稿紩銇嶇稒銇愮当鍚堟渶閬╁寲銆?,
+      "8. Clark-Wright 绡€绱勬硶锛氱瘈绱勫€よ▓绠椼€佸彲琛屻儷銉笺儓绲卞悎銆佸埗绱勩儊銈с儍銈仹楂樺搧璩垵鏈熻В銈掗珮閫熺敓鎴愩€?,
+      "9. VRPTW 璨鎸垮叆锛氭檪闁撶獡鍎厛銇у簵鑸椼倰涓︺伖銆佹渶瀹夋尶鍏ャ仹閫愭閰嶇疆銇椼€佸彲琛屾€с倰閫愭妞滆銆?,
       "",
-      "9 大アルゴリズムの分散型インテリジェンス",
-      "アルゴリズムの寄せ集めではなく、役割配備です。各アルゴリズムは調度チェーンの中で置き換え不能な職責を担います。",
+      "9 澶с偄銉偞銉偤銉犮伄鍒嗘暎鍨嬨偆銉炽儐銉偢銈с兂銈?,
+      "銈儷銈淬儶銈恒儬銇瘎銇涢泦銈併仹銇仾銇忋€佸焦鍓查厤鍌欍仹銇欍€傚悇銈儷銈淬儶銈恒儬銇搴︺儊銈с兗銉炽伄涓仹缃亶鎻涖亪涓嶈兘銇伔璨倰鎷呫亜銇俱仚銆?,
       "",
-      "VRPTW：時間窓のゲートキーパー。時間窓違反のルートは初期案の段階で通しません。",
-      "Clark-Wright：距離と車両数の最適化器。ルート結合の節約値から車両数下界の参考を与えます。",
-      "GA：全体構造探索器。初期案の質に依存せず、大きな解空間を荒く探ります。",
-      "PSO：群知能探索器。複数粒子の並行探索で、直感的でない帰属再編を見つけるのが得意です。",
-      "ACO：経路フェロモン蓄積器。正のフィードバックで良い経路構造を繰り返し強化します。",
-      "Tabu：局所深掘り器。悪い波次を監視し、同じ失敗手に戻らないようにします。",
-      "LNS：大近傍修復器。悪いルートの局所構造を壊し、より良い断片で置き換えます。",
-      "Hybrid：多戦略融合エンジン。GA 的探索と局所探索を融合し、探索と利用のバランスを取ります。",
-      "SA：焼きなまし収束器。最終段で敢えて劣解も受け入れ、最後の局所最適にはまり込むのを防ぎます。",
+      "VRPTW锛氭檪闁撶獡銇偛銉笺儓銈兗銉戙兗銆傛檪闁撶獡閬曞弽銇儷銉笺儓銇垵鏈熸銇闅庛仹閫氥仐銇俱仜銈撱€?,
+      "Clark-Wright锛氳窛闆仺杌婁浮鏁般伄鏈€閬╁寲鍣ㄣ€傘儷銉笺儓绲愬悎銇瘈绱勫€ゃ亱銈夎粖涓℃暟涓嬬晫銇弬鑰冦倰涓庛亪銇俱仚銆?,
+      "GA锛氬叏浣撴閫犳帰绱㈠櫒銆傚垵鏈熸銇唱銇緷瀛樸仜銇氥€佸ぇ銇嶃仾瑙ｇ┖闁撱倰鑽掋亸鎺倞銇俱仚銆?,
+      "PSO锛氱兢鐭ヨ兘鎺㈢储鍣ㄣ€傝鏁扮矑瀛愩伄涓﹁鎺㈢储銇с€佺洿鎰熺殑銇с仾銇勫赴灞炲啀绶ㄣ倰瑕嬨仱銇戙倠銇亴寰楁剰銇с仚銆?,
+      "ACO锛氱祵璺儠銈с儹銉兂钃勭鍣ㄣ€傛銇儠銈ｃ兗銉夈儛銉冦偗銇ц壇銇勭祵璺閫犮倰绻般倞杩斻仐寮峰寲銇椼伨銇欍€?,
+      "Tabu锛氬眬鎵€娣辨帢銈婂櫒銆傛偑銇勬尝娆°倰鐩ｈ銇椼€佸悓銇樺け鏁楁墜銇埢銈夈仾銇勩倛銇嗐伀銇椼伨銇欍€?,
+      "LNS锛氬ぇ杩戝倣淇京鍣ㄣ€傛偑銇勩儷銉笺儓銇眬鎵€妲嬮€犮倰澹娿仐銆併倛銈婅壇銇勬柇鐗囥仹缃亶鎻涖亪銇俱仚銆?,
+      "Hybrid锛氬鎴︾暐铻嶅悎銈ㄣ兂銈搞兂銆侴A 鐨勬帰绱仺灞€鎵€鎺㈢储銈掕瀺鍚堛仐銆佹帰绱仺鍒╃敤銇儛銉┿兂銈广倰鍙栥倞銇俱仚銆?,
+      "SA锛氱劶銇嶃仾銇俱仐鍙庢潫鍣ㄣ€傛渶绲傛銇ф暍銇堛仸鍔ｈВ銈傚彈銇戝叆銈屻€佹渶寰屻伄灞€鎵€鏈€閬┿伀銇伨銈婅炯銈€銇倰闃层亷銇俱仚銆?,
       "",
-      "これら 9 つは一列に流して終わりではありません。現在の求解段階、目標、既存結果の質を見て、どれを何本、どの順でリレーするかを動的に決めます。",
+      "銇撱倢銈?9 銇ゃ伅涓€鍒椼伀娴併仐銇︾祩銈忋倞銇с伅銇傘倞銇俱仜銈撱€傜従鍦ㄣ伄姹傝В娈甸殠銆佺洰妯欍€佹棦瀛樼祼鏋溿伄璩倰瑕嬨仸銆併仼銈屻倰浣曟湰銆併仼銇爢銇с儶銉兗銇欍倠銇嬨倰鍕曠殑銇焙銈併伨銇欍€?,
       "",
-      "リレー求解：初期案から仕上げまでの知的意思決定チェーン",
-      "従来システム：1 本のアルゴリズムを回す → 結果を出す → 終了。",
-      "本システム：アルゴリズムをバトンでつなぎ、各段階に明確な役割と採用条件を持たせます。",
+      "銉儸銉兼眰瑙ｏ細鍒濇湡妗堛亱銈変粫涓娿亽銇俱仹銇煡鐨勬剰鎬濇焙瀹氥儊銈с兗銉?,
+      "寰撴潵銈枫偣銉嗐儬锛? 鏈伄銈儷銈淬儶銈恒儬銈掑洖銇?鈫?绲愭灉銈掑嚭銇?鈫?绲備簡銆?,
+      "鏈偡銈广儐銉狅細銈儷銈淬儶銈恒儬銈掋儛銉堛兂銇с仱銇亷銆佸悇娈甸殠銇槑纰恒仾褰瑰壊銇ㄦ帯鐢ㄦ潯浠躲倰鎸併仧銇涖伨銇欍€?,
       "",
-      "第一棒（初期案）     → VRPTW / Clark-Wright を並列実行し、2 つの骨格案を作成",
-      "         ↓",
-      "第二棒（全域探索）   → GA / PSO / ACO から目標に応じて 1〜2 本を選び、大規模再構成",
-      "         ↓",
-      "第三棒（局所強化）   → Hybrid / Tabu / LNS が悪い波次を噛み、細部まで磨く",
-      "         ↓",
-      "第四棒（収束）       → SA が最後の落とし穴を飛び越え、これ以上改善しないと確認して停止",
+      "绗竴妫掞紙鍒濇湡妗堬級     鈫?VRPTW / Clark-Wright 銈掍甫鍒楀疅琛屻仐銆? 銇ゃ伄楠ㄦ牸妗堛倰浣滄垚",
+      "         鈫?,
+      "绗簩妫掞紙鍏ㄥ煙鎺㈢储锛?  鈫?GA / PSO / ACO 銇嬨倝鐩銇繙銇樸仸 1銆? 鏈倰閬搞伋銆佸ぇ瑕忔ā鍐嶆鎴?,
+      "         鈫?,
+      "绗笁妫掞紙灞€鎵€寮峰寲锛?  鈫?Hybrid / Tabu / LNS 銇屾偑銇勬尝娆°倰鍣涖伩銆佺窗閮ㄣ伨銇х（銇?,
+      "         鈫?,
+      "绗洓妫掞紙鍙庢潫锛?      鈫?SA 銇屾渶寰屻伄钀姐仺銇楃┐銈掗銇宠秺銇堛€併亾銈屼互涓婃敼鍠勩仐銇亜銇ㄧ⒑瑾嶃仐銇﹀仠姝?,
       "",
-      "各段階の終了時にシステムは次を判定します。",
-      "接棒条件を満たすか（内部代価の低下が閾値を超えたか）",
-      "次の棒を飛ばすか（現案が十分に良いか）",
-      "悪化が大きい場合に巻き戻して再試行するか",
+      "鍚勬闅庛伄绲備簡鏅傘伀銈枫偣銉嗐儬銇銈掑垽瀹氥仐銇俱仚銆?,
+      "鎺ユ鏉′欢銈掓簚銇熴仚銇嬶紙鍐呴儴浠ｄ尽銇綆涓嬨亴闁惧€ゃ倰瓒呫亪銇熴亱锛?,
+      "娆°伄妫掋倰椋涖伆銇欍亱锛堢従妗堛亴鍗佸垎銇壇銇勩亱锛?,
+      "鎮寲銇屽ぇ銇嶃亜鍫村悎銇坊銇嶆埢銇椼仸鍐嶈│琛屻仚銈嬨亱",
       "",
-      "これはブラックボックスではありません。各棒の入力、出力、判断理由、内部代価の分解が画面に継続表示されます。",
+      "銇撱倢銇儢銉┿儍銈儨銉冦偗銈广仹銇亗銈娿伨銇涖倱銆傚悇妫掋伄鍏ュ姏銆佸嚭鍔涖€佸垽鏂悊鐢便€佸唴閮ㄤ唬渚°伄鍒嗚В銇岀敾闈伀缍欑稓琛ㄧず銇曘倢銇俱仚銆?,
       "",
-      "AI 中枢：3×3 アルゴリズムプールのリアルタイム可視化",
-      "中央の 3×3 パネルで、今回どのアルゴリズムが実際に点灯しているかをすぐ確認できます。",
-      `現在の方式：${currentStrategyLabel()} / 現在の目標：${currentGoalLabel()} / 今回のアルゴリズムチェーン：${selectedAlgorithms.join(" / ") || "なし"}`,
+      "AI 涓灑锛?脳3 銈儷銈淬儶銈恒儬銉椼兗銉伄銉偄銉偪銈ゃ儬鍙鍖?,
+      "涓ぎ銇?3脳3 銉戙儘銉仹銆佷粖鍥炪仼銇偄銉偞銉偤銉犮亴瀹熼殯銇偣鐏仐銇︺亜銈嬨亱銈掋仚銇愮⒑瑾嶃仹銇嶃伨銇欍€?,
+      `鐝惧湪銇柟寮忥細${currentStrategyLabel()} / 鐝惧湪銇洰妯欙細${currentGoalLabel()} / 浠婂洖銇偄銉偞銉偤銉犮儊銈с兗銉筹細${selectedAlgorithms.join(" / ") || "銇仐"}`,
       "",
-      "調度中に見えるもの：",
-      "どのアルゴリズムが点灯しているか（本ラウンドで実際に呼ばれたもの）",
-      "各アルゴリズムの役割（初期案 / 探索 / 強化 / 収束）",
-      "今が第何棒か（リレー進捗）",
-      "内部代価の曲線がどう動いているか（案の質の時間軸）",
+      "瑾垮害涓伀瑕嬨亪銈嬨倐銇細",
+      "銇┿伄銈儷銈淬儶銈恒儬銇岀偣鐏仐銇︺亜銈嬨亱锛堟湰銉┿偊銉炽儔銇у疅闅涖伀鍛笺伆銈屻仧銈傘伄锛?,
+      "鍚勩偄銉偞銉偤銉犮伄褰瑰壊锛堝垵鏈熸 / 鎺㈢储 / 寮峰寲 / 鍙庢潫锛?,
+      "浠娿亴绗綍妫掋亱锛堛儶銉兗閫叉崡锛?,
+      "鍐呴儴浠ｄ尽銇洸绶氥亴銇┿亞鍕曘亜銇︺亜銈嬨亱锛堟銇唱銇檪闁撹桓锛?,
       "",
-      "勘に頼らず、闇雲に試さず、各アルゴリズムの貢献度を見える形にします。",
+      "鍕樸伀闋笺倝銇氥€侀棁闆层伀瑭︺仌銇氥€佸悇銈儷銈淬儶銈恒儬銇并鐚害銈掕銇堛倠褰伀銇椼伨銇欍€?,
       "",
-      "データ層の業務知能",
-      "これは汎用 VRPTW ソルバーではありません。多店舗・一日多配・高頻度補充の業務に合わせて深くチューニングした調度エンジンです。",
+      "銉囥兗銈垮堡銇キ鍕欑煡鑳?,
+      "銇撱倢銇睅鐢?VRPTW 銈姐儷銉愩兗銇с伅銇傘倞銇俱仜銈撱€傚搴楄垪銉讳竴鏃ュ閰嶃兓楂橀牷搴﹁鍏呫伄妤嫏銇悎銈忋仜銇︽繁銇忋儊銉ャ兗銉嬨兂銈般仐銇熻搴︺偍銉炽偢銉炽仹銇欍€?,
       "",
-      "3 つの中核メカニズム",
-      "1. 多波次データの分離管理",
-      "波次数は固定しません。2 便、3 便、4 便、5 便…実業務に合わせて設定できます。各波次は店舗一覧、時間窓、サービス時間を独立管理し、その波次需要がない拠点は無理に入れません。理論上は入るが現場では配送不能、という偽案を防ぎます。",
+      "3 銇ゃ伄涓牳銉°偒銉嬨偤銉?,
+      "1. 澶氭尝娆°儑銉笺偪銇垎闆㈢鐞?,
+      "娉㈡鏁般伅鍥哄畾銇椼伨銇涖倱銆? 渚裤€? 渚裤€? 渚裤€? 渚库€﹀疅妤嫏銇悎銈忋仜銇﹁ō瀹氥仹銇嶃伨銇欍€傚悇娉㈡銇簵鑸椾竴瑕с€佹檪闁撶獡銆併偟銉笺儞銈规檪闁撱倰鐙珛绠＄悊銇椼€併仢銇尝娆￠渶瑕併亴銇亜鎷犵偣銇劇鐞嗐伀鍏ャ倢銇俱仜銈撱€傜悊璜栦笂銇叆銈嬨亴鐝惧牬銇с伅閰嶉€佷笉鑳姐€併仺銇勩亞鍋芥銈掗槻銇庛伨銇欍€?,
       "",
-      "2. 超遠距離拠点の独立評価",
-      "単波次で距離が極端に遠い拠点は、倉庫→拠点の去程距離だけを評価し、帰庫まで含めた全行程一律判定で誤って落としません。合理的な遠距離専用便を守りつつ、本当に不可達な拠点は見抜きます。",
+      "2. 瓒呴仩璺濋洟鎷犵偣銇嫭绔嬭渚?,
+      "鍗樻尝娆°仹璺濋洟銇屾サ绔伀閬犮亜鎷犵偣銇€佸€夊韩鈫掓嫚鐐广伄鍘荤▼璺濋洟銇犮亼銈掕渚°仐銆佸赴搴伨銇у惈銈併仧鍏ㄨ绋嬩竴寰嬪垽瀹氥仹瑾ゃ仯銇﹁惤銇ㄣ仐銇俱仜銈撱€傚悎鐞嗙殑銇仩璺濋洟灏傜敤渚裤倰瀹堛倞銇ゃ仱銆佹湰褰撱伀涓嶅彲閬斻仾鎷犵偣銇鎶溿亶銇俱仚銆?,
       "",
-      "3. 路網エンジン + スマートキャッシュ",
-      "高德や百度などの商用路網 API を優先し、実距離・実所要時間で案を作ります。同時にローカルキャッシュを持ち、同じ倉庫-店舗ペアは初回だけ真面目に取得し、以後は即時再利用します。実行性とコストを両立します。",
+      "3. 璺恫銈ㄣ兂銈搞兂 + 銈广優銉笺儓銈儯銉冦偡銉?,
+      "楂樺痉銈勭櫨搴︺仾銇┿伄鍟嗙敤璺恫 API 銈掑劒鍏堛仐銆佸疅璺濋洟銉诲疅鎵€瑕佹檪闁撱仹妗堛倰浣溿倞銇俱仚銆傚悓鏅傘伀銉兗銈儷銈儯銉冦偡銉ャ倰鎸併仭銆佸悓銇樺€夊韩-搴楄垪銉氥偄銇垵鍥炪仩銇戠湡闈㈢洰銇彇寰椼仐銆佷互寰屻伅鍗虫檪鍐嶅埄鐢ㄣ仐銇俱仚銆傚疅琛屾€с仺銈炽偣銉堛倰涓＄珛銇椼伨銇欍€?,
       "",
-      "現実に解いている問題",
-      "チェーンブランド向け：一日多配、店舗ごとに補充頻度が違い、一部は朝だけ・一部は夜だけでも、そのまま運用できます。",
-      "3PL 向け：複数ブランド、複数倉庫、複数時間窓ルールを 1 つのシステムで統合調度できます。",
-      "配車担当向け：この波次に出すべきでない拠点を手動で除外する必要がなく、システムが自動でルールに従ってふるい分けます。",
-      "経営層向け：路網 API はキャッシュされるため、1 枚の調度票で何百回も API を焼くことがありません。",
+      "鐝惧疅銇В銇勩仸銇勩倠鍟忛",
+      "銉併偋銉笺兂銉栥儵銉炽儔鍚戙亼锛氫竴鏃ュ閰嶃€佸簵鑸椼仈銇ㄣ伀瑁滃厖闋诲害銇岄仌銇勩€佷竴閮ㄣ伅鏈濄仩銇戙兓涓€閮ㄣ伅澶溿仩銇戙仹銈傘€併仢銇伨銇鹃亱鐢ㄣ仹銇嶃伨銇欍€?,
+      "3PL 鍚戙亼锛氳鏁般儢銉┿兂銉夈€佽鏁板€夊韩銆佽鏁版檪闁撶獡銉兗銉倰 1 銇ゃ伄銈枫偣銉嗐儬銇х当鍚堣搴︺仹銇嶃伨銇欍€?,
+      "閰嶈粖鎷呭綋鍚戙亼锛氥亾銇尝娆°伀鍑恒仚銇广亶銇с仾銇勬嫚鐐广倰鎵嬪嫊銇ч櫎澶栥仚銈嬪繀瑕併亴銇亸銆併偡銈广儐銉犮亴鑷嫊銇с儷銉笺儷銇緭銇ｃ仸銇点倠銇勫垎銇戙伨銇欍€?,
+      "绲屽柖灞ゅ悜銇戯細璺恫 API 銇偔銉ｃ儍銈枫儱銇曘倢銈嬨仧銈併€? 鏋氥伄瑾垮害绁ㄣ仹浣曠櫨鍥炪倐 API 銈掔劶銇忋亾銇ㄣ亴銇傘倞銇俱仜銈撱€?,
       "",
-      "説明可能な調度：答えだけでなく証拠を出す",
-      "どの結果を開いても、次が確認できます。",
-      "なぜこの店舗がこの車両に入ったか（時間窓整合、距離便益、積載維持）",
-      "なぜこの波次がさらに圧縮されなかったか（分布の疎さ、時間窓の硬さ、車数制約）",
-      "なぜ未割当になったか（超距離、超時間、空き車両なし、ルール除外）",
-      "内部代価の分解（時間窓罰、超載罰、距離罰など）",
+      "瑾槑鍙兘銇搴︼細绛斻亪銇犮亼銇с仾銇忚鎷犮倰鍑恒仚",
+      "銇┿伄绲愭灉銈掗枊銇勩仸銈傘€佹銇岀⒑瑾嶃仹銇嶃伨銇欍€?,
+      "銇仠銇撱伄搴楄垪銇屻亾銇粖涓°伀鍏ャ仯銇熴亱锛堟檪闁撶獡鏁村悎銆佽窛闆究鐩娿€佺杓夌董鎸侊級",
+      "銇仠銇撱伄娉㈡銇屻仌銈夈伀鍦х府銇曘倢銇亱銇ｃ仧銇嬶紙鍒嗗竷銇枎銇曘€佹檪闁撶獡銇‖銇曘€佽粖鏁板埗绱勶級",
+      "銇仠鏈壊褰撱伀銇仯銇熴亱锛堣秴璺濋洟銆佽秴鏅傞枔銆佺┖銇嶈粖涓°仾銇椼€併儷銉笺儷闄ゅ锛?,
+      "鍐呴儴浠ｄ尽銇垎瑙ｏ紙鏅傞枔绐撶桨銆佽秴杓夌桨銆佽窛闆㈢桨銇仼锛?,
       "",
-      "経営層が知りたいのはアルゴリズム名ではなく、「なぜ今日は案 1 で、案 3 ではないのか」です。本システムはその証拠チェーンを出します。",
+      "绲屽柖灞ゃ亴鐭ャ倞銇熴亜銇伅銈儷銈淬儶銈恒儬鍚嶃仹銇仾銇忋€併€屻仾銇滀粖鏃ャ伅妗?1 銇с€佹 3 銇с伅銇亜銇亱銆嶃仹銇欍€傛湰銈枫偣銉嗐儬銇仢銇鎷犮儊銈с兗銉炽倰鍑恒仐銇俱仚銆?,
       "",
-      "求解アーカイブ：各ラウンド結果を永久に残す",
-      "市販システムでは第 5 ラウンドを回すと第 3 ラウンドが消えがちです。",
-      "本システムは各ラウンドを自動保存し、ページ送りで見返し、比較し、復元できます。",
+      "姹傝В銈兗銈偆銉栵細鍚勩儵銈︺兂銉夌祼鏋溿倰姘镐箙銇畫銇?,
+      "甯傝博銈枫偣銉嗐儬銇с伅绗?5 銉┿偊銉炽儔銈掑洖銇欍仺绗?3 銉┿偊銉炽儔銇屾秷銇堛亴銇°仹銇欍€?,
+      "鏈偡銈广儐銉犮伅鍚勩儵銈︺兂銉夈倰鑷嫊淇濆瓨銇椼€併儦銉笺偢閫併倞銇ц杩斻仐銆佹瘮杓冦仐銆佸京鍏冦仹銇嶃伨銇欍€?,
       "",
-      "配車担当の使い方：",
-      "快速初排 → アーカイブ",
-      "继续优化を 3 回 → アーカイブ",
-      "やはり第 2 ラウンドが良い → 第 2 ラウンドを復元 → そこから再最適化",
+      "閰嶈粖鎷呭綋銇娇銇勬柟锛?,
+      "蹇€熷垵鎺?鈫?銈兗銈偆銉?,
+      "缁х画浼樺寲銈?3 鍥?鈫?銈兗銈偆銉?,
+      "銈勩伅銈婄 2 銉┿偊銉炽儔銇岃壇銇?鈫?绗?2 銉┿偊銉炽儔銈掑京鍏?鈫?銇濄亾銇嬨倝鍐嶆渶閬╁寲",
       "",
-      "上書きせず、失わず、各判断を痕跡として残します。",
+      "涓婃浉銇嶃仜銇氥€佸け銈忋仛銆佸悇鍒ゆ柇銈掔棔璺°仺銇椼仸娈嬨仐銇俱仚銆?,
       "",
-      "デジタル調度官：音声対話を前置",
-      "従来は結果が出るまで聞けませんでした。",
-      "本システムは計算前から対話できます。",
+      "銉囥偢銈裤儷瑾垮害瀹橈細闊冲０瀵捐┍銈掑墠缃?,
+      "寰撴潵銇祼鏋溿亴鍑恒倠銇俱仹鑱炪亼銇俱仜銈撱仹銇椼仧銆?,
+      "鏈偡銈广儐銉犮伅瑷堢畻鍓嶃亱銈夊瑭便仹銇嶃伨銇欍€?,
       "",
-      "音声質問：「前のラウンドであの店舗が入らなかったのはなぜ？」",
-      "音声ブリーフィング：「今回の調度は 47 店舗、6 台、総距離 318km、前回より 12km 短縮しました。」",
+      "闊冲０璩晱锛氥€屽墠銇儵銈︺兂銉夈仹銇傘伄搴楄垪銇屽叆銈夈仾銇嬨仯銇熴伄銇仾銇滐紵銆?,
+      "闊冲０銉栥儶銉笺儠銈ｃ兂銈帮細銆屼粖鍥炪伄瑾垮害銇?47 搴楄垪銆? 鍙般€佺窂璺濋洟 318km銆佸墠鍥炪倛銈?12km 鐭府銇椼伨銇椼仧銆傘€?,
       "",
-      "待たせず、先に待機します。",
+      "寰呫仧銇涖仛銆佸厛銇緟姗熴仐銇俱仚銆?,
       "",
-      "経営層の視点",
-      "このシステムが経営層に価値を持つのは、見た目ではなく次の点です。",
-      "結果が追跡可能：各ラウンドの案が残るため、意思決定が勘にならない",
-      "理由が説明可能：どのルートもどの店舗帰属も理由を示せる",
-      "過程が監査可能：誰がいつ何を触り、システムがどの接力を走らせたか残る",
-      "比較が定量化：複数案を並べ、代価・台数・距離・違反数を同時比較できる",
-      "コストが制御可能：路網 API はキャッシュし、算法チェーンも無駄なく編成する",
+      "绲屽柖灞ゃ伄瑕栫偣",
+      "銇撱伄銈枫偣銉嗐儬銇岀祵鍠跺堡銇尽鍊ゃ倰鎸併仱銇伅銆佽銇熺洰銇с伅銇亸娆°伄鐐广仹銇欍€?,
+      "绲愭灉銇岃拷璺″彲鑳斤細鍚勩儵銈︺兂銉夈伄妗堛亴娈嬨倠銇熴倎銆佹剰鎬濇焙瀹氥亴鍕樸伀銇倝銇亜",
+      "鐞嗙敱銇岃鏄庡彲鑳斤細銇┿伄銉兗銉堛倐銇┿伄搴楄垪甯板睘銈傜悊鐢便倰绀恒仜銈?,
+      "閬庣▼銇岀洠鏌诲彲鑳斤細瑾般亴銇勩仱浣曘倰瑙︺倞銆併偡銈广儐銉犮亴銇┿伄鎺ュ姏銈掕蛋銈夈仜銇熴亱娈嬨倠",
+      "姣旇純銇屽畾閲忓寲锛氳鏁版銈掍甫銇广€佷唬渚°兓鍙版暟銉昏窛闆兓閬曞弽鏁般倰鍚屾檪姣旇純銇с亶銈?,
+      "銈炽偣銉堛亴鍒跺尽鍙兘锛氳矾缍?API 銇偔銉ｃ儍銈枫儱銇椼€佺畻娉曘儊銈с兗銉炽倐鐒￠銇亸绶ㄦ垚銇欍倠",
       "",
-      "これは配車担当だけの操作台ではなく、配送意思決定全体の証拠センターです。",
+      "銇撱倢銇厤杌婃媴褰撱仩銇戙伄鎿嶄綔鍙般仹銇仾銇忋€侀厤閫佹剰鎬濇焙瀹氬叏浣撱伄瑷兼嫚銈汇兂銈裤兗銇с仚銆?,
       "",
-      "一言でまとめると",
-      "市面でも珍しい、9 大アルゴリズムを役割配備し、接力求解を透明化し、調度判断を説明可能にし、全履歴を残す多波次配送調度システムです。",
+      "涓€瑷€銇с伨銇ㄣ倎銈嬨仺",
+      "甯傞潰銇с倐鐝嶃仐銇勩€? 澶с偄銉偞銉偤銉犮倰褰瑰壊閰嶅倷銇椼€佹帴鍔涙眰瑙ｃ倰閫忔槑鍖栥仐銆佽搴﹀垽鏂倰瑾槑鍙兘銇仐銆佸叏灞ユ銈掓畫銇欏娉㈡閰嶉€佽搴︺偡銈广儐銉犮仹銇欍€?,
       "",
-      "業種を選ばず、業態を選ばず、「計算できる」から「正しく計算でき、説明でき、残せて、追及にも耐えられる」へ進めます。",
+      "妤ó銈掗伕銇般仛銆佹キ鎱嬨倰閬搞伆銇氥€併€岃▓绠椼仹銇嶃倠銆嶃亱銈夈€屾銇椼亸瑷堢畻銇с亶銆佽鏄庛仹銇嶃€佹畫銇涖仸銆佽拷鍙娿伀銈傝€愩亪銈夈倢銈嬨€嶃伕閫层倎銇俱仚銆?,
     ].join("\n");
   }
   return [
-    "城市配送AI调度系统",
+    "鍩庡競閰嶉€丄I璋冨害绯荤粺",
     "",
-    "核心定位",
-    "这不是一套排车工具。这是一套具备算法决策链、可解释调度、全流程留痕的AI调度操作系统。",
+    "鏍稿績瀹氫綅",
+    "杩欎笉鏄竴濂楁帓杞﹀伐鍏枫€傝繖鏄竴濂楀叿澶囩畻娉曞喅绛栭摼銆佸彲瑙ｉ噴璋冨害銆佸叏娴佺▼鐣欑棔鐨凙I璋冨害鎿嶄綔绯荤粺銆?,
     "",
-    "市面上绝大多数调度系统做的是三件事：输入数据 → 跑一个算法 → 输出表格。调度员拿到结果，不知道这个结果怎么来的，也不知道为什么不是另一个结果。",
+    "甯傞潰涓婄粷澶у鏁拌皟搴︾郴缁熷仛鐨勬槸涓変欢浜嬶細杈撳叆鏁版嵁 鈫?璺戜竴涓畻娉?鈫?杈撳嚭琛ㄦ牸銆傝皟搴﹀憳鎷垮埌缁撴灉锛屼笉鐭ラ亾杩欎釜缁撴灉鎬庝箞鏉ョ殑锛屼篃涓嶇煡閬撲负浠€涔堜笉鏄彟涓€涓粨鏋溿€?,
     "",
-    "这套系统不一样。它把九套算法的协同决策过程完整暴露出来，让调度员能看到、能理解、能干预、能复盘。让管理层能追溯、能对比、能决策。",
+    "杩欏绯荤粺涓嶄竴鏍枫€傚畠鎶婁節濂楃畻娉曠殑鍗忓悓鍐崇瓥杩囩▼瀹屾暣鏆撮湶鍑烘潵锛岃璋冨害鍛樿兘鐪嬪埌銆佽兘鐞嗚В銆佽兘骞查銆佽兘澶嶇洏銆傝绠＄悊灞傝兘杩芥函銆佽兘瀵规瘮銆佽兘鍐崇瓥銆?,
     "",
-    "适用行业：连锁零售、餐饮门店、医药配送、社区电商、冷链生鲜、中央厨房配送、石油站点补货、第三方统仓共配……凡是涉及「同一批车、一天多趟、每家站点有自己的时间窗口和补货节奏」的业务，都能直接落地。",
+    "閫傜敤琛屼笟锛氳繛閿侀浂鍞€侀楗棬搴椼€佸尰鑽厤閫併€佺ぞ鍖虹數鍟嗐€佸喎閾剧敓椴溿€佷腑澶帹鎴块厤閫併€佺煶娌圭珯鐐硅ˉ璐с€佺涓夋柟缁熶粨鍏遍厤鈥︹€﹀嚒鏄秹鍙娿€屽悓涓€鎵硅溅銆佷竴澶╁瓒熴€佹瘡瀹剁珯鐐规湁鑷繁鐨勬椂闂寸獥鍙ｅ拰琛ヨ揣鑺傚銆嶇殑涓氬姟锛岄兘鑳界洿鎺ヨ惤鍦般€?,
     "",
-    "鲸略使调度求解器 - 产品简介",
-    "九大算法引擎，真正的工业级优化。",
-    "鲸略使调度求解器是一款面向VRPTW（带时间窗车辆路径问题）的企业级智能调度系统，核心算法库包含九种真正的元启发式算法，绝非简单的规则堆砌。",
+    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒 - 浜у搧绠€浠?,
+    "涔濆ぇ绠楁硶寮曟搸锛岀湡姝ｇ殑宸ヤ笟绾т紭鍖栥€?,
+    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒鏄竴娆鹃潰鍚慥RPTW锛堝甫鏃堕棿绐楄溅杈嗚矾寰勯棶棰橈級鐨勪紒涓氱骇鏅鸿兘璋冨害绯荤粺锛屾牳蹇冪畻娉曞簱鍖呭惈涔濈鐪熸鐨勫厓鍚彂寮忕畻娉曪紝缁濋潪绠€鍗曠殑瑙勫垯鍫嗙爩銆?,
     "",
-    "核心算法矩阵",
-    "群智能类：蚁群算法（ACO）配备完整信息素挥发与精英策略；粒子群算法（PSO）实现真正的速度-位置更新机制。",
-    "局部搜索类：模拟退火（SA）采用Metropolis准则与自适应重启；禁忌搜索（Tabu）拥有完整的禁忌表和特赦机制；大邻域搜索（LNS）实现destroy-repair双阶段优化。",
-    "进化计算类：遗传算法（GA）支持锦标赛选择、多点交叉与三种变异算子。",
-    "混合与构造类：Hybrid混合器串联SA+LNS+Tabu三阶段优化；Clark-Wright节约法和VRPTW贪心插入提供高质量初始解。",
+    "鏍稿績绠楁硶鐭╅樀",
+    "缇ゆ櫤鑳界被锛氳殎缇ょ畻娉曪紙ACO锛夐厤澶囧畬鏁翠俊鎭礌鎸ュ彂涓庣簿鑻辩瓥鐣ワ紱绮掑瓙缇ょ畻娉曪紙PSO锛夊疄鐜扮湡姝ｇ殑閫熷害-浣嶇疆鏇存柊鏈哄埗銆?,
+    "灞€閮ㄦ悳绱㈢被锛氭ā鎷熼€€鐏紙SA锛夐噰鐢∕etropolis鍑嗗垯涓庤嚜閫傚簲閲嶅惎锛涚蹇屾悳绱紙Tabu锛夋嫢鏈夊畬鏁寸殑绂佸繉琛ㄥ拰鐗硅郸鏈哄埗锛涘ぇ閭诲煙鎼滅储锛圠NS锛夊疄鐜癲estroy-repair鍙岄樁娈典紭鍖栥€?,
+    "杩涘寲璁＄畻绫伙細閬椾紶绠楁硶锛圙A锛夋敮鎸侀敠鏍囪禌閫夋嫨銆佸鐐逛氦鍙変笌涓夌鍙樺紓绠楀瓙銆?,
+    "娣峰悎涓庢瀯閫犵被锛欻ybrid娣峰悎鍣ㄤ覆鑱擲A+LNS+Tabu涓夐樁娈典紭鍖栵紱Clark-Wright鑺傜害娉曞拰VRPTW璐績鎻掑叆鎻愪緵楂樿川閲忓垵濮嬭В銆?,
     "",
-    "智能调参与并行加速",
-    "集成贝叶斯优化（高斯过程代理模型），自动搜索最优参数组合，调参效率提升70%。",
-    "支持多核并行评估与GPU加速（CuPy），8核环境下加速比达5.2倍。",
+    "鏅鸿兘璋冨弬涓庡苟琛屽姞閫?,
+    "闆嗘垚璐濆彾鏂紭鍖栵紙楂樻柉杩囩▼浠ｇ悊妯″瀷锛夛紝鑷姩鎼滅储鏈€浼樺弬鏁扮粍鍚堬紝璋冨弬鏁堢巼鎻愬崌70%銆?,
+    "鏀寔澶氭牳骞惰璇勪及涓嶨PU鍔犻€燂紙CuPy锛夛紝8鏍哥幆澧冧笅鍔犻€熸瘮杈?.2鍊嶃€?,
     "",
-    "算法集合结构",
-    "构造启发式（2种）→ 快速生成初始解",
-    "改进算法（6种）→ 深度优化",
-    "混合策略（1种）→ 取长补短",
+    "绠楁硶闆嗗悎缁撴瀯",
+    "鏋勯€犲惎鍙戝紡锛?绉嶏級鈫?蹇€熺敓鎴愬垵濮嬭В",
+    "鏀硅繘绠楁硶锛?绉嶏級鈫?娣卞害浼樺寲",
+    "娣峰悎绛栫暐锛?绉嶏級鈫?鍙栭暱琛ョ煭",
     "",
-    "鲸略使调度求解器 - 九大算法核心",
-    "1. 蚁群算法（ACO）：基于信息素正反馈机制，包含信息素矩阵维护、轮盘赌概率选择、精英蚂蚁策略与信息素挥发机制。",
-    "2. 粒子群算法（PSO）：通过粒子位置与速度迭代更新寻优，记录个体最优与全局最优，并采用惯性权重衰减平衡探索与开发。",
-    "3. 模拟退火（SA）：采用Metropolis接受准则和温度衰减策略，内置自适应重启机制与多邻域算子。",
-    "4. 禁忌搜索（Tabu）：维护禁忌表记录近期移动，通过特赦准则和渴望水平破禁，结合邻域搜索持续改进。",
-    "5. 大邻域搜索（LNS）：采用破坏与修复双阶段框架，破坏支持随机移除和最差移除，修复支持贪婪插入和遗憾插入，并引入模拟退火接受准则。",
-    "6. 遗传算法（GA）：采用锦标赛选择、部分映射交叉与三种变异算子（重定位、交换、2-opt），并实施精英保留机制。",
-    "7. 混合算法（Hybrid）：串联模拟退火、大邻域搜索和禁忌搜索三个阶段，将前序结果传递给后续算法。",
-    "8. Clark-Wright节约法：通过计算节约值、合并可行路线并检查约束条件，快速生成高质量初始解。",
-    "9. VRPTW贪心插入：按最早时间窗优先排序门店，采用最便宜插入策略并实时验证可行性。",
+    "椴哥暐浣胯皟搴︽眰瑙ｅ櫒 - 涔濆ぇ绠楁硶鏍稿績",
+    "1. 铓佺兢绠楁硶锛圓CO锛夛細鍩轰簬淇℃伅绱犳鍙嶉鏈哄埗锛屽寘鍚俊鎭礌鐭╅樀缁存姢銆佽疆鐩樿祵姒傜巼閫夋嫨銆佺簿鑻辫殏铓佺瓥鐣ヤ笌淇℃伅绱犳尌鍙戞満鍒躲€?,
+    "2. 绮掑瓙缇ょ畻娉曪紙PSO锛夛細閫氳繃绮掑瓙浣嶇疆涓庨€熷害杩唬鏇存柊瀵讳紭锛岃褰曚釜浣撴渶浼樹笌鍏ㄥ眬鏈€浼橈紝骞堕噰鐢ㄦ儻鎬ф潈閲嶈“鍑忓钩琛℃帰绱笌寮€鍙戙€?,
+    "3. 妯℃嫙閫€鐏紙SA锛夛細閲囩敤Metropolis鎺ュ彈鍑嗗垯鍜屾俯搴﹁“鍑忕瓥鐣ワ紝鍐呯疆鑷€傚簲閲嶅惎鏈哄埗涓庡閭诲煙绠楀瓙銆?,
+    "4. 绂佸繉鎼滅储锛圱abu锛夛細缁存姢绂佸繉琛ㄨ褰曡繎鏈熺Щ鍔紝閫氳繃鐗硅郸鍑嗗垯鍜屾复鏈涙按骞崇牬绂侊紝缁撳悎閭诲煙鎼滅储鎸佺画鏀硅繘銆?,
+    "5. 澶ч偦鍩熸悳绱紙LNS锛夛細閲囩敤鐮村潖涓庝慨澶嶅弻闃舵妗嗘灦锛岀牬鍧忔敮鎸侀殢鏈虹Щ闄ゅ拰鏈€宸Щ闄わ紝淇鏀寔璐┆鎻掑叆鍜岄仐鎲炬彃鍏ワ紝骞跺紩鍏ユā鎷熼€€鐏帴鍙楀噯鍒欍€?,
+    "6. 閬椾紶绠楁硶锛圙A锛夛細閲囩敤閿︽爣璧涢€夋嫨銆侀儴鍒嗘槧灏勪氦鍙変笌涓夌鍙樺紓绠楀瓙锛堥噸瀹氫綅銆佷氦鎹€?-opt锛夛紝骞跺疄鏂界簿鑻变繚鐣欐満鍒躲€?,
+    "7. 娣峰悎绠楁硶锛圚ybrid锛夛細涓茶仈妯℃嫙閫€鐏€佸ぇ閭诲煙鎼滅储鍜岀蹇屾悳绱笁涓樁娈碉紝灏嗗墠搴忕粨鏋滀紶閫掔粰鍚庣画绠楁硶銆?,
+    "8. Clark-Wright鑺傜害娉曪細閫氳繃璁＄畻鑺傜害鍊笺€佸悎骞跺彲琛岃矾绾垮苟妫€鏌ョ害鏉熸潯浠讹紝蹇€熺敓鎴愰珮璐ㄩ噺鍒濆瑙ｃ€?,
+    "9. VRPTW璐績鎻掑叆锛氭寜鏈€鏃╂椂闂寸獥浼樺厛鎺掑簭闂ㄥ簵锛岄噰鐢ㄦ渶渚垮疁鎻掑叆绛栫暐骞跺疄鏃堕獙璇佸彲琛屾€с€?,
     "",
-    "九大算法的分布式智能",
-    "不是算法堆砌，是算法岗位化。每一套算法在调度链中承担不可替代的职能：",
+    "涔濆ぇ绠楁硶鐨勫垎甯冨紡鏅鸿兘",
+    "涓嶆槸绠楁硶鍫嗙爩锛屾槸绠楁硶宀椾綅鍖栥€傛瘡涓€濂楃畻娉曞湪璋冨害閾句腑鎵挎媴涓嶅彲鏇夸唬鐨勮亴鑳斤細",
     "",
-    "VRPTW：时间窗守门人。硬约束第一关，违反时间窗的线路根本不出现在初排中。",
-    "Clark-Wright：里程与车数优化器。从合并收益出发，给出车数下界的理论参考。",
-    "GA：全局结构搜索器。在大解空间中暴力探索，不依赖初排质量。",
-    "PSO：群体协同探索器。多粒子并行，擅长发现非直觉的归属关系重组。",
-    "ACO：路径信息素累积器。通过正反馈机制，让好的路径结构被反复强化。",
-    "Tabu：局部深度挖掘器。盯住坏波次，禁止走回头路，强制跳出局部陷阱。",
-    "LNS：大邻域修复器。摧毁坏线路的局部结构，用更优片段替换。",
-    "Hybrid：多策略融合引擎。在 GA 框架中嵌入局部搜索，平衡探索与利用。",
-    "SA：退火收口器。在最后阶段接受差解，避免卡在最后一层最优。",
+    "VRPTW锛氭椂闂寸獥瀹堥棬浜恒€傜‖绾︽潫绗竴鍏筹紝杩濆弽鏃堕棿绐楃殑绾胯矾鏍规湰涓嶅嚭鐜板湪鍒濇帓涓€?,
+    "Clark-Wright锛氶噷绋嬩笌杞︽暟浼樺寲鍣ㄣ€備粠鍚堝苟鏀剁泭鍑哄彂锛岀粰鍑鸿溅鏁颁笅鐣岀殑鐞嗚鍙傝€冦€?,
+    "GA锛氬叏灞€缁撴瀯鎼滅储鍣ㄣ€傚湪澶цВ绌洪棿涓毚鍔涙帰绱紝涓嶄緷璧栧垵鎺掕川閲忋€?,
+    "PSO锛氱兢浣撳崗鍚屾帰绱㈠櫒銆傚绮掑瓙骞惰锛屾搮闀垮彂鐜伴潪鐩磋鐨勫綊灞炲叧绯婚噸缁勩€?,
+    "ACO锛氳矾寰勪俊鎭礌绱Н鍣ㄣ€傞€氳繃姝ｅ弽棣堟満鍒讹紝璁╁ソ鐨勮矾寰勭粨鏋勮鍙嶅寮哄寲銆?,
+    "Tabu锛氬眬閮ㄦ繁搴︽寲鎺樺櫒銆傜洴浣忓潖娉㈡锛岀姝㈣蛋鍥炲ご璺紝寮哄埗璺冲嚭灞€閮ㄩ櫡闃便€?,
+    "LNS锛氬ぇ閭诲煙淇鍣ㄣ€傛懅姣佸潖绾胯矾鐨勫眬閮ㄧ粨鏋勶紝鐢ㄦ洿浼樼墖娈垫浛鎹€?,
+    "Hybrid锛氬绛栫暐铻嶅悎寮曟搸銆傚湪 GA 妗嗘灦涓祵鍏ュ眬閮ㄦ悳绱紝骞宠　鎺㈢储涓庡埄鐢ㄣ€?,
+    "SA锛氶€€鐏敹鍙ｅ櫒銆傚湪鏈€鍚庨樁娈垫帴鍙楀樊瑙ｏ紝閬垮厤鍗″湪鏈€鍚庝竴灞傛渶浼樸€?,
     "",
-    "品牌隐喻：鲸类本领与求解机制的暗合",
-    "这套系统并不是随便选了一个鲸鱼 Logo。鲸类的捕食、迁徙、协同与感知方式，和这套求解器里的多算法协同机制高度同构。",
+    "鍝佺墝闅愬柣锛氶哺绫绘湰棰嗕笌姹傝В鏈哄埗鐨勬殫鍚?,
+    "杩欏绯荤粺骞朵笉鏄殢渚块€変簡涓€涓哺楸?Logo銆傞哺绫荤殑鎹曢銆佽縼寰欍€佸崗鍚屼笌鎰熺煡鏂瑰紡锛屽拰杩欏姹傝В鍣ㄩ噷鐨勫绠楁硶鍗忓悓鏈哄埗楂樺害鍚屾瀯銆?,
     "",
-    "1. 座头鲸的“气泡网捕食” ↔ 大邻域搜索 + 禁忌搜索",
-    "座头鲸会先吐气泡形成“网”，把猎物大范围圈住，再在圈内反复下潜、精细捕食。",
-    "对应到求解器里：大邻域搜索负责破坏部分路线、重构结构，相当于先吐气泡画圈；禁忌搜索负责在邻域内反复交换门店、持续修补，相当于圈内精细下潜。",
-    "对应到求解过程，就是先大范围扰动，再局部精修。",
+    "1. 搴уご椴哥殑鈥滄皵娉＄綉鎹曢鈥?鈫?澶ч偦鍩熸悳绱?+ 绂佸繉鎼滅储",
+    "搴уご椴镐細鍏堝悙姘旀场褰㈡垚鈥滅綉鈥濓紝鎶婄寧鐗╁ぇ鑼冨洿鍦堜綇锛屽啀鍦ㄥ湀鍐呭弽澶嶄笅娼溿€佺簿缁嗘崟椋熴€?,
+    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細澶ч偦鍩熸悳绱㈣礋璐ｇ牬鍧忛儴鍒嗚矾绾裤€侀噸鏋勭粨鏋勶紝鐩稿綋浜庡厛鍚愭皵娉＄敾鍦堬紱绂佸繉鎼滅储璐熻矗鍦ㄩ偦鍩熷唴鍙嶅浜ゆ崲闂ㄥ簵銆佹寔缁慨琛ワ紝鐩稿綋浜庡湀鍐呯簿缁嗕笅娼溿€?,
+    "瀵瑰簲鍒版眰瑙ｈ繃绋嬶紝灏辨槸鍏堝ぇ鑼冨洿鎵板姩锛屽啀灞€閮ㄧ簿淇€?,
     "",
-    "2. 鲸的“长途迁徙 + 局部觅食” ↔ 模拟退火的“高温探索 + 低温收敛”",
-    "鲸会先进行长距离迁徙，广泛探索新海域；到达高价值海域后，再集中觅食。",
-    "对应到求解器里：模拟退火高温阶段接受差解、主动跳出局部最优，相当于迁徙探索；低温阶段只保留更优解、逐步收紧，相当于抵达好海域后的稳定觅食。",
-    "对应到求解过程，就是先放开探索，再收紧收敛。",
+    "2. 椴哥殑鈥滈暱閫旇縼寰?+ 灞€閮ㄨ椋熲€?鈫?妯℃嫙閫€鐏殑鈥滈珮娓╂帰绱?+ 浣庢俯鏀舵暃鈥?,
+    "椴镐細鍏堣繘琛岄暱璺濈杩佸緳锛屽箍娉涙帰绱㈡柊娴峰煙锛涘埌杈鹃珮浠峰€兼捣鍩熷悗锛屽啀闆嗕腑瑙呴銆?,
+    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細妯℃嫙閫€鐏珮娓╅樁娈垫帴鍙楀樊瑙ｃ€佷富鍔ㄨ烦鍑哄眬閮ㄦ渶浼橈紝鐩稿綋浜庤縼寰欐帰绱紱浣庢俯闃舵鍙繚鐣欐洿浼樿В銆侀€愭鏀剁揣锛岀浉褰撲簬鎶佃揪濂芥捣鍩熷悗鐨勭ǔ瀹氳椋熴€?,
+    "瀵瑰簲鍒版眰瑙ｈ繃绋嬶紝灏辨槸鍏堟斁寮€鎺㈢储锛屽啀鏀剁揣鏀舵暃銆?,
     "",
-    "3. 虎鲸的“群体狩猎分工” ↔ 粒子群算法的“个体经验 + 群体协作”",
-    "虎鲸群捕猎时会分工：有的驱赶、有的拦截、有的主攻，但整体始终围绕群体目标行动。",
-    "对应到求解器里：每个粒子都有自己的位置、速度和个体最优经验；群体最优则持续牵引整体方向。",
-    "对应到群体智能机制，就是个体经验与群体协作共同形成整体智能。",
+    "3. 铏庨哺鐨勨€滅兢浣撶嫨鐚庡垎宸モ€?鈫?绮掑瓙缇ょ畻娉曠殑鈥滀釜浣撶粡楠?+ 缇や綋鍗忎綔鈥?,
+    "铏庨哺缇ゆ崟鐚庢椂浼氬垎宸ワ細鏈夌殑椹辫刀銆佹湁鐨勬嫤鎴€佹湁鐨勪富鏀伙紝浣嗘暣浣撳缁堝洿缁曠兢浣撶洰鏍囪鍔ㄣ€?,
+    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細姣忎釜绮掑瓙閮芥湁鑷繁鐨勪綅缃€侀€熷害鍜屼釜浣撴渶浼樼粡楠岋紱缇や綋鏈€浼樺垯鎸佺画鐗靛紩鏁翠綋鏂瑰悜銆?,
+    "瀵瑰簲鍒扮兢浣撴櫤鑳芥満鍒讹紝灏辨槸涓綋缁忛獙涓庣兢浣撳崗浣滃叡鍚屽舰鎴愭暣浣撴櫤鑳姐€?,
     "",
-    "4. 抹香鲸的“深潜觅食” ↔ Clark-Wright 节约法的“一次深潜到位”",
-    "抹香鲸能够一次深潜到极深海域，在有限时间里精准完成觅食，再高效返回。",
-    "对应到求解器里：Clark-Wright 节约法不依赖长链迭代，而是直接依据节约量完成路线合并，一次构造到位。",
-    "对应到构造型算法机制，就是不反复折腾，一次深潜把事办完。",
+    "4. 鎶归椴哥殑鈥滄繁娼滆椋熲€?鈫?Clark-Wright 鑺傜害娉曠殑鈥滀竴娆℃繁娼滃埌浣嶁€?,
+    "鎶归椴歌兘澶熶竴娆℃繁娼滃埌鏋佹繁娴峰煙锛屽湪鏈夐檺鏃堕棿閲岀簿鍑嗗畬鎴愯椋燂紝鍐嶉珮鏁堣繑鍥炪€?,
+    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細Clark-Wright 鑺傜害娉曚笉渚濊禆闀块摼杩唬锛岃€屾槸鐩存帴渚濇嵁鑺傜害閲忓畬鎴愯矾绾垮悎骞讹紝涓€娆℃瀯閫犲埌浣嶃€?,
+    "瀵瑰簲鍒版瀯閫犲瀷绠楁硶鏈哄埗锛屽氨鏄笉鍙嶅鎶樿吘锛屼竴娆℃繁娼滄妸浜嬪姙瀹屻€?,
     "",
-    "5. 鲸的“回声定位” ↔ 综合评分体系的“多维反馈导向”",
-    "鲸依靠回声定位感知周围环境，判断猎物位置、方向和追击价值。",
-    "对应到求解器里：综合评分就是算法的回声反馈。准时率 45% + 里程 25% + 装载率 15% + 偏好 15%，共同决定一个方案值不值得被保留、下一步该往哪里优化。",
-    "对应到评分反馈机制，就是不只看单一指标，而是依靠多维反馈做判断。",
+    "5. 椴哥殑鈥滃洖澹板畾浣嶁€?鈫?缁煎悎璇勫垎浣撶郴鐨勨€滃缁村弽棣堝鍚戔€?,
+    "椴镐緷闈犲洖澹板畾浣嶆劅鐭ュ懆鍥寸幆澧冿紝鍒ゆ柇鐚庣墿浣嶇疆銆佹柟鍚戝拰杩藉嚮浠峰€笺€?,
+    "瀵瑰簲鍒版眰瑙ｅ櫒閲岋細缁煎悎璇勫垎灏辨槸绠楁硶鐨勫洖澹板弽棣堛€傚噯鏃剁巼 45% + 閲岀▼ 25% + 瑁呰浇鐜?15% + 鍋忓ソ 15%锛屽叡鍚屽喅瀹氫竴涓柟妗堝€间笉鍊煎緱琚繚鐣欍€佷笅涓€姝ヨ寰€鍝噷浼樺寲銆?,
+    "瀵瑰簲鍒拌瘎鍒嗗弽棣堟満鍒讹紝灏辨槸涓嶅彧鐪嬪崟涓€鎸囨爣锛岃€屾槸渚濋潬澶氱淮鍙嶉鍋氬垽鏂€?,
     "",
-    "最有意思的一点是：整套系统本身就像一个“算法鲸群”。",
-    "九套算法同时在场，有的负责大范围探索（SA / PSO / ACO），有的负责局部精修（禁忌搜索 / 大邻域搜索），有的负责快速给出基线（VRPTW / Clark-Wright），最后由评分体系决定谁的结果被采纳。",
-    "这本质上就是一群算法鲸在协同捕食同一个目标：找到更优的调度方案。",
+    "鏈€鏈夋剰鎬濈殑涓€鐐规槸锛氭暣濂楃郴缁熸湰韬氨鍍忎竴涓€滅畻娉曢哺缇も€濄€?,
+    "涔濆绠楁硶鍚屾椂鍦ㄥ満锛屾湁鐨勮礋璐ｅぇ鑼冨洿鎺㈢储锛圫A / PSO / ACO锛夛紝鏈夌殑璐熻矗灞€閮ㄧ簿淇紙绂佸繉鎼滅储 / 澶ч偦鍩熸悳绱級锛屾湁鐨勮礋璐ｅ揩閫熺粰鍑哄熀绾匡紙VRPTW / Clark-Wright锛夛紝鏈€鍚庣敱璇勫垎浣撶郴鍐冲畾璋佺殑缁撴灉琚噰绾炽€?,
+    "杩欐湰璐ㄤ笂灏辨槸涓€缇ょ畻娉曢哺鍦ㄥ崗鍚屾崟椋熷悓涓€涓洰鏍囷細鎵惧埌鏇翠紭鐨勮皟搴︽柟妗堛€?,
     "",
-    "这九套算法不是串行跑一遍就结束。系统根据当前求解阶段、方案目标、已有结果质量，动态决定调用哪几套、以什么顺序、接力多少次。",
+    "杩欎節濂楃畻娉曚笉鏄覆琛岃窇涓€閬嶅氨缁撴潫銆傜郴缁熸牴鎹綋鍓嶆眰瑙ｉ樁娈点€佹柟妗堢洰鏍囥€佸凡鏈夌粨鏋滆川閲忥紝鍔ㄦ€佸喅瀹氳皟鐢ㄥ摢鍑犲銆佷互浠€涔堥『搴忋€佹帴鍔涘灏戞銆?,
     "",
-    "接力求解：从初排到收口的智能决策链",
-    "传统系统：跑一个算法 → 出结果 → 结束。",
-    "这套系统：算法接力跑，每一棒都有明确任务和判断标准。",
+    "鎺ュ姏姹傝В锛氫粠鍒濇帓鍒版敹鍙ｇ殑鏅鸿兘鍐崇瓥閾?,
+    "浼犵粺绯荤粺锛氳窇涓€涓畻娉?鈫?鍑虹粨鏋?鈫?缁撴潫銆?,
+    "杩欏绯荤粺锛氱畻娉曟帴鍔涜窇锛屾瘡涓€妫掗兘鏈夋槑纭换鍔″拰鍒ゆ柇鏍囧噯銆?,
     "",
-    "第一棒（初排）     → VRPTW / Clark-Wright 并行，给出两版骨架方案",
-    "         ↓",
-    "第二棒（全局探索） → GA / PSO / ACO 根据目标选择 1-2 套，大规模重构",
-    "         ↓",
-    "第三棒（局部强化） → Hybrid / Tabu / LNS 咬住坏波次，逐条打磨",
-    "         ↓",
-    "第四棒（收口）     → SA 跳坑，确认无法进一步改善才终止",
+    "绗竴妫掞紙鍒濇帓锛?    鈫?VRPTW / Clark-Wright 骞惰锛岀粰鍑轰袱鐗堥鏋舵柟妗?,
+    "         鈫?,
+    "绗簩妫掞紙鍏ㄥ眬鎺㈢储锛?鈫?GA / PSO / ACO 鏍规嵁鐩爣閫夋嫨 1-2 濂楋紝澶ц妯￠噸鏋?,
+    "         鈫?,
+    "绗笁妫掞紙灞€閮ㄥ己鍖栵級 鈫?Hybrid / Tabu / LNS 鍜綇鍧忔尝娆★紝閫愭潯鎵撶（",
+    "         鈫?,
+    "绗洓妫掞紙鏀跺彛锛?    鈫?SA 璺冲潙锛岀‘璁ゆ棤娉曡繘涓€姝ユ敼鍠勬墠缁堟",
     "",
-    "每一棒结束时，系统会判断：",
-    "接棒条件是否满足（代价下降是否达到阈值）",
-    "是否跳过下一棒（当前方案已足够好）",
-    "是否回退重跑（某一步恶化超出预期）",
+    "姣忎竴妫掔粨鏉熸椂锛岀郴缁熶細鍒ゆ柇锛?,
+    "鎺ユ鏉′欢鏄惁婊¤冻锛堜唬浠蜂笅闄嶆槸鍚﹁揪鍒伴槇鍊硷級",
+    "鏄惁璺宠繃涓嬩竴妫掞紙褰撳墠鏂规宸茶冻澶熷ソ锛?,
+    "鏄惁鍥為€€閲嶈窇锛堟煇涓€姝ユ伓鍖栬秴鍑洪鏈燂級",
     "",
-    "这不是黑箱。每一棒的输入、输出、决策理由、代价拆解，都在界面上持续输出。",
+    "杩欎笉鏄粦绠便€傛瘡涓€妫掔殑杈撳叆銆佽緭鍑恒€佸喅绛栫悊鐢便€佷唬浠锋媶瑙ｏ紝閮藉湪鐣岄潰涓婃寔缁緭鍑恒€?,
     "",
-    "AI中枢：九宫格实时可视化",
-    "系统中央有一块 3×3 的算法池面板。",
-    `当前模式：${currentStrategyLabel()}；当前目标：${currentGoalLabel()}；本轮计划调用：${selectedAlgorithms.join(" / ") || "无"}`,
+    "AI涓灑锛氫節瀹牸瀹炴椂鍙鍖?,
+    "绯荤粺涓ぎ鏈変竴鍧?3脳3 鐨勭畻娉曟睜闈㈡澘銆?,
+    `褰撳墠妯″紡锛?{currentStrategyLabel()}锛涘綋鍓嶇洰鏍囷細${currentGoalLabel()}锛涙湰杞鍒掕皟鐢細${selectedAlgorithms.join(" / ") || "鏃?}`,
     "",
-    "每一轮求解过程中，调度员能直接看到：",
-    "哪些算法被点亮（本轮实际调用）",
-    "每个算法承担什么角色（初排 / 探索 / 强化 / 收口）",
-    "当前处于第几棒（接力进度）",
-    "代价曲线如何变化（方案质量的时间线）",
+    "姣忎竴杞眰瑙ｈ繃绋嬩腑锛岃皟搴﹀憳鑳界洿鎺ョ湅鍒帮細",
+    "鍝簺绠楁硶琚偣浜紙鏈疆瀹為檯璋冪敤锛?,
+    "姣忎釜绠楁硶鎵挎媴浠€涔堣鑹诧紙鍒濇帓 / 鎺㈢储 / 寮哄寲 / 鏀跺彛锛?,
+    "褰撳墠澶勪簬绗嚑妫掞紙鎺ュ姏杩涘害锛?,
+    "浠ｄ环鏇茬嚎濡備綍鍙樺寲锛堟柟妗堣川閲忕殑鏃堕棿绾匡級",
     "",
-    "不靠猜。不靠经验盲测。每一轮算法的贡献度是可见的。",
+    "涓嶉潬鐚溿€備笉闈犵粡楠岀洸娴嬨€傛瘡涓€杞畻娉曠殑璐＄尞搴︽槸鍙鐨勩€?,
     "",
-    "数据层的业务智能",
-    "这不是一个通用的 VRPTW 求解器。这是一套为多门店、一日多配、敏捷补货场景深度定制的调度引擎。",
+    "鏁版嵁灞傜殑涓氬姟鏅鸿兘",
+    "杩欎笉鏄竴涓€氱敤鐨?VRPTW 姹傝В鍣ㄣ€傝繖鏄竴濂椾负澶氶棬搴椼€佷竴鏃ュ閰嶃€佹晱鎹疯ˉ璐у満鏅繁搴﹀畾鍒剁殑璋冨害寮曟搸銆?,
     "",
-    "三套核心机制",
-    "1. 多波次数据分离管理",
-    "波次数不写死。两配、三配、四配、五配……按业务实际配置。每个波次独立维护门店清单、时间窗口、服务时长。没有某波次需求的站点，不会被系统强行塞入。时间窗回归真实补货节奏，不产生「理论上能排、实际上送不了」的假方案。",
+    "涓夊鏍稿績鏈哄埗",
+    "1. 澶氭尝娆℃暟鎹垎绂荤鐞?,
+    "娉㈡鏁颁笉鍐欐銆備袱閰嶃€佷笁閰嶃€佸洓閰嶃€佷簲閰嶁€︹€︽寜涓氬姟瀹為檯閰嶇疆銆傛瘡涓尝娆＄嫭绔嬬淮鎶ら棬搴楁竻鍗曘€佹椂闂寸獥鍙ｃ€佹湇鍔℃椂闀裤€傛病鏈夋煇娉㈡闇€姹傜殑绔欑偣锛屼笉浼氳绯荤粺寮鸿濉炲叆銆傛椂闂寸獥鍥炲綊鐪熷疄琛ヨ揣鑺傚锛屼笉浜х敓銆岀悊璁轰笂鑳芥帓銆佸疄闄呬笂閫佷笉浜嗐€嶇殑鍋囨柟妗堛€?,
     "",
-    "2. 超远站点独立考核规则",
-    "单波次中距离异常的站点，系统采用独立代价函数——只考核从仓库到站点的去程里程，不再用「去程+回库」的全程里程一刀切。避免合理线路因返程空驶被误杀，同时保留对真正不可达站点的识别能力。",
+    "2. 瓒呰繙绔欑偣鐙珛鑰冩牳瑙勫垯",
+    "鍗曟尝娆′腑璺濈寮傚父鐨勭珯鐐癸紝绯荤粺閲囩敤鐙珛浠ｄ环鍑芥暟鈥斺€斿彧鑰冩牳浠庝粨搴撳埌绔欑偣鐨勫幓绋嬮噷绋嬶紝涓嶅啀鐢ㄣ€屽幓绋?鍥炲簱銆嶇殑鍏ㄧ▼閲岀▼涓€鍒€鍒囥€傞伩鍏嶅悎鐞嗙嚎璺洜杩旂▼绌洪┒琚鏉€锛屽悓鏃朵繚鐣欏鐪熸涓嶅彲杈剧珯鐐圭殑璇嗗埆鑳藉姏銆?,
     "",
-    "3. 路网引擎 + 智能缓存",
-    "优先调用高德 / 百度等商用路网接口获取真实距离与时长，确保方案可执行。同时建立本地缓存机制：同一对站点-仓库的组合，第一次认真拉取，后续直接命中缓存。成本和响应速度兼顾，不会重复烧接口费。",
+    "3. 璺綉寮曟搸 + 鏅鸿兘缂撳瓨",
+    "浼樺厛璋冪敤楂樺痉 / 鐧惧害绛夊晢鐢ㄨ矾缃戞帴鍙ｈ幏鍙栫湡瀹炶窛绂讳笌鏃堕暱锛岀‘淇濇柟妗堝彲鎵ц銆傚悓鏃跺缓绔嬫湰鍦扮紦瀛樻満鍒讹細鍚屼竴瀵圭珯鐐?浠撳簱鐨勭粍鍚堬紝绗竴娆¤鐪熸媺鍙栵紝鍚庣画鐩存帴鍛戒腑缂撳瓨銆傛垚鏈拰鍝嶅簲閫熷害鍏奸【锛屼笉浼氶噸澶嶇儳鎺ュ彛璐广€?,
     "",
-    "解决的真实问题",
-    "对连锁品牌：一日多配、不同门店不同补货频次、部分站点只配早不配晚——系统天然支持，不用改代码。",
-    "对第三方物流：服务多个品牌、多个仓库、多套时间窗规则——一套系统统一调度，不来回切换。",
-    "对调度员：不用手动剔除「不该出现在这一波」的站点，系统自动按规则过滤。",
-    "对管理层：路网 API 有缓存，算力成本可控，不会被一张调度单烧掉几百次接口调用。",
+    "瑙ｅ喅鐨勭湡瀹為棶棰?,
+    "瀵硅繛閿佸搧鐗岋細涓€鏃ュ閰嶃€佷笉鍚岄棬搴椾笉鍚岃ˉ璐ч娆°€侀儴鍒嗙珯鐐瑰彧閰嶆棭涓嶉厤鏅氣€斺€旂郴缁熷ぉ鐒舵敮鎸侊紝涓嶇敤鏀逛唬鐮併€?,
+    "瀵圭涓夋柟鐗╂祦锛氭湇鍔″涓搧鐗屻€佸涓粨搴撱€佸濂楁椂闂寸獥瑙勫垯鈥斺€斾竴濂楃郴缁熺粺涓€璋冨害锛屼笉鏉ュ洖鍒囨崲銆?,
+    "瀵硅皟搴﹀憳锛氫笉鐢ㄦ墜鍔ㄥ墧闄ゃ€屼笉璇ュ嚭鐜板湪杩欎竴娉€嶇殑绔欑偣锛岀郴缁熻嚜鍔ㄦ寜瑙勫垯杩囨护銆?,
+    "瀵圭鐞嗗眰锛氳矾缃?API 鏈夌紦瀛橈紝绠楀姏鎴愭湰鍙帶锛屼笉浼氳涓€寮犺皟搴﹀崟鐑ф帀鍑犵櫨娆℃帴鍙ｈ皟鐢ㄣ€?,
     "",
-    "可解释调度：不是只给答案，是给证据链",
-    "调度员点击任何一个结果，能看到：",
-    "为什么这个门店归这辆车（时间窗匹配 / 里程收益 / 避免超载）",
-    "为什么这个波次没被优化掉（门店分布稀疏 / 时间窗刚性 / 车数约束）",
-    "为什么某些门店未被调度（超距 / 超时 / 无可用车辆 / 规则过滤）",
-    "罚分规则的内部代价拆解（时间窗惩罚 / 超载惩罚 / 里程惩罚各自多少）",
+    "鍙В閲婅皟搴︼細涓嶆槸鍙粰绛旀锛屾槸缁欒瘉鎹摼",
+    "璋冨害鍛樼偣鍑讳换浣曚竴涓粨鏋滐紝鑳界湅鍒帮細",
+    "涓轰粈涔堣繖涓棬搴楀綊杩欒締杞︼紙鏃堕棿绐楀尮閰?/ 閲岀▼鏀剁泭 / 閬垮厤瓒呰浇锛?,
+    "涓轰粈涔堣繖涓尝娆℃病琚紭鍖栨帀锛堥棬搴楀垎甯冪█鐤?/ 鏃堕棿绐楀垰鎬?/ 杞︽暟绾︽潫锛?,
+    "涓轰粈涔堟煇浜涢棬搴楁湭琚皟搴︼紙瓒呰窛 / 瓒呮椂 / 鏃犲彲鐢ㄨ溅杈?/ 瑙勫垯杩囨护锛?,
+    "缃氬垎瑙勫垯鐨勫唴閮ㄤ唬浠锋媶瑙ｏ紙鏃堕棿绐楁儵缃?/ 瓒呰浇鎯╃綒 / 閲岀▼鎯╃綒鍚勮嚜澶氬皯锛?,
     "",
-    "管理层不需要看懂算法。管理层需要看懂“为什么今天用方案 1 而不是方案 3”。这套系统提供的就是这个证据链。",
+    "绠＄悊灞備笉闇€瑕佺湅鎳傜畻娉曘€傜鐞嗗眰闇€瑕佺湅鎳傗€滀负浠€涔堜粖澶╃敤鏂规 1 鑰屼笉鏄柟妗?3鈥濄€傝繖濂楃郴缁熸彁渚涚殑灏辨槸杩欎釜璇佹嵁閾俱€?,
     "",
-    "求解档案：每一轮结果永久留痕",
-    "市面系统：算完第 5 轮，第 3 轮就没了。",
-    "这套系统：自动存档每一轮求解结果。后续可以翻页回看、对比、恢复历史方案。",
+    "姹傝В妗ｆ锛氭瘡涓€杞粨鏋滄案涔呯暀鐥?,
+    "甯傞潰绯荤粺锛氱畻瀹岀 5 杞紝绗?3 杞氨娌′簡銆?,
+    "杩欏绯荤粺锛氳嚜鍔ㄥ瓨妗ｆ瘡涓€杞眰瑙ｇ粨鏋溿€傚悗缁彲浠ョ炕椤靛洖鐪嬨€佸姣斻€佹仮澶嶅巻鍙叉柟妗堛€?,
     "",
-    "调度员可以这样工作：",
-    "快速初排 → 存档",
-    "继续优化三轮 → 存档",
-    "发现第 2 轮方案更好 → 恢复第 2 轮 → 在此基础上继续优化",
+    "璋冨害鍛樺彲浠ヨ繖鏍峰伐浣滐細",
+    "蹇€熷垵鎺?鈫?瀛樻。",
+    "缁х画浼樺寲涓夎疆 鈫?瀛樻。",
+    "鍙戠幇绗?2 杞柟妗堟洿濂?鈫?鎭㈠绗?2 杞?鈫?鍦ㄦ鍩虹涓婄户缁紭鍖?,
     "",
-    "不覆盖。不丢失。每一轮思考都有痕迹。",
+    "涓嶈鐩栥€備笉涓㈠け銆傛瘡涓€杞€濊€冮兘鏈夌棔杩广€?,
     "",
-    "数字调度官：语音交互前置",
-    "传统系统：等结果算完，才能看、才能问。",
-    "这套系统：求解前即可对话。",
+    "鏁板瓧璋冨害瀹橈細璇煶浜や簰鍓嶇疆",
+    "浼犵粺绯荤粺锛氱瓑缁撴灉绠楀畬锛屾墠鑳界湅銆佹墠鑳介棶銆?,
+    "杩欏绯荤粺锛氭眰瑙ｅ墠鍗冲彲瀵硅瘽銆?,
     "",
-    "语音提问：“为什么上一轮那家店没排进去？”",
-    "语音播报：“本轮共调度 47 家门店，使用 6 辆车，总里程 318 公里，较上一轮下降 12 公里。”",
+    "璇煶鎻愰棶锛氣€滀负浠€涔堜笂涓€杞偅瀹跺簵娌℃帓杩涘幓锛熲€?,
+    "璇煶鎾姤锛氣€滄湰杞叡璋冨害 47 瀹堕棬搴楋紝浣跨敤 6 杈嗚溅锛屾€婚噷绋?318 鍏噷锛岃緝涓婁竴杞笅闄?12 鍏噷銆傗€?,
     "",
-    "提前待机，不等人。",
+    "鎻愬墠寰呮満锛屼笉绛変汉銆?,
     "",
-    "管理层的视角",
-    "这套系统对管理层有价值，不是因为界面好看，而是因为：",
-    "结果可追溯：每一轮方案都有存档，决策不是拍脑袋",
-    "原因可解释：任何一条线路、一个门店的归属，都能说出为什么",
-    "过程可审计：调度员做了哪些操作、系统自动跑了哪些接力、谁在什么时间点干预了什么，都有记录",
-    "对比可量化：多方案并排对比，代价、车数、里程、违反约束数一目了然",
-    "成本可控制：路网 API 有缓存，不重复调取；算法链可配置，不浪费算力",
+    "绠＄悊灞傜殑瑙嗚",
+    "杩欏绯荤粺瀵圭鐞嗗眰鏈変环鍊硷紝涓嶆槸鍥犱负鐣岄潰濂界湅锛岃€屾槸鍥犱负锛?,
+    "缁撴灉鍙拷婧細姣忎竴杞柟妗堥兘鏈夊瓨妗ｏ紝鍐崇瓥涓嶆槸鎷嶈剳琚?,
+    "鍘熷洜鍙В閲婏細浠讳綍涓€鏉＄嚎璺€佷竴涓棬搴楃殑褰掑睘锛岄兘鑳借鍑轰负浠€涔?,
+    "杩囩▼鍙璁★細璋冨害鍛樺仛浜嗗摢浜涙搷浣溿€佺郴缁熻嚜鍔ㄨ窇浜嗗摢浜涙帴鍔涖€佽皝鍦ㄤ粈涔堟椂闂寸偣骞查浜嗕粈涔堬紝閮芥湁璁板綍",
+    "瀵规瘮鍙噺鍖栵細澶氭柟妗堝苟鎺掑姣旓紝浠ｄ环銆佽溅鏁般€侀噷绋嬨€佽繚鍙嶇害鏉熸暟涓€鐩簡鐒?,
+    "鎴愭湰鍙帶鍒讹細璺綉 API 鏈夌紦瀛橈紝涓嶉噸澶嶈皟鍙栵紱绠楁硶閾惧彲閰嶇疆锛屼笉娴垂绠楀姏",
     "",
-    "它不是调度员一个人的操作台。它是整个配送决策的证据中心。",
+    "瀹冧笉鏄皟搴﹀憳涓€涓汉鐨勬搷浣滃彴銆傚畠鏄暣涓厤閫佸喅绛栫殑璇佹嵁涓績銆?,
     "",
-    "一句话总结",
-    "市面唯一一套将九大算法岗位化、接力求解透明化、调度决策可解释化、全流程留痕永久化的多波次配送调度系统。",
+    "涓€鍙ヨ瘽鎬荤粨",
+    "甯傞潰鍞竴涓€濂楀皢涔濆ぇ绠楁硶宀椾綅鍖栥€佹帴鍔涙眰瑙ｉ€忔槑鍖栥€佽皟搴﹀喅绛栧彲瑙ｉ噴鍖栥€佸叏娴佺▼鐣欑棔姘镐箙鍖栫殑澶氭尝娆￠厤閫佽皟搴︾郴缁熴€?,
     "",
-    "不限行业，不限业态。从“算得出”到“算得对、讲得清、留得住、经得起追问”。",
+    "涓嶉檺琛屼笟锛屼笉闄愪笟鎬併€備粠鈥滅畻寰楀嚭鈥濆埌鈥滅畻寰楀銆佽寰楁竻銆佺暀寰椾綇銆佺粡寰楄捣杩介棶鈥濄€?,
   ].join("\n");
 }
 
@@ -10942,7 +10933,7 @@ function clearProcessTypingTimers() {
 function typeProcessText(box, text) {
   box.textContent = "";
   let index = 0;
-  const punctuationPauses = new Set(["，", "。", "：", "；", "！", "？", ",", ".", ":", ";", "!", "?", "\n"]);
+  const punctuationPauses = new Set(["锛?, "銆?, "锛?, "锛?, "锛?, "锛?, ",", ".", ":", ";", "!", "?", "\n"]);
   const tick = () => {
     if (index >= text.length) {
       return;
@@ -10975,7 +10966,7 @@ function openProcessModal(resultKey, waveId, plateNo, tripNo) {
     const [preferred] = matched.splice(preferredIndex, 1);
     matched.unshift(preferred);
   }
-  document.getElementById("processModalTitle").textContent = lang() === "ja" ? `${plateNo} · ${waveId} · 第 ${tripNo} 便 · 複数アルゴリズム${L("playback")}` : `${plateNo} · ${waveId} · 第 ${tripNo} ${L("tripSuffix")} · 多算法${L("playback")}`;
+  document.getElementById("processModalTitle").textContent = lang() === "ja" ? `${plateNo} 路 ${waveId} 路 绗?${tripNo} 渚?路 瑜囨暟銈儷銈淬儶銈恒儬${L("playback")}` : `${plateNo} 路 ${waveId} 路 绗?${tripNo} ${L("tripSuffix")} 路 澶氱畻娉?{L("playback")}`;
   const grid = document.getElementById("processGrid");
   grid.innerHTML = matched.map((item, index) => `
     <section class="process-pane">
@@ -11179,7 +11170,7 @@ function renderFallbackRouteMap(containerId, mapData) {
       <div class="route-panzoom-toolbar">
         <button type="button" class="mini route-zoom-in">+</button>
         <button type="button" class="mini route-zoom-out">-</button>
-        <span class="muted">${lang() === "ja" ? "実地図ベース / ドラッグ・ホイール操作に対応" : "真实底图，可拖动 / 滚轮缩放"}</span>
+        <span class="muted">${lang() === "ja" ? "瀹熷湴鍥炽儥銉笺偣 / 銉夈儵銉冦偘銉汇儧銈ゃ兗銉搷浣溿伀瀵惧繙" : "鐪熷疄搴曞浘锛屽彲鎷栧姩 / 婊氳疆缂╂斁"}</span>
       </div>
       <div class="route-panzoom-viewport">
         <div class="route-panzoom-content route-tilemap-content">
@@ -11337,7 +11328,7 @@ function buildRouteStopScheduleTable(trip) {
   `).join("");
   return `
     <div class="route-stop-card">
-      <div class="route-stop-card-title">${lang() === "ja" ? "店舗到着計画" : "门店到店计划"}</div>
+      <div class="route-stop-card-title">${lang() === "ja" ? "搴楄垪鍒扮潃瑷堢敾" : "闂ㄥ簵鍒板簵璁″垝"}</div>
       <div class="table-wrap route-stop-table-wrap">
         <table class="route-stop-table">
           <tr>
@@ -11346,7 +11337,7 @@ function buildRouteStopScheduleTable(trip) {
             <th>${L("routePlanArrival")}</th>
             <th>${L("routeDesiredArrival")}</th>
           </tr>
-          ${rows || `<tr><td colspan="4">${lang() === "ja" ? "店舗はありません" : "暂无门店"}</td></tr>`}
+          ${rows || `<tr><td colspan="4">${lang() === "ja" ? "搴楄垪銇亗銈娿伨銇涖倱" : "鏆傛棤闂ㄥ簵"}</td></tr>`}
         </table>
       </div>
     </div>
@@ -11366,13 +11357,13 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
   const title = document.getElementById("routeMapModalTitle");
   const body = document.getElementById("routeMapModalBody");
   const fallbackMapData = buildFallbackRouteMapData(result, trip);
-  title.textContent = `${plateNo} · ${waveId} · ${L("tripNo")}${tripNo}${L("tripSuffix")} · ${L("routeMap")}`;
+  title.textContent = `${plateNo} 路 ${waveId} 路 ${L("tripNo")}${tripNo}${L("tripSuffix")} 路 ${L("routeMap")}`;
   body.innerHTML = `
     <div class="route-map-shell">
         <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? "まずローカルの対話型ルート図を表示し、外部ルートデータが取れれば自動で更新します。" : "先展示本地交互线路图，若外部线路数据可用会自动升级成更完整的线路图。"}</p>
+          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? "銇俱仛銉兗銈儷銇瑭卞瀷銉兗銉堝洺銈掕〃绀恒仐銆佸閮ㄣ儷銉笺儓銉囥兗銈裤亴鍙栥倢銈屻伆鑷嫊銇ф洿鏂般仐銇俱仚銆? : "鍏堝睍绀烘湰鍦颁氦浜掔嚎璺浘锛岃嫢澶栭儴绾胯矾鏁版嵁鍙敤浼氳嚜鍔ㄥ崌绾ф垚鏇村畬鏁寸殑绾胯矾鍥俱€?}</p>
           <div class="route-map-legend">
             ${fallbackMapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11389,8 +11380,8 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
       <div class="route-map-shell">
         <div id="routeInteractiveMap" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? `この地図はドラッグ・拡大縮小できます。底図は交互地図、順路は既存の実线路データを描画しています。` : `这张图现在可以拖动和缩放，底图可交互，顺路继续使用现有真实线路数据绘制。`}</p>
+          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? `銇撱伄鍦板洺銇儔銉┿儍銈般兓鎷″ぇ绺皬銇с亶銇俱仚銆傚簳鍥炽伅浜や簰鍦板洺銆侀爢璺伅鏃㈠瓨銇疅绾胯矾銉囥兗銈裤倰鎻忕敾銇椼仸銇勩伨銇欍€俙 : `杩欏紶鍥剧幇鍦ㄥ彲浠ユ嫋鍔ㄥ拰缂╂斁锛屽簳鍥惧彲浜や簰锛岄『璺户缁娇鐢ㄧ幇鏈夌湡瀹炵嚎璺暟鎹粯鍒躲€俙}</p>
           <div class="route-map-legend">
             ${mapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11403,8 +11394,8 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
         <div class="route-map-shell">
           <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
           <div class="route-map-meta">
-            <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
-            <p class="muted">${lang() === "ja" ? `交互底図の読み込みに失敗したため、ローカル交互线路图に切り替えました。` : `交互底图加载失败，已切换到本地交互线路图。`}</p>
+            <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
+            <p class="muted">${lang() === "ja" ? `浜や簰搴曞洺銇銇胯炯銇裤伀澶辨晽銇椼仧銇熴倎銆併儹銉笺偒銉氦浜掔嚎璺浘銇垏銈婃浛銇堛伨銇椼仧銆俙 : `浜や簰搴曞浘鍔犺浇澶辫触锛屽凡鍒囨崲鍒版湰鍦颁氦浜掔嚎璺浘銆俙}</p>
             <div class="route-map-legend">
               ${mapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
             </div>
@@ -11419,8 +11410,8 @@ async function openRouteMapModal(resultKey, waveId, plateNo, tripNo) {
       <div class="route-map-shell">
         <div id="routeInteractiveMapFallback" class="route-map-interactive"></div>
         <div class="route-map-meta">
-          <p class="muted">${L("route")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
-          <p class="muted">${lang() === "ja" ? "外部地図の読み込みに失敗したため、ローカルのルート図で表示しています。" : "外部地图加载失败，已改用本地线路图显示。"} ${escapeHtml(error?.message || "")}</p>
+          <p class="muted">${L("route")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
+          <p class="muted">${lang() === "ja" ? "澶栭儴鍦板洺銇銇胯炯銇裤伀澶辨晽銇椼仧銇熴倎銆併儹銉笺偒銉伄銉兗銉堝洺銇ц〃绀恒仐銇︺亜銇俱仚銆? : "澶栭儴鍦板浘鍔犺浇澶辫触锛屽凡鏀圭敤鏈湴绾胯矾鍥炬樉绀恒€?} ${escapeHtml(error?.message || "")}</p>
           <div class="route-map-legend">
             ${fallbackMapData.markers.map((item) => `<span class="route-map-chip"><strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.name)}</span>`).join("")}
           </div>
@@ -11546,7 +11537,7 @@ function openRelayConsoleModal(title = "") {
   const body = document.getElementById("relayConsoleBody");
   const titleNode = document.getElementById("relayConsoleTitle");
   if (body) body.textContent = "";
-  if (titleNode) titleNode.textContent = title || (lang() === "ja" ? "リレー最適化の過程" : "接力求解过程");
+  if (titleNode) titleNode.textContent = title || (lang() === "ja" ? "銉儸銉兼渶閬╁寲銇亷绋? : "鎺ュ姏姹傝В杩囩▼");
   persistRelayConsoleLines();
   modal?.classList.remove("hidden");
   modal?.setAttribute("aria-hidden", "false");
@@ -11568,7 +11559,7 @@ function reportRelayStageProgress(text) {
   if (typeof relayStageReporter === "function" && text) relayStageReporter(text);
 }
 
-function reportStrategyAuditToRelayConsole(strategyAudit, algoName = "算法") {
+function reportStrategyAuditToRelayConsole(strategyAudit, algoName = "绠楁硶") {
   if (!strategyAudit || typeof strategyAudit !== "object") return;
   const waveId = String(strategyAudit.waveId || "").trim() || "-";
   const inputCount = Number(strategyAudit.inputStoreCount || 0);
@@ -11581,42 +11572,42 @@ function reportStrategyAuditToRelayConsole(strategyAudit, algoName = "算法") {
     : [];
   const emitStoreIdChunks = (title, ids) => {
     const list = Array.isArray(ids) ? ids : [];
-    reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：${title} ${list.length} 家。`);
+    reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細${title} ${list.length} 瀹躲€俙);
     if (!list.length) return;
     const chunkSize = 20;
     for (let i = 0; i < list.length; i += chunkSize) {
       const chunk = list.slice(i, i + chunkSize);
-      reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：${title}明细 ${i + 1}-${Math.min(i + chunkSize, list.length)}：${chunk.join("、")}。`);
+      reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細${title}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, list.length)}锛?{chunk.join("銆?)}銆俙);
     }
   };
-  reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：输入门店 ${inputCount} 家，策略后 ${outputCount} 家。`);
-  emitStoreIdChunks("过滤零货量", zeroIds);
-  emitStoreIdChunks("过滤非本波次", scopeIds);
+  reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細杈撳叆闂ㄥ簵 ${inputCount} 瀹讹紝绛栫暐鍚?${outputCount} 瀹躲€俙);
+  emitStoreIdChunks("杩囨护闆惰揣閲?, zeroIds);
+  emitStoreIdChunks("杩囨护闈炴湰娉㈡", scopeIds);
   if (waveId === "W3") {
-    reportRelayStageProgress(`策略中心审计（${algoName} ${waveId}）：W3按单程里程规则执行（由后端约束层判定）。`);
+    reportRelayStageProgress(`绛栫暐涓績瀹¤锛?{algoName} ${waveId}锛夛細W3鎸夊崟绋嬮噷绋嬭鍒欐墽琛岋紙鐢卞悗绔害鏉熷眰鍒ゅ畾锛夈€俙);
   }
 }
 
-function reportBackendUnscheduledToRelayConsole(unscheduledStores, algoName = "算法", waveId = "-") {
+function reportBackendUnscheduledToRelayConsole(unscheduledStores, algoName = "绠楁硶", waveId = "-") {
   const rows = Array.isArray(unscheduledStores) ? unscheduledStores : [];
   if (!rows.length) {
-    reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：0 家。`);
+    reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細0 瀹躲€俙);
     return;
   }
   const groups = new Map();
   for (const row of rows) {
-    const reason = String(row?.reasonText || row?.reason || "未知").trim() || "未知";
+    const reason = String(row?.reasonText || row?.reason || "鏈煡").trim() || "鏈煡";
     const storeId = String(row?.storeId || "").trim();
     if (!groups.has(reason)) groups.set(reason, []);
     if (storeId) groups.get(reason).push(storeId);
   }
-  reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：共 ${rows.length} 家。`);
+  reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細鍏?${rows.length} 瀹躲€俙);
   for (const [reason, ids] of groups.entries()) {
-    reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：${reason} ${ids.length} 家。`);
+    reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細${reason} ${ids.length} 瀹躲€俙);
     const chunkSize = 20;
     for (let i = 0; i < ids.length; i += chunkSize) {
       const chunk = ids.slice(i, i + chunkSize);
-      reportRelayStageProgress(`后端未分配诊断（${algoName} ${waveId}）：${reason}明细 ${i + 1}-${Math.min(i + chunkSize, ids.length)}：${chunk.join("、")}。`);
+      reportRelayStageProgress(`鍚庣鏈垎閰嶈瘖鏂紙${algoName} ${waveId}锛夛細${reason}鏄庣粏 ${i + 1}-${Math.min(i + chunkSize, ids.length)}锛?{chunk.join("銆?)}銆俙);
     }
   }
 }
@@ -11658,9 +11649,9 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
     return `
       <section class="wave-block">
         <h3>${wave.waveId} ${wave.start} - ${wave.end}</h3>
-        <p class="muted">${L("dispatchStart")}：${wave.start}，${lang() === "ja" ? "締切ルール" : "截止规则"}：${(wave.endMode || "return") === "return" ? LT("waveModeReturn", { time: wave.end }) : LT("waveModeService", { time: wave.end })}${wave.singleWave ? `，${L("waveSingleHint")}` : `，${L("waveRegularHint")}`}</p>
-        <p class="muted">${L("includedStores")}：${wave.storeList.join(",") || L("allStores")}</p>
-        ${overtimeTrips.length ? `<div class="note overtime-note">${L("overtimeTrips")}：${overtimeTrips.map(({ plateNo, trip }) => `${plateNo} ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}`).join("；")}</div>` : ""}
+        <p class="muted">${L("dispatchStart")}锛?{wave.start}锛?{lang() === "ja" ? "绶犲垏銉兗銉? : "鎴瑙勫垯"}锛?{(wave.endMode || "return") === "return" ? LT("waveModeReturn", { time: wave.end }) : LT("waveModeService", { time: wave.end })}${wave.singleWave ? `锛?{L("waveSingleHint")}` : `锛?{L("waveRegularHint")}`}</p>
+        <p class="muted">${L("includedStores")}锛?{wave.storeList.join(",") || L("allStores")}</p>
+        ${overtimeTrips.length ? `<div class="note overtime-note">${L("overtimeTrips")}锛?{overtimeTrips.map(({ plateNo, trip }) => `${plateNo} ${L("tripNo")}${trip.tripNo}${L("tripSuffix")}${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}`).join("锛?)}</div>` : ""}
         ${used.map((plan) => {
           const usage = usageMap.get(plan.vehicle.plateNo);
           return `
@@ -11681,7 +11672,7 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
                   ${(() => {
                     const truck = getTripTruckVisual(trip);
                     return `<div class="trip-hero">
-                    <p class="route">${L("tripNo")} ${trip.tripNo} ${L("tripSuffix")}：${buildRouteDisplay(trip.route, result.scenario)}</p>
+                    <p class="route">${L("tripNo")} ${trip.tripNo} ${L("tripSuffix")}锛?{buildRouteDisplay(trip.route, result.scenario)}</p>
                       <div class="trip-truck-row">
                         <div class="trip-truck trip-truck-${truck.cls}">
                           <img src="${truck.src}" alt="${escapeHtml(`${plan.vehicle.plateNo} ${truck.badge}`)}" onerror="this.style.display='none';this.parentElement.classList.add('trip-truck-fallback')">
@@ -11690,7 +11681,7 @@ function renderWaveBlocks(result, selectedWaveIds = null) {
                         </div>
                       </div>
                       <p class="trip-actions"><button class="alert open-process" data-result="${result.key}" data-wave="${wave.waveId}" data-plate="${plan.vehicle.plateNo}" data-trip="${trip.tripNo}">${L("viewViz")}</button><button class="secondary open-route-map" data-result="${result.key}" data-wave="${wave.waveId}" data-plate="${plan.vehicle.plateNo}" data-trip="${trip.tripNo}">${L("routeMap")}</button></p>
-                      <p class="trip-footer muted">${showReturnTime ? `${L("returnTime")}：${formatTime(trip.finish)}，` : ""}${L("backDistance")}：${trip.stops.length ? result.scenario.dist[trip.stops[trip.stops.length - 1].storeId][DC.id].toFixed(1) : "0.0"} km，${L("tripRoundKm")}：${trip.totalDistance.toFixed(1)} km，${L("tripLoadRate")}：${formatRate(trip.loadRate)}${(trip.waveLateMinutes || 0) > 0 ? `，<span class="status-bad">${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}</span>` : ""}</p>
+                      <p class="trip-footer muted">${showReturnTime ? `${L("returnTime")}锛?{formatTime(trip.finish)}锛宍 : ""}${L("backDistance")}锛?{trip.stops.length ? result.scenario.dist[trip.stops[trip.stops.length - 1].storeId][DC.id].toFixed(1) : "0.0"} km锛?{L("tripRoundKm")}锛?{trip.totalDistance.toFixed(1)} km锛?{L("tripLoadRate")}锛?{formatRate(trip.loadRate)}${(trip.waveLateMinutes || 0) > 0 ? `锛?span class="status-bad">${L("overWave")} ${(trip.waveLateMinutes || 0).toFixed(0)} ${L("minutes")}</span>` : ""}</p>
                     </div>`;
                   })()}
                   <div class="stop-list">
@@ -11729,29 +11720,29 @@ function renderResults() {
           <p>${algoDescription(activeResult.key)}</p>
         </div>
         <button class="${detailExpanded ? "secondary" : "primary"} toggle-result-detail" data-result-key="${activeResult.key}">
-          ${lang() === "ja" ? (detailExpanded ? "詳細を閉じる" : "詳細を開く") : (detailExpanded ? "收起明细" : "展开明细")}
+          ${lang() === "ja" ? (detailExpanded ? "瑭崇窗銈掗枆銇樸倠" : "瑭崇窗銈掗枊銇?) : (detailExpanded ? "鏀惰捣鏄庣粏" : "灞曞紑鏄庣粏")}
         </button>
       </div>
-      <div class="algo-summary"><span class="chip">${L("score")} ${activeResult.metrics.score.toFixed(1)}${lang() === "ja" ? " / 100（高いほど良い）" : " / 100（越高越好）"}</span><span class="chip">${L("onTime")} ${activeResult.metrics.totalOnTime}/${activeResult.metrics.totalStops}</span><span class="chip">${L("totalDistance")} ${activeResult.metrics.totalDistance.toFixed(1)} km</span><span class="chip">${L("avgLoad")} ${formatRate(activeResult.metrics.loadRate)}</span><span class="chip">${L("fleetLoad")} ${formatRate(activeResult.metrics.fleetLoadRate)}</span><span class="chip">${lang() === "ja" ? `使用車両 ${activeResult.metrics.usedVehicleCount} 台` : `已用车辆 ${activeResult.metrics.usedVehicleCount} 辆`}</span><span class="chip">${lang() === "ja" ? `待機車両 ${activeResult.metrics.unusedVehicleCount} 台` : `未用车辆 ${activeResult.metrics.unusedVehicleCount} 辆`}</span><span class="chip">${lang() === "ja" ? `モード ${currentStrategyLabel()}` : `模式 ${currentStrategyLabel()}`}</span><span class="chip">${lang() === "ja" ? `方針 ${currentGoalLabel()}` : `目标 ${currentGoalLabel()}`}</span></div>
+      <div class="algo-summary"><span class="chip">${L("score")} ${activeResult.metrics.score.toFixed(1)}${lang() === "ja" ? " / 100锛堥珮銇勩伝銇╄壇銇勶級" : " / 100锛堣秺楂樿秺濂斤級"}</span><span class="chip">${L("onTime")} ${activeResult.metrics.totalOnTime}/${activeResult.metrics.totalStops}</span><span class="chip">${L("totalDistance")} ${activeResult.metrics.totalDistance.toFixed(1)} km</span><span class="chip">${L("avgLoad")} ${formatRate(activeResult.metrics.loadRate)}</span><span class="chip">${L("fleetLoad")} ${formatRate(activeResult.metrics.fleetLoadRate)}</span><span class="chip">${lang() === "ja" ? `浣跨敤杌婁浮 ${activeResult.metrics.usedVehicleCount} 鍙癭 : `宸茬敤杞﹁締 ${activeResult.metrics.usedVehicleCount} 杈哷}</span><span class="chip">${lang() === "ja" ? `寰呮杌婁浮 ${activeResult.metrics.unusedVehicleCount} 鍙癭 : `鏈敤杞﹁締 ${activeResult.metrics.unusedVehicleCount} 杈哷}</span><span class="chip">${lang() === "ja" ? `銉兗銉?${currentStrategyLabel()}` : `妯″紡 ${currentStrategyLabel()}`}</span><span class="chip">${lang() === "ja" ? `鏂归嚌 ${currentGoalLabel()}` : `鐩爣 ${currentGoalLabel()}`}</span></div>
       <div class="result-wave-filter">
-        <span class="muted">${lang() === "ja" ? "波次選択" : "波次选择"}</span>
-        <button class="${allWaveSelected ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-filter-mode="all">${lang() === "ja" ? "全部" : "全部"}</button>
+        <span class="muted">${lang() === "ja" ? "娉㈡閬告姙" : "娉㈡閫夋嫨"}</span>
+        <button class="${allWaveSelected ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-filter-mode="all">${lang() === "ja" ? "鍏ㄩ儴" : "鍏ㄩ儴"}</button>
         ${waveIds.map((waveId) => `<button class="${selectedWaveIds.has(waveId) ? "primary" : "secondary"} toggle-result-wave-filter" data-wave-id="${escapeHtml(waveId)}">${escapeHtml(waveId)}</button>`).join("")}
       </div>
       ${detailExpanded ? `
       <div class="result-detail-body">
-        <p class="note">${lang() === "ja" ? `スコアは 100 点満点です。現在は「${currentGoalLabel()}」重視で並べつつ、定時性・距離・車両数・積載も合わせて評価しています。` : `评分说明：100分制。当前按“${currentGoalLabel()}”权重排序，同时综合参考准点、里程、车辆使用和装载表现。`}</p>
+        <p class="note">${lang() === "ja" ? `銈广偝銈伅 100 鐐规簚鐐广仹銇欍€傜従鍦ㄣ伅銆?{currentGoalLabel()}銆嶉噸瑕栥仹涓︺伖銇ゃ仱銆佸畾鏅傛€с兓璺濋洟銉昏粖涓℃暟銉荤杓夈倐鍚堛倧銇涖仸瑭曚尽銇椼仸銇勩伨銇欍€俙 : `璇勫垎璇存槑锛?00鍒嗗埗銆傚綋鍓嶆寜鈥?{currentGoalLabel()}鈥濇潈閲嶆帓搴忥紝鍚屾椂缁煎悎鍙傝€冨噯鐐广€侀噷绋嬨€佽溅杈嗕娇鐢ㄥ拰瑁呰浇琛ㄧ幇銆俙}</p>
         ${activeResult.adjustMessage ? `<p class="note">${activeResult.adjustMessage}</p>` : ""}
-        ${selectedWaveIds.size ? renderWaveBlocks(activeResult, selectedWaveIds) : `<div class="result-detail-collapsed">${lang() === "ja" ? "先に波次を選択してから詳細を開いてください。" : "请先选择要查看的波次，再展开明细。"}</div>`}
+        ${selectedWaveIds.size ? renderWaveBlocks(activeResult, selectedWaveIds) : `<div class="result-detail-collapsed">${lang() === "ja" ? "鍏堛伀娉㈡銈掗伕鎶炪仐銇︺亱銈夎┏绱般倰闁嬨亜銇︺亸銇犮仌銇勩€? : "璇峰厛閫夋嫨瑕佹煡鐪嬬殑娉㈡锛屽啀灞曞紑鏄庣粏銆?}</div>`}
         <div class="result-detail-actions">
           <button class="secondary toggle-result-detail" data-result-key="${activeResult.key}">
-            ${lang() === "ja" ? "詳細を閉じる" : "收起明细"}
+            ${lang() === "ja" ? "瑭崇窗銈掗枆銇樸倠" : "鏀惰捣鏄庣粏"}
           </button>
         </div>
       </div>
       ` : `
       <div class="result-detail-collapsed">
-        ${lang() === "ja" ? "詳細は折りたたまれています。必要なときだけ開いて確認できます。" : "明细已收起。需要定位问题时再展开，这样页面更短，方便截图。"}
+        ${lang() === "ja" ? "瑭崇窗銇姌銈娿仧銇熴伨銈屻仸銇勩伨銇欍€傚繀瑕併仾銇ㄣ亶銇犮亼闁嬨亜銇︾⒑瑾嶃仹銇嶃伨銇欍€? : "鏄庣粏宸叉敹璧枫€傞渶瑕佸畾浣嶉棶棰樻椂鍐嶅睍寮€锛岃繖鏍烽〉闈㈡洿鐭紝鏂逛究鎴浘銆?}
       </div>
       `}
     </article>
@@ -11858,7 +11849,7 @@ function getWaveAndPlans(result, waveId) {
 
 function syncResultAfterLocalAdjustment(result) {
   applyFinalRuleToResult(result, result.scenario);
-  reportWaveCandidateAssignedPendingStats("局部调整后", result.solution || [], result.scenario);
+  reportWaveCandidateAssignedPendingStats("灞€閮ㄨ皟鏁村悗", result.solution || [], result.scenario);
 }
 
 function getLiveUnscheduledItems(result) {
@@ -11936,24 +11927,24 @@ function exportLiveUnscheduledIds(resultKey = "") {
   const items = getLiveUnscheduledItems(result);
   const stats = computeWaveCandidateAssignedPendingStats(result.solution || [], result.scenario);
   const lines = [];
-  lines.push(`算法: ${result.label || result.key || "-"}`);
-  lines.push(`导出时间: ${new Date().toLocaleString("zh-CN", { hour12: false })}`);
-  lines.push(`未调度店-波次条数: ${items.length}`);
-  lines.push(`未调度门店去重数: ${new Set(items.map((x) => normalizeStoreKey(x.storeId))).size}`);
-  lines.push(`明细筛选未调度门店数: ${computeStoreDetailUnscheduledCount(result)}`);
+  lines.push(`绠楁硶: ${result.label || result.key || "-"}`);
+  lines.push(`瀵煎嚭鏃堕棿: ${new Date().toLocaleString("zh-CN", { hour12: false })}`);
+  lines.push(`鏈皟搴﹀簵-娉㈡鏉℃暟: ${items.length}`);
+  lines.push(`鏈皟搴﹂棬搴楀幓閲嶆暟: ${new Set(items.map((x) => normalizeStoreKey(x.storeId))).size}`);
+  lines.push(`鏄庣粏绛涢€夋湭璋冨害闂ㄥ簵鏁? ${computeStoreDetailUnscheduledCount(result)}`);
   lines.push("");
-  lines.push("=== 实时集合核对 ===");
+  lines.push("=== 瀹炴椂闆嗗悎鏍稿 ===");
   stats.forEach((row) => {
     lines.push(`${row.waveId}: candidate=${row.candidateCount}, assigned=${row.assignedCount}, pending=${row.pendingCount}`);
   });
   lines.push("");
-  lines.push("=== 未调度店-波次明细 ===");
+  lines.push("=== 鏈皟搴﹀簵-娉㈡鏄庣粏 ===");
   items.forEach((item) => {
     lines.push(`${item.waveId},${normalizeStoreKey(item.storeId)},${String(item.storeName || "")}`);
   });
   const stamp = new Date();
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  const fileName = `未调度实时集合_${result.key || "result"}_${timestamp}.txt`;
+  const fileName = `鏈皟搴﹀疄鏃堕泦鍚坃${result.key || "result"}_${timestamp}.txt`;
   const blob = new Blob([`\uFEFF${lines.join("\r\n")}`], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -12035,15 +12026,15 @@ function rescheduleUnscheduledStores(resultKey) {
       }
     }
     applyFinalRuleToResult(result, result.scenario);
-    reportWaveCandidateAssignedPendingStats(`补排第${round + 1}轮后`, result.solution || [], result.scenario);
+    reportWaveCandidateAssignedPendingStats(`琛ユ帓绗?{round + 1}杞悗`, result.solution || [], result.scenario);
     if (roundScheduled <= 0) break;
     round += 1;
   }
   syncResultAfterLocalAdjustment(result);
   const remainingCount = Number(result?.metrics?.unscheduledCount || 0);
   result.adjustMessage = scheduledNow > 0
-    ? `${LT("rescheduleProgress", { count: scheduledNow })}，${lang() === "ja" ? `未割当残り ${remainingCount} 件` : `剩余未调度 ${remainingCount} 家`}`
-    : `${L("rescheduleNoProgress")}，${lang() === "ja" ? `今回も ${pending.length} 件とも条件に合いませんでした。` : `本轮 ${pending.length} 家都未满足条件。`}`;
+    ? `${LT("rescheduleProgress", { count: scheduledNow })}锛?{lang() === "ja" ? `鏈壊褰撴畫銈?${remainingCount} 浠禶 : `鍓╀綑鏈皟搴?${remainingCount} 瀹禶}`
+    : `${L("rescheduleNoProgress")}锛?{lang() === "ja" ? `浠婂洖銈?${pending.length} 浠躲仺銈傛潯浠躲伀鍚堛亜銇俱仜銈撱仹銇椼仧銆俙 : `鏈疆 ${pending.length} 瀹堕兘鏈弧瓒虫潯浠躲€俙}`;
   box.textContent = result.adjustMessage;
   renderVehicles();
   renderSummary();
@@ -12134,15 +12125,15 @@ function renderUnscheduledPanel(result) {
           <button class="primary reschedule-again" data-result="${result.key}">${L("rescheduleAgain")}</button>
         </div>
       </div>
-      <p class="note">${lang() === "ja" ? `現在未割当 店舗 ${panelUniqueCount} 件（店-波次 ${items.length} 件）。まず空車を優先し、1 店 1 車で補配を試します。` : `当前未调度门店 ${panelUniqueCount} 家（店-波次 ${items.length} 条）。系统会优先空闲车辆，先按一店一车尝试补调。`}</p>
+      <p class="note">${lang() === "ja" ? `鐝惧湪鏈壊褰?搴楄垪 ${panelUniqueCount} 浠讹紙搴?娉㈡ ${items.length} 浠讹級銆傘伨銇氱┖杌娿倰鍎厛銇椼€? 搴?1 杌娿仹瑁滈厤銈掕│銇椼伨銇欍€俙 : `褰撳墠鏈皟搴﹂棬搴?${panelUniqueCount} 瀹讹紙搴?娉㈡ ${items.length} 鏉★級銆傜郴缁熶細浼樺厛绌洪棽杞﹁締锛屽厛鎸変竴搴椾竴杞﹀皾璇曡ˉ璋冦€俙}</p>
       ${result.adjustMessage ? `<p class="note">${result.adjustMessage}</p>` : ""}
       <div class="unscheduled-list">
         ${items.map((item) => {
           const timing = getEarliestDirectArrivalInfo(result, item);
           const timingText = timing
             ? (lang() === "ja"
-              ? `最早直行到着 ${formatTime(timing.earliestArrival)} / 期望 ${formatTime(timing.desiredArrivalMin)} / 最終許容 ${formatTime(timing.latestAllowedArrivalMin)}（+${Number(timing.allowedLateMinutes || 0)}）/ 要求より ${Number(timing.lateByDisplay || 0)} 分遅れ`
-              : `最早直达可到 ${formatTime(timing.earliestArrival)} / 期望 ${formatTime(timing.desiredArrivalMin)} / 最晚允许 ${formatTime(timing.latestAllowedArrivalMin)}（+${Number(timing.allowedLateMinutes || 0)}）/ 比要求晚 ${Number(timing.lateByDisplay || 0)} 分钟`)
+              ? `鏈€鏃╃洿琛屽埌鐫€ ${formatTime(timing.earliestArrival)} / 鏈熸湜 ${formatTime(timing.desiredArrivalMin)} / 鏈€绲傝ū瀹?${formatTime(timing.latestAllowedArrivalMin)}锛?${Number(timing.allowedLateMinutes || 0)}锛? 瑕佹眰銈堛倞 ${Number(timing.lateByDisplay || 0)} 鍒嗛亝銈宍
+              : `鏈€鏃╃洿杈惧彲鍒?${formatTime(timing.earliestArrival)} / 鏈熸湜 ${formatTime(timing.desiredArrivalMin)} / 鏈€鏅氬厑璁?${formatTime(timing.latestAllowedArrivalMin)}锛?${Number(timing.allowedLateMinutes || 0)}锛? 姣旇姹傛櫄 ${Number(timing.lateByDisplay || 0)} 鍒嗛挓`)
             : "";
           return `
           <article class="unscheduled-card">
@@ -12182,21 +12173,21 @@ function loadSavedPlans() { try { return JSON.parse(localStorage.getItem(STORAGE
 function loadRunArchives() { try { return JSON.parse(localStorage.getItem(RUN_ARCHIVE_KEY) || "[]"); } catch { return []; } }
 function archiveStrategyLabel(key) {
   return ({
-    quick: "快速初排",
-    deep: "继续优化",
-    relay: "接力求解",
-    compare: "多方案对比",
-    global: "全局搜索",
-    manual: "手工模式",
+    quick: "蹇€熷垵鎺?,
+    deep: "缁х画浼樺寲",
+    relay: "鎺ュ姏姹傝В",
+    compare: "澶氭柟妗堝姣?,
+    global: "鍏ㄥ眬鎼滅储",
+    manual: "鎵嬪伐妯″紡",
   })[key] || key;
 }
 function archiveGoalLabel(key) {
   return ({
-    balanced: "综合平衡",
-    ontime: "最准时",
-    vehicles: "少用车",
-    distance: "省里程",
-    load: "重装载",
+    balanced: "缁煎悎骞宠　",
+    ontime: "鏈€鍑嗘椂",
+    vehicles: "灏戠敤杞?,
+    distance: "鐪侀噷绋?,
+    load: "閲嶈杞?,
   })[key] || key;
 }
 function snapshotResultForArchive(result) {
@@ -12277,17 +12268,17 @@ function renderSavedPlans() {
       <div class="archive-toolbar">
         <div>
           <p class="archive-eyebrow">Solve Archive</p>
-          <h3 class="archive-title">求解档案</h3>
+          <h3 class="archive-title">姹傝В妗ｆ</h3>
         </div>
         <div class="archive-pager-wrap">
           <label class="archive-date-filter">
-            <span>${lang() === "ja" ? "日付" : "日期"}</span>
+            <span>${lang() === "ja" ? "鏃ヤ粯" : "鏃ユ湡"}</span>
             <input id="archiveDateFilterInput" type="date" value="${escapeHtml(dateFilter)}">
           </label>
           <div class="archive-pager">
-          <button class="secondary archive-page-btn" data-archive-page="${Math.max(1, state.ui.archivePage - 1)}" ${state.ui.archivePage <= 1 ? "disabled" : ""}>上一页</button>
-          <span class="archive-page-indicator">第 ${state.ui.archivePage} / ${totalPages} 页</span>
-          <button class="secondary archive-page-btn" data-archive-page="${Math.min(totalPages, state.ui.archivePage + 1)}" ${state.ui.archivePage >= totalPages ? "disabled" : ""}>下一页</button>
+          <button class="secondary archive-page-btn" data-archive-page="${Math.max(1, state.ui.archivePage - 1)}" ${state.ui.archivePage <= 1 ? "disabled" : ""}>涓婁竴椤?/button>
+          <span class="archive-page-indicator">绗?${state.ui.archivePage} / ${totalPages} 椤?/span>
+          <button class="secondary archive-page-btn" data-archive-page="${Math.min(totalPages, state.ui.archivePage + 1)}" ${state.ui.archivePage >= totalPages ? "disabled" : ""}>涓嬩竴椤?/button>
           </div>
         </div>
       </div>
@@ -12295,15 +12286,15 @@ function renderSavedPlans() {
         <table class="archive-table">
           <thead>
             <tr>
-              <th>轮次</th>
+              <th>杞</th>
               <th>${L("savedAt")}</th>
-              <th>求解方式</th>
-              <th>方案目标</th>
-              <th>最佳分</th>
-              <th>最佳方案</th>
-              <th>算法链</th>
-              <th>结果数</th>
-              <th>操作</th>
+              <th>姹傝В鏂瑰紡</th>
+              <th>鏂规鐩爣</th>
+              <th>鏈€浣冲垎</th>
+              <th>鏈€浣虫柟妗?/th>
+              <th>绠楁硶閾?/th>
+              <th>缁撴灉鏁?/th>
+              <th>鎿嶄綔</th>
             </tr>
           </thead>
           <tbody>
@@ -12322,20 +12313,20 @@ function renderSavedPlans() {
                 <td>${item.resultCount}</td>
                 <td>
                   <div class="archive-action-group">
-                    <button class="secondary preview-archive-btn" data-archive-id="${item.id}">查看</button>
-                    <button class="primary adopt-archive-btn" data-archive-id="${item.id}">采用</button>
+                    <button class="secondary preview-archive-btn" data-archive-id="${item.id}">鏌ョ湅</button>
+                    <button class="primary adopt-archive-btn" data-archive-id="${item.id}">閲囩敤</button>
                   </div>
                 </td>
               </tr>`;
             }).join("")}
           </tbody>
         </table>
-      </div>` : `<div class="note">${lang() === "ja" ? "この日に該当する求解档案はまだありません。" : "这一天还没有求解档案。"}</div>`}
+      </div>` : `<div class="note">${lang() === "ja" ? "銇撱伄鏃ャ伀瑭插綋銇欍倠姹傝В妗ｆ銇伨銇犮亗銈娿伨銇涖倱銆? : "杩欎竴澶╄繕娌℃湁姹傝В妗ｆ銆?}</div>`}
       ${saved.length ? `
         <div class="archive-legacy">
-          <p class="archive-legacy-title">手工快照</p>
-          <div class="saved-list">${saved.map((item) => `<article class="adjust-item"><strong>${item.algorithms}</strong><p>${L("savedAt")}：${item.createdAt}</p><p>${L("wavesLabel")}：${item.waves}</p></article>`).join("")}</div>
-        </div>` : (!archives.length ? `<div class="note">${lang() === "ja" ? "この日に該当する手動快照もありません。" : "这一天也没有手工快照。"}</div>` : "")}
+          <p class="archive-legacy-title">鎵嬪伐蹇収</p>
+          <div class="saved-list">${saved.map((item) => `<article class="adjust-item"><strong>${item.algorithms}</strong><p>${L("savedAt")}锛?{item.createdAt}</p><p>${L("wavesLabel")}锛?{item.waves}</p></article>`).join("")}</div>
+        </div>` : (!archives.length ? `<div class="note">${lang() === "ja" ? "銇撱伄鏃ャ伀瑭插綋銇欍倠鎵嬪嫊蹇収銈傘亗銈娿伨銇涖倱銆? : "杩欎竴澶╀篃娌℃湁鎵嬪伐蹇収銆?}</div>` : "")}
     </section>
   `;
 }
@@ -12352,7 +12343,7 @@ async function restoreArchivedRun(archiveId, mode = "preview") {
   const baseScenario = await buildScenario();
   const selectedScenario = applySolveWaveSelectionToScenario(baseScenario);
   if (selectedScenario.error || !selectedScenario.scenario) {
-    box.textContent = selectedScenario.error || (lang() === "ja" ? "波次筛选失败。" : "波次筛选失败。");
+    box.textContent = selectedScenario.error || (lang() === "ja" ? "娉㈡绛涢€夊け璐ャ€? : "娉㈡绛涢€夊け璐ャ€?);
     return;
   }
   const scenario = selectedScenario.scenario;
@@ -12366,12 +12357,12 @@ async function restoreArchivedRun(archiveId, mode = "preview") {
   const box = document.getElementById("validationBox");
   if (box) {
     box.textContent = mode === "adopt"
-      ? `已采用 ${archive.createdAt} 这轮求解档案。上方调度结果区已经切到这一轮，可以继续汇报、导出，或在此基础上继续优化。`
-      : `正在查看 ${archive.createdAt} 这轮求解档案。上方调度结果区已经切到这一轮；如果老板认可，再点“采用”即可。`;
+      ? `宸查噰鐢?${archive.createdAt} 杩欒疆姹傝В妗ｆ銆備笂鏂硅皟搴︾粨鏋滃尯宸茬粡鍒囧埌杩欎竴杞紝鍙互缁х画姹囨姤銆佸鍑猴紝鎴栧湪姝ゅ熀纭€涓婄户缁紭鍖栥€俙
+      : `姝ｅ湪鏌ョ湅 ${archive.createdAt} 杩欒疆姹傝В妗ｆ銆備笂鏂硅皟搴︾粨鏋滃尯宸茬粡鍒囧埌杩欎竴杞紱濡傛灉鑰佹澘璁ゅ彲锛屽啀鐐光€滈噰鐢ㄢ€濆嵆鍙€俙;
   }
   renderAll();
 }
-function saveCurrentPlan() { if (!state.lastResults.length) return; const saved = loadSavedPlans(); saved.unshift({ id: `plan-${Date.now()}`, createdAt: new Date().toLocaleString("zh-CN"), algorithms: state.lastResults.map((x) => x.label).join(" vs "), waves: state.settings.ignoreWaves ? "忽略波次（全天统一调度）" : state.waves.map((w) => `${w.waveId}(${w.start}-${w.end})`).join("，") }); localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 12))); renderSavedPlans(); }
+function saveCurrentPlan() { if (!state.lastResults.length) return; const saved = loadSavedPlans(); saved.unshift({ id: `plan-${Date.now()}`, createdAt: new Date().toLocaleString("zh-CN"), algorithms: state.lastResults.map((x) => x.label).join(" vs "), waves: state.settings.ignoreWaves ? "蹇界暐娉㈡锛堝叏澶╃粺涓€璋冨害锛? : state.waves.map((w) => `${w.waveId}(${w.start}-${w.end})`).join("锛?) }); localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 12))); renderSavedPlans(); }
 
 function todayDateKey() {
   const now = new Date();
@@ -12383,7 +12374,7 @@ function todayDateKey() {
 
 function extractDateKey(value) {
   const text = String(value || "");
-  const match = text.match(/(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})/);
+  const match = text.match(/(\d{4})[\/\-骞碷(\d{1,2})[\/\-鏈圿(\d{1,2})/);
   if (!match) return "";
   return `${match[1]}-${String(match[2]).padStart(2, "0")}-${String(match[3]).padStart(2, "0")}`;
 }
@@ -12396,12 +12387,12 @@ function getConfiguredWaveOptions() {
   if (state.settings.ignoreWaves) {
     return [{
       value: "ALL",
-      label: lang() === "ja" ? "ALL ・ 全店舗統合" : "ALL · 全部门店统一调度",
+      label: lang() === "ja" ? "ALL 銉?鍏ㄥ簵鑸楃当鍚? : "ALL 路 鍏ㄩ儴闂ㄥ簵缁熶竴璋冨害",
     }];
   }
   const options = (state.waves || []).map((wave) => ({
     value: wave.waveId,
-    label: `${wave.waveId} · ${wave.start}-${wave.end}`,
+    label: `${wave.waveId} 路 ${wave.start}-${wave.end}`,
   }));
   const stores = enrichStores(state.stores || []);
   if (stores.length) {
@@ -12409,10 +12400,10 @@ function getConfiguredWaveOptions() {
     const singleWaveIds = getSingleWaveStoreIds(stores, dist, Number(state.settings.singleWaveDistanceKm || 70));
     if (singleWaveIds.length) {
       options.push({
-        value: "单波次",
+        value: "鍗曟尝娆?,
         label: lang() === "ja"
-          ? `単独波次 · ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`
-          : `单波次 · ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`,
+          ? `鍗樼嫭娉㈡ 路 ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`
+          : `鍗曟尝娆?路 ${state.settings.singleWaveStart || "19:10"}-${state.settings.singleWaveEnd || "05:30"}`,
       });
     }
   }
@@ -12442,7 +12433,7 @@ function renderSolveWaveSelectionOptions() {
   const isAll = state.ui.solveWaveSelectedIds.includes("ALL");
   allInput.checked = isAll;
   if (!options.length) {
-    optionsBox.innerHTML = `<span class="muted">${lang() === "ja" ? "可选波次なし" : "暂无可选波次"}</span>`;
+    optionsBox.innerHTML = `<span class="muted">${lang() === "ja" ? "鍙€夋尝娆°仾銇? : "鏆傛棤鍙€夋尝娆?}</span>`;
     return;
   }
   const selectedSet = new Set(state.ui.solveWaveSelectedIds);
@@ -12464,14 +12455,14 @@ function renderWaveSolverPanel() {
 }
 
 function applySolveWaveSelectionToScenario(scenario) {
-  if (!scenario || !Array.isArray(scenario.waves)) return { scenario, error: "波次数据不可用" };
+  if (!scenario || !Array.isArray(scenario.waves)) return { scenario, error: "娉㈡鏁版嵁涓嶅彲鐢? };
   if (state.settings.ignoreWaves) return { scenario };
   const selected = normalizeSolveWaveSelection(state.ui.solveWaveSelectedIds, getConfiguredWaveOptions());
   if (selected.includes("ALL")) return { scenario };
   const selectedSet = new Set(selected.map((id) => String(id || "").trim()).filter(Boolean));
   const filteredWaves = (scenario.waves || []).filter((wave) => selectedSet.has(String(wave?.waveId || "").trim()));
   if (!filteredWaves.length) {
-    return { scenario: null, error: lang() === "ja" ? "少なくとも1つの波次を選択してください。" : "请至少选择1个波次求解。" };
+    return { scenario: null, error: lang() === "ja" ? "灏戙仾銇忋仺銈?銇ゃ伄娉㈡銈掗伕鎶炪仐銇︺亸銇犮仌銇勩€? : "璇疯嚦灏戦€夋嫨1涓尝娆℃眰瑙ｃ€? };
   }
   return { scenario: { ...scenario, waves: filteredWaves } };
 }
@@ -12532,25 +12523,25 @@ async function runSingleWaveInitialSolve() {
   const algoKey = state.ui.waveSolverAlgo;
   const runner = getAlgorithmRunner(algoKey);
   if (!runner) return;
-  if (box) box.textContent = lang() === "ja" ? `波次 ${waveId} を ${algoLabel(algoKey)} で初期求解しています…` : `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做初步求解…`;
+  if (box) box.textContent = lang() === "ja" ? `娉㈡ ${waveId} 銈?${algoLabel(algoKey)} 銇у垵鏈熸眰瑙ｃ仐銇︺亜銇俱仚鈥 : `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬垵姝ユ眰瑙ｂ€;
   const scenario = await buildScenario();
   const singleScenario = buildSingleWaveScenario(scenario, waveId);
   if (!singleScenario) {
-    if (box) box.textContent = lang() === "ja" ? `波次 ${waveId} が見つかりません。` : `没有找到波次 ${waveId}。`;
+    if (box) box.textContent = lang() === "ja" ? `娉㈡ ${waveId} 銇岃銇ゃ亱銈娿伨銇涖倱銆俙 : `娌℃湁鎵惧埌娉㈡ ${waveId}銆俙;
     return;
   }
   const result = await runner(singleScenario);
-  result.adjustMessage = lang() === "ja" ? `已切到 ${waveId} 的单独求解视图，当前算法是 ${algoLabel(algoKey)}。` : `已切到 ${waveId} 的单独求解视图，当前算法是 ${algoLabel(algoKey)}。`;
+  result.adjustMessage = lang() === "ja" ? `宸插垏鍒?${waveId} 鐨勫崟鐙眰瑙ｈ鍥撅紝褰撳墠绠楁硶鏄?${algoLabel(algoKey)}銆俙 : `宸插垏鍒?${waveId} 鐨勫崟鐙眰瑙ｈ鍥撅紝褰撳墠绠楁硶鏄?${algoLabel(algoKey)}銆俙;
   state.lastResults = [result];
   state.activeResultKey = result.key;
   state.ui.generating = false;
   state.ui.progress = 100;
-  state.ui.progressText = lang() === "ja" ? `${waveId} の初期求解が完了しました` : `${waveId} 的初步求解已完成`;
-  if (box) box.textContent = lang() === "ja" ? `${waveId} の初期求解が完成しました。` : `${waveId} 的初步求解已完成。`;
+  state.ui.progressText = lang() === "ja" ? `${waveId} 銇垵鏈熸眰瑙ｃ亴瀹屼簡銇椼伨銇椼仧` : `${waveId} 鐨勫垵姝ユ眰瑙ｅ凡瀹屾垚`;
+  if (box) box.textContent = lang() === "ja" ? `${waveId} 銇垵鏈熸眰瑙ｃ亴瀹屾垚銇椼伨銇椼仧銆俙 : `${waveId} 鐨勫垵姝ユ眰瑙ｅ凡瀹屾垚銆俙;
   renderAll();
   document.getElementById("resultIntro").textContent = lang() === "ja"
-    ? `${waveId} の単独波次ビューです。甘特图・驾驶舱・线路明细は下方に統一表示します。`
-    : `当前是 ${waveId} 的单波次视图，甘特图、驾驶舱和线路明细都在下方统一展示。`;
+    ? `${waveId} 銇崢鐙尝娆°儞銉ャ兗銇с仚銆傜敇鐗瑰浘銉婚┚椹惰埍銉荤嚎璺槑缁嗐伅涓嬫柟銇当涓€琛ㄧず銇椼伨銇欍€俙
+    : `褰撳墠鏄?${waveId} 鐨勫崟娉㈡瑙嗗浘锛岀敇鐗瑰浘銆侀┚椹惰埍鍜岀嚎璺槑缁嗛兘鍦ㄤ笅鏂圭粺涓€灞曠ず銆俙;
   focusSolvedOutput();
 }
 
@@ -12558,17 +12549,17 @@ async function runSingleWaveResolve() {
   const box = document.getElementById("validationBox");
   const result = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
   if (!result) {
-    if (box) box.textContent = lang() === "ja" ? "先に通常の调度结果を生成してください。" : "请先生成一版调度结果。";
+    if (box) box.textContent = lang() === "ja" ? "鍏堛伀閫氬父銇皟搴︾粨鏋溿倰鐢熸垚銇椼仸銇忋仩銇曘亜銆? : "璇峰厛鐢熸垚涓€鐗堣皟搴︾粨鏋溿€?;
     return;
   }
   const waveId = state.ui.waveSolverWaveId;
   const algoKey = state.ui.waveSolverAlgo;
   const target = getWaveAndPlans(result, waveId);
   if (!target) {
-    if (box) box.textContent = lang() === "ja" ? `当前结果に波次 ${waveId} がありません。` : `当前结果里没有波次 ${waveId}。`;
+    if (box) box.textContent = lang() === "ja" ? `褰撳墠缁撴灉銇尝娆?${waveId} 銇屻亗銈娿伨銇涖倱銆俙 : `褰撳墠缁撴灉閲屾病鏈夋尝娆?${waveId}銆俙;
     return;
   }
-  if (box) box.textContent = lang() === "ja" ? `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做再求解…` : `正在用 ${algoLabel(algoKey)} 对 ${waveId} 做再求解…`;
+  if (box) box.textContent = lang() === "ja" ? `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬啀姹傝В鈥 : `姝ｅ湪鐢?${algoLabel(algoKey)} 瀵?${waveId} 鍋氬啀姹傝В鈥;
   const singleScenario = buildSingleWaveScenario(result.scenario, waveId);
   if (!singleScenario) return;
   let nextWavePlans = null;
@@ -12583,20 +12574,20 @@ async function runSingleWaveResolve() {
     nextWavePlans = rerun?.solution?.[0] || null;
   }
   if (!nextWavePlans) {
-    if (box) box.textContent = lang() === "ja" ? `${waveId} の再求解に失敗しました。` : `${waveId} 的再求解失败了。`;
+    if (box) box.textContent = lang() === "ja" ? `${waveId} 銇啀姹傝В銇け鏁椼仐銇俱仐銇熴€俙 : `${waveId} 鐨勫啀姹傝В澶辫触浜嗐€俙;
     return;
   }
   result.solution[target.waveIndex] = nextWavePlans;
-  result.adjustMessage = lang() === "ja" ? `${waveId} を ${algoLabel(algoKey)} で再求解しました。` : `${waveId} 已按 ${algoLabel(algoKey)} 完成再求解。`;
+  result.adjustMessage = lang() === "ja" ? `${waveId} 銈?${algoLabel(algoKey)} 銇у啀姹傝В銇椼伨銇椼仧銆俙 : `${waveId} 宸叉寜 ${algoLabel(algoKey)} 瀹屾垚鍐嶆眰瑙ｃ€俙;
   syncResultAfterLocalAdjustment(result);
   state.ui.generating = false;
   state.ui.progress = 100;
-  state.ui.progressText = lang() === "ja" ? `${waveId} の再求解が完了しました` : `${waveId} 的再求解已完成`;
+  state.ui.progressText = lang() === "ja" ? `${waveId} 銇啀姹傝В銇屽畬浜嗐仐銇俱仐銇焋 : `${waveId} 鐨勫啀姹傝В宸插畬鎴恅;
   if (box) box.textContent = result.adjustMessage;
   renderAll();
   document.getElementById("resultIntro").textContent = lang() === "ja"
-    ? `${waveId} の波次だけを再求解したビューです。下方の甘特图・结果卡・线路明细を合わせて確認できます。`
-    : `当前是只针对 ${waveId} 做再求解后的视图，下方会统一展示甘特图、结果卡和线路明细。`;
+    ? `${waveId} 銇尝娆°仩銇戙倰鍐嶆眰瑙ｃ仐銇熴儞銉ャ兗銇с仚銆備笅鏂广伄鐢樼壒鍥俱兓缁撴灉鍗°兓绾胯矾鏄庣粏銈掑悎銈忋仜銇︾⒑瑾嶃仹銇嶃伨銇欍€俙
+    : `褰撳墠鏄彧閽堝 ${waveId} 鍋氬啀姹傝В鍚庣殑瑙嗗浘锛屼笅鏂逛細缁熶竴灞曠ず鐢樼壒鍥俱€佺粨鏋滃崱鍜岀嚎璺槑缁嗐€俙;
   focusSolvedOutput();
 }
 
@@ -12676,7 +12667,7 @@ function downloadXlsHtml(fileName, title, headers, rows) {
   const thead = headers.map((header) => `<th>${escapeExcelHtml(header)}</th>`).join("");
   const tbody = rows.length
     ? rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeExcelHtml(cell)}</td>`).join("")}</tr>`).join("")
-    : `<tr><td colspan="${Math.max(1, headers.length)}">无数据</td></tr>`;
+    : `<tr><td colspan="${Math.max(1, headers.length)}">鏃犳暟鎹?/td></tr>`;
   const html = `<!doctype html>
 <html>
 <head>
@@ -12760,19 +12751,19 @@ function buildStoreExportRows(mode) {
 }
 
 function exportMultiDailyStores() {
-  const headers = ["编号", "名称", "区域", "次数", "一波次货量", "二波次货量", "一配时间", "二配时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号"];
+  const headers = ["缂栧彿", "鍚嶇О", "鍖哄煙", "娆℃暟", "涓€娉㈡璐ч噺", "浜屾尝娆¤揣閲?, "涓€閰嶆椂闂?, "浜岄厤鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿"];
   const rows = buildStoreExportRows("multi");
   const stamp = new Date();
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  downloadXlsHtml(`一日多配店铺明细_${timestamp}.xls`, "一日多配店铺明细", headers, rows);
+  downloadXlsHtml(`涓€鏃ュ閰嶅簵閾烘槑缁哶${timestamp}.xls`, "涓€鏃ュ閰嶅簵閾烘槑缁?, headers, rows);
 }
 
 function exportSingleDailyStores() {
-  const headers = ["编号", "名称", "区域", "次数", "三波次货量", "四波次货量", "W3到店时间", "W4到店时间", "所属波次", "卸货分钟", "难度", "允许偏差(分)", "状态", "车号"];
+  const headers = ["缂栧彿", "鍚嶇О", "鍖哄煙", "娆℃暟", "涓夋尝娆¤揣閲?, "鍥涙尝娆¤揣閲?, "W3鍒板簵鏃堕棿", "W4鍒板簵鏃堕棿", "鎵€灞炴尝娆?, "鍗歌揣鍒嗛挓", "闅惧害", "鍏佽鍋忓樊(鍒?", "鐘舵€?, "杞﹀彿"];
   const rows = buildStoreExportRows("single");
   const stamp = new Date();
   const timestamp = `${stamp.getFullYear()}${String(stamp.getMonth() + 1).padStart(2, "0")}${String(stamp.getDate()).padStart(2, "0")}_${String(stamp.getHours()).padStart(2, "0")}${String(stamp.getMinutes()).padStart(2, "0")}${String(stamp.getSeconds()).padStart(2, "0")}`;
-  downloadXlsHtml(`一日一配店铺明细_${timestamp}.xls`, "一日一配店铺明细", headers, rows);
+  downloadXlsHtml(`涓€鏃ヤ竴閰嶅簵閾烘槑缁哶${timestamp}.xls`, "涓€鏃ヤ竴閰嶅簵閾烘槑缁?, headers, rows);
 }
 
 function renderVehicles() {
@@ -12901,7 +12892,7 @@ function renderStoresTable() {
   const buildStoreWaveHeader = (label, total) => `
     <div class="store-wave-header">
       <span class="store-wave-header-label">${escapeHtml(label)}</span>
-      <span class="store-wave-header-total">合计 ${formatLoadConvertValue(total)}</span>
+      <span class="store-wave-header-total">鍚堣 ${formatLoadConvertValue(total)}</span>
     </div>
   `;
   const buildColumns = (waveLabelA, waveTotalA, waveLabelB, waveTotalB, opts = {}) => {
@@ -12938,7 +12929,7 @@ function renderStoresTable() {
       <td><input data-kind="store" data-field="id" data-index="${i}" value="${s.id || ""}" title="${escapeHtml(String(s.id || ""))}"></td>
       <td class="store-name-cell">
         <div class="store-name-stack">
-          <span class="store-name-id" title="${escapeHtml(String(s.id || ""))}">店铺编号：${escapeHtml(String(s.id || ""))}</span>
+          <span class="store-name-id" title="${escapeHtml(String(s.id || ""))}">搴楅摵缂栧彿锛?{escapeHtml(String(s.id || ""))}</span>
           <input data-kind="store" data-field="name" data-index="${i}" value="${s.name || ""}" title="${escapeHtml(String(s.name || ""))}">
         </div>
       </td>
@@ -12979,7 +12970,7 @@ function renderStoresTable() {
   if (storeTable) {
     storeTable.innerHTML = buildDataTableHtml({
       tableKind: "store",
-      columns: buildColumns("一波次货量", multiWave1Total, "二波次货量", multiWave2Total, {
+      columns: buildColumns("涓€娉㈡璐ч噺", multiWave1Total, "浜屾尝娆¤揣閲?, multiWave2Total, {
         includeFirstTime: true,
         firstWaveSortField: "wave1TotalLoad",
         secondWaveSortField: "wave2TotalLoad",
@@ -12989,8 +12980,8 @@ function renderStoresTable() {
         multiDailyRows,
         "resolvedWave1Load",
         "resolvedWave2Load",
-        "110：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380",
-        "210：apcs/350+apaper/380",
+        "110锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380",
+        "210锛歛pcs/350+apaper/380",
         { includeFirstTime: true, arrivalField: "waveW2" }
       ),
       tableClass: "store-data-table",
@@ -13000,9 +12991,9 @@ function renderStoresTable() {
   if (storeTableSingleDaily) {
     storeTableSingleDaily.innerHTML = buildDataTableHtml({
       tableKind: "store",
-      columns: buildColumns("三波次货量", singleWave3Total, "四波次货量", singleWave4Total, {
+      columns: buildColumns("涓夋尝娆¤揣閲?, singleWave3Total, "鍥涙尝娆¤揣閲?, singleWave4Total, {
         includeFirstTime: false,
-        secondTimeLabel: "到店时间",
+        secondTimeLabel: "鍒板簵鏃堕棿",
         firstWaveSortField: "wave3TotalLoad",
         secondWaveSortField: "wave4TotalLoad",
         secondTimeSortField: "waveW4",
@@ -13011,8 +13002,8 @@ function renderStoresTable() {
         singleDailyRows,
         "resolvedWave3Load",
         "resolvedWave4Load",
-        "W3：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
-        "W4：rpcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
+        "W3锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
+        "W4锛歳pcs/207+rcase/380+bpcs/120+bpaper/380+rpaper/380+apcs/350+apaper/380",
         { includeFirstTime: false, arrivalField: "waveW4" }
       ),
       tableClass: "store-data-table",
@@ -13035,7 +13026,7 @@ function renderWaves() {
   });
   const leftItems = searched.filter((item) => item.matched);
   if (!leftItems.length) {
-    left.innerHTML = `<div class="muted">无匹配波次</div>`;
+    left.innerHTML = `<div class="muted">鏃犲尮閰嶆尝娆?/div>`;
   } else {
     if (!leftItems.some((item) => item.index === state.ui.waveSelectedIndex)) {
       state.ui.waveSelectedIndex = leftItems[0].index;
@@ -13052,7 +13043,7 @@ function renderWaves() {
   state.ui.waveSelectedIndex = selectedIndex;
   const wave = state.waves[selectedIndex];
   if (!wave) {
-    right.innerHTML = `<div class="muted">暂无波次</div>`;
+    right.innerHTML = `<div class="muted">鏆傛棤娉㈡</div>`;
     return;
   }
   const selectedIds = new Set(parseStoreIds(wave.storeIds).map((id) => normalizeStoreCode(id)));
@@ -13071,9 +13062,9 @@ function renderWaves() {
       </label>
     </div>
     <div class="wave-editor-toolbar">
-      <input id="waveStoreSearchInput" type="text" placeholder="搜索门店名称" value="${escapeHtml(state.ui.waveStoreSearchQuery || "")}">
-      <button class="secondary" data-wave-select-all="${selectedIndex}">全选当前检索</button>
-      <button class="secondary" data-wave-clear-all="${selectedIndex}">清空当前波次</button>
+      <input id="waveStoreSearchInput" type="text" placeholder="鎼滅储闂ㄥ簵鍚嶇О" value="${escapeHtml(state.ui.waveStoreSearchQuery || "")}">
+      <button class="secondary" data-wave-select-all="${selectedIndex}">鍏ㄩ€夊綋鍓嶆绱?/button>
+      <button class="secondary" data-wave-clear-all="${selectedIndex}">娓呯┖褰撳墠娉㈡</button>
       <button class="mini" data-remove="wave" data-index="${selectedIndex}">${L("del")}</button>
     </div>
     <div>${renderWaveStoreNameTags(wave.storeIds, 6)}</div>
@@ -13083,7 +13074,7 @@ function renderWaves() {
           <input type="checkbox" data-wave-store-index="${selectedIndex}" data-store-id="${escapeHtml(store.id)}" ${selectedIds.has(store.id) ? "checked" : ""}>
           <span class="store-name">${escapeHtml(store.name)}</span>
         </label>
-      `).join("") || `<div class="muted">无匹配门店</div>`}
+      `).join("") || `<div class="muted">鏃犲尮閰嶉棬搴?/div>`}
     </div>
   `;
 }
@@ -13143,8 +13134,8 @@ function syncAlgorithmControls() {
     input.disabled = !isFreeMode;
     input.setAttribute("aria-disabled", isFreeMode ? "false" : "true");
     input.title = isFreeMode
-      ? (lang() === "ja" ? `自由求解模式：最多选择 ${MAX_FREE_SOLVE_ALGOS} 个算法。` : `自由求解模式：最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`)
-      : (lang() === "ja" ? "アルゴリズムの組み合わせは、現在の方針に応じてシステムが自動で選びます。" : "算法组合会由系统按当前策略自动选择。");
+      ? (lang() === "ja" ? `鑷敱姹傝В妯″紡锛氭渶澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 涓畻娉曘€俙 : `鑷敱姹傝В妯″紡锛氭渶澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙)
+      : (lang() === "ja" ? "銈儷銈淬儶銈恒儬銇祫銇垮悎銈忋仜銇€佺従鍦ㄣ伄鏂归嚌銇繙銇樸仸銈枫偣銉嗐儬銇岃嚜鍕曘仹閬搞伋銇俱仚銆? : "绠楁硶缁勫悎浼氱敱绯荤粺鎸夊綋鍓嶇瓥鐣ヨ嚜鍔ㄩ€夋嫨銆?);
     input.closest(".algo-box")?.classList.toggle("is-locked", !isFreeMode);
   });
 }
@@ -13170,24 +13161,24 @@ function renderAlgorithmPool() {
   shell.innerHTML = `
     <div class="algorithm-pool-head">
       <div>
-        <h3>${lang() === "ja" ? "アルゴリズム中枢" : "算法中枢"}</h3>
+        <h3>${lang() === "ja" ? "銈儷銈淬儶銈恒儬涓灑" : "绠楁硶涓灑"}</h3>
       </div>
       <p class="algorithm-pool-summary">${currentStrategy === "free"
         ? (lang() === "ja"
-          ? `自由求解です。下のカードを直接クリックしてアルゴリズムを選択できます（最大 ${MAX_FREE_SOLVE_ALGOS} 本）。現在 ${active.size} 本。`
-          : `当前是自由求解，可直接点击下方卡片选择算法（最多 ${MAX_FREE_SOLVE_ALGOS} 种）。当前已选 ${active.size} 种。`)
+          ? `鑷敱姹傝В銇с仚銆備笅銇偒銉笺儔銈掔洿鎺ャ偗銉儍銈仐銇︺偄銉偞銉偤銉犮倰閬告姙銇с亶銇俱仚锛堟渶澶?${MAX_FREE_SOLVE_ALGOS} 鏈級銆傜従鍦?${active.size} 鏈€俙
+          : `褰撳墠鏄嚜鐢辨眰瑙ｏ紝鍙洿鎺ョ偣鍑讳笅鏂瑰崱鐗囬€夋嫨绠楁硶锛堟渶澶?${MAX_FREE_SOLVE_ALGOS} 绉嶏級銆傚綋鍓嶅凡閫?${active.size} 绉嶃€俙)
         : (lang() === "ja"
-          ? `今回の計算では ${active.size} 本のアルゴリズムが動作中です。実際に使われている中核だけを自動で点灯表示します。`
-          : `本轮已调用 ${active.size} 套算法，系统会自动点亮当前正在参与求解的核心。`)}</p>
+          ? `浠婂洖銇▓绠椼仹銇?${active.size} 鏈伄銈儷銈淬儶銈恒儬銇屽嫊浣滀腑銇с仚銆傚疅闅涖伀浣裤倧銈屻仸銇勩倠涓牳銇犮亼銈掕嚜鍕曘仹鐐圭伅琛ㄧず銇椼伨銇欍€俙
+          : `鏈疆宸茶皟鐢?${active.size} 濂楃畻娉曪紝绯荤粺浼氳嚜鍔ㄧ偣浜綋鍓嶆鍦ㄥ弬涓庢眰瑙ｇ殑鏍稿績銆俙)}</p>
     </div>
     <div class="algorithm-pool"></div>
   `;
   pool = shell.querySelector(".algorithm-pool");
   pool.innerHTML = order.map((key) => `
-    <div class="algorithm-card ${active.has(key) ? "is-active" : ""} ${currentStrategy === "free" ? "is-pickable" : ""}" data-algo-card="${key}" title="${currentStrategy === "free" ? (lang() === "ja" ? "クリックして選択/解除（最大5本）" : "点击选择/取消（最多5种）") : ""}">
+    <div class="algorithm-card ${active.has(key) ? "is-active" : ""} ${currentStrategy === "free" ? "is-pickable" : ""}" data-algo-card="${key}" title="${currentStrategy === "free" ? (lang() === "ja" ? "銈儶銉冦偗銇椼仸閬告姙/瑙ｉ櫎锛堟渶澶?鏈級" : "鐐瑰嚮閫夋嫨/鍙栨秷锛堟渶澶?绉嶏級") : ""}">
       <div class="algorithm-card-head">
         <span class="algorithm-card-name">${algoLabel(key)}</span>
-        <span class="algorithm-card-state">${active.has(key) ? (lang() === "ja" ? "稼働中" : "已启用") : (lang() === "ja" ? "待機中" : "待命中")}</span>
+        <span class="algorithm-card-state">${active.has(key) ? (lang() === "ja" ? "绋煎儘涓? : "宸插惎鐢?) : (lang() === "ja" ? "寰呮涓? : "寰呭懡涓?)}</span>
       </div>
       <div class="algorithm-card-body">${algoDescription(key)}</div>
     </div>
@@ -13275,7 +13266,7 @@ function renderStrategyPreviewControls() {
   const groups = document.querySelectorAll(".strategy-shell .strategy-preview-group");
   if (groups[0]) {
     groups[0].innerHTML = `
-      <div class="strategy-preview-label" id="solveModePreviewLabel">${lang() === "ja" ? "解法モード" : "求解方式"}</div>
+      <div class="strategy-preview-label" id="solveModePreviewLabel">${lang() === "ja" ? "瑙ｆ硶銉兗銉? : "姹傝В鏂瑰紡"}</div>
       <div class="strategy-preview-row">
         <button type="button" class="strategy-pill strategy-preview-btn ${(state.settings.solveStrategy || "quick") === "quick" ? "is-active" : ""}" data-solve-preview="quick" id="solvePreviewQuick">${L("quickSolve")}</button>
         <span class="strategy-divider">/</span>
@@ -13290,13 +13281,13 @@ function renderStrategyPreviewControls() {
   }
   if (groups[1]) {
     groups[1].innerHTML = `
-      <div class="strategy-preview-label" id="goalModePreviewLabel">${lang() === "ja" ? "目標方針" : "方案目标"}</div>
+      <div class="strategy-preview-label" id="goalModePreviewLabel">${lang() === "ja" ? "鐩鏂归嚌" : "鏂规鐩爣"}</div>
       <div class="strategy-preview-row">
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "ontime" ? "is-active" : ""}" data-goal-preview="ontime" id="goalPreviewOnTime">${lang() === "ja" ? "定時重視" : "最准时"}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "ontime" ? "is-active" : ""}" data-goal-preview="ontime" id="goalPreviewOnTime">${lang() === "ja" ? "瀹氭檪閲嶈" : "鏈€鍑嗘椂"}</button>
         <span class="strategy-divider">/</span>
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "vehicles" ? "is-active" : ""}" data-goal-preview="vehicles" id="goalPreviewVehicles">${lang() === "ja" ? "少車両" : "少用车"}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "vehicles" ? "is-active" : ""}" data-goal-preview="vehicles" id="goalPreviewVehicles">${lang() === "ja" ? "灏戣粖涓? : "灏戠敤杞?}</button>
         <span class="strategy-divider">/</span>
-        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "distance" ? "is-active" : ""}" data-goal-preview="distance" id="goalPreviewDistance">${lang() === "ja" ? "短距離" : "省里程"}</button>
+        <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "distance" ? "is-active" : ""}" data-goal-preview="distance" id="goalPreviewDistance">${lang() === "ja" ? "鐭窛闆? : "鐪侀噷绋?}</button>
         <span class="strategy-divider">/</span>
         <button type="button" class="strategy-pill goal-preview-btn ${(state.settings.optimizeGoal || "balanced") === "balanced" ? "is-active" : ""}" data-goal-preview="balanced" id="goalPreviewBalanced">${L("goalBalanced")}</button>
       </div>`;
@@ -13306,25 +13297,25 @@ function buildStrategyHint() {
   const strategy = state.settings.solveStrategy || "manual";
   const goal = state.settings.optimizeGoal || "balanced";
   const labels = {
-    quick: lang() === "ja" ? "まず実用的な初期案を素早く作る構成です。" : "先用快速构造算法给出可行初稿。",
-    deep: lang() === "ja" ? "現在の案を引き継いで、さらに詰めていく改善構成です。" : "主打在现有方案上继续深挖优化。",
-    global: lang() === "ja" ? "大きく別のルート構造を探すためのグローバル探索構成です。" : "主打全局搜索，探索完全不同的排线结构。",
-    relay: lang() === "ja" ? "初期案から改善までを段階的につなぐ、リレー型の求解構成です。" : "让初排和优化算法接力求解，更像真正的平台流程。",
-    free: lang() === "ja" ? `自由求解です。アルゴリズムは手動で選択でき、最大 ${MAX_FREE_SOLVE_ALGOS} 本までです。` : `自由求解模式，可手动选择算法，最多 ${MAX_FREE_SOLVE_ALGOS} 种。`,
-    compare: lang() === "ja" ? "複数の解法を並べて差を見比べる比較モードです。" : "并排跑多种思路，方便做算法对比。",
-    manual: lang() === "ja" ? "現在は手動選択モードです。" : "当前是手动勾选模式。",
+    quick: lang() === "ja" ? "銇俱仛瀹熺敤鐨勩仾鍒濇湡妗堛倰绱犳棭銇忎綔銈嬫鎴愩仹銇欍€? : "鍏堢敤蹇€熸瀯閫犵畻娉曠粰鍑哄彲琛屽垵绋裤€?,
+    deep: lang() === "ja" ? "鐝惧湪銇銈掑紩銇嶇稒銇勩仹銆併仌銈夈伀瑭般倎銇︺亜銇忔敼鍠勬鎴愩仹銇欍€? : "涓绘墦鍦ㄧ幇鏈夋柟妗堜笂缁х画娣辨寲浼樺寲銆?,
+    global: lang() === "ja" ? "澶с亶銇忓垾銇儷銉笺儓妲嬮€犮倰鎺仚銇熴倎銇偘銉兗銉愩儷鎺㈢储妲嬫垚銇с仚銆? : "涓绘墦鍏ㄥ眬鎼滅储锛屾帰绱㈠畬鍏ㄤ笉鍚岀殑鎺掔嚎缁撴瀯銆?,
+    relay: lang() === "ja" ? "鍒濇湡妗堛亱銈夋敼鍠勩伨銇с倰娈甸殠鐨勩伀銇ゃ仾銇愩€併儶銉兗鍨嬨伄姹傝В妲嬫垚銇с仚銆? : "璁╁垵鎺掑拰浼樺寲绠楁硶鎺ュ姏姹傝В锛屾洿鍍忕湡姝ｇ殑骞冲彴娴佺▼銆?,
+    free: lang() === "ja" ? `鑷敱姹傝В銇с仚銆傘偄銉偞銉偤銉犮伅鎵嬪嫊銇ч伕鎶炪仹銇嶃€佹渶澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇с仹銇欍€俙 : `鑷敱姹傝В妯″紡锛屽彲鎵嬪姩閫夋嫨绠楁硶锛屾渶澶?${MAX_FREE_SOLVE_ALGOS} 绉嶃€俙,
+    compare: lang() === "ja" ? "瑜囨暟銇В娉曘倰涓︺伖銇﹀樊銈掕姣斻伖銈嬫瘮杓冦儮銉笺儔銇с仚銆? : "骞舵帓璺戝绉嶆€濊矾锛屾柟渚垮仛绠楁硶瀵规瘮銆?,
+    manual: lang() === "ja" ? "鐝惧湪銇墜鍕曢伕鎶炪儮銉笺儔銇с仚銆? : "褰撳墠鏄墜鍔ㄥ嬀閫夋ā寮忋€?,
   };
   const goalTexts = {
-    balanced: lang() === "ja" ? "目標は総合バランス重視です。" : "目标偏向综合平衡。",
-    ontime: lang() === "ja" ? "目標は定時性重視です。" : "目标偏向准点率。",
-    distance: lang() === "ja" ? "目標は総距離の圧縮です。" : "目标偏向总里程压缩。",
-    vehicles: lang() === "ja" ? "目標は使用車両数の抑制です。" : "目标偏向少用车。",
-    load: lang() === "ja" ? "目標は積載の集約です。" : "目标偏向装载集中。",
+    balanced: lang() === "ja" ? "鐩銇窂鍚堛儛銉┿兂銈归噸瑕栥仹銇欍€? : "鐩爣鍋忓悜缁煎悎骞宠　銆?,
+    ontime: lang() === "ja" ? "鐩銇畾鏅傛€ч噸瑕栥仹銇欍€? : "鐩爣鍋忓悜鍑嗙偣鐜囥€?,
+    distance: lang() === "ja" ? "鐩銇窂璺濋洟銇湩绺仹銇欍€? : "鐩爣鍋忓悜鎬婚噷绋嬪帇缂┿€?,
+    vehicles: lang() === "ja" ? "鐩銇娇鐢ㄨ粖涓℃暟銇姂鍒躲仹銇欍€? : "鐩爣鍋忓悜灏戠敤杞︺€?,
+    load: lang() === "ja" ? "鐩銇杓夈伄闆嗙磩銇с仚銆? : "鐩爣鍋忓悜瑁呰浇闆嗕腑銆?,
   };
   const baseHint = `${labels[strategy] || labels.manual} ${goalTexts[goal] || goalTexts.balanced}`;
   if (strategy === "free") {
     const selected = getEffectiveFreeAlgorithms();
-    return `${baseHint} ${lang() === "ja" ? `現在 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 本を選択中です。` : `当前已选择 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 种算法。`}`;
+    return `${baseHint} ${lang() === "ja" ? `鐝惧湪 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 鏈倰閬告姙涓仹銇欍€俙 : `褰撳墠宸查€夋嫨 ${selected.length}/${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙}`;
   }
   return baseHint;
 }
@@ -13370,13 +13361,13 @@ function buildSolveModeSummary() {
   const goal = currentGoalLabel();
   const selectedCount = strategyPreset(state.settings.solveStrategy || "manual", state.settings.optimizeGoal || "balanced").algorithms.length;
   return lang() === "ja"
-    ? `現在は「${strategy}」モードで計算し、目標方針は「${goal}」、参加アルゴリズムは ${selectedCount} 本です。`
-    : `当前按“${strategy}”模式求解，优化目标为“${goal}”，参与算法 ${selectedCount} 种。`;
+    ? `鐝惧湪銇€?{strategy}銆嶃儮銉笺儔銇ц▓绠椼仐銆佺洰妯欐柟閲濄伅銆?{goal}銆嶃€佸弬鍔犮偄銉偞銉偤銉犮伅 ${selectedCount} 鏈仹銇欍€俙
+    : `褰撳墠鎸夆€?{strategy}鈥濇ā寮忔眰瑙ｏ紝浼樺寲鐩爣涓衡€?{goal}鈥濓紝鍙備笌绠楁硶 ${selectedCount} 绉嶃€俙;
 }
 
 function relayMetricSummary(metrics) {
   const onTime = Math.round((metrics.totalOnTime / Math.max(metrics.totalStops || 0, 1)) * 100);
-  return `评分 ${metrics.score.toFixed(1)}，已调度 ${metrics.scheduledCount || 0} 家，未调度 ${metrics.unscheduledCount || 0} 家，准点 ${onTime}%，总里程 ${(metrics.totalDistance || 0).toFixed(1)} km，用车 ${metrics.usedVehicleCount || 0} 辆`;
+  return `璇勫垎 ${metrics.score.toFixed(1)}锛屽凡璋冨害 ${metrics.scheduledCount || 0} 瀹讹紝鏈皟搴?${metrics.unscheduledCount || 0} 瀹讹紝鍑嗙偣 ${onTime}%锛屾€婚噷绋?${(metrics.totalDistance || 0).toFixed(1)} km锛岀敤杞?${metrics.usedVehicleCount || 0} 杈哷;
 }
 
 function describeRelayMetricDelta(beforeMetrics, afterMetrics) {
@@ -13389,13 +13380,13 @@ function describeRelayMetricDelta(beforeMetrics, afterMetrics) {
   const onTimeDelta = onTimeAfter - onTimeBefore;
   const distanceDelta = (afterMetrics.totalDistance || 0) - (beforeMetrics.totalDistance || 0);
   const vehicleDelta = (afterMetrics.usedVehicleCount || 0) - (beforeMetrics.usedVehicleCount || 0);
-  if (Math.abs(scoreDelta) > 0.05) parts.push(`总分 ${scoreDelta > 0 ? "提高" : "下降"} ${Math.abs(scoreDelta).toFixed(1)}`);
-  if (scheduledDelta !== 0) parts.push(`已调度门店 ${scheduledDelta > 0 ? `增加 ${scheduledDelta}` : `减少 ${Math.abs(scheduledDelta)}`}`);
-  if (unscheduledDelta !== 0) parts.push(`未调度门店 ${unscheduledDelta < 0 ? `减少 ${Math.abs(unscheduledDelta)}` : `增加 ${unscheduledDelta}`}`);
-  if (Math.abs(onTimeDelta) >= 0.5) parts.push(`准点率 ${onTimeDelta > 0 ? "上升" : "下降"} ${Math.abs(onTimeDelta).toFixed(1)}%`);
-  if (Math.abs(distanceDelta) >= 0.1) parts.push(`总里程 ${distanceDelta < 0 ? `减少 ${Math.abs(distanceDelta).toFixed(1)} km` : `增加 ${distanceDelta.toFixed(1)} km`}`);
-  if (vehicleDelta !== 0) parts.push(`用车 ${vehicleDelta < 0 ? `减少 ${Math.abs(vehicleDelta)} 辆` : `增加 ${vehicleDelta} 辆`}`);
-  return parts.length ? parts.join("，") : "主要指标几乎没有变化";
+  if (Math.abs(scoreDelta) > 0.05) parts.push(`鎬诲垎 ${scoreDelta > 0 ? "鎻愰珮" : "涓嬮檷"} ${Math.abs(scoreDelta).toFixed(1)}`);
+  if (scheduledDelta !== 0) parts.push(`宸茶皟搴﹂棬搴?${scheduledDelta > 0 ? `澧炲姞 ${scheduledDelta}` : `鍑忓皯 ${Math.abs(scheduledDelta)}`}`);
+  if (unscheduledDelta !== 0) parts.push(`鏈皟搴﹂棬搴?${unscheduledDelta < 0 ? `鍑忓皯 ${Math.abs(unscheduledDelta)}` : `澧炲姞 ${unscheduledDelta}`}`);
+  if (Math.abs(onTimeDelta) >= 0.5) parts.push(`鍑嗙偣鐜?${onTimeDelta > 0 ? "涓婂崌" : "涓嬮檷"} ${Math.abs(onTimeDelta).toFixed(1)}%`);
+  if (Math.abs(distanceDelta) >= 0.1) parts.push(`鎬婚噷绋?${distanceDelta < 0 ? `鍑忓皯 ${Math.abs(distanceDelta).toFixed(1)} km` : `澧炲姞 ${distanceDelta.toFixed(1)} km`}`);
+  if (vehicleDelta !== 0) parts.push(`鐢ㄨ溅 ${vehicleDelta < 0 ? `鍑忓皯 ${Math.abs(vehicleDelta)} 杈哷 : `澧炲姞 ${vehicleDelta} 杈哷}`);
+  return parts.length ? parts.join("锛?) : "涓昏鎸囨爣鍑犱箮娌℃湁鍙樺寲";
 }
 function syncSettingsFromUI() {
   state.settings.dispatchStartTime = document.getElementById("dispatchStartTimeInput").value || "19:10";
@@ -13451,8 +13442,8 @@ async function triggerStrategySolve(strategy, goal) {
   const box = document.getElementById("validationBox");
   if (box) {
     box.textContent = `${buildSolveModeSummary()} ${lang() === "ja"
-      ? "先打开求解前诊断窗口，确认字段是否齐全后再继续。"
-      : "先弹出求解前诊断窗口，确认字段是否齐全后再继续。"}`
+      ? "鍏堟墦寮€姹傝В鍓嶈瘖鏂獥鍙ｏ紝纭瀛楁鏄惁榻愬叏鍚庡啀缁х画銆?
+      : "鍏堝脊鍑烘眰瑙ｅ墠璇婃柇绐楀彛锛岀‘璁ゅ瓧娈垫槸鍚﹂綈鍏ㄥ悗鍐嶇户缁€?}`
     ;
   }
   pendingSolveContinuation = async () => {
@@ -13467,7 +13458,7 @@ async function openSolveDiagnoseAndPause(strategy, goal) {
   applySolveStrategy(strategy, goal);
   const report = await buildSolveDiagnoseReport();
   const box = document.getElementById("validationBox");
-  if (box) box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? "先に診断を確認してください。" : "先看诊断报告，再决定是否继续求解。"}`;
+  if (box) box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? "鍏堛伀瑷烘柇銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€? : "鍏堢湅璇婃柇鎶ュ憡锛屽啀鍐冲畾鏄惁缁х画姹傝В銆?}`;
   pendingSolveContinuation = async () => {
     pendingSolveContinuation = null;
     await generatePlans();
@@ -13525,7 +13516,7 @@ function parseVehicleTxt(text) {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => {
-      const parts = line.split(/[\t,，;；\s]+/).map((x) => x.trim()).filter(Boolean);
+      const parts = line.split(/[\t,锛?锛沑s]+/).map((x) => x.trim()).filter(Boolean);
       return { plateNo: parts[0] || "", driverName: parts[1] || "" };
     })
     .filter((item) => item.plateNo)
@@ -13587,7 +13578,7 @@ function setImportFileTag(kind, fileName = "") {
 }
 
 function splitSimpleCsvLine(line) {
-  return String(line || "").split(/[\t,，]/).map((x) => x.trim());
+  return String(line || "").split(/[\t,锛宂/).map((x) => x.trim());
 }
 
 function parseStoreFileText(text) {
@@ -13602,12 +13593,12 @@ function parseStoreFileText(text) {
   const headers = splitSimpleCsvLine(lines[0]);
   const indexOf = (...candidates) => candidates.map((name) => headers.indexOf(name)).find((idx) => idx >= 0) ?? -1;
   const idx = {
-    id: indexOf("编号", "店铺代码", "id", "store_id"),
-    name: indexOf("名称", "店铺名称", "name", "store_name"),
-    district: indexOf("区域", "district"),
-    lng: indexOf("经度", "lng", "longitude"),
-    lat: indexOf("纬度", "lat", "latitude"),
-    tripCount: indexOf("次数", "tripCount", "trip_count"),
+    id: indexOf("缂栧彿", "搴楅摵浠ｇ爜", "id", "store_id"),
+    name: indexOf("鍚嶇О", "搴楅摵鍚嶇О", "name", "store_name"),
+    district: indexOf("鍖哄煙", "district"),
+    lng: indexOf("缁忓害", "lng", "longitude"),
+    lat: indexOf("绾害", "lat", "latitude"),
+    tripCount: indexOf("娆℃暟", "tripCount", "trip_count"),
     rpcs: indexOf("RPCS", "rpcs"),
     rcase: indexOf("RCASE", "rcase"),
     bpcs: indexOf("BPCS", "bpcs"),
@@ -13615,15 +13606,15 @@ function parseStoreFileText(text) {
     apcs: indexOf("APCS", "apcs"),
     apaper: indexOf("APAPER", "apaper"),
     rpaper: indexOf("RPAPER", "rpaper"),
-    coldRatio: indexOf("冷藏比例", "coldRatio", "cold_ratio"),
-    waveBelongs: indexOf("所属波次", "waveBelongs", "wave_belongs"),
-    wave1Time: indexOf("一配时间", "wave1_time", "first_wave_time"),
-    wave2Time: indexOf("二配时间", "wave2_time", "second_wave_time"),
-    wave3Time: indexOf("到店时间", "wave3_time", "arrival_time_w3"),
-    wave4Time: indexOf("到店时间", "wave4_time", "arrival_time_w4", "arrival_time"),
-    serviceMinutes: indexOf("卸货分钟", "serviceMinutes", "service_minutes"),
-    difficulty: indexOf("难度", "difficulty"),
-    parking: indexOf("允许偏差(分)", "停车", "parking"),
+    coldRatio: indexOf("鍐疯棌姣斾緥", "coldRatio", "cold_ratio"),
+    waveBelongs: indexOf("鎵€灞炴尝娆?, "waveBelongs", "wave_belongs"),
+    wave1Time: indexOf("涓€閰嶆椂闂?, "wave1_time", "first_wave_time"),
+    wave2Time: indexOf("浜岄厤鏃堕棿", "wave2_time", "second_wave_time"),
+    wave3Time: indexOf("鍒板簵鏃堕棿", "wave3_time", "arrival_time_w3"),
+    wave4Time: indexOf("鍒板簵鏃堕棿", "wave4_time", "arrival_time_w4", "arrival_time"),
+    serviceMinutes: indexOf("鍗歌揣鍒嗛挓", "serviceMinutes", "service_minutes"),
+    difficulty: indexOf("闅惧害", "difficulty"),
+    parking: indexOf("鍏佽鍋忓樊(鍒?", "鍋滆溅", "parking"),
   };
   const getValue = (cells, key) => (idx[key] >= 0 ? cells[idx[key]] : "");
   return lines.slice(1).map((line) => {
@@ -13753,7 +13744,7 @@ function bindImports() {
       const text = await file.text();
       const parsed = parseStoreFileText(text).map((item) => normalizeImportedStore(item)).filter((store) => store.id && store.name);
       if (!parsed.length) {
-        box.textContent = lang() === "ja" ? "店舗ファイルの解析に失敗しました。" : "门店文件解析失败。";
+        box.textContent = lang() === "ja" ? "搴楄垪銉曘偂銈ゃ儷銇В鏋愩伀澶辨晽銇椼伨銇椼仧銆? : "闂ㄥ簵鏂囦欢瑙ｆ瀽澶辫触銆?;
         return;
       }
   const resolvedMap = await fetchStoreWaveResolvedLoadMap(parsed.map((item) => item?.id).filter(Boolean));
@@ -13762,9 +13753,9 @@ function bindImports() {
       state.lastResults = [];
       state.activeResultKey = "";
       renderAll();
-      box.textContent = lang() === "ja" ? `店舗 ${state.stores.length} 件を導入し、ローカル折算貨量を適用しました。` : `已导入门店 ${state.stores.length} 家，并已应用本地折算货量。`;
+      box.textContent = lang() === "ja" ? `搴楄垪 ${state.stores.length} 浠躲倰灏庡叆銇椼€併儹銉笺偒銉姌绠楄波閲忋倰閬╃敤銇椼伨銇椼仧銆俙 : `宸插鍏ラ棬搴?${state.stores.length} 瀹讹紝骞跺凡搴旂敤鏈湴鎶樼畻璐ч噺銆俙;
     } catch (error) {
-      box.textContent = `${lang() === "ja" ? "门店導入失敗" : "门店导入失败"} ${error?.message || ""}`.trim();
+      box.textContent = `${lang() === "ja" ? "闂ㄥ簵灏庡叆澶辨晽" : "闂ㄥ簵瀵煎叆澶辫触"} ${error?.message || ""}`.trim();
     }
   });
 }
@@ -13948,9 +13939,9 @@ function bindEditing() {
           const result = await saveDualTableLoadsToBackend();
           await queryStoreWaveResolvedTable();
           showSaveDualLoadsReport(result?.reportText || "");
-          if (box) box.textContent = `双表货量已保存：${Number(result?.upserted || 0)} 条`;
+          if (box) box.textContent = `鍙岃〃璐ч噺宸蹭繚瀛橈細${Number(result?.upserted || 0)} 鏉;
         } catch (error) {
-          if (box) box.textContent = `保存双表货量失败：${error?.message || ""}`.trim();
+          if (box) box.textContent = `淇濆瓨鍙岃〃璐ч噺澶辫触锛?{error?.message || ""}`.trim();
         }
       })();
       return;
@@ -13960,7 +13951,7 @@ function bindEditing() {
       const query = String(document.getElementById("storeSearchInput")?.value || state.ui.storeSearchQuery || "").trim();
       const found = locateStoreRow(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `已定位门店：${query}` : `未找到门店：${query}`) : "请输入门店检索关键字。";
+      if (box) box.textContent = query ? (found ? `宸插畾浣嶉棬搴楋細${query}` : `鏈壘鍒伴棬搴楋細${query}`) : "璇疯緭鍏ラ棬搴楁绱㈠叧閿瓧銆?;
       return;
     }
     const vehicleLocateBtn = event.target.closest("#vehicleLocateBtn");
@@ -13968,7 +13959,7 @@ function bindEditing() {
       const query = String(document.getElementById("vehicleSearchInput")?.value || state.ui.vehicleSearchQuery || "").trim();
       const found = locateVehicleRow(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `已定位车辆：${query}` : `未找到车辆：${query}`) : "请输入车辆检索关键字。";
+      if (box) box.textContent = query ? (found ? `宸插畾浣嶈溅杈嗭細${query}` : `鏈壘鍒拌溅杈嗭細${query}`) : "璇疯緭鍏ヨ溅杈嗘绱㈠叧閿瓧銆?;
       return;
     }
     const waveLocateBtn = event.target.closest("#waveLocateBtn");
@@ -13976,7 +13967,7 @@ function bindEditing() {
       const query = String(document.getElementById("waveSearchInput")?.value || state.ui.waveSearchQuery || "").trim();
       const found = locateWaveItem(query);
       const box = document.getElementById("validationBox");
-      if (box) box.textContent = query ? (found ? `已定位波次：${query}` : `未找到波次：${query}`) : "请输入波次检索关键字。";
+      if (box) box.textContent = query ? (found ? `宸插畾浣嶆尝娆★細${query}` : `鏈壘鍒版尝娆★細${query}`) : "璇疯緭鍏ユ尝娆℃绱㈠叧閿瓧銆?;
       return;
     }
     if (event.target.closest("#dataArchiveQueryBtn")) {
@@ -14027,9 +14018,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("store");
-          if (box) box.textContent = `门店资料已保存到后台档案：${archiveId}`;
+          if (box) box.textContent = `闂ㄥ簵璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `门店资料保存失败：${error?.message || ""}`.trim();
+          if (box) box.textContent = `闂ㄥ簵璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14041,9 +14032,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("vehicle");
-          if (box) box.textContent = `车辆资料已保存到后台档案：${archiveId}`;
+          if (box) box.textContent = `杞﹁締璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `车辆资料保存失败：${error?.message || ""}`.trim();
+          if (box) box.textContent = `杞﹁締璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14055,9 +14046,9 @@ function bindEditing() {
         const box = document.getElementById("validationBox");
         try {
           const archiveId = await saveBaseDataSnapshot("wave");
-          if (box) box.textContent = `波次资料已保存到后台档案：${archiveId}`;
+          if (box) box.textContent = `娉㈡璧勬枡宸蹭繚瀛樺埌鍚庡彴妗ｆ锛?{archiveId}`;
         } catch (error) {
-          if (box) box.textContent = `波次资料保存失败：${error?.message || ""}`.trim();
+          if (box) box.textContent = `娉㈡璧勬枡淇濆瓨澶辫触锛?{error?.message || ""}`.trim();
         }
       })();
       return;
@@ -14178,8 +14169,8 @@ function bindEditing() {
           const box = document.getElementById("validationBox");
           if (box) {
             box.textContent = lang() === "ja"
-              ? `自由求解では最大 ${MAX_FREE_SOLVE_ALGOS} 本まで選択できます。`
-              : `自由求解最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`;
+              ? `鑷敱姹傝В銇с伅鏈€澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇ч伕鎶炪仹銇嶃伨銇欍€俙
+              : `鑷敱姹傝В鏈€澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙;
           }
           return;
         }
@@ -14343,8 +14334,8 @@ function bindEditing() {
       const box = document.getElementById("validationBox");
       if (beforeCount > MAX_FREE_SOLVE_ALGOS && box) {
         box.textContent = lang() === "ja"
-          ? `自由求解では最大 ${MAX_FREE_SOLVE_ALGOS} 本まで選択できます。`
-          : `自由求解最多选择 ${MAX_FREE_SOLVE_ALGOS} 种算法。`;
+          ? `鑷敱姹傝В銇с伅鏈€澶?${MAX_FREE_SOLVE_ALGOS} 鏈伨銇ч伕鎶炪仹銇嶃伨銇欍€俙
+          : `鑷敱姹傝В鏈€澶氶€夋嫨 ${MAX_FREE_SOLVE_ALGOS} 绉嶇畻娉曘€俙;
       }
       return;
     }
@@ -14427,8 +14418,8 @@ async function generatePlans() {
     const box = document.getElementById("validationBox");
     if (box) {
       box.textContent = lang() === "ja"
-        ? "既に求解中です。リレーウィンドウの進捗を確認してください。"
-        : "当前已在求解中，请查看“求解过程可视化窗口”进度。";
+        ? "鏃伀姹傝В涓仹銇欍€傘儶銉兗銈︺偅銉炽儔銈︺伄閫叉崡銈掔⒑瑾嶃仐銇︺亸銇犮仌銇勩€?
+        : "褰撳墠宸插湪姹傝В涓紝璇锋煡鐪嬧€滄眰瑙ｈ繃绋嬪彲瑙嗗寲绐楀彛鈥濊繘搴︺€?;
     }
     return;
   }
@@ -14452,21 +14443,21 @@ async function generatePlans() {
     }
     if (!selected.length) {
       box.textContent = strategy === "free"
-        ? (lang() === "ja" ? "自由求解では少なくとも 1 本のアルゴリズムを選択してください。" : "自由求解请至少勾选 1 种算法。")
-        : (lang() === "ja" ? "現在の方針に対応するアルゴリズムチェーンが設定されていません。" : "请先为当前策略内置至少 1 条算法链。");
+        ? (lang() === "ja" ? "鑷敱姹傝В銇с伅灏戙仾銇忋仺銈?1 鏈伄銈儷銈淬儶銈恒儬銈掗伕鎶炪仐銇︺亸銇犮仌銇勩€? : "鑷敱姹傝В璇疯嚦灏戝嬀閫?1 绉嶇畻娉曘€?)
+        : (lang() === "ja" ? "鐝惧湪銇柟閲濄伀瀵惧繙銇欍倠銈儷銈淬儶銈恒儬銉併偋銉笺兂銇岃ō瀹氥仌銈屻仸銇勩伨銇涖倱銆? : "璇峰厛涓哄綋鍓嶇瓥鐣ュ唴缃嚦灏?1 鏉＄畻娉曢摼銆?);
       state.ui.generating = false;
       renderGenerationProgress();
       return;
     }
-  // 临时放开：屏蔽分区方案号必选校验
+  // 涓存椂鏀惧紑锛氬睆钄藉垎鍖烘柟妗堝彿蹇呴€夋牎楠?
 
-  openRelayConsoleModal(lang() === "ja" ? "求解过程可视化窗口" : "求解过程可视化窗口");
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  收到求解请求，开始同步前台设置与基础校验。`);
+  openRelayConsoleModal(lang() === "ja" ? "姹傝В杩囩▼鍙鍖栫獥鍙? : "姹傝В杩囩▼鍙鍖栫獥鍙?);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鏀跺埌姹傝В璇锋眰锛屽紑濮嬪悓姝ュ墠鍙拌缃笌鍩虹鏍￠獙銆俙);
   relayStageReporter = (text) => appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${text}`);
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  当前策略：${state.settings.solveStrategy || "manual"}，目标：${state.settings.optimizeGoal || "balanced"}，算法：${selected.join("、") || "（空）"}。`);
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  正在构建场景（门店/车辆/波次/路网），这一步可能耗时较长。`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  褰撳墠绛栫暐锛?{state.settings.solveStrategy || "manual"}锛岀洰鏍囷細${state.settings.optimizeGoal || "balanced"}锛岀畻娉曪細${selected.join("銆?) || "锛堢┖锛?}銆俙);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姝ｅ湪鏋勫缓鍦烘櫙锛堥棬搴?杞﹁締/娉㈡/璺綉锛夛紝杩欎竴姝ュ彲鑳借€楁椂杈冮暱銆俙);
   const scenario = await buildScenario();
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  场景构建完成：门店 ${scenario?.stores?.length || 0} 家，车辆 ${scenario?.vehicles?.length || 0} 台，波次 ${scenario?.waves?.length || 0} 个。`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鍦烘櫙鏋勫缓瀹屾垚锛氶棬搴?${scenario?.stores?.length || 0} 瀹讹紝杞﹁締 ${scenario?.vehicles?.length || 0} 鍙帮紝娉㈡ ${scenario?.waves?.length || 0} 涓€俙);
   const runners = { vrptw: solveByVRPTW, hybrid: solveByHybrid, ga: solveByGA, tabu: solveByTabu, lns: solveByLNS, savings: solveBySavings, sa: solveBySA, aco: solveByACO, pso: solveByPSO, vehicle: solveByVehicle };
   const carryResult = state.lastResults.find((item) => item.key === state.activeResultKey) || state.lastResults[0] || null;
   const requiredTimingIssues = [];
@@ -14481,16 +14472,16 @@ async function generatePlans() {
   }
   if (requiredTimingIssues.length) {
     if (box) {
-      box.textContent = `${lang() === "ja" ? "求解前检查未通过：" : "求解前检查未通过："}${requiredTimingIssues.slice(0, 15).join("、")}${requiredTimingIssues.length > 15 ? "..." : ""}`;
+      box.textContent = `${lang() === "ja" ? "姹傝В鍓嶆鏌ユ湭閫氳繃锛? : "姹傝В鍓嶆鏌ユ湭閫氳繃锛?}${requiredTimingIssues.slice(0, 15).join("銆?)}${requiredTimingIssues.length > 15 ? "..." : ""}`;
     }
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解前检查未通过：${requiredTimingIssues.slice(0, 30).join("、")}${requiredTimingIssues.length > 30 ? "..." : ""}`);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В鍓嶆鏌ユ湭閫氳繃锛?{requiredTimingIssues.slice(0, 30).join("銆?)}${requiredTimingIssues.length > 30 ? "..." : ""}`);
     state.ui.generating = false;
     renderGenerationProgress();
     return;
   }
   state.lastResults = [];
   state.activeResultKey = "";
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${lang() === "ja" ? "开始求解，正在准备场景与校验..." : "开始求解，正在准备场景与校验..."}`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${lang() === "ja" ? "寮€濮嬫眰瑙ｏ紝姝ｅ湪鍑嗗鍦烘櫙涓庢牎楠?.." : "寮€濮嬫眰瑙ｏ紝姝ｅ湪鍑嗗鍦烘櫙涓庢牎楠?.."}`);
   await updateGenerationProgress(6, L("progressPreparing"));
   const built = [];
   const ALGO_TIMEOUT_MS = 120000;
@@ -14510,27 +14501,27 @@ async function generatePlans() {
 
   try {
     if (strategy === "relay") {
-      appendRelayConsoleLine(lang() === "ja" ? "リレー最適化のウィンドウを開きました。ここに各段階の動きが順次表示されます。" : "接力求解窗口已打开，下面会持续打印每一步动作。");
-      await updateGenerationProgress(24, lang() === "ja" ? "リレー最適化を起動しています..." : "正在启动接力求解...");
+      appendRelayConsoleLine(lang() === "ja" ? "銉儸銉兼渶閬╁寲銇偊銈ｃ兂銉夈偊銈掗枊銇嶃伨銇椼仧銆傘亾銇撱伀鍚勬闅庛伄鍕曘亶銇岄爢娆¤〃绀恒仌銈屻伨銇欍€? : "鎺ュ姏姹傝В绐楀彛宸叉墦寮€锛屼笅闈細鎸佺画鎵撳嵃姣忎竴姝ュ姩浣溿€?);
+      await updateGenerationProgress(24, lang() === "ja" ? "銉儸銉兼渶閬╁寲銈掕捣鍕曘仐銇︺亜銇俱仚..." : "姝ｅ湪鍚姩鎺ュ姏姹傝В...");
       try {
         built.push({ ...(await runWithTimeout("relay", () => solveByRelay(scenario, selected, carryResult))), scenario, adjustMessage: "" });
       } catch (error) {
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  接力求解失败或超时：${error?.message || error}`);
-        if (box) box.textContent = `接力求解失败或超时：${error?.message || error}`;
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鎺ュ姏姹傝В澶辫触鎴栬秴鏃讹細${error?.message || error}`);
+        if (box) box.textContent = `鎺ュ姏姹傝В澶辫触鎴栬秴鏃讹細${error?.message || error}`;
       }
       await cooperativeYield();
-      await updateGenerationProgress(75, lang() === "ja" ? "リレー段階が完了し、結果をまとめています..." : "接力阶段已完成，正在汇总结果...");
+      await updateGenerationProgress(75, lang() === "ja" ? "銉儸銉兼闅庛亴瀹屼簡銇椼€佺祼鏋溿倰銇俱仺銈併仸銇勩伨銇?.." : "鎺ュ姏闃舵宸插畬鎴愶紝姝ｅ湪姹囨€荤粨鏋?..");
     } else if (strategy === "compare") {
-      appendRelayConsoleLine(lang() === "ja" ? "多算法対比を起動しました。ここに各算法の進行と剖析が順次表示されます。" : "多算法对比已启动。下面会持续打印每套算法的运行进度与剖析。");
+      appendRelayConsoleLine(lang() === "ja" ? "澶氱畻娉曞姣斻倰璧峰嫊銇椼伨銇椼仧銆傘亾銇撱伀鍚勭畻娉曘伄閫茶銇ㄥ墫鏋愩亴闋嗘琛ㄧず銇曘倢銇俱仚銆? : "澶氱畻娉曞姣斿凡鍚姩銆備笅闈細鎸佺画鎵撳嵃姣忓绠楁硶鐨勮繍琛岃繘搴︿笌鍓栨瀽銆?);
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始运行 ${algoLabel(key)}。`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬭繍琛?${algoLabel(key)}銆俙);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let result = null;
         try {
           result = { ...(await runWithTimeout(key, () => runners[key](scenario))), scenario, adjustMessage: "" };
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 失败或超时：${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 澶辫触鎴栬秴鏃讹細${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
@@ -14538,29 +14529,29 @@ async function generatePlans() {
         built.push(result);
         state.lastResults = [...built].sort((a, b) => b.metrics.score - a.metrics.score);
         state.activeResultKey = state.lastResults[0]?.key || "";
-        box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? `現在已完成 ${built.length}/${selected.length} 本算法，最新完成的是 ${algoLabel(key)}。` : `当前已完成 ${built.length}/${selected.length} 套算法，最新完成的是 ${algoLabel(key)}。`}`;
+        box.textContent = `${buildSolveModeSummary()} ${lang() === "ja" ? `鐝惧湪宸插畬鎴?${built.length}/${selected.length} 鏈畻娉曪紝鏈€鏂板畬鎴愮殑鏄?${algoLabel(key)}銆俙 : `褰撳墠宸插畬鎴?${built.length}/${selected.length} 濂楃畻娉曪紝鏈€鏂板畬鎴愮殑鏄?${algoLabel(key)}銆俙}`;
         renderVehicles();
         renderSummary();
         renderAnalytics();
         renderResults();
         renderStoresTable();
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 已完成，当前评分 ${result.metrics.score.toFixed(1)}，总里程 ${result.metrics.totalDistance.toFixed(1)} km，用车 ${result.metrics.usedVehicleCount || 0} 辆。`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 宸插畬鎴愶紝褰撳墠璇勫垎 ${result.metrics.score.toFixed(1)}锛屾€婚噷绋?${result.metrics.totalDistance.toFixed(1)} km锛岀敤杞?${result.metrics.usedVehicleCount || 0} 杈嗐€俙);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     } else if (strategy === "deep" && carryResult?.solution?.length) {
-      appendRelayConsoleLine(lang() === "ja" ? "深度最適化モード：既存解の波次改善を開始。" : "深度优化模式：开始在已有解上做波次优化。");
+      appendRelayConsoleLine(lang() === "ja" ? "娣卞害鏈€閬╁寲銉兗銉夛細鏃㈠瓨瑙ｃ伄娉㈡鏀瑰杽銈掗枊濮嬨€? : "娣卞害浼樺寲妯″紡锛氬紑濮嬪湪宸叉湁瑙ｄ笂鍋氭尝娆′紭鍖栥€?);
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
         const optimizer = ({ hybrid: optimizeWaveWithHybrid, tabu: optimizeWaveWithTabu, lns: optimizeWaveWithLns, sa: optimizeWaveWithSA, ga: optimizeWaveWithGA, aco: optimizeWaveWithACO, pso: optimizeWaveWithPSO })[key];
         if (!optimizer) continue;
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始执行深度优化算法 ${algoLabel(key)}。`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬫墽琛屾繁搴︿紭鍖栫畻娉?${algoLabel(key)}銆俙);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let improved = null;
         try {
           improved = await runWithTimeout(`deep-${key}`, () => improveSolutionByWaveOptimizer(carryResult.solution, scenario, optimizer, 40 + i));
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 深度优化失败或超时：${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 娣卞害浼樺寲澶辫触鎴栬秴鏃讹細${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
@@ -14574,32 +14565,32 @@ async function generatePlans() {
           scenario,
           adjustMessage: "",
         }, scenario));
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 深度优化完成，评分 ${built[built.length - 1]?.metrics?.score?.toFixed?.(1) ?? "-"}`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 娣卞害浼樺寲瀹屾垚锛岃瘎鍒?${built[built.length - 1]?.metrics?.score?.toFixed?.(1) ?? "-"}`);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     } else {
-      appendRelayConsoleLine(lang() === "ja" ? "标准求解模式：逐个算法执行。" : "标准求解模式：逐个算法执行。");
+      appendRelayConsoleLine(lang() === "ja" ? "鏍囧噯姹傝В妯″紡锛氶€愪釜绠楁硶鎵ц銆? : "鏍囧噯姹傝В妯″紡锛氶€愪釜绠楁硶鎵ц銆?);
       for (let i = 0; i < selected.length; i += 1) {
         const key = selected[i];
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  开始运行 ${algoLabel(key)}。`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  寮€濮嬭繍琛?${algoLabel(key)}銆俙);
         await updateGenerationProgress(20 + (i / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
         let result = null;
         try {
           result = { ...(await runWithTimeout(key, () => runners[key](scenario))), scenario, adjustMessage: "" };
         } catch (error) {
-          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 失败或超时：${error?.message || error}`);
+          appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 澶辫触鎴栬秴鏃讹細${error?.message || error}`);
           await cooperativeYield();
           await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
           continue;
         }
         built.push(result);
-        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 已完成，评分 ${result.metrics.score.toFixed(1)}，总里程 ${result.metrics.totalDistance.toFixed(1)} km。`);
+        appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  ${algoLabel(key)} 宸插畬鎴愶紝璇勫垎 ${result.metrics.score.toFixed(1)}锛屾€婚噷绋?${result.metrics.totalDistance.toFixed(1)} km銆俙);
         await cooperativeYield();
         await updateGenerationProgress(20 + ((i + 1) / Math.max(selected.length, 1)) * 55, LT("progressRunning", { algo: algoLabel(key) }));
       }
     }
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解计算阶段结束，开始汇总结果。`);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В璁＄畻闃舵缁撴潫锛屽紑濮嬫眹鎬荤粨鏋溿€俙);
   } finally {
     relayStageReporter = null;
   }
@@ -14609,15 +14600,15 @@ async function generatePlans() {
   if (!state.lastResults.length) {
     const issues = diagnoseScenarioFeasibility(scenario);
     box.textContent = issues.length
-      ? `${buildSolveModeSummary()} ${state.settings.ignoreWaves ? (lang() === "ja" ? "現在は波次を分けずに計算しています。" : "当前按忽略波次模式求解") : (lang() === "ja" ? "現在は波次ごとに計算しています。" : "当前按波次求解")}，${lang() === "ja" ? "現在の条件では実行可能な案が見つかりません。想定される制約衝突：" : "暂未找到可行方案。可能的硬约束冲突："}${issues.join("；")}`
-      : `${buildSolveModeSummary()} ${lang() === "ja" ? "現在の制約では実行可能な案が見つかりません。" : "当前约束下暂未找到可行方案。"}`;
+      ? `${buildSolveModeSummary()} ${state.settings.ignoreWaves ? (lang() === "ja" ? "鐝惧湪銇尝娆°倰鍒嗐亼銇氥伀瑷堢畻銇椼仸銇勩伨銇欍€? : "褰撳墠鎸夊拷鐣ユ尝娆℃ā寮忔眰瑙?) : (lang() === "ja" ? "鐝惧湪銇尝娆°仈銇ㄣ伀瑷堢畻銇椼仸銇勩伨銇欍€? : "褰撳墠鎸夋尝娆℃眰瑙?)}锛?{lang() === "ja" ? "鐝惧湪銇潯浠躲仹銇疅琛屽彲鑳姐仾妗堛亴瑕嬨仱銇嬨倞銇俱仜銈撱€傛兂瀹氥仌銈屻倠鍒剁磩琛濈獊锛? : "鏆傛湭鎵惧埌鍙鏂规銆傚彲鑳界殑纭害鏉熷啿绐侊細"}${issues.join("锛?)}`
+      : `${buildSolveModeSummary()} ${lang() === "ja" ? "鐝惧湪銇埗绱勩仹銇疅琛屽彲鑳姐仾妗堛亴瑕嬨仱銇嬨倞銇俱仜銈撱€? : "褰撳墠绾︽潫涓嬫殏鏈壘鍒板彲琛屾柟妗堛€?}`;
     await updateGenerationProgress(100, L("progressDone"));
     renderVehicles();
     renderSummary();
     renderAnalytics();
     renderResults();
     renderStoresTable();
-    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  未找到可行解，已输出约束冲突提示。`);
+    appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  鏈壘鍒板彲琛岃В锛屽凡杈撳嚭绾︽潫鍐茬獊鎻愮ず銆俙);
     return;
   }
 
@@ -14628,20 +14619,20 @@ async function generatePlans() {
   const targetScore = Number(state.settings.targetScore || 0);
   const routeSourceMessage = scenario.distanceSource === "database-full"
     ? (lang() === "ja"
-      ? ` 現在は数据库全量距离矩阵を使用中です。主数据源=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}、欠損 0。`
-      : ` 当前使用数据库全量距离矩阵，主数据源=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}，缺失 0。`)
+      ? ` 鐝惧湪銇暟鎹簱鍏ㄩ噺璺濈鐭╅樀銈掍娇鐢ㄤ腑銇с仚銆備富鏁版嵁婧?${String(scenario?.distDbStats?.dbDominantSource || "unknown")}銆佹瑺鎼?0銆俙
+      : ` 褰撳墠浣跨敤鏁版嵁搴撳叏閲忚窛绂荤煩闃碉紝涓绘暟鎹簮=${String(scenario?.distDbStats?.dbDominantSource || "unknown")}锛岀己澶?0銆俙)
     : scenario.distanceSource === "amap"
     ? (lang() === "ja"
-      ? ` 現在は高德の道路距離と所要時間を使用中です。キャッシュ命中 ${scenario.distanceCacheHitPairs || 0} 件、今回の新規取得 ${scenario.distanceFetchedPairs || 0} 件。`
-      : ` 当前使用高德路网距离/时长，缓存命中 ${scenario.distanceCacheHitPairs || 0} 对，本轮新拉取 ${scenario.distanceFetchedPairs || 0} 对。`)
+      ? ` 鐝惧湪銇珮寰枫伄閬撹矾璺濋洟銇ㄦ墍瑕佹檪闁撱倰浣跨敤涓仹銇欍€傘偔銉ｃ儍銈枫儱鍛戒腑 ${scenario.distanceCacheHitPairs || 0} 浠躲€佷粖鍥炪伄鏂拌鍙栧緱 ${scenario.distanceFetchedPairs || 0} 浠躲€俙
+      : ` 褰撳墠浣跨敤楂樺痉璺綉璺濈/鏃堕暱锛岀紦瀛樺懡涓?${scenario.distanceCacheHitPairs || 0} 瀵癸紝鏈疆鏂版媺鍙?${scenario.distanceFetchedPairs || 0} 瀵广€俙)
     : (lang() === "ja"
-      ? " 現在は高德の道路情報が使えないため、直線距離の推定に自動で切り替えています。"
-      : " 当前高德路网不可用，已自动回退到直线距离估算。");
+      ? " 鐝惧湪銇珮寰枫伄閬撹矾鎯呭牨銇屼娇銇堛仾銇勩仧銈併€佺洿绶氳窛闆伄鎺ㄥ畾銇嚜鍕曘仹鍒囥倞鏇裤亪銇︺亜銇俱仚銆?
+      : " 褰撳墠楂樺痉璺綉涓嶅彲鐢紝宸茶嚜鍔ㄥ洖閫€鍒扮洿绾胯窛绂讳及绠椼€?);
   const baseMessage = state.settings.ignoreWaves
-    ? (lang() === "ja" ? "可能な範囲で割り当てた結果を生成しました。現在は波次を分けずに計算しています。" : "已生成尽量调度结果。当前按忽略波次模式求解。")
-    : (lang() === "ja" ? `可能な範囲で割り当てた結果を生成しました。現在は ${scenario.waves.length} 個の業務波次で計算しており、到着要件を強制約として扱います。` : `已生成尽量调度结果。当前按 ${scenario.waves.length} 个业务波次求解，并按到店要求做强约束。`);
+    ? (lang() === "ja" ? "鍙兘銇瘎鍥层仹鍓层倞褰撱仸銇熺祼鏋溿倰鐢熸垚銇椼伨銇椼仧銆傜従鍦ㄣ伅娉㈡銈掑垎銇戙仛銇▓绠椼仐銇︺亜銇俱仚銆? : "宸茬敓鎴愬敖閲忚皟搴︾粨鏋溿€傚綋鍓嶆寜蹇界暐娉㈡妯″紡姹傝В銆?)
+    : (lang() === "ja" ? `鍙兘銇瘎鍥层仹鍓层倞褰撱仸銇熺祼鏋溿倰鐢熸垚銇椼伨銇椼仧銆傜従鍦ㄣ伅 ${scenario.waves.length} 鍊嬨伄妤嫏娉㈡銇ц▓绠椼仐銇︺亰銈娿€佸埌鐫€瑕佷欢銈掑挤鍒剁磩銇ㄣ仐銇︽壉銇勩伨銇欍€俙 : `宸茬敓鎴愬敖閲忚皟搴︾粨鏋溿€傚綋鍓嶆寜 ${scenario.waves.length} 涓笟鍔℃尝娆℃眰瑙ｏ紝骞舵寜鍒板簵瑕佹眰鍋氬己绾︽潫銆俙);
   const unscheduledMessage = bestResult.metrics.unscheduledCount ? ` ${LT("unscheduledSummary", { count: bestResult.metrics.unscheduledCount, names: formatUnscheduledDetails(bestResult.metrics.unscheduledStores, 12) })}` : ` ${L("noUnscheduled")}`;
-  const reasonMessage = bestResult.metrics.unscheduledCount ? ` ${lang() === "ja" ? `未割当の主因：${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}` : `未调度主因：${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}`}` : "";
+  const reasonMessage = bestResult.metrics.unscheduledCount ? ` ${lang() === "ja" ? `鏈壊褰撱伄涓诲洜锛?{summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}` : `鏈皟搴︿富鍥狅細${summarizeUnscheduledReasons(bestResult.metrics.unscheduledStores)}`}` : "";
   const targetMessage = targetScore > 0 ? ` ${buildTargetScoreAdvice(bestResult)}` : "";
   box.textContent = `${buildSolveModeSummary()} ${baseMessage}${routeSourceMessage}${unscheduledMessage}${reasonMessage}${targetMessage}`;
   renderVehicles();
@@ -14650,7 +14641,7 @@ async function generatePlans() {
   renderResults();
   renderStoresTable();
   renderSavedPlans();
-  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  求解完成：最佳方案 ${bestResult.label}，评分 ${bestResult.metrics.score.toFixed(1)}。`);
+  appendRelayConsoleLine(`${new Date().toLocaleTimeString("zh-CN", { hour12: false })}  姹傝В瀹屾垚锛氭渶浣虫柟妗?${bestResult.label}锛岃瘎鍒?${bestResult.metrics.score.toFixed(1)}銆俙);
     await updateGenerationProgress(100, L("progressDone"));
   } finally {
     state.ui.generating = false;
@@ -14730,12 +14721,12 @@ async function loadSample() {
     await refreshRunRegionData(true);
     await queryStoreWaveResolvedTable({ needConfirm: false });
     document.getElementById("validationBox").textContent = lang() === "ja"
-      ? `店舗 ${state.stores.length} 件・車両 ${state.vehicles.length} 台を読み込み、貨量はローカル折算値を適用しました。`
-      : `已加载门店 ${state.stores.length} 家、车辆 ${state.vehicles.length} 台，并已将货量统一应用为本地折算值。`;
+      ? `搴楄垪 ${state.stores.length} 浠躲兓杌婁浮 ${state.vehicles.length} 鍙般倰瑾伩杈笺伩銆佽波閲忋伅銉兗銈儷鎶樼畻鍊ゃ倰閬╃敤銇椼伨銇椼仧銆俙
+      : `宸插姞杞介棬搴?${state.stores.length} 瀹躲€佽溅杈?${state.vehicles.length} 鍙帮紝骞跺凡灏嗚揣閲忕粺涓€搴旂敤涓烘湰鍦版姌绠楀€笺€俙;
   } catch (error) {
     const box = document.getElementById("validationBox");
     if (box) {
-      box.textContent = `${lang() === "ja" ? "画面文言の更新中にエラーが出ましたが、基本データは復元済みです。" : "界面文案刷新时发生错误，但基础数据已经恢复。"} ${error?.message || ""}`.trim();
+      box.textContent = `${lang() === "ja" ? "鐢婚潰鏂囪█銇洿鏂颁腑銇偍銉┿兗銇屽嚭銇俱仐銇熴亴銆佸熀鏈儑銉笺偪銇京鍏冩笀銇裤仹銇欍€? : "鐣岄潰鏂囨鍒锋柊鏃跺彂鐢熼敊璇紝浣嗗熀纭€鏁版嵁宸茬粡鎭㈠銆?} ${error?.message || ""}`.trim();
     }
   }
 }
@@ -14762,7 +14753,7 @@ try {
     ));
     targetKeys.forEach((k) => localStorage.removeItem(k));
     const box = document.getElementById("validationBox");
-    if (box) box.textContent = `已清理距离缓存 ${targetKeys.length} 项，页面即将刷新。`;
+    if (box) box.textContent = `宸叉竻鐞嗚窛绂荤紦瀛?${targetKeys.length} 椤癸紝椤甸潰鍗冲皢鍒锋柊銆俙;
     setTimeout(() => window.location.reload(), 120);
   });
   document.getElementById("addVehicleBtn")?.addEventListener("click", addVehicle);
@@ -14793,7 +14784,7 @@ try {
 } catch (error) {
   const box = document.getElementById("validationBox");
   if (box) {
-    box.textContent = `${lang() === "ja" ? "初期化中にエラーが出ました。まず一度「固定店舗を再読込」を押してください。" : "初始化时发生错误，请先点一次“重新加载固定门店”。"} ${error?.message || ""}`.trim();
+    box.textContent = `${lang() === "ja" ? "鍒濇湡鍖栦腑銇偍銉┿兗銇屽嚭銇俱仐銇熴€傘伨銇氫竴搴︺€屽浐瀹氬簵鑸椼倰鍐嶈杈笺€嶃倰鎶笺仐銇︺亸銇犮仌銇勩€? : "鍒濆鍖栨椂鍙戠敓閿欒锛岃鍏堢偣涓€娆♀€滈噸鏂板姞杞藉浐瀹氶棬搴椻€濄€?} ${error?.message || ""}`.trim();
   }
 }
 
@@ -14828,23 +14819,23 @@ window.addEventListener("beforeunload", () => {
     runRegionMap = null;
   }
 });
-// ========== 新增：直接调用车辆驱动构造算法（新） ==========
+// ========== 鏂板锛氱洿鎺ヨ皟鐢ㄨ溅杈嗛┍鍔ㄦ瀯閫犵畻娉曪紙鏂帮級 ==========
 async function directVehicleSolve() {
   if (state.ui.generating) {
     const box = document.getElementById("validationBox");
-    if (box) box.textContent = "正在求解中，请稍后";
+    if (box) box.textContent = "姝ｅ湪姹傝В涓紝璇风◢鍚?;
     return;
   }
   const box = document.getElementById("validationBox");
   try {
     state.ui.generating = true;
     renderGenerationProgress();
-    await updateGenerationProgress(5, "正在构建场景...");
+    await updateGenerationProgress(5, "姝ｅ湪鏋勫缓鍦烘櫙...");
     
     const scenario = await buildScenario();
     const selected = applySolveWaveSelectionToScenario(scenario);
     if (selected.error || !selected.scenario) {
-      box.textContent = selected.error || "场景构建失败";
+      box.textContent = selected.error || "鍦烘櫙鏋勫缓澶辫触";
       return;
     }
     const finalScenario = selected.scenario;
@@ -14853,9 +14844,8 @@ async function directVehicleSolve() {
     const solutions = [];
     let totalUnscheduled = [];
     
-    // 记录已使用的车辆（车牌号集合）
-    let usedVehicles = new Set();
-    // 记录 W1 每个车辆的门店列表（按顺序）
+    // 璁板綍宸蹭娇鐢ㄧ殑杞﹁締锛堣溅鐗屽彿闆嗗悎锛?    let usedVehicles = new Set();
+    // 璁板綍 W1 姣忎釜杞﹁締鐨勯棬搴楀垪琛紙鎸夐『搴忥級
     let w1Assignments = {};   // { plateNo: [storeId, ...] }
     let w1RoutesByPlate = {}; // { plateNo: [[storeId, ...], ...] }
     let w1PriorStats = {};    // { plateNo: { finish_time, prior_round_distance, priorWaveCount } }
@@ -14863,10 +14853,10 @@ async function directVehicleSolve() {
     for (let idx = 0; idx < finalScenario.waves.length; idx++) {
       const wave = finalScenario.waves[idx];
       const waveId = wave.waveId;
-      box.textContent = `正在求解 ${waveId} (${idx+1}/${finalScenario.waves.length}) ...`;
-      await updateGenerationProgress(20 + (idx / finalScenario.waves.length) * 70, `求解 ${waveId}`);
+      box.textContent = `姝ｅ湪姹傝В ${waveId} (${idx+1}/${finalScenario.waves.length}) ...`;
+      await updateGenerationProgress(20 + (idx / finalScenario.waves.length) * 70, `姹傝В ${waveId}`);
       
-      // 构建基础 payload
+      // 鏋勫缓鍩虹 payload
       let payload = {
         algorithmKey: "vehicle",
         scenario: finalScenario,
@@ -14876,35 +14866,34 @@ async function directVehicleSolve() {
         strategyConfig: strategyConfig,
       };
       
-      // 特殊处理不同波次
+      // 鐗规畩澶勭悊涓嶅悓娉㈡
       if (waveId === "W1") {
-        // W1: 使用全部车辆，不排除任何车，也不传递 assignments
+        // W1: 浣跨敤鍏ㄩ儴杞﹁締锛屼笉鎺掗櫎浠讳綍杞︼紝涔熶笉浼犻€?assignments
         payload.vehicles = finalScenario.vehicles;
       } else if (waveId === "W2") {
-        // W2: 只使用 W1 中用过的车辆，并传递 W1 的 assignments
+        // W2: 鍙娇鐢?W1 涓敤杩囩殑杞﹁締锛屽苟浼犻€?W1 鐨?assignments
         const w1UsedVehicles = finalScenario.vehicles.filter(v => usedVehicles.has(v.plateNo));
         if (w1UsedVehicles.length === 0) {
-          // 如果 W1 没有车辆（不可能），回退全部车辆
+          // 濡傛灉 W1 娌℃湁杞﹁締锛堜笉鍙兘锛夛紝鍥為€€鍏ㄩ儴杞﹁締
           payload.vehicles = finalScenario.vehicles;
         } else {
           payload.vehicles = w1UsedVehicles;
         }
-        payload.w1_assignments = w1Assignments;   // 传递 W1 门店映射
-        payload.w1_routes_by_plate = w1RoutesByPlate; // 传递 W1 完整趟次结构
-        payload.w1_prior_stats = w1PriorStats; // 传递 W1 接力 prior stats
+        payload.w1_assignments = w1Assignments;   // 浼犻€?W1 闂ㄥ簵鏄犲皠
+        payload.w1_routes_by_plate = w1RoutesByPlate; // 浼犻€?W1 瀹屾暣瓒熸缁撴瀯
+        payload.w1_prior_stats = w1PriorStats; // 浼犻€?W1 鎺ュ姏 prior stats
       } else if (waveId === "W3") {
-        // W3: 排除 W1 和 W2 用过的车辆
-        if (strategyConfig.w3ExcludePriorVehicles && usedVehicles.size > 0) {
+        // W3: 鎺掗櫎 W1 鍜?W2 鐢ㄨ繃鐨勮溅杈?        if (strategyConfig.w3ExcludePriorVehicles && usedVehicles.size > 0) {
           payload.excluded_vehicles = Array.from(usedVehicles);
-          console.log(`[directVehicleSolve] 排除车辆: ${payload.excluded_vehicles.join(", ")}`);
+          console.log(`[directVehicleSolve] 鎺掗櫎杞﹁締: ${payload.excluded_vehicles.join(", ")}`);
         }
-        // W3 使用全部车辆（排除后后端会过滤）
+        // W3 浣跨敤鍏ㄩ儴杞﹁締锛堟帓闄ゅ悗鍚庣浼氳繃婊わ級
         payload.vehicles = finalScenario.vehicles.map((vehicle) => ({
           ...vehicle,
           speed: Number(strategyConfig.w3SpeedKmh || 48),
         }));
       } else if (waveId === "W4") {
-        // W4: 不排除（可根据需要调整）
+        // W4: 涓嶆帓闄わ紙鍙牴鎹渶瑕佽皟鏁达級
         payload.vehicles = finalScenario.vehicles;
       }
       
@@ -14915,17 +14904,16 @@ async function directVehicleSolve() {
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
-      if (!result.bestState) throw new Error(`波次 ${waveId} 求解失败`);
+      if (!result.bestState) throw new Error(`娉㈡ ${waveId} 姹傝В澶辫触`);
       
-      // 记录本波次使用的车辆
+      // 璁板綍鏈尝娆′娇鐢ㄧ殑杞﹁締
       const waveUsedPlates = result.bestState
         .filter(item => item.routes && item.routes.length > 0)
         .map(item => item.plateNo);
       waveUsedPlates.forEach(plate => usedVehicles.add(plate));
-      console.log(`[directVehicleSolve] ${waveId} 使用车辆: ${waveUsedPlates.join(", ")}`);
+      console.log(`[directVehicleSolve] ${waveId} 浣跨敤杞﹁締: ${waveUsedPlates.join(", ")}`);
       
-      // 如果是 W1，记录每个车辆的门店列表（按路线顺序）
-      if (waveId === "W1") {
+      // 濡傛灉鏄?W1锛岃褰曟瘡涓溅杈嗙殑闂ㄥ簵鍒楄〃锛堟寜璺嚎椤哄簭锛?      if (waveId === "W1") {
         w1RoutesByPlate = {};
         w1Assignments = {};
         w1PriorStats = {};
@@ -14946,7 +14934,7 @@ async function directVehicleSolve() {
         }
       }
       
-      // 转换为前端需要的 plan 结构
+      // 杞崲涓哄墠绔渶瑕佺殑 plan 缁撴瀯
       const plans = result.bestState.map(item => ({
         vehicle: { plateNo: item.plateNo, capacity: item.capacity, speed: item.speed, canCarryCold: item.canCarryCold || false },
         waveId: waveId,
@@ -14970,8 +14958,8 @@ async function directVehicleSolve() {
     const metrics = evaluateSolution(solutions, finalScenario, totalUnscheduled);
     const resultObj = {
       key: "vehicle_new",
-      label: "车辆驱动构造（新）",
-      description: "无硬约束，全门店必调度，日志见 C:\\Users\\laoj0\\Desktop\\123.txt",
+      label: "杞﹁締椹卞姩鏋勯€狅紙鏂帮級",
+      description: "鏃犵‖绾︽潫锛屽叏闂ㄥ簵蹇呰皟搴︼紝鏃ュ織瑙?C:\\Users\\laoj0\\Desktop\\123.txt",
       solution: solutions,
       metrics: metrics,
       unscheduledStores: totalUnscheduled,
@@ -14983,11 +14971,11 @@ async function directVehicleSolve() {
     state.activeResultKey = resultObj.key;
     autoArchiveCurrentRun();
     renderAll();
-    box.textContent = `车辆驱动构造（新）完成，评分 ${metrics.score.toFixed(1)}，已调度 ${metrics.scheduledCount} 家，未调度 ${metrics.unscheduledCount} 家。详情日志 C:\\Users\\laoj0\\Desktop\\123.txt`;
-    await updateGenerationProgress(100, "完成");
+    box.textContent = `杞﹁締椹卞姩鏋勯€狅紙鏂帮級瀹屾垚锛岃瘎鍒?${metrics.score.toFixed(1)}锛屽凡璋冨害 ${metrics.scheduledCount} 瀹讹紝鏈皟搴?${metrics.unscheduledCount} 瀹躲€傝鎯呮棩蹇?C:\\Users\\laoj0\\Desktop\\123.txt`;
+    await updateGenerationProgress(100, "瀹屾垚");
   } catch (err) {
     console.error(err);
-    if (box) box.textContent = `车辆驱动构造（新）失败：${err.message}`;
+    if (box) box.textContent = `杞﹁締椹卞姩鏋勯€狅紙鏂帮級澶辫触锛?{err.message}`;
   } finally {
     state.ui.generating = false;
     renderGenerationProgress();
@@ -15002,14 +14990,14 @@ function addDirectVehicleButton() {
     const newBtn = document.createElement("button");
     newBtn.id = "directVehicleBtn";
     newBtn.className = "secondary";
-    newBtn.textContent = lang() === "ja" ? "車両駆動構築（新）" : "车辆驱动构造（新）";
+    newBtn.textContent = lang() === "ja" ? "杌婁浮椐嗗嫊妲嬬瘔锛堟柊锛? : "杞﹁締椹卞姩鏋勯€狅紙鏂帮級";
     newBtn.style.marginLeft = "8px";
     newBtn.addEventListener("click", directVehicleSolve);
     parent.insertBefore(newBtn, generateBtn.nextSibling);
   }
 }
 
-// 确保按钮在 DOM 加载后添加
+// 纭繚鎸夐挳鍦?DOM 鍔犺浇鍚庢坊鍔?
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", addDirectVehicleButton);
 } else {
