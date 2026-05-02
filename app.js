@@ -764,7 +764,7 @@ let relayConsoleLines = [];
 let relayStageReporter = null;
 let relayConsolePendingLogLines = [];
 let relayConsoleLogFlushTimer = null;
-const GA_BACKEND_URL = "http://127.0.0.1:8765";
+const GA_BACKEND_URL = "";                     
 const USE_FULL_DISTANCE_MATRIX_FROM_BACKEND = true;
 let gaBackendHealth = { available: null, checkedAt: 0 };
 let gaBackendStatusTimer = null;
@@ -14908,7 +14908,7 @@ async function directVehicleSolve() {
         payload.vehicles = finalScenario.vehicles;
       }
       
-      const response = await fetch("http://127.0.0.1:8765/wave-optimize", {
+      const response = await fetch("/wave-optimize", {                     
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
