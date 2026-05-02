@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const API_BASE = "";
   const W1_START_MIN = 19 * 60 + 30;
 
@@ -67,8 +67,8 @@
   }
 
   function toCnBool(v) {
-    if (v === true) return "鏄?;
-    if (v === false) return "鍚?;
+    if (v === true) return "是";
+    if (v === false) return "否";
     return "-";
   }
 
@@ -94,7 +94,7 @@
     return h * 60 + mm;
   }
 
-  // W1璺ㄥ崍澶滄帓搴忥細19:30~23:59 褰撳ぉ锛?0:00~08:00 娆℃棩
+  // W1跨午夜排序：19:30~23:59 当天，00:00~08:00 次日
   function parseW1TimeSort(v) {
     const m = parseHm(v);
     if (m == null) return Number.POSITIVE_INFINITY;
@@ -148,7 +148,7 @@
     const query = new URLSearchParams({ wave: state.wave }).toString();
     const resp = await fetch(`${API_BASE}/rengong/boundary-page-data?${query}`, { cache: "no-store" });
     const json = await resp.json();
-    if (!resp.ok || json.ok === false) throw new Error(json.error || "鍔犺浇澶辫触");
+    if (!resp.ok || json.ok === false) throw new Error(json.error || "加载失败");
     state.stores = (json.store_arrival_windows || []).map((x, i) => ({ ...x, __idx: i }));
     state.routes = (json.route_load_profiles || []).map((x, i) => ({ ...x, __idx: i }));
     state.rules = json.load_rules || [];
@@ -192,7 +192,7 @@
 
     rows = sortRows(rows, "store", STORE_COLUMNS, defaultStoreOrder);
     if (!rows.length) {
-      els.storeBody.innerHTML = '<tr><td colspan="8" class="bd-empty">鏃犲尮閰嶆暟鎹?/td></tr>';
+      els.storeBody.innerHTML = '<tr><td colspan="8" class="bd-empty">无匹配数据</td></tr>';
       return;
     }
     els.storeBody.innerHTML = rows.map((r) => `
@@ -225,7 +225,7 @@
       if (ds && String(r.delivery_date || "") < ds) return false;
       if (de && String(r.delivery_date || "") > de) return false;
       if (cat === "normal" && String(r.route_category || "").trim() !== "normal") return false;
-      if (cat === "airport" && String(r.route_category || "").trim() !== "棣栭兘鏈哄満") return false;
+      if (cat === "airport" && String(r.route_category || "").trim() !== "首都机场") return false;
       if (status === "over" && !r.is_over_normal_limit) return false;
       if (status === "airport" && !r.is_airport_route) return false;
       if (status === "dirty" && !r.is_dirty_candidate) return false;
@@ -233,7 +233,7 @@
     });
     rows = sortRows(rows, "route", ROUTE_COLUMNS, defaultRouteOrder);
     if (!rows.length) {
-      els.routeBody.innerHTML = '<tr><td colspan="11" class="bd-empty">鏃犲尮閰嶆暟鎹?/td></tr>';
+      els.routeBody.innerHTML = '<tr><td colspan="11" class="bd-empty">无匹配数据</td></tr>';
       return;
     }
     els.routeBody.innerHTML = rows.map((r) => `
@@ -242,7 +242,7 @@
         <td title="${escapeHtml(r.vehicle_id || "-")}">${escapeHtml(r.vehicle_id || "-")}</td>
         <td>${escapeHtml(r.route_id || "-")}</td>
         <td title="${escapeHtml(r.route_name || "-")}">${escapeHtml(r.route_name || "-")}</td>
-        <td>${String(r.route_category || "").trim() === "棣栭兘鏈哄満" ? "棣栭兘鏈哄満" : "鏅€?}</td>
+        <td>${String(r.route_category || "").trim() === "首都机场" ? "首都机场" : "普通"}</td>
         <td>${escapeHtml(r.store_count ?? "-")}</td>
         <td>${toNum(r.route_load_w1, 3)}</td>
         <td>${toNum(r.normal_hard_limit, 3)}</td>
@@ -254,28 +254,28 @@
   }
 
   function renderRules() {
-    const typeMap = { normal: "鏅€氱嚎璺?, airport: "棣栭兘鏈哄満绾胯矾", dirty_filter: "鑴忔暟鎹繃婊? };
-    const categoryMap = { normal: "鏅€氱嚎璺?, "棣栭兘鏈哄満": "棣栭兘鏈哄満" };
+    const typeMap = { normal: "普通线路", airport: "首都机场线路", dirty_filter: "脏数据过滤" };
+    const categoryMap = { normal: "普通线路", "首都机场": "首都机场" };
     const formatPreferred = (arr) => {
       if (!Array.isArray(arr) || !arr.length) return "-";
-      return arr.join("銆?);
+      return arr.join("、");
     };
     if (!state.rules.length) {
-      els.rulesWrap.innerHTML = '<div class="bd-empty">鏆傛棤瑙勫垯鏁版嵁</div>';
+      els.rulesWrap.innerHTML = '<div class="bd-empty">暂无规则数据</div>';
       return;
     }
     els.rulesWrap.innerHTML = state.rules.map((r) => `
       <article class="bd-card">
         <h3>${escapeHtml(typeMap[r.rule_type] || r.rule_type || "-")}</h3>
-        <div class="bd-kv"><span class="bd-k">绾胯矾绫诲瀷</span><span class="bd-v">${escapeHtml(categoryMap[r.route_category] || r.route_category || "-")}</span></div>
-        <div class="bd-kv"><span class="bd-k">瑁呰浇纭笂闄?/span><span class="bd-v">${r.hard_load_limit == null ? "-" : escapeHtml(r.hard_load_limit)}</span></div>
-        <div class="bd-kv"><span class="bd-k">鏄惁蹇界暐瑁呰浇涓婇檺</span><span class="bd-v">${toCnBool(r.ignore_load_limit)}</span></div>
-        <div class="bd-kv"><span class="bd-k">浼樺厛杞﹁締</span><span class="bd-v">${escapeHtml(formatPreferred(r.preferred_vehicle_ids))}</span></div>
-        <div class="bd-kv"><span class="bd-k">鏄惁鍏佽澶氳稛</span><span class="bd-v">${toCnBool(r.allow_multi_trip)}</span></div>
-        <div class="bd-kv"><span class="bd-k">鑴忔暟鎹槇鍊?/span><span class="bd-v">${r.dirty_load_threshold == null ? "-" : escapeHtml(r.dirty_load_threshold)}</span></div>
-        <div class="bd-kv"><span class="bd-k">鏄惁鎺掗櫎鏈哄満绾?/span><span class="bd-v">${toCnBool(r.dirty_exclude_airport)}</span></div>
+        <div class="bd-kv"><span class="bd-k">线路类型</span><span class="bd-v">${escapeHtml(categoryMap[r.route_category] || r.route_category || "-")}</span></div>
+        <div class="bd-kv"><span class="bd-k">装载硬上限</span><span class="bd-v">${r.hard_load_limit == null ? "-" : escapeHtml(r.hard_load_limit)}</span></div>
+        <div class="bd-kv"><span class="bd-k">是否忽略装载上限</span><span class="bd-v">${toCnBool(r.ignore_load_limit)}</span></div>
+        <div class="bd-kv"><span class="bd-k">优先车辆</span><span class="bd-v">${escapeHtml(formatPreferred(r.preferred_vehicle_ids))}</span></div>
+        <div class="bd-kv"><span class="bd-k">是否允许多趟</span><span class="bd-v">${toCnBool(r.allow_multi_trip)}</span></div>
+        <div class="bd-kv"><span class="bd-k">脏数据阈值</span><span class="bd-v">${r.dirty_load_threshold == null ? "-" : escapeHtml(r.dirty_load_threshold)}</span></div>
+        <div class="bd-kv"><span class="bd-k">是否排除机场线</span><span class="bd-v">${toCnBool(r.dirty_exclude_airport)}</span></div>
         <div class="bd-kv bd-kv-desc">
-          <span class="bd-k">瑙勫垯璇存槑</span>
+          <span class="bd-k">规则说明</span>
           <span class="bd-v bd-v-desc">${escapeHtml(r.rule_desc || "-")}</span>
         </div>
       </article>
@@ -307,7 +307,7 @@
       await fetchData();
       renderAll();
     } catch (e) {
-      els.waveMsg.textContent = e.message || "鍔犺浇澶辫触";
+      els.waveMsg.textContent = e.message || "加载失败";
     }
   }
 
@@ -329,4 +329,3 @@
   bindSortEvents();
   reload();
 })();
-
