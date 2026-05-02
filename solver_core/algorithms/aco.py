@@ -303,7 +303,7 @@ def load_stores_from_db(wave: Dict) -> Dict[str, Dict[str, Any]]:
             cursor.execute(
                 f"""
                 SELECT shop_code, shop_name, service_minutes, allowed_late_minutes, difficulty
-                FROM C_SHOP_MAIN
+                FROM c_shop_main
                 WHERE shop_code IN ({placeholders})
                 """,
                 tuple(shop_codes),
@@ -324,7 +324,7 @@ def load_stores_from_db(wave: Dict) -> Dict[str, Dict[str, Any]]:
 
         shop_info = shop_map.get(code)
         if not shop_info:
-            _log(f"门店 {code} 在 C_SHOP_MAIN 中不存在，已跳过")
+            _log(f"门店 {code} 在 c_shop_main 中不存在，已跳过")
             continue
 
         service_minutes = shop_info.get("service_minutes")

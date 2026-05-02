@@ -6,7 +6,7 @@
 # W1/W2接力：同一辆车两趟往返总里程≤240km
 # W3独立：单程≤260km，车速48km/h，且不使用前序波次用过的车辆
 # W2继承W1路线：同一辆车优先跑W1中跑过的门店（若属于W2），按W2时间窗重新排序
-# 数据源：store_wave_load_resolved + C_SHOP_MAIN（字段必须存在，否则跳过门店）
+# 数据源：store_wave_load_resolved + c_shop_main（字段必须存在，否则跳过门店）
 # 距离：store_distance_matrix（真实路网，缺失则不可行）
 # 输出TXT明细（含店名）并写入六张调度结果表
 
@@ -153,7 +153,7 @@ def load_stores_from_db(wave):
                 cursor.execute(
                     f"""
                     SELECT shop_code, shop_name, service_minutes, allowed_late_minutes, difficulty
-                    FROM C_SHOP_MAIN
+                    FROM c_shop_main
                     WHERE shop_code IN ({placeholders})
                     """,
                     shop_codes
@@ -174,7 +174,7 @@ def load_stores_from_db(wave):
         desired_min = time_str_to_minutes(desired_time_str, wave["startMin"])
         shop_info = shop_map.get(code)
         if not shop_info:
-            _log(f"门店 {code} 在 C_SHOP_MAIN 中无记录，已过滤")
+            _log(f"门店 {code} 在 c_shop_main 中无记录，已过滤")
             continue
 
         store_name = shop_info.get("shop_name", code)
@@ -476,7 +476,7 @@ def output_and_save(wave_id, state, stores, dist_payload, wave, scenario, prior_
                         f.write(f"{idx}\t{stop['store_id']}\t{stop['store_name']}\t{stop['boxes']:.3f}\t{stop['cumulative_load']:.3f}\t"
                                 f"{stop['expected_time_str']}\t{stop['arrival_time_str']}\t{stop['leave_time_str']}\n")
                     f.write("\n")
-            f.write(f"注：容量上限 {MAX_CAPACITY}，允许晚到（从C_SHOP_MAIN读取），W1/W2往返总里程≤{MAX_MILEAGE_W1W2_TOTAL}km，每趟≤{MAX_STOPS_PER_TRIP_W1W2}店；W3单程≤{MAX_MILEAGE_W3_ONE_WAY}km，车速{SPEED_W3}km/h。\n")
+            f.write(f"注：容量上限 {MAX_CAPACITY}，允许晚到（从c_shop_main读取），W1/W2往返总里程≤{MAX_MILEAGE_W1W2_TOTAL}km，每趟≤{MAX_STOPS_PER_TRIP_W1W2}店；W3单程≤{MAX_MILEAGE_W3_ONE_WAY}km，车速{SPEED_W3}km/h。\n")
         _log(f"详细调度结果已写入 {filename}")
     except Exception as e:
         _log(f"写入TXT失败: {e}")
